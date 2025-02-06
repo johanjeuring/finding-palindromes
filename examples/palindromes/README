@@ -1,0 +1,18 @@
+Example Palindromes
+==============================================
+
+This directory contains examples of palindromes.
+
+* pal17.txt 
+  A 17,826 Word Palindrome (or Palindromic Sentence)
+  From http://norvig.com/pal17txt.html
+  Characteristics: 
+    - contains punctuation symbols
+    - ...
+
+* Daminitimmad.txt
+  224-word palindromic poem entitled "Dammit I'm Mad," composed by Demetri Martin 
+  From http://www.slate.com/id/2101150/sidebar/2101387/ent/2101353/
+  Characteristics:
+    - contains punctuation symbols
+    - ...

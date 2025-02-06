@@ -1,0 +1,6 @@
+parBuffer (buffert de input, kijkt alleen naar de eerste zoveel waarden) instead of parMap
+
+clustering van informatie: splits de lijst op in zoveel stukken dat de geforceerde lengte van de lijst niet meer het probleem vormt. Misschien in stukken van 1000 bv?
+
+show van palindromes nakijken
+

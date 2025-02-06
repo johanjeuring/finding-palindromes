@@ -155,9 +155,9 @@ palindromesAroundCentres        :: Maybe Flag -> Maybe Flag -> Maybe Flag -> May
 palindromesAroundCentres palindromeVariant algorithmComplexity gap nrOfErrors input input' positionTextInput = 
   case (algorithmComplexity,gap,nrOfErrors) of
     (Just Linear   ,Nothing,Nothing)  ->  case palindromeVariant of
-                                            Just DNA   ->  reverse $ appendseq $ extendPalindromeS 2 0 input' [] S.empty 0 0 
+                                            Just DNA   ->  reverse $ appendseq $ extendPalindromeS (=:=) 2 0 input' [] S.empty 0 0
                                             Just Word  ->  reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0,[0]) 
-                                            _          ->  reverse $ appendseq $ extendPalindromeS 1 1 input' [] S.empty 0 0 
+                                            _          ->  reverse $ appendseq $ extendPalindromeS (==) 1 1 input' [] S.empty 0 0
     (Just Linear   ,_      ,_      )  ->  error "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"  
     (Just Quadratic,g      ,k      )  ->  let g'  =  case g of
                                                        Just (Gap g'')         ->  g''
@@ -168,14 +168,14 @@ palindromesAroundCentres palindromeVariant algorithmComplexity gap nrOfErrors in
                                           in  gappedApproximatePalindromesAroundCentres palindromeVariant input g' k' 
     (_             ,_      ,_      )  ->  error "palindromesAroundCentres: case not defined"
 
-extendPalindromeS :: Int -> Int -> B.ByteString -> [Int] -> S.Seq Int -> Int -> Int -> ([Int],S.Seq Int)
-extendPalindromeS centerfactor tailfactor input = 
+extendPalindromeS :: (Word8 -> Word8 -> Bool) -> Int -> Int -> B.ByteString -> [Int] -> S.Seq Int -> Int -> Int -> ([Int],S.Seq Int)
+extendPalindromeS eq centerfactor tailfactor input =
   let ePS maximalPalindromesPre maximalPalindromesIn rightmost currentPalindrome 
         | rightmost > lastPos
           -- reached the end of the array
           =  finalPalindromesS centerfactor currentPalindrome maximalPalindromesPre (currentPalindrome S.<| maximalPalindromesIn) maximalPalindromesIn
         | rightmost-currentPalindrome == first ||
-          not (B.index input rightmost == B.index input (rightmost-currentPalindrome-1))
+          not (B.index input rightmost `eq` B.index input (rightmost-currentPalindrome-1))
             -- the current palindrome extends to the start of the array, 
             -- or it cannot be extended 
             =  mCS rightmost maximalPalindromesPre (currentPalindrome S.<| maximalPalindromesIn) maximalPalindromesIn currentPalindrome 

@@ -1,0 +1,1 @@
+This is the repository for the Haskell finding Palindromes Package originally made by Johan Jeuring

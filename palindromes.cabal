@@ -19,7 +19,7 @@ extra-source-files:     README,
                         RELEASE_HISTORY
                         tests/Main.hs
 build-type:             Simple
-cabal-version:          >= 1.6
+cabal-version:          >= 1.8
 tested-with:            GHC == 7.4.1
 source-repository this
   type:     svn
@@ -29,7 +29,13 @@ source-repository this
 
 Library
   hs-source-dirs:       src
-  exposed-modules:      Data.Algorithms.Palindromes.Palindromes
+  exposed-modules:      Data.Algorithms.Palindromes.Palindromes, Data.Algorithms.Palindromes.PalindromesUtils
+  build-depends:        base >= 4.17 && < 5
+                        , array
+                        , bytestring
+                        , containers
+                        , QuickCheck >= 2.14 && < 3.0
+                        , HUnit
 
 Executable              palindromes
   Main-is:              Data/Algorithms/Palindromes/Main.hs
@@ -38,10 +44,22 @@ Executable              palindromes
   other-modules:        Data.Algorithms.Palindromes.Palindromes,
                         Data.Algorithms.Palindromes.PalindromesUtils,
                         Data.Algorithms.Palindromes.Options
+  build-depends:        base >= 4.17 && < 5
+                        , array
+                        , bytestring
+                        , containers
+
+Test-Suite              property-tests
+  type:                 exitcode-stdio-1.0
+  hs-source-dirs:       tests
+  main-is:              Main.hs
   build-depends:        base >= 3.0 && < 5,
                         array,
                         bytestring,
-                        containers
+                        containers,
+                        QuickCheck >= 2.14 && < 3.0,
+                        HUnit,
+                        palindromes
 
 --------------------------------------------------------------------------------
 

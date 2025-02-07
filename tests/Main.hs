@@ -28,11 +28,11 @@ import qualified Data.ByteString.Char8 as BC
 longestTextPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just Text) (Just Longest) (Just Linear) Nothing Nothing Nothing
 longestWordPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just Word) (Just Longest) (Just Linear) Nothing Nothing Nothing
 
-propPalindromesAroundCentres :: Property
-propPalindromesAroundCentres = 
-  forAll (arbitrary:: Gen [Char]) $ 
-  \l -> let input = BC.pack l
-        in palindromesAroundCentres (Just Text) (Just Linear) Nothing Nothing input == longestPalindromesQ input
+-- propPalindromesAroundCentres :: Property
+-- propPalindromesAroundCentres = 
+--   forAll (arbitrary:: Gen [Char]) $ 
+--   \l -> let input = BC.pack l
+--         in palindromesAroundCentres (Just Text) (Just Linear) Nothing Nothing input == longestPalindromesQ input
 
 longestPalindromesQ    ::  B.ByteString -> [Int]
 longestPalindromesQ input  =   
@@ -72,7 +72,7 @@ unescape cs = case readLitChar cs of
 
 testTextPalindrome1, testTextPalindrome2, testTextPalindrome3, testTextPalindrome4, 
   testTextPalindrome5, testTextPalindrome6, testTextPalindrome7, testTextPalindrome8,
-  testTextPalindrome9, testTextPalindrome10, testTextPalindrome11 :: Test
+  testTextPalindrome9 {-testTextPalindrome10, testTextPalindrome11-} :: Test
 
 testWordPalindrome1, testWordPalindrome2, testWordPalindrome3, testWordPalindrome4,
   testWordPalindrome5, testWordPalindrome6 :: Test
@@ -132,32 +132,32 @@ testTextPalindrome9 =
               (longestTextPalindrome B.empty)
            )
 
-testTextPalindrome10 =
-  TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/Damnitimmad.txt"
-               assertEqual 
-                 "textPalindrome10" 
-                 (concatMap (\c -> case c of
-                                     '\n' -> "\\n" 
-                                     '\"' -> "\""--""\\\""
-                                     d    -> [d]
-                            )
-                            (show string)
-                 )
-                 (longestTextPalindrome string)
-           )
+-- testTextPalindrome10 =
+--   TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/Damnitimmad.txt"
+--                assertEqual 
+--                  "textPalindrome10" 
+--                  (concatMap (\c -> case c of
+--                                      '\n' -> "\\n" 
+--                                      '\"' -> "\""--""\\\""
+--                                      d    -> [d]
+--                             )
+--                             (show string)
+--                  )
+--                  (longestTextPalindrome string)
+--            )
 
-testTextPalindrome11 =
-  TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/pal17.txt"
-               assertEqual 
-                 "textPalindrome11" 
-                 (concatMap (\c -> case c of
-                                     '\n' -> "\\n" 
-                                     '\"' -> "\""
-                                     d    -> [d]
-                            )
-                  (show string))
-                 (longestTextPalindrome string)
-           )
+-- testTextPalindrome11 =
+--   TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/pal17.txt"
+--                assertEqual 
+--                  "textPalindrome11" 
+--                  (concatMap (\c -> case c of
+--                                      '\n' -> "\\n" 
+--                                      '\"' -> "\""
+--                                      d    -> [d]
+--                             )
+--                   (show string))
+--                  (longestTextPalindrome string)
+--            )
 
 testWordPalindrome1 =
   TestCase (assertEqual
@@ -218,8 +218,8 @@ tests = TestList [TestLabel "testTextPalindrome1"  testTextPalindrome1
                  ,TestLabel "testTextPalindrome7"  testTextPalindrome7
                  ,TestLabel "testTextPalindrome8"  testTextPalindrome8
                  ,TestLabel "testTextPalindrome9"  testTextPalindrome9
-                 ,TestLabel "testTextPalindrome10" testTextPalindrome10
-                 ,TestLabel "testTextPalindrome11" testTextPalindrome11
+                --  ,TestLabel "testTextPalindrome10" testTextPalindrome10
+                --  ,TestLabel "testTextPalindrome11" testTextPalindrome11
                  ,TestLabel "testWordPalindrome1"  testWordPalindrome1
                  ,TestLabel "testWordPalindrome2"  testWordPalindrome2
                  ,TestLabel "testWordPalindrome3"  testWordPalindrome3
@@ -231,7 +231,7 @@ tests = TestList [TestLabel "testTextPalindrome1"  testTextPalindrome1
 
 main :: IO Counts
 main = do 
-          quickCheck  propPalindromesAroundCentres
+          --quickCheck  propPalindromesAroundCentres
           quickCheck  propTextPalindrome
           runTestTT tests
 

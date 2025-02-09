@@ -24,15 +24,16 @@ import Data.Algorithms.Palindromes.PalindromesUtils
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as BC
 
-
 longestTextPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just Text) (Just Longest) (Just Linear) Nothing Nothing Nothing
 longestWordPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just Word) (Just Longest) (Just Linear) Nothing Nothing Nothing
 
--- propPalindromesAroundCentres :: Property
--- propPalindromesAroundCentres = 
---   forAll (arbitrary:: Gen [Char]) $ 
---   \l -> let input = BC.pack l
---         in palindromesAroundCentres (Just Text) (Just Linear) Nothing Nothing input == longestPalindromesQ input
+propPalindromesAroundCentres :: Property
+propPalindromesAroundCentres = 
+  forAll (arbitrary:: Gen [Char]) $ 
+  \l -> let input = BC.pack l
+        in palindromesAroundCentres (Just Text) (Just Linear) Nothing Nothing input B.empty k == longestPalindromesQ input
+  where k :: Array Int Int
+        k = undefined
 
 longestPalindromesQ    ::  B.ByteString -> [Int]
 longestPalindromesQ input  =   
@@ -231,7 +232,7 @@ tests = TestList [TestLabel "testTextPalindrome1"  testTextPalindrome1
 
 main :: IO Counts
 main = do 
-          --quickCheck  propPalindromesAroundCentres
+          quickCheck  propPalindromesAroundCentres
           quickCheck  propTextPalindrome
           runTestTT tests
 

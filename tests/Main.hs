@@ -30,16 +30,21 @@ longestWordPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just
 propPalindromesAroundCentres :: Property
 propPalindromesAroundCentres = 
   forAll (arbitrary:: Gen [Char]) $ 
-  \l -> let input = BC.pack l
+  \l -> let 
+          input = BC.pack l
+          input' = B.map myToLower $ B.filter myIsLetterW input
+          posArray = listArrayl0 $ B.findIndices myIsLetterW input
         in palindromesAroundCentres 
           (Just Text) 
           (Just Linear) 
           Nothing 
           Nothing 
           input 
-          (B.map myToLower (B.filter myIsLetterW input)) -- input'
-          (listArrayl0 (B.findIndices myIsLetterW input)) -- Position array
-            == longestPalindromesQ input
+          input'
+          posArray -- Position array
+            == longestPalindromesQ input'
+            
+
 
 longestPalindromesQ    ::  B.ByteString -> [Int]
 longestPalindromesQ input  =   

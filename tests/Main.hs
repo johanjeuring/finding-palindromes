@@ -24,15 +24,27 @@ import Data.Algorithms.Palindromes.PalindromesUtils
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as BC
 
-
 longestTextPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just Text) (Just Longest) (Just Linear) Nothing Nothing Nothing
 longestWordPalindrome = Data.Algorithms.Palindromes.Palindromes.palindrome (Just Word) (Just Longest) (Just Linear) Nothing Nothing Nothing
 
 propPalindromesAroundCentres :: Property
 propPalindromesAroundCentres = 
   forAll (arbitrary:: Gen [Char]) $ 
-  \l -> let input = BC.pack l
-        in palindromesAroundCentres (Just Text) (Just Linear) Nothing Nothing input == longestPalindromesQ input
+  \l -> let 
+          input = BC.pack l
+          input' = B.map myToLower $ B.filter myIsLetterW input
+          posArray = listArrayl0 $ B.findIndices myIsLetterW input
+        in palindromesAroundCentres 
+          (Just Text) 
+          (Just Linear) 
+          Nothing 
+          Nothing 
+          input 
+          input'
+          posArray -- Position array
+            == longestPalindromesQ input'
+            
+
 
 longestPalindromesQ    ::  B.ByteString -> [Int]
 longestPalindromesQ input  =   
@@ -72,7 +84,7 @@ unescape cs = case readLitChar cs of
 
 testTextPalindrome1, testTextPalindrome2, testTextPalindrome3, testTextPalindrome4, 
   testTextPalindrome5, testTextPalindrome6, testTextPalindrome7, testTextPalindrome8,
-  testTextPalindrome9, testTextPalindrome10, testTextPalindrome11 :: Test
+  testTextPalindrome9 {-testTextPalindrome10, testTextPalindrome11-} :: Test
 
 testWordPalindrome1, testWordPalindrome2, testWordPalindrome3, testWordPalindrome4,
   testWordPalindrome5, testWordPalindrome6 :: Test
@@ -133,7 +145,7 @@ testTextPalindrome9 =
            )
 
 testTextPalindrome10 =
-  TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/Damnitimmad.txt"
+  TestCase (do string <- B.readFile "./examples/palindromes/Damnitimmad.txt"
                assertEqual 
                  "textPalindrome10" 
                  (concatMap (\c -> case c of
@@ -147,7 +159,7 @@ testTextPalindrome10 =
            )
 
 testTextPalindrome11 =
-  TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/pal17.txt"
+  TestCase (do string <- B.readFile "./examples/palindromes/pal17.txt"
                assertEqual 
                  "textPalindrome11" 
                  (concatMap (\c -> case c of
@@ -204,7 +216,7 @@ testWordPalindrome6 =
 testWordPalindrome7 =
   TestCase (assertEqual
               "wordPalindrome" 
-              "\" waaw \"" 
+              "\" v waaw v\"" 
               (longestWordPalindrome (BC.pack "vwaawvxy v waaw v"))
            )
 

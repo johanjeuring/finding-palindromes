@@ -31,7 +31,7 @@ Requirements
 
 [Palindromes] has the following requirements:
 
-*  [GHC] version 6.8.1 or later - It has been tested with version 7.4.1.
+*  [GHC] version 6.8.1 or later - It has been tested with version 7.4.1. (And not rigourusly tested with 9.4.7)
 *  [Cabal] library version 1.2.1 or later - It has been tested with version 
            1.10.2.0.
 
@@ -41,6 +41,22 @@ Requirements
 
 Download & Installation
 -----------------------
+
+
+run the following commands, with changing `<path-to-file>` to the file containing the input, and `<options>` with the flags you want enabled
+  
+    cabal run palindromes -- <path-to-file> -<options>
+
+Here are some examples of working flags:
+
+    cabal run palindromes -- input.txt -prl
+    cabal run palindromes -- input.txt -trl
+    cabal run palindromes -- input.txt -wqm
+    cabal run palindromes -- input.txt -dqm
+    cabal run palindromes -- input.txt -dql -g 1 -n 3
+
+
+*This is were the old installation guide starts. This stould still be checked for accuracy.
 
 *If you have [cabal-install]*, you should use that to install the package,
 because it will handle everything for you.

@@ -144,32 +144,32 @@ testTextPalindrome9 =
               (longestTextPalindrome B.empty)
            )
 
--- testTextPalindrome10 =
---   TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/Damnitimmad.txt"
---                assertEqual 
---                  "textPalindrome10" 
---                  (concatMap (\c -> case c of
---                                      '\n' -> "\\n" 
---                                      '\"' -> "\""--""\\\""
---                                      d    -> [d]
---                             )
---                             (show string)
---                  )
---                  (longestTextPalindrome string)
---            )
+testTextPalindrome10 =
+  TestCase (do string <- B.readFile "./examples/palindromes/Damnitimmad.txt"
+               assertEqual 
+                 "textPalindrome10" 
+                 (concatMap (\c -> case c of
+                                     '\n' -> "\\n" 
+                                     '\"' -> "\""--""\\\""
+                                     d    -> [d]
+                            )
+                            (show string)
+                 )
+                 (longestTextPalindrome string)
+           )
 
--- testTextPalindrome11 =
---   TestCase (do string <- B.readFile "/Users/johan/Documents/Palindromes/Software/staff.johanj.palindromes/trunk/examples/palindromes/pal17.txt"
---                assertEqual 
---                  "textPalindrome11" 
---                  (concatMap (\c -> case c of
---                                      '\n' -> "\\n" 
---                                      '\"' -> "\""
---                                      d    -> [d]
---                             )
---                   (show string))
---                  (longestTextPalindrome string)
---            )
+testTextPalindrome11 =
+  TestCase (do string <- B.readFile "./examples/palindromes/pal17.txt"
+               assertEqual 
+                 "textPalindrome11" 
+                 (concatMap (\c -> case c of
+                                     '\n' -> "\\n" 
+                                     '\"' -> "\""
+                                     d    -> [d]
+                            )
+                  (show string))
+                 (longestTextPalindrome string)
+           )
 
 testWordPalindrome1 =
   TestCase (assertEqual
@@ -216,7 +216,7 @@ testWordPalindrome6 =
 testWordPalindrome7 =
   TestCase (assertEqual
               "wordPalindrome" 
-              "\" waaw \"" 
+              "\" v waaw v\"" 
               (longestWordPalindrome (BC.pack "vwaawvxy v waaw v"))
            )
 
@@ -230,15 +230,15 @@ tests = TestList [TestLabel "testTextPalindrome1"  testTextPalindrome1
                  ,TestLabel "testTextPalindrome7"  testTextPalindrome7
                  ,TestLabel "testTextPalindrome8"  testTextPalindrome8
                  ,TestLabel "testTextPalindrome9"  testTextPalindrome9
-                --  ,TestLabel "testTextPalindrome10" testTextPalindrome10 -- Contains an error
-                --  ,TestLabel "testTextPalindrome11" testTextPalindrome11 -- Contains an error
+                 ,TestLabel "testTextPalindrome10" testTextPalindrome10
+                 ,TestLabel "testTextPalindrome11" testTextPalindrome11
                  ,TestLabel "testWordPalindrome1"  testWordPalindrome1
                  ,TestLabel "testWordPalindrome2"  testWordPalindrome2
                  ,TestLabel "testWordPalindrome3"  testWordPalindrome3
                  ,TestLabel "testWordPalindrome4"  testWordPalindrome4
                  ,TestLabel "testWordPalindrome5"  testWordPalindrome5
                  ,TestLabel "testWordPalindrome6"  testWordPalindrome6
-                 --,TestLabel "testWordPalindrome7"  testWordPalindrome7 -- Contains an error
+                 ,TestLabel "testWordPalindrome7"  testWordPalindrome7
                  ]
 
 main :: IO Counts

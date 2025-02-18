@@ -32,6 +32,7 @@ import Data.Array (Array,bounds,listArray,(!))
 import qualified Data.ByteString as B
 import Data.ByteString.Internal (w2c,c2w)
 import qualified Data.Sequence as S
+import Data.Foldable (Foldable(toList))
 
 -----------------------------------------------------------------------------
 -- Flags a user can specify
@@ -160,12 +161,7 @@ surroundedByPunctuation begin end input
 -----------------------------------------------------------------------------
 
 appendseq :: ([a],S.Seq a) -> [a]
-appendseq (list,s) = tolist s ++ list
-
-tolist :: S.Seq a -> [a]
-tolist s = case S.viewl s of 
-               S.EmptyL -> []
-               a S.:< r -> a:tolist r
+appendseq (list,s) = toList s ++ list
 
 -----------------------------------------------------------------------------
 -- Array utils

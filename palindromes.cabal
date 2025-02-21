@@ -53,6 +53,10 @@ Test-Suite              property-tests
   type:                 exitcode-stdio-1.0
   hs-source-dirs:       tests
   main-is:              Main.hs
+  other-modules:        PalindromeProperties,
+                        UTTextPals,
+                        UTWordPals,
+                        PalindromeMethods
   build-depends:        base >= 3.0 && < 5,
                         array,
                         bytestring,
@@ -60,6 +64,5 @@ Test-Suite              property-tests
                         QuickCheck >= 2.14 && < 3.0,
                         HUnit,
                         palindromes
-
 --------------------------------------------------------------------------------
 

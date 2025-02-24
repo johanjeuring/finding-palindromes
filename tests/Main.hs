@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- 
+--
 -- Module      :  tests.Main
 -- Copyright   :  (c) 2007 - 2013 Johan Jeuring
 -- License     :  BSD3
@@ -12,21 +12,19 @@
 
 module Main where
 
+import PalindromeProperties (propPalindromesAroundCentres, propTextPalindrome)
+import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
-import Test.HUnit (Counts,Test,runTestTT,Test(..))
-
-import PalindromeProperties (propTextPalindrome, propPalindromesAroundCentres)
 import UTTextPals (testListText)
 import UTWordPals (testListWords)
 
 import qualified Data.Algorithms.Palindromes.PalindromesUtils as PU
 
-
 tests :: Test
 tests = TestList $ testListText PU.Linear ++ testListText PU.Quadratic ++ testListWords
 
 main :: IO Counts
-main = do 
+main = do
     quickCheck propPalindromesAroundCentres
     quickCheck propTextPalindrome
     runTestTT tests
@@ -51,12 +49,12 @@ import System.IO
 import qualified Data.ByteString as B
 
 main :: IO ()
-main = 
+main =
   do fnenhl <- openFile  "examples/palindromes/Damnitimmad.txt" ReadMode-- "../../TestSources/Bibles/engelskingjames.txt" ReadMode
-     hSetEncoding fnenhl latin1 
+     hSetEncoding fnenhl latin1
      inputenB <- B.hGetContents fnenhl
 --     fnnlhl <- openFile  "../../TestSources/Bibles/nederlands.txt" ReadMode
---     hSetEncoding fnnlhl latin1 
+--     hSetEncoding fnnlhl latin1
 --    inputnlB <- B.hGetContents fnnlhl
      defaultMain
        [
@@ -64,7 +62,7 @@ main =
 --        bench "longestPalindrome Dutch" (nf longestPalindrome inputnlB)--,
 --       bench "longestPalindromeConstantArguments English" (nf CA.longestPalindrome inputenB)--,
         bench "longestPalindrome English" (nf longestPalindrome inputenB)--,--,
-       ]       
+       ]
 
 -}
 {-
@@ -76,4 +74,3 @@ To compare my solution and Rampion's lazy solution:
        ]
 
 -}
-

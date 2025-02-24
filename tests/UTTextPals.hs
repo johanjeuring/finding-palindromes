@@ -62,29 +62,14 @@ testTextPalindrome9 t = TestCase
 testTextPalindrome10 t =
     TestCase $ do
         string <- B.readFile "./examples/palindromes/Damnitimmad.txt"
+        putStrLn $ show string
         assertEqual
-            "textPalindrome10"
-            ( concatMap
-                ( \c -> case c of
-                    '\n' -> "\\n"
-                    '\"' -> "\"" -- ""\\\""
-                    d -> [d]
-                )
-                (show string)
-            )
+            "textPalindrome10" (show $ B.unpack string)
             $ longestTextPalindrome t string
 
 testTextPalindrome11 t =
     TestCase $ do
         string <- B.readFile "./examples/palindromes/pal17.txt"
         assertEqual
-            "textPalindrome11"
-            ( concatMap
-                ( \c -> case c of
-                    '\n' -> "\\n"
-                    '\"' -> "\""
-                    d -> [d]
-                )
-                (show string)
-            )
+            "textPalindrome11" (filter (\c -> c /= '\n' && c /= '\r') (show string))
             $ longestTextPalindrome t string

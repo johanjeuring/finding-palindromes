@@ -38,7 +38,6 @@ import qualified Data.Sequence as S
 import Data.Word (Word8)
 import Data.Array(Array,(!))
 
-
 -----------------------------------------------------------------------------
 -- palindrome dispatches to the desired variant of the palindrome finding
 -- algorithm. It captures all the variablity, in input format, output format,
@@ -75,7 +74,7 @@ palindrome palindromeVariant outputFormat algorithmComplexity lengthModifier gap
                               _                         ->  showPalindrome input
       outputf           =  case outputFormat of
                              Just LengthLongest         ->  show . maximum . map post . filter predicate
-                             Just Maximal               ->  intercalate "\n" . map show' . map (\(l,r) -> (post l,r)) . filter (predicate . fst) . flip zip [0..]
+                             Just Maximal               ->  intercalate "\n" . map (show' . (\ (l, r) -> (post l, r))) . filter (predicate . fst) . flip zip [0 .. ]
                              Just LengthMaximal         ->  show . map post . filter predicate
                              _                          ->  show' . maximumBy (\(l,_) (l',_) -> compare l l') . map (\(l,r) -> (post l,r)) . filter (predicate . fst) . flip zip [0..]
   in outputf $ palindromesAroundCentres palindromeVariant algorithmComplexity gap nrOfErrors input input' positionTextInput
@@ -160,14 +159,13 @@ palindromesAroundCentres palindromeVariant algorithmComplexity gap nrOfErrors in
                                             Just Word  ->  reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0,[0])
                                             _          ->  reverse $ appendseq $ extendPalindromeS (==) 1 1 input' [] S.empty 0 0
     (Just Linear   ,_      ,_      )  ->  error "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"
-    (Just Quadratic,g      ,k      )  ->  let g'  =  case g of
+    (_             ,g      ,k      )  ->  let g'  =  case g of
                                                        Just (Gap g'')         ->  g''
                                                        _                      ->  0
                                               k'  =  case k of
                                                        Just (NrOfErrors k'')  ->  k''
                                                        _                      ->  0
-                                          in  gappedApproximatePalindromesAroundCentres palindromeVariant input' g' k'
-    (_             ,_      ,_      )  ->  error "palindromesAroundCentres: case not defined"
+                                          in gappedApproximatePalindromesAroundCentres palindromeVariant input' g' k'
 
 extendPalindromeS :: (Word8 -> Word8 -> Bool) -> Int -> Int -> B.ByteString -> [Int] -> S.Seq Int -> Int -> Int -> ([Int],S.Seq Int)
 extendPalindromeS eq centerfactor tailfactor input =
@@ -224,15 +222,17 @@ gappedApproximatePalindromesAroundCentres palindromeVariant input g k =
 -- the next two functions should be mergable, with a centerdivfactor
 lengthGappedApproximatePalindromeAround :: (Word8 -> Word8 -> Bool) -> Int -> B.ByteString -> Int -> Int -> Int -> Int
 lengthGappedApproximatePalindromeAround (===) centerfactor input g k center =
-  let halfg        =  div g 2
-      c            =  div center centerfactor
-      lengthInput  =  B.length input
-      halfg'       |  c < halfg                =  c
-                   |  c + halfg > lengthInput  =  lengthInput-c
-                   |  otherwise                =  halfg
-      left         =  c-1-halfg'
-      right        =  if even g then c+halfg' else c+1+halfg'
-  in  lengthApproximatePalindrome (===) input k left right
+    let halfg = div g 2
+        c = div center centerfactor
+        lengthInput = B.length input
+        onletter = centerfactor == 2 && odd center
+        halfg' 
+            | c < halfg = c
+            | c + halfg > lengthInput = lengthInput-c
+            | otherwise = halfg
+        left = c-1-halfg'
+        right = if onletter then c+1+halfg' else c+halfg'
+    in lengthApproximatePalindrome (===) input k left right
 
 lengthApproximatePalindrome :: (Word8 -> Word8 -> Bool) -> B.ByteString  -> Int -> Int -> Int -> Int
 lengthApproximatePalindrome (===) input k start end

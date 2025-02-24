@@ -121,7 +121,7 @@ showTextPalindrome input positionTextInput (len,pos) =
                end        =  if endpos < plast
                              then (positionTextInput!(endpos+1))-1
                              else ilast
-           in  show (B.take (end-start+1) (B.drop start input))
+           in  show $ B.filter (\c -> c /= 13 && c /= 10) (B.take (end-start+1) (B.drop start input))
 
 {- Using this code instead of the last else above shows text palindromes without 
    all punctuation around it. Right now this punctuation is shown.

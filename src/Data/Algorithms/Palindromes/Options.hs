@@ -102,7 +102,7 @@ isMaximal _                                          =  False
 
 isLengthMaximal :: Flag -> Bool
 isLengthMaximal LengthMaximal                        =  True
-isLengthMaximal _                                    =  False      
+isLengthMaximal _                                    =  False   
 
 isGap :: Flag -> Bool
 isGap (Gap _)                                        =  True

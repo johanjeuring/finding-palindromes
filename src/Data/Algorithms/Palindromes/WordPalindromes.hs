@@ -33,11 +33,11 @@ maximalWordPalindromesLengthAtLeast :: Int -> B.ByteString -> String
 maximalWordPalindromesLengthAtLeast m input =
     let textInput = B.map myToLower (B.filter myIsLetterW input)
         positionTextInput = listArrayl0 (B.findIndices myIsLetterW input)
-     in intercalate "\n" $
+    in  intercalate "\n" $
             maximalWordPalindromesLengthAtLeastBS m input textInput positionTextInput
 
-maximalWordPalindromesLengthAtLeastBS ::
-    Int -> B.ByteString -> B.ByteString -> Array Int Int -> [String]
+maximalWordPalindromesLengthAtLeastBS
+    :: Int -> B.ByteString -> B.ByteString -> Array Int Int -> [String]
 maximalWordPalindromesLengthAtLeastBS m input textInput positionTextInput =
     map (showTextPalindrome input positionTextInput) $
         filter ((m <=) . fst) $
@@ -54,7 +54,7 @@ longestWordPalindrome input =
             maximumBy
                 (\(w, _) (w', _) -> compare w w')
                 (zip (wordPalindromesAroundCentres input textInput positionTextInput) [0 ..])
-     in showTextPalindrome input positionTextInput (len, pos)
+    in  showTextPalindrome input positionTextInput (len, pos)
 
 -----------------------------------------------------------------------------
 -- wordPalindromesAroundCentres
@@ -70,20 +70,20 @@ longestWordPalindrome input =
 wordPalindromesAroundCentres :: B.ByteString -> B.ByteString -> Array Int Int -> [Int]
 wordPalindromesAroundCentres input textInput positionTextInput =
     let tfirst = 0
-     in reverse $
+    in  reverse $
             map (head . snd) $
                 extendTailWord input textInput positionTextInput [] tfirst (0, [0])
 
 -- extendTailWordold textInput positionTextInput input n current centres = extendTailWord input textInput positionTextInput centres n current
 
-extendTailWord ::
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [(Int, [Int])] ->
-    Int ->
-    (Int, [Int]) ->
-    [(Int, [Int])]
+extendTailWord
+    :: B.ByteString
+    -> B.ByteString
+    -> Array Int Int
+    -> [(Int, [Int])]
+    -> Int
+    -> (Int, [Int])
+    -> [(Int, [Int])]
 extendTailWord input textInput positionTextInput centres n current@(currentTail, currentTailWords)
     | n > alast =
         -- reached the end of the text input array
@@ -141,15 +141,15 @@ extendTailWord input textInput positionTextInput centres n current@(currentTail,
   where
     (afirst, alast) = (0, B.length textInput - 1)
 
-extendWordCentres ::
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])]
+extendWordCentres
+    :: B.ByteString
+    -> B.ByteString
+    -> Array Int Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
 extendWordCentres input textInput positionTextInput centres n tcentres centreDistance
     | centreDistance == 0 =
         -- the last centre is on the last element:
@@ -164,7 +164,7 @@ extendWordCentres input textInput positionTextInput centres n tcentres centreDis
         -- of palindromes to find the longest tail
         -- palindrome
         let (currentTail, oldWord : oldWords) = head tcentres
-         in if surroundedByPunctuation
+        in  if surroundedByPunctuation
                 (positionTextInput ! (n - currentTail))
                 (positionTextInput ! (n - 1))
                 input
@@ -208,7 +208,7 @@ extendWordCentres input textInput positionTextInput centres n tcentres centreDis
                     snd (head tcentres)
                 | otherwise =
                     tail (snd (head tcentres))
-         in extendWordCentres
+        in  extendWordCentres
                 input
                 textInput
                 positionTextInput
@@ -217,15 +217,15 @@ extendWordCentres input textInput positionTextInput centres n tcentres centreDis
                 (tail tcentres)
                 (centreDistance - 1)
 
-finalWordCentres ::
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])]
+finalWordCentres
+    :: B.ByteString
+    -> B.ByteString
+    -> Array Int Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
 finalWordCentres input textInput positionTextInput centres n tcentres mirrorPoint
     | n == 0 = centres
     | n > 0 =
@@ -258,7 +258,7 @@ finalWordCentres input textInput positionTextInput centres n tcentres mirrorPoin
                     || null oldWords =
                     newWord : oldWords
                 | otherwise = oldWords
-         in finalWordCentres
+        in  finalWordCentres
                 input
                 textInput
                 positionTextInput

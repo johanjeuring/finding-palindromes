@@ -1,6 +1,7 @@
 module PalindromeProperties where
 
-import Data.Char (readLitChar, toLower)
+import Data.Char (isAlpha, readLitChar, toLower)
+import Data.Vector (fromList)
 import PalindromeMethods (longestTextPalindrome)
 import Test.QuickCheck (Gen, Property, arbitrary, forAll)
 
@@ -8,33 +9,33 @@ import qualified Data.Algorithms.Palindromes.Palindromes as P
 import qualified Data.Algorithms.Palindromes.PalindromesUtils as PU
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as BC
+import qualified Data.List as L
 
 propPalindromesAroundCentres :: Property
 propPalindromesAroundCentres = forAll (arbitrary :: Gen [Char]) $ \l ->
     let
-        input = BC.pack l
-        input' = B.map PU.myToLower $ B.filter PU.myIsLetterW input
-        posArray = PU.listArrayl0 $ B.findIndices PU.myIsLetterW input
-     in
+        input = map toLower $ filter isAlpha l
+        posArray = PU.listArrayl0 $ L.findIndices isAlpha l
+    in
         P.palindromesAroundCentres
             (Just PU.Text)
             (Just PU.Linear)
             Nothing
             Nothing
-            input
-            input'
+            (fromList l)
+            (fromList input)
             posArray -- Position array
-            == longestPalindromesQ input'
+            == longestPalindromesQ input
 
-longestPalindromesQ :: B.ByteString -> [Int]
+longestPalindromesQ :: String -> [Int]
 longestPalindromesQ input =
     let
-        (afirst, alast) = (0, B.length input - 1)
+        (afirst, alast) = (0, length input - 1)
         positions = [0 .. 2 * (alast - afirst + 1)]
-     in
+    in
         map (lengthPalindromeAround input) positions
 
-lengthPalindromeAround :: B.ByteString -> Int -> Int
+lengthPalindromeAround :: String -> Int -> Int
 lengthPalindromeAround input position
     | even position =
         extendPalindromeAround (afirst + pos - 1) (afirst + pos)
@@ -42,11 +43,11 @@ lengthPalindromeAround input position
         extendPalindromeAround (afirst + pos - 1) (afirst + pos + 1)
   where
     pos = div position 2
-    (afirst, alast) = (0, B.length input - 1)
+    (afirst, alast) = (0, length input - 1)
     extendPalindromeAround start end =
         if start < 0
             || end > alast - afirst
-            || B.index input start /= B.index input end
+            || input !! start /= input !! end
             then end - start - 1
             else extendPalindromeAround (start - 1) (end + 1)
 
@@ -54,9 +55,9 @@ propTextPalindrome :: Property
 propTextPalindrome =
     forAll (arbitrary :: Gen [Char]) $
         \l ->
-            let ltp = longestTextPalindrome PU.Linear (BC.pack l)
-                ltp' = map toLower (filter PU.myIsLetterC (unescape ltp))
-             in ltp' == reverse ltp'
+            let ltp = longestTextPalindrome PU.Linear (fromList l)
+                ltp' = map toLower (filter isAlpha (unescape ltp))
+            in  ltp' == reverse ltp'
 
 unescape :: String -> String
 unescape [] = []

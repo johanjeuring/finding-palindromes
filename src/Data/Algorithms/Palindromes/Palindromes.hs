@@ -1,6 +1,5 @@
 -- test strict integers
 -- >let input = Data.ByteString.pack (map Data.ByteString.Internal.c2w "yabadabadoo")
-
 -----------------------------------------------------------------------------
 --
 -- Module      :  Data.Algorithms.Palindromes.Palindromes
@@ -16,27 +15,30 @@
 module Data.Algorithms.Palindromes.Palindromes
     ( palindrome
     , palindromesAroundCentres
-    , dnaLengthGappedApproximatePalindromeAround
     ) where
 
 import Data.Algorithms.Palindromes.PalindromesUtils
-    ( Flag (..)
+    ( Couplable
+    , Flag (..)
     , appendseq
-    , listArrayl0
-    , myIsLetterW
-    , myToLower
     , showPalindrome
     , showPalindromeDNA
     , showTextPalindrome
     , surroundedByPunctuation
+    , toDNA
+    , vecToArray
     , (=:=)
     )
+import Data.Algorithms.Palindromes.QuadraticAlgorithm
+    ( gappedApproximatePalindromesAroundCentres
+    )
 import Data.Array (Array, (!))
+import Data.Char (isAlpha, toLower)
 import Data.List (intercalate, maximumBy)
-import Data.Word (Word8)
 
-import qualified Data.ByteString as B
+import qualified Data.Bifunctor as BiFunc
 import qualified Data.Sequence as S
+import qualified Data.Vector as V
 
 -----------------------------------------------------------------------------
 -- palindrome dispatches to the desired variant of the palindrome finding
@@ -49,60 +51,82 @@ import qualified Data.Sequence as S
 -----------------------------------------------------------------------------
 
 -- | palindrome captures all possible variants of finding palindromes.
-palindrome ::
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    B.ByteString ->
-    String
+palindrome
+    :: Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> V.Vector Char
+    -- ^ For now, we use Word8 until we can abstract the whole datatype away or decide to use another datatype
+    -> String
 palindrome palindromeVariant outputFormat algorithmComplexity lengthModifier gap nrOfErrors input =
-    let predicate = case lengthModifier of
-            Just (LengthAtLeast m) -> (m <=)
-            Just (LengthAtMost m) -> (<= m)
-            Just (LengthExact m) -> \l -> m <= l && (odd l == odd m)
-            Just (LengthBetween m n) -> \pl -> pl >= m && pl <= n
-            _ -> const True
+    let (predicate, correctLengthInput) = case lengthModifier of
+            Just (LengthAtLeast m) -> ((m <=), m >= 0)
+            Just (LengthAtMost m) -> ((<= m), m >= 0)
+            Just (LengthExact m) -> (\l -> m <= l && (odd l == odd m), m >= 0)
+            Just (LengthBetween m n) -> (\pl -> pl >= m && pl <= n, m >= 0 && n >= 0)
+            _ -> (const True, True)
+
         post = case lengthModifier of
-            Just (LengthExact m) -> \_ -> m
+            Just (LengthExact m) -> const m
             _ -> id
-        textinput = B.map myToLower (B.filter myIsLetterW input)
-        positionTextInput = listArrayl0 (B.findIndices myIsLetterW input)
+
+        correctGapInput = case gap of
+            Just (Gap gapSize) -> gapSize >= 0
+            _ -> True
+
+        correctErrorInput = case gap of
+            Just (NrOfErrors n) -> n >= 0
+            _ -> True
+
+        textinput = V.map toLower (V.filter isAlpha input)
+
+        positionTextInput = vecToArray $ V.findIndices isAlpha input
+
         input' = case palindromeVariant of
             Just Text -> textinput
             Just Word -> textinput
             Just DNA -> textinput
             _ -> input
+
         show' = case palindromeVariant of
             Just Text -> showTextPalindrome input positionTextInput
             Just Word -> showTextPalindrome input positionTextInput
             Just DNA -> showPalindromeDNA textinput
             _ -> showPalindrome input
+
         outputf = case outputFormat of
             Just LengthLongest -> show . maximum . map post . filter predicate
             Just Maximal ->
                 intercalate "\n"
-                    . map (show' . (\(l, r) -> (post l, r)))
+                    . map (show' . BiFunc.first post)
                     . filter (predicate . fst)
                     . flip zip [0 ..]
             Just LengthMaximal -> show . map post . filter predicate
+            Just (Extend n) ->
+                show'
+                    . flip (!!) n
+                    . flip zip [0 ..]
             _ ->
                 show'
                     . maximumBy (\(l, _) (l', _) -> compare l l')
-                    . map (\(l, r) -> (post l, r))
+                    . map (BiFunc.first post)
                     . filter (predicate . fst)
                     . flip zip [0 ..]
-     in outputf $
-            palindromesAroundCentres
-                palindromeVariant
-                algorithmComplexity
-                gap
-                nrOfErrors
-                input
-                input'
-                positionTextInput
+    in  if not correctLengthInput || not correctGapInput || not correctErrorInput
+            then error "Invalid input"
+            else
+                outputf $
+                    palindromesAroundCentres
+                        palindromeVariant
+                        algorithmComplexity
+                        gap
+                        nrOfErrors
+                        input
+                        input'
+                        positionTextInput
 
 {-
 -- The following code is replaced by the equivalent code using a more efficient
@@ -161,7 +185,6 @@ finalPalindromes nrOfCenters previousMaximalPalindromes currentMaximalPalindrome
       =  error "finalCentres: input < 0"
 
 -}
-
 -----------------------------------------------------------------------------
 -- palindromesAroundCentresS
 --
@@ -177,44 +200,65 @@ finalPalindromes nrOfCenters previousMaximalPalindromes currentMaximalPalindrome
   the list of lenghths of the longest palindrome around each position in a
   string.
 -}
-palindromesAroundCentres ::
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [Int]
-palindromesAroundCentres palindromeVariant algorithmComplexity gap nrOfErrors input input' positionTextInput =
-    case (algorithmComplexity, gap, nrOfErrors) of
-        (Just Linear, Nothing, Nothing) -> case palindromeVariant of
-            Just DNA -> reverse $ appendseq $ extendPalindromeS (=:=) 2 0 input' [] S.empty 0 0
-            Just Word ->
-                reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0, [0])
-            _ -> reverse $ appendseq $ extendPalindromeS (==) 1 1 input' [] S.empty 0 0
-        (Just Linear, _, _) ->
-            error
-                "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"
-        (_, g, k) ->
-            let g' = case g of
-                    Just (Gap g'') -> g''
-                    _ -> 0
-                k' = case k of
-                    Just (NrOfErrors k'') -> k''
-                    _ -> 0
-             in gappedApproximatePalindromesAroundCentres palindromeVariant input' g' k'
+palindromesAroundCentres
+    :: Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> V.Vector Char
+    -> V.Vector Char
+    -> Array Int Int
+    -> [Int]
+palindromesAroundCentres
+    palindromeVariant
+    algorithmComplexity
+    gap
+    nrOfErrors
+    input
+    input'
+    positionTextInput =
+        case (algorithmComplexity, gap, nrOfErrors) of
+            (Just Linear, Nothing, Nothing) -> case palindromeVariant of
+                Just DNA -> reverse $ appendseq $ extendPalindromeS (=:=) 2 0 input' [] S.empty 0 0
+                Just Word ->
+                    reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0, [0])
+                _ -> reverse $ appendseq $ extendPalindromeS (=:=) 1 1 input' [] S.empty 0 0
+            (Just Linear, _, _) ->
+                error
+                    "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"
+            (_, gapSize, errorCount) ->
+                let gapSize' = case gapSize of
+                        Just (Gap gapSize'') -> gapSize''
+                        _ -> 0
+                    errorCount' = case errorCount of
+                        Just (NrOfErrors errorCount'') -> errorCount''
+                        _ -> 0
+                    result = case palindromeVariant of
+                        Just DNA ->
+                            gappedApproximatePalindromesAroundCentres
+                                palindromeVariant
+                                (toDNA input')
+                                gapSize'
+                                errorCount'
+                        _ ->
+                            gappedApproximatePalindromesAroundCentres
+                                palindromeVariant
+                                input'
+                                gapSize'
+                                errorCount'
+                in  result
 
-extendPalindromeS ::
-    (Word8 -> Word8 -> Bool) ->
-    Int ->
-    Int ->
-    B.ByteString ->
-    [Int] ->
-    S.Seq Int ->
-    Int ->
-    Int ->
-    ([Int], S.Seq Int)
+extendPalindromeS
+    :: (Couplable a)
+    => (a -> a -> Bool)
+    -> Int
+    -> Int
+    -> V.Vector a
+    -> [Int]
+    -> S.Seq Int
+    -> Int
+    -> Int
+    -> ([Int], S.Seq Int)
 extendPalindromeS eq centerfactor tailfactor input =
     let ePS maximalPalindromesPre maximalPalindromesIn rightmost currentPalindrome
             | rightmost > lastPos =
@@ -226,7 +270,7 @@ extendPalindromeS eq centerfactor tailfactor input =
                     (currentPalindrome S.<| maximalPalindromesIn)
                     maximalPalindromesIn
             | rightmost - currentPalindrome == first
-                || not (B.index input rightmost `eq` B.index input (rightmost - currentPalindrome - 1)) =
+                || not (input V.! rightmost `eq` (input V.! (rightmost - currentPalindrome - 1))) =
                 -- the current palindrome extends to the start of the array,
                 -- or it cannot be extended
                 mCS
@@ -238,14 +282,14 @@ extendPalindromeS eq centerfactor tailfactor input =
             | otherwise =
                 -- the current palindrome can be extended
                 let (left, rest) = splitAt 2 maximalPalindromesPre
-                 in ePS
+                in  ePS
                         rest
                         (foldr (flip (S.|>)) maximalPalindromesIn left)
                         (rightmost + 1)
                         (currentPalindrome + 2)
           where
             first = 0
-            lastPos = B.length input - 1
+            lastPos = V.length input - 1
         mCS rightmost maximalPalindromesPre maximalPalindromesIn maximalPalindromesIn' nrOfCenters
             | nrOfCenters == 0 =
                 -- the last centre is on the last element: try to extend the tail of length 1
@@ -265,9 +309,7 @@ extendPalindromeS eq centerfactor tailfactor input =
                             tailq
                             (nrOfCenters - centerfactor)
                     S.EmptyL -> error "extendPalindromeS: empty sequence"
-     in ePS
-
--- moveCenterS :: B.ByteString -> Int -> [Int] -> S.Seq Int -> S.Seq Int -> Int -> ([Int],S.Seq Int)
+    in  ePS
 
 finalPalindromesS :: Int -> Int -> [Int] -> S.Seq Int -> S.Seq Int -> ([Int], S.Seq Int)
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesPre maximalPalindromesIn maximalPalindromesIn'
@@ -286,61 +328,21 @@ finalPalindromesS centerfactor nrOfCenters maximalPalindromesPre maximalPalindro
     | otherwise =
         error "finalPalindromesS: input < 0"
 
-gappedApproximatePalindromesAroundCentres ::
-    Maybe Flag -> B.ByteString -> Int -> Int -> [Int]
-gappedApproximatePalindromesAroundCentres palindromeVariant input g k =
-    case palindromeVariant of
-        Just DNA ->
-            map
-                (lengthGappedApproximatePalindromeAround (=:=) 1 input g k)
-                (if even g then [0 .. B.length input] else [0 .. B.length input - 1])
-        _ ->
-            map
-                (lengthGappedApproximatePalindromeAround (==) 2 input g k)
-                [0 .. 2 * B.length input]
+{-
+---------------------------------------------------------------------
+      Begin functions for finding punctuation palindromes,
+      still called word palindromes here
+---------------------------------------------------------------------
+-}
 
--- I probably get the wrong positions printed for odd-gapped palindromes
--- the next two functions should be mergable, with a centerdivfactor
-lengthGappedApproximatePalindromeAround ::
-    (Word8 -> Word8 -> Bool) -> Int -> B.ByteString -> Int -> Int -> Int -> Int
-lengthGappedApproximatePalindromeAround (===) centerfactor input g k center =
-    let halfg = div g 2
-        c = div center centerfactor
-        lengthInput = B.length input
-        onletter = centerfactor == 2 && odd center
-        halfg'
-            | c < halfg = c
-            | c + halfg > lengthInput = lengthInput - c
-            | otherwise = halfg
-        left = c - 1 - halfg'
-        right = if onletter then c + 1 + halfg' else c + halfg'
-     in lengthApproximatePalindrome (===) input k left right
-
-lengthApproximatePalindrome ::
-    (Word8 -> Word8 -> Bool) -> B.ByteString -> Int -> Int -> Int -> Int
-lengthApproximatePalindrome (===) input k start end
-    | start < 0 || end > lastPos = end - start - 1
-    | B.index input start === B.index input end =
-        lengthApproximatePalindrome (===) input k (start - 1) (end + 1)
-    | k > 0 =
-        lengthApproximatePalindrome (===) input (k - 1) (start - 1) (end + 1)
-    | otherwise = end - start - 1
-  where
-    lastPos = B.length input - 1
-
-dnaLengthGappedApproximatePalindromeAround ::
-    Maybe Flag -> Maybe Flag -> Int -> B.ByteString -> String
-dnaLengthGappedApproximatePalindromeAround (Just (Gap gap)) (Just (NrOfErrors k)) center input = show $ lengthGappedApproximatePalindromeAround (=:=) 1 input gap k center
-dnaLengthGappedApproximatePalindromeAround _ _ center input = show $ lengthGappedApproximatePalindromeAround (=:=) 1 input 0 0 center
-
-extendTailWord ::
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [(Int, [Int])] ->
-    Int ->
-    (Int, [Int]) ->
-    [(Int, [Int])]
+extendTailWord
+    :: V.Vector Char
+    -> V.Vector Char
+    -> Array Int Int
+    -> [(Int, [Int])]
+    -> Int
+    -> (Int, [Int])
+    -> [(Int, [Int])]
 extendTailWord input textInput positionTextInput centres n current@(currentTail, currentTailWords)
     | n > alast =
         -- reached the end of the text input array
@@ -362,7 +364,7 @@ extendTailWord input textInput positionTextInput centres n current@(currentTail,
             n
             centres
             currentTail
-    | B.index textInput n == B.index textInput (n - currentTail - 1) =
+    | (textInput V.! n) =:= (textInput V.! (n - currentTail - 1)) =
         -- the current longest tail palindrome can be extended
         -- check whether or not the extended palindrome is a wordpalindrome
         if surroundedByPunctuation
@@ -396,17 +398,17 @@ extendTailWord input textInput positionTextInput centres n current@(currentTail,
             centres
             currentTail
   where
-    (afirst, alast) = (0, B.length textInput - 1)
+    (afirst, alast) = (0, V.length textInput - 1)
 
-extendWordCentres ::
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])]
+extendWordCentres
+    :: V.Vector Char
+    -> V.Vector Char
+    -> Array Int Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
 extendWordCentres input textInput positionTextInput centres n tcentres centreDistance
     | centreDistance == 0 =
         -- the last centre is on the last element:
@@ -421,7 +423,7 @@ extendWordCentres input textInput positionTextInput centres n tcentres centreDis
         -- of palindromes to find the longest tail
         -- palindrome
         let (currentTail, oldWord : oldWords) = head tcentres
-         in if surroundedByPunctuation
+        in  if surroundedByPunctuation
                 (positionTextInput ! (n - currentTail))
                 (positionTextInput ! (n - 1))
                 input
@@ -465,7 +467,7 @@ extendWordCentres input textInput positionTextInput centres n tcentres centreDis
                     snd (head tcentres)
                 | otherwise =
                     tail (snd (head tcentres))
-         in extendWordCentres
+        in  extendWordCentres
                 input
                 textInput
                 positionTextInput
@@ -474,19 +476,19 @@ extendWordCentres input textInput positionTextInput centres n tcentres centreDis
                 (tail tcentres)
                 (centreDistance - 1)
 
-finalWordCentres ::
-    B.ByteString ->
-    B.ByteString ->
-    Array Int Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])] ->
-    Int ->
-    [(Int, [Int])]
+finalWordCentres
+    :: V.Vector Char
+    -> V.Vector Char
+    -> Array Int Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
+    -> Int
+    -> [(Int, [Int])]
 finalWordCentres input textInput positionTextInput centres n tcentres mirrorPoint
     | n == 0 = centres
     | n > 0 =
-        let tlast = B.length textInput - 1
+        let tlast = V.length textInput - 1
             (oldTail, oldWord : oldWords) = head tcentres
             newTail = min oldTail (n - 1)
             newWord = min oldWord (n - 1)
@@ -515,7 +517,7 @@ finalWordCentres input textInput positionTextInput centres n tcentres mirrorPoin
                     || null oldWords =
                     newWord : oldWords
                 | otherwise = oldWords
-         in finalWordCentres
+        in  finalWordCentres
                 input
                 textInput
                 positionTextInput
@@ -524,3 +526,9 @@ finalWordCentres input textInput positionTextInput centres n tcentres mirrorPoin
                 (tail tcentres)
                 (mirrorPoint + 1)
     | otherwise = error "finalWordCentres: input < 0"
+
+{-
+---------------------------------------------------------------------
+      End functions for finding punctuation palindromes
+---------------------------------------------------------------------
+-}

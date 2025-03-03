@@ -1,0 +1,76 @@
+module UTExtendPals where
+
+import Data.Algorithms.Palindromes.PalindromesUtils (Flag)
+import Data.Vector (fromList)
+import PalindromeMethods (extendTextPalindrome)
+import Test.HUnit (Test (..), assertEqual)
+
+testExtendPalindrome1
+    , testExtendPalindrome2
+    , testExtendPalindrome3
+    , testExtendPalindrome4
+    , testExtendPalindrome5
+    , testExtendPalindrome6
+    , testExtendPalindrome7
+    , testExtendPalindrome8
+        :: Flag -> Test
+
+testListExtend t =
+    [ 
+      TestLabel "testExtendPalindrome1" $ testExtendPalindrome1 t
+    , TestLabel "testExtendPalindrome2" $ testExtendPalindrome2 t
+    , TestLabel "testExtendPalindrome3" $ testExtendPalindrome3 t
+    , TestLabel "testExtendPalindrome4" $ testExtendPalindrome4 t
+    , TestLabel "testExtendPalindrome5" $ testExtendPalindrome5 t
+    , TestLabel "testExtendPalindrome6" $ testExtendPalindrome6 t
+    , TestLabel "testExtendPalindrome7" $ testExtendPalindrome7 t
+    , TestLabel "testExtendPalindrome8" $ testExtendPalindrome8 t
+    ]
+
+testExtendPalindrome1 t =
+    TestCase $
+        assertEqual "extendPalindrome1" "e fe" $
+            extendTextPalindrome t 39 $
+                fromList "the cat jumped over the fence"
+
+testExtendPalindrome2 t =
+    TestCase $
+        assertEqual "extendPalindrome2" " evil live " $
+            extendTextPalindrome t 30 $
+                fromList "They found an evil live broadcast"
+
+testExtendPalindrome3 t =
+    TestCase $
+        assertEqual "extendPalindrome3" "o ho" $
+            extendTextPalindrome t 31 $
+                fromList "The coffee was too hot to drink"
+
+testExtendPalindrome4 t =
+    TestCase $
+        assertEqual "extendPalindrome4" " d" $
+            extendTextPalindrome t 3 $
+                fromList "A dog barked in the distance"
+
+testExtendPalindrome5 t =
+    TestCase $
+        assertEqual "extendPalindrome5" "oo" $
+            extendTextPalindrome t 10 $
+                fromList "The book fell off the shelf"
+
+testExtendPalindrome6 t =
+    TestCase $
+        assertEqual "extendPalindrome6" "" $
+            extendTextPalindrome t 0 $
+                fromList "the cat jumped over the fence"
+
+testExtendPalindrome7 t =
+    TestCase $
+        assertEqual "extendPalindrome7" "s s" $
+            extendTextPalindrome t 10 $
+                fromList "Birds sang outside my window"
+
+testExtendPalindrome8 t =
+    TestCase $
+        assertEqual "extendPalindrome8" " racecar " $
+            extendTextPalindrome t 13 $
+                fromList "The racecar zoomed past us"

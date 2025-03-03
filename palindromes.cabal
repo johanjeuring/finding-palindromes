@@ -29,40 +29,49 @@ source-repository this
 
 Library
   hs-source-dirs:       src
-  exposed-modules:      Data.Algorithms.Palindromes.Palindromes, Data.Algorithms.Palindromes.PalindromesUtils
+  exposed-modules:      Data.Algorithms.Palindromes.Palindromes
+                        , Data.Algorithms.Palindromes.PalindromesUtils
+                        , Data.Algorithms.Palindromes.QuadraticAlgorithm
   build-depends:        base >= 4.17 && < 5
                         , array
                         , bytestring
                         , containers
                         , QuickCheck >= 2.14 && < 3.0
                         , HUnit
+                        , vector
 
 Executable              palindromes
   Main-is:              Data/Algorithms/Palindromes/Main.hs
   ghc-options:          -Wall -O2 -rtsopts -threaded
-  hs-source-dirs:       src
-  other-modules:        Data.Algorithms.Palindromes.Palindromes,
-                        Data.Algorithms.Palindromes.PalindromesUtils,
-                        Data.Algorithms.Palindromes.Options
+  hs-source-dirs:       src  
+  other-modules:        Data.Algorithms.Palindromes.Options        
+                        , Data.Algorithms.Palindromes.Palindromes
+                        , Data.Algorithms.Palindromes.PalindromesUtils
+                        , Data.Algorithms.Palindromes.QuadraticAlgorithm
   build-depends:        base >= 4.17 && < 5
                         , array
                         , bytestring
                         , containers
+                        , vector
 
 Test-Suite              property-tests
   type:                 exitcode-stdio-1.0
   hs-source-dirs:       tests
   main-is:              Main.hs
-  other-modules:        PalindromeProperties,
-                        UTTextPals,
-                        UTWordPals,
-                        PalindromeMethods
-  build-depends:        base >= 3.0 && < 5,
-                        array,
-                        bytestring,
-                        containers,
-                        QuickCheck >= 2.14 && < 3.0,
-                        HUnit,
-                        palindromes
+  other-modules:        PalindromeProperties
+                        , UTGetLeftRight
+                        , UTQuadraticAlgorithm
+                        , UTTextPals
+                        , UTWordPals
+                        , PalindromeMethods
+                        , UTDNAPals
+  build-depends:        base >= 3.0 && < 5
+                        , array
+                        , bytestring
+                        , containers
+                        , QuickCheck >= 2.14 && < 3.0
+                        , HUnit
+                        , palindromes
+                        , vector
 --------------------------------------------------------------------------------
 

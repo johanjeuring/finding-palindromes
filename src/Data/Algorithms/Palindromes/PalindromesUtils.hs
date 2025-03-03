@@ -9,104 +9,101 @@
 -- Portability :  portable
 --
 -----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-- Flags a user can specify
+-----------------------------------------------------------------------------
+-- Palindromic variants (choose 1 out of 6; mutually exclusive):
+-- Algorithm complexity (choose 1 out of 2; mutually exclusive):
+-- Output format (choose 1 out of 4; mutually exclusive):
+-- Modifiers (choose 0 to 5; where the length restrictions need to fit together)
+-- input via AtLeast and AtMost. Adapt?
+-- Input format
+-----------------------------------------------------------------------------
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Data.Algorithms.Palindromes.PalindromesUtils
     ( Flag (..)
-    , negateDNA
     , showPalindromeDNA
     , (=:=)
     , showPalindrome
     , showTextPalindrome
     , myIsLetterC
-    , myIsLetterW
-    , myToLower
     , surroundedByPunctuation
     , appendseq
     , listArrayl0
+    , vecToArray
+    , toDNA
+    , Couplable
+    , DNA (..)
     ) where
 
 import Data.Array (Array, bounds, listArray, (!))
-import Data.ByteString.Internal (c2w, w2c)
-import Data.Char (isControl, isPunctuation, isSpace, toLower, toUpper)
+import Data.Char (isControl, isPunctuation, isSpace, toUpper)
 import Data.Foldable (Foldable (toList))
-import Data.Word (Word8)
 
-import qualified Data.ByteString as B
 import qualified Data.Sequence as S
+import qualified Data.Vector as V
 
------------------------------------------------------------------------------
--- Flags a user can specify
------------------------------------------------------------------------------
-
-data Flag -- Palindromic variants (choose 1 out of 6; mutually exclusive):
+data Flag
     = Help
     | Plain
     | Text
     | Word
     | DNA
     | Extend Int
-    | -- Algorithm complexity (choose 1 out of 2; mutually exclusive):
-      Linear
+    | Linear
     | Quadratic
-    | -- Output format (choose 1 out of 4; mutually exclusive):
-      Longest
+    | Longest
     | LengthLongest
     | Maximal
     | LengthMaximal
-    | -- Modifiers (choose 0 to 5; where the length restrictions need to fit together)
-      Gap Int
+    | Gap Int
     | NrOfErrors Int
     | LengthAtLeast Int
     | LengthAtMost Int
     | LengthExact Int
-    | LengthBetween Int Int -- input via AtLeast and AtMost. Adapt?
-    -- Input format
+    | LengthBetween Int Int
     | StandardInput
 
------------------------------------------------------------------------------
--- Equality on DNA
------------------------------------------------------------------------------
+{-
+-------------------------------------
+  Begin functions to show single palindromes
+-------------------------------------
+-}
 
-negateDNA :: Char -> Char
-negateDNA 'A' = 'T'
-negateDNA 'T' = 'A'
-negateDNA 'C' = 'G'
-negateDNA 'G' = 'C'
-negateDNA _ = error "negateDNA: not a DNA character"
-
-(=:=) :: Word8 -> Word8 -> Bool
-l =:= r =
-    let cl = toUpper (w2c l)
-        cr = toUpper (w2c r)
-     in if cl `elem` "ATCG" && cr `elem` "ATCG"
-            then cl == negateDNA cr
-            else False
-
------------------------------------------------------------------------------
--- Showing DNA palindromes
------------------------------------------------------------------------------
-
-showPalindromeDNA :: B.ByteString -> (Int, Int) -> String
+{- |
+  Show palindrome generates a string of a single palindrome that is contained in the input.
+  The DNA version works with the assumption that every centre is between letters.
+-}
+showPalindromeDNA :: (Show a) => V.Vector a -> (Int, Int) -> String
 showPalindromeDNA input (len, pos) =
     let startpos = pos - len `div` 2
-     in (show startpos ++)
+    in  (show startpos ++)
             . (" to " ++)
             . (show (startpos + len) ++)
             . ("\t" ++)
-            . (show (B.take len $ B.drop startpos input) ++)
+            . (show (V.take len $ V.drop startpos input) ++)
             . ("\t" ++)
             $ show len
 
------------------------------------------------------------------------------
--- Showing palindromes and other text related functionality
------------------------------------------------------------------------------
+{- |
+  Show palindrome generates a string of a single palindrome that is contained in the input.
+  This version works with the assumption that centres can be on top and between letters.
+-}
+showPalindrome :: (Show a) => V.Vector a -> (Int, Int) -> String
+showPalindrome input (len, pos) = show a
+  where
+    startpos = pos `div` 2 - len `div` 2
+    a = V.take len $ V.drop startpos input
 
-showPalindrome :: B.ByteString -> (Int, Int) -> String
-showPalindrome input (len, pos) =
-    let startpos = pos `div` 2 - len `div` 2
-     in show $ B.take len $ B.drop startpos input
-
-showTextPalindrome :: B.ByteString -> Array Int Int -> (Int, Int) -> String
+{- |
+  Show palindrome generates a string of a single palindrome that is contained in the input.
+  This version works with the assumption that centres can be on top and between letters.
+  Due to the way `show` works with text symbols, this procedure is a bit longer than the generic version.
+-}
+showTextPalindrome
+    :: V.Vector Char -> Array Int Int -> (Int, Int) -> String
 showTextPalindrome input positionTextInput (len, pos) =
     let startpos = pos `div` 2 - len `div` 2
         endpos =
@@ -114,10 +111,14 @@ showTextPalindrome input positionTextInput (len, pos) =
                 then pos `div` 2 + len `div` 2
                 else pos `div` 2 + len `div` 2 - 1
         (pfirst, plast) = bounds positionTextInput
-        (ifirst, ilast) = (0, 1 + B.length input)
-     in if endpos < startpos
+        (ifirst, ilast) = (0, 1 + V.length input)
+    in  if endpos < startpos
             then []
             else
+                {-
+                   This block of code is used to add punctuation at the start
+                   and end of the palindrome to the returned value
+                -}
                 let start =
                         if startpos > pfirst
                             then (positionTextInput ! (startpos - 1)) + 1
@@ -126,57 +127,129 @@ showTextPalindrome input positionTextInput (len, pos) =
                         if endpos < plast
                             then (positionTextInput ! (endpos + 1)) - 1
                             else ilast
-                 in show $ B.filter (\c -> c /= 13 && c /= 10) (B.take (end - start + 1) (B.drop start input))
+                in  toList $
+                        V.filter
+                            (\c -> c /= '\n' && c /= '\r')
+                            (V.take (end - start + 1) (V.drop start input))
 
-{- Using this code instead of the last else above shows text palindromes without
-   all punctuation around it. Right now this punctuation is shown.
-
-      else let start      =  positionArray!!!startpos
-               end        =  positionArray!!!endpos
+{-
+-------------------------------------
+  End functions to show single palindromes
+-------------------------------------
 -}
 
--- For palindromes in strings, punctuation, spacing, and control characters
--- are often ignored
+{-
+--------------------------------------
+  Begin punctuation utility functions
+--------------------------------------
+-}
 
-myIsLetterW :: Word8 -> Bool
-myIsLetterW c' =
-    not (isPunctuation c)
-        && not (isControl c)
-        && not (isSpace c)
-  where
-    c = w2c c'
-
+{- |
+  Checks whether a character is a letter
+-}
 myIsLetterC :: Char -> Bool
 myIsLetterC c =
     not (isPunctuation c)
         && not (isControl c)
         && not (isSpace c)
 
-myToLower :: Word8 -> Word8
-myToLower = c2w . toLower . w2c
-
-surroundedByPunctuation :: Int -> Int -> B.ByteString -> Bool
+{- |
+  Checks whether the range specified by the first 2 parameters is surrounded by punctuation in the 3rd parameter.
+-}
+surroundedByPunctuation :: Int -> Int -> V.Vector Char -> Bool
 surroundedByPunctuation begin end input
     | begin > afirst && end < alast =
-        not (myIsLetterW (B.index input (begin - 1)))
-            && not (myIsLetterW (B.index input (end + 1)))
-    | begin <= afirst && end < alast = not (myIsLetterW (B.index input (end + 1)))
+        not (myIsLetterC ((V.!) input (begin - 1)))
+            && not (myIsLetterC ((V.!) input (end + 1)))
+    | begin <= afirst && end < alast = not (myIsLetterC ((V.!) input (end + 1)))
     | begin <= afirst && end >= alast = True
-    | begin > afirst && end >= alast = not (myIsLetterW (B.index input (begin - 1)))
+    | begin > afirst && end >= alast = not (myIsLetterC ((V.!) input (begin - 1)))
     | otherwise = error "surroundedByPunctuation"
   where
-    (afirst, alast) = (0, B.length input - 1)
+    (afirst, alast) = (0, V.length input - 1)
 
------------------------------------------------------------------------------
--- Seq utils
------------------------------------------------------------------------------
+{-
+--------------------------------------
+  End punctuation utility functions
+--------------------------------------
+-}
+
+{-
+----------------------------------------------------
+  Begin foldable (Seq/Array/List) utility functions
+----------------------------------------------------
+-}
 
 appendseq :: ([a], S.Seq a) -> [a]
 appendseq (list, s) = toList s ++ list
 
------------------------------------------------------------------------------
--- Array utils
------------------------------------------------------------------------------
-
 listArrayl0 :: [a] -> Array Int a
 listArrayl0 string = listArray (0, length string - 1) string
+
+vecToArray :: V.Vector a -> Array Int a
+vecToArray v = listArray bounds content
+  where
+    bounds = (0, V.length v - 1)
+    content = V.toList v
+
+{-
+-----------------------------
+  Begin couplable definition
+-----------------------------
+-}
+
+{- |
+  Shows that some element belongs to another element.
+  For example, A belongs to T in DNA, and 'z' belongs to 'z' in normal text.
+-}
+class Couplable a where
+    (=:=) :: a -> a -> Bool
+
+-- | Define Couplable instance for any a of class Eq. Just use the equality relation.
+instance (Eq a) => Couplable a where
+    (=:=) = (==)
+
+{-
+-----------------------------
+  End couplable definition
+-----------------------------
+-}
+
+{-
+--------------------------------------
+  Begin DNA definition and functions
+--------------------------------------
+-}
+
+-- | Datatype for the different DNA
+data DNA = A | T | C | G | N deriving (Show)
+
+-- | Declare instance Couplable for DNA. A and T form a couple, C and G form a couple.
+instance {-# OVERLAPPING #-} Couplable DNA where
+    A =:= T = True
+    T =:= A = True
+    G =:= C = True
+    C =:= G = True
+    _ =:= _ = False
+
+toDNA :: (Functor f) => f Char -> f DNA
+toDNA = fmap charToDNA
+
+charToDNA :: Char -> DNA
+charToDNA 'A' = A
+charToDNA 'T' = T
+charToDNA 'C' = C
+charToDNA 'G' = G
+charToDNA 'N' = N
+charToDNA 'a' = A
+charToDNA 't' = T
+charToDNA 'c' = C
+charToDNA 'g' = G
+charToDNA 'n' = N
+charToDNA _ = error "Not a valid DNA string"
+
+{-
+--------------------------------------
+  End DNA definition and functions
+--------------------------------------
+-}

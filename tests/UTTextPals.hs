@@ -1,6 +1,7 @@
 module UTTextPals where
 
 import Data.Algorithms.Palindromes.PalindromesUtils (Flag)
+import Data.Vector (fromList)
 import PalindromeMethods (longestTextPalindrome)
 import Test.HUnit (Test (..), assertEqual)
 
@@ -17,8 +18,8 @@ testTextPalindrome1
     , testTextPalindrome8
     , testTextPalindrome9
     , testTextPalindrome10
-    , testTextPalindrome11 ::
-        Flag -> Test
+    , testTextPalindrome11
+        :: Flag -> Test
 
 testListText t =
     [ TestLabel "testTextPalindrome10" $ testTextPalindrome10 t
@@ -36,70 +37,76 @@ testListText t =
 
 testTextPalindrome1 t =
     TestCase $
-        assertEqual "textPalindrome1" "\"a,ba.\"" $
+        assertEqual "textPalindrome1" "a,ba." $
             longestTextPalindrome t $
-                BC.pack "abcdea,ba."
+                fromList "abcdea,ba."
 
 testTextPalindrome2 t =
     TestCase $
-        assertEqual "textPalindrome2" "\"a,ba\"" $
+        assertEqual "textPalindrome2" "a,ba" $
             longestTextPalindrome t $
-                BC.pack "abcdea,ba"
+                fromList "abcdea,ba"
 
 testTextPalindrome3 t =
     TestCase $
-        assertEqual "textPalindrome3" "\".a,ba\"" $
+        assertEqual "textPalindrome3" ".a,ba" $
             longestTextPalindrome t $
-                BC.pack "abcde.a,ba"
+                fromList "abcde.a,ba"
 
 testTextPalindrome4 t =
     TestCase $
-        assertEqual "textPalindrome4" "\".a,ba\"" $
+        assertEqual "textPalindrome4" ".a,ba" $
             longestTextPalindrome t $
-                BC.pack "abcde.a,baf"
+                fromList "abcde.a,baf"
 
 testTextPalindrome5 t =
     TestCase $
-        assertEqual "textPalindrome5" "\".ab,a\"" $
+        assertEqual "textPalindrome5" ".ab,a" $
             longestTextPalindrome t $
-                BC.pack ".ab,acdef"
+                fromList ".ab,acdef"
 
 testTextPalindrome6 t =
     TestCase $
-        assertEqual "textPalindrome6" "\"ab,a\"" $
+        assertEqual "textPalindrome6" "ab,a" $
             longestTextPalindrome t $
-                BC.pack "ab,acdef"
+                fromList "ab,acdef"
 
 testTextPalindrome7 t =
     TestCase $
-        assertEqual "textPalindrome7" "\"ab,a.\"" $
+        assertEqual "textPalindrome7" "ab,a." $
             longestTextPalindrome t $
-                BC.pack "ab,a.cdef"
+                fromList "ab,a.cdef"
 
 testTextPalindrome8 t =
     TestCase $
-        assertEqual "textPalindrome8" "\".ab,a.\"" $
+        assertEqual "textPalindrome8" ".ab,a." $
             longestTextPalindrome t $
-                BC.pack "g.ab,a.cdef"
+                fromList "g.ab,a.cdef"
 
 testTextPalindrome9 t =
     TestCase $
         assertEqual "textPalindrome9" "" $
-            longestTextPalindrome t B.empty
+            longestTextPalindrome t $
+                fromList ""
 
 testTextPalindrome10 t =
     TestCase $ do
-        string <- B.readFile "./examples/palindromes/Damnitimmad.txt"
-        putStrLn $ show string
+        string <- readFile "./examples/palindromes/Damnitimmad.txt"
         assertEqual
             "textPalindrome10"
-            (show $ B.unpack string)
-            $ longestTextPalindrome t string
+            ( filter
+                (\c -> c /= '\r' && c /= '\\' && c /= '\n')
+                string
+            )
+            $ longestTextPalindrome t (fromList string)
 
 testTextPalindrome11 t =
     TestCase $ do
-        string <- B.readFile "./examples/palindromes/pal17.txt"
+        string <- readFile "./examples/palindromes/pal17.txt"
         assertEqual
             "textPalindrome11"
-            (filter (\c -> c /= '\n' && c /= '\r') (show string))
-            $ longestTextPalindrome t string
+            ( filter
+                (\c -> c /= '\r' && c /= '\\' && c /= '\n')
+                string
+            )
+            $ longestTextPalindrome t (fromList string)

@@ -18,10 +18,9 @@ import Data.Algorithms.Palindromes.Palindromes
     ( dnaLengthGappedApproximatePalindromeAround
     , palindrome
     )
-import Data.Algorithms.Palindromes.PalindromesUtils (Flag (..))
+import Data.Algorithms.Palindromes.PalindromesUtils (Flag (..), toDNA)
+import Data.Vector (fromList)
 import System.Console.GetOpt
-
-import qualified Data.ByteString as B
 
 -----------------------------------------------------------------------------
 -- Options
@@ -203,7 +202,6 @@ palindromeVariant flags
     | any isText flags = Just Text
     | any isWord flags = Just Word
     | any isDNA flags = Just DNA
-    | any isExtend flags = Just $ head $ filter isExtend flags
     | otherwise = Nothing
 
 outputFormat :: [Flag] -> Maybe Flag
@@ -212,6 +210,7 @@ outputFormat flags
     | any isLengthLongest flags = Just LengthLongest
     | any isMaximal flags = Just Maximal
     | any isLengthMaximal flags = Just LengthMaximal
+    | any isExtend flags = Just $ head $ filter isExtend flags
     | otherwise = Nothing
 
 algorithmComplexity :: [Flag] -> Maybe Flag
@@ -264,7 +263,7 @@ getLengthAtMosts flags = case filter isLengthAtMost flags of
     [lal] -> getLengthAtMost lal
     _ -> error "No or too many length at least specified"
 
-handleOptions :: [Flag] -> (B.ByteString -> String, Bool)
+handleOptions :: [Flag] -> (String -> String, Bool)
 handleOptions flags =
     ( dispatchFlags
         (palindromeVariant flags)
@@ -276,20 +275,20 @@ handleOptions flags =
     , any isStandardInput flags
     )
 
-dispatchFlags ::
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    Maybe Flag ->
-    B.ByteString ->
-    String
-dispatchFlags pvariant out ac l g k = case pvariant of
-    Nothing -> const (usageInfo headerHelpMessage options)
-    Just Help -> const (usageInfo headerHelpMessage options)
-    Just (Extend c) -> dnaLengthGappedApproximatePalindromeAround g k c
-    _ -> palindrome pvariant out ac l g k
+dispatchFlags
+    :: Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> Maybe Flag
+    -> String
+    -> String
+dispatchFlags pvariant out ac l gapSize errorCount b = case pvariant of
+    Nothing -> usageInfo headerHelpMessage options
+    Just Help -> usageInfo headerHelpMessage options
+    Just DNA -> palindrome pvariant out ac l gapSize errorCount (fromList b)
+    _ -> palindrome pvariant out ac l gapSize errorCount (fromList b)
 
 headerHelpMessage :: String
 headerHelpMessage =

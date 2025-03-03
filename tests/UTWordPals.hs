@@ -1,17 +1,16 @@
 module UTWordPals where
 
+import Data.Vector (fromList)
 import PalindromeMethods (longestWordPalindrome)
 import Test.HUnit (Test (..), assertEqual)
-
-import qualified Data.ByteString.Char8 as BC
 
 testWordPalindrome1
     , testWordPalindrome2
     , testWordPalindrome3
     , testWordPalindrome4
     , testWordPalindrome5
-    , testWordPalindrome6 ::
-        Test
+    , testWordPalindrome6
+        :: Test
 
 testListWords =
     [ TestLabel "testWordPalindrome1" testWordPalindrome1
@@ -25,42 +24,44 @@ testListWords =
 
 testWordPalindrome1 =
     TestCase $
-        assertEqual "wordPalindrome" "\" is non si, \"" $
+        assertEqual "wordPalindrome" " is non si, " $
             longestWordPalindrome $
-                BC.pack "what is non si, not?"
+                fromList "what is non si, not?"
 
 testWordPalindrome2 =
     TestCase $
-        assertEqual "wordPalindrome" "\" is non si\"" $
+        assertEqual "wordPalindrome" " is non si" $
             longestWordPalindrome $
-                BC.pack "what is non si"
+                fromList "what is non si"
 
 testWordPalindrome3 =
     TestCase $
-        assertEqual "wordPalindrome" "\"is non si, \"" $
+        assertEqual "wordPalindrome" "is non si, " $
             longestWordPalindrome $
-                BC.pack "is non si, not?"
+                fromList "is non si, not?"
 
 testWordPalindrome4 =
     TestCase $
         assertEqual "wordPalindrome" "" $
             longestWordPalindrome $
-                BC.pack "aaaaba"
+                fromList "aaaaba"
 
 testWordPalindrome5 =
     TestCase $
-        assertEqual "wordPalindrome" "\" a\"" $
+        assertEqual "wordPalindrome" " a" $
             longestWordPalindrome $
-                BC.pack "aaaab a"
+                fromList "aaaab a"
 
 testWordPalindrome6 =
     TestCase $
-        assertEqual "wordPalindrome" "\" waaw \"" $
+        assertEqual "wordPalindrome" " waaw " $
             longestWordPalindrome $
-                BC.pack "w waaw wo waw"
+                fromList "w waaw wo waw"
 
 testWordPalindrome7 =
-    TestCase $
-        assertEqual "wordPalindrome" "\" v waaw v\"" $
-            longestWordPalindrome $
-                BC.pack "vwaawvxy v waaw v"
+    TestCase
+        $ assertEqual
+            "wordPalindrome"
+            " v waaw v"
+        $ longestWordPalindrome
+        $ fromList "vwaawvxy v waaw v"

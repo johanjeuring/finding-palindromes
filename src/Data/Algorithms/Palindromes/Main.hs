@@ -13,36 +13,35 @@ Portability :  portable
 -}
 module Main where
 
-import Data.Algorithms.Palindromes.Options
-import System.Console.GetOpt
+import Data.Algorithms.Palindromes.Options (handleOptions, options)
+import System.Console.GetOpt (ArgOrder (Permute), getOpt)
 import System.Environment (getArgs)
-import System.IO
 
-import qualified Data.ByteString as B
+import qualified System.IO as Sys
 
 -----------------------------------------------------------------------------
 -- main
 -----------------------------------------------------------------------------
 
-handleFilesWith :: (B.ByteString -> String) -> [String] -> IO ()
+handleFilesWith :: (String -> String) -> [String] -> IO ()
 handleFilesWith f [] = putStr $ f undefined
 handleFilesWith f xs =
     let hFW filenames =
             case filenames of
                 [] -> putStr ""
                 (fn : fns) -> do
-                    fn' <- openFile fn ReadMode
-                    hSetEncoding fn' latin1
-                    input <- B.hGetContents fn'
+                    fn' <- Sys.openFile fn Sys.ReadMode
+                    Sys.hSetEncoding fn' Sys.latin1
+                    input <- Sys.hGetContents fn'
                     putStrLn (f input)
-                    hClose fn'
+                    Sys.hClose fn'
                     hFW fns
-     in hFW xs
+    in  hFW xs
 
-handleStandardInputWith :: (B.ByteString -> String) -> IO ()
+handleStandardInputWith :: (String -> String) -> IO ()
 handleStandardInputWith function =
     do
-        input <- B.getContents
+        input <- getContents
         putStrLn (function input)
 
 main :: IO ()
@@ -53,6 +52,6 @@ main = do
         then putStrLn (concat errors)
         else
             let (function, standardInput) = handleOptions optionArgs
-             in if standardInput
+            in  if standardInput
                     then handleStandardInputWith function
                     else handleFilesWith function files

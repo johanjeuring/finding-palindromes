@@ -17,6 +17,10 @@ module Data.Algorithms.Palindromes.Palindromes
     , palindromesAroundCentres
     ) where
 
+import Data.Algorithms.Palindromes.LinearAlgorithm
+    ( extendPalindromeS
+    , extendTailWord
+    )
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
     , Flag (..)
@@ -219,10 +223,10 @@ palindromesAroundCentres
     positionTextInput =
         case (algorithmComplexity, gap, nrOfErrors) of
             (Just Linear, Nothing, Nothing) -> case palindromeVariant of
-                Just DNA -> reverse $ appendseq $ extendPalindromeS (=:=) 2 0 input' [] S.empty 0 0
+                Just DNA -> reverse $ appendseq $ extendPalindromeS 2 0 input' [] S.empty 0 0
                 Just Word ->
                     reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0, [0])
-                _ -> reverse $ appendseq $ extendPalindromeS (=:=) 1 1 input' [] S.empty 0 0
+                _ -> reverse $ appendseq $ extendPalindromeS 1 1 input' [] S.empty 0 0
             (Just Linear, _, _) ->
                 error
                     "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"
@@ -247,4 +251,3 @@ palindromesAroundCentres
                                 gapSize'
                                 errorCount'
                 in  result
-

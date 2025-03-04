@@ -1,20 +1,36 @@
-module LinearAlgorithm
+module Data.Algorithms.Palindromes.LinearAlgorithm
     ( extendPalindromeS
     , extendTailWord
     ) where
 
+import Data.Algorithms.Palindromes.PalindromesUtils
+    ( Couplable
+    , Flag (..)
+    , appendseq
+    , showPalindrome
+    , showPalindromeDNA
+    , showTextPalindrome
+    , surroundedByPunctuation
+    , toDNA
+    , vecToArray
+    , (=:=)
+    )
+
+import Data.Array (Array, (!))
+import qualified Data.Sequence as S
+import qualified Data.Vector as V
+
 extendPalindromeS
     :: (Couplable a)
-    => (a -> a -> Bool)
-    -> Int
-    -> Int
-    -> V.Vector a
+    => Int -- centerfactor;
+    -> Int -- tailfactor
+    -> V.Vector a -- input, with only alphabetic characters
     -> [Int]
     -> S.Seq Int
-    -> Int
-    -> Int
+    -> Int -- rightmost index
+    -> Int -- the current center
     -> ([Int], S.Seq Int)
-extendPalindromeS eq centerfactor tailfactor input =
+extendPalindromeS centerfactor tailfactor input =
     let ePS maximalPalindromesPre maximalPalindromesIn rightmost currentPalindrome
             | rightmost > lastPos =
                 -- reached the end of the array
@@ -25,7 +41,7 @@ extendPalindromeS eq centerfactor tailfactor input =
                     (currentPalindrome S.<| maximalPalindromesIn)
                     maximalPalindromesIn
             | rightmost - currentPalindrome == first
-                || not (input V.! rightmost `eq` (input V.! (rightmost - currentPalindrome - 1))) =
+                || not (input V.! rightmost =:= (input V.! (rightmost - currentPalindrome - 1))) =
                 -- the current palindrome extends to the start of the array,
                 -- or it cannot be extended
                 mCS
@@ -37,11 +53,12 @@ extendPalindromeS eq centerfactor tailfactor input =
             | otherwise =
                 -- the current palindrome can be extended
                 let (left, rest) = splitAt 2 maximalPalindromesPre
-                in  ePS
-                        rest
-                        (foldr (flip (S.|>)) maximalPalindromesIn left)
-                        (rightmost + 1)
-                        (currentPalindrome + 2)
+                in  trace (show maximalPalindromesPre) $
+                        ePS
+                            rest
+                            (foldr (flip (S.|>)) maximalPalindromesIn left)
+                            (rightmost + 1)
+                            (currentPalindrome + 2)
           where
             first = 0
             lastPos = V.length input - 1

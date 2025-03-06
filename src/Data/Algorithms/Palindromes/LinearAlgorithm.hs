@@ -15,8 +15,8 @@ import Data.Algorithms.Palindromes.PalindromesUtils
     , vecToArray
     , (=:=)
     )
-
 import Data.Array (Array, (!))
+
 import qualified Data.Sequence as S
 import qualified Data.Vector as V
 
@@ -83,21 +83,16 @@ finalPalindromesS
     -> [Int] -- the lengths of the palindromes that are found, excluding the current palindrome
     -> [Int] -- the final sequence of
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindromesIn'
-    | nrOfCenters == 0 -- if the sequence is complete, return it
-        =
-        maximalPalindromesIn
-    | nrOfCenters > 0 -- if the sequence is incomplete, add the centers that still need to be added
-        =
-        case maximalPalindromesIn' of
-            (headq : tailq) ->
-                finalPalindromesS
-                    centerfactor
-                    (nrOfCenters - centerfactor)
-                    (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
-                    tailq
-            [] -> error "finalPalindromesS: empty sequence"
+    | nrOfCenters < 0 = error "finalPalindromesS: input < 0"
+    | nrOfCenters == 0 = maximalPalindromesIn
     | otherwise =
-        error "finalPalindromesS: input < 0"
+        let updatedList =
+                zipWith
+                    -- (n - centerfactor) is exactly the theoretical maximum of the remaining maximal palindromes
+                    (\x n -> min x (n - centerfactor))
+                    maximalPalindromesIn'
+                    [nrOfCenters, nrOfCenters - centerfactor ..]
+        in  reverse updatedList ++ maximalPalindromesIn
 
 {-
 ---------------------------------------------------------------------

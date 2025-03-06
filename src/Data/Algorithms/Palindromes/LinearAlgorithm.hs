@@ -25,10 +25,10 @@ extendPalindromeS
     => Int -- centerfactor;
     -> Int -- tailfactor
     -> V.Vector a -- input, with only alphabetic characters
-    -> S.Seq Int -- length of palindromes that are already found
+    -> [Int] -- length of palindromes that are already found
     -> Int -- the rightmost index which is checked by the algorithm
     -> Int -- the length of the palindrome currently being expanded
-    -> S.Seq Int -- the final list of palindrome lengths from
+    -> [Int] -- the final list of palindrome lengths from
 extendPalindromeS centerfactor tailfactor input =
     let ePS maximalPalindromesIn rightmost currentPalindrome
             | rightmost > lastPos =
@@ -36,7 +36,7 @@ extendPalindromeS centerfactor tailfactor input =
                 finalPalindromesS
                     centerfactor
                     currentPalindrome
-                    (currentPalindrome S.<| maximalPalindromesIn)
+                    (currentPalindrome : maximalPalindromesIn)
                     maximalPalindromesIn
             | rightmost - currentPalindrome == first
                 || not (input V.! rightmost =:= (input V.! (rightmost - currentPalindrome - 1))) =
@@ -44,7 +44,7 @@ extendPalindromeS centerfactor tailfactor input =
                 -- or it cannot be extended
                 mCS
                     rightmost
-                    (currentPalindrome S.<| maximalPalindromesIn)
+                    (currentPalindrome : maximalPalindromesIn)
                     maximalPalindromesIn
                     currentPalindrome
             | otherwise =
@@ -60,42 +60,42 @@ extendPalindromeS centerfactor tailfactor input =
             | nrOfCenters == 0 =
                 -- the last centre is on the last element: try to extend the tail of length 1
                 ePS maximalPalindromesIn (rightmost + 1) tailfactor
-            | nrOfCenters - centerfactor == S.index maximalPalindromesIn' 0 =
+            | nrOfCenters - centerfactor == head maximalPalindromesIn' =
                 -- the previous element in the centre list reaches exactly to the end of the last
                 -- tail palindrome use the mirror property of palindromes to find the longest tail palindrome
                 ePS maximalPalindromesIn rightmost (nrOfCenters - centerfactor)
             | otherwise =
                 -- move the centres one step add the length of the longest palindrome to the centres
-                case S.viewl maximalPalindromesIn' of
-                    headq S.:< tailq ->
+                case maximalPalindromesIn' of
+                    (headq : tailq) ->
                         mCS
                             rightmost
-                            (min headq (nrOfCenters - centerfactor) S.<| maximalPalindromesIn)
+                            (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
                             tailq
                             (nrOfCenters - centerfactor)
-                    S.EmptyL -> error "extendPalindromeS: empty sequence"
+                    [] -> error "extendPalindromeS: empty sequence"
     in  ePS
 
 finalPalindromesS
     :: Int -- centerfactor
     -> Int -- amount of centers that haven't been extended before finalizing extendPalindromeS
-    -> S.Seq Int -- the lengths of the palindromes that are found, including the current palindrome
-    -> S.Seq Int -- the lengths of the palindromes that are found, excluding the current palindrome
-    -> S.Seq Int -- the final sequence of
+    -> [Int] -- the lengths of the palindromes that are found, including the current palindrome
+    -> [Int] -- the lengths of the palindromes that are found, excluding the current palindrome
+    -> [Int] -- the final sequence of
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindromesIn'
     | nrOfCenters == 0 -- if the sequence is complete, return it
         =
         maximalPalindromesIn
     | nrOfCenters > 0 -- if the sequence is incomplete, add the centers that still need to be added
         =
-        case S.viewl maximalPalindromesIn' of
-            headq S.:< tailq ->
+        case maximalPalindromesIn' of
+            (headq : tailq) ->
                 finalPalindromesS
                     centerfactor
                     (nrOfCenters - centerfactor)
-                    (min headq (nrOfCenters - centerfactor) S.<| maximalPalindromesIn)
+                    (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
                     tailq
-            S.EmptyL -> error "finalPalindromesS: empty sequence"
+            [] -> error "finalPalindromesS: empty sequence"
     | otherwise =
         error "finalPalindromesS: input < 0"
 

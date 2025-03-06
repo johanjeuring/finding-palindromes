@@ -58,13 +58,14 @@ Test-Suite              property-tests
   type:                 exitcode-stdio-1.0
   hs-source-dirs:       tests
   main-is:              Main.hs
-  other-modules:        PalindromeProperties
+  other-modules:        PalindromeMethods
+                        , PalindromeProperties
+                        , UTDNAPals
+                        , UTExtendPals
                         , UTGetLeftRight
                         , UTQuadraticAlgorithm
                         , UTTextPals
                         , UTWordPals
-                        , PalindromeMethods
-                        , UTDNAPals
   build-depends:        base >= 3.0 && < 5
                         , array
                         , bytestring

@@ -16,8 +16,7 @@ testExtendPalindrome1
         :: Flag -> Test
 
 testListExtend t =
-    [ 
-      TestLabel "testExtendPalindrome1" $ testExtendPalindrome1 t
+    [ TestLabel "testExtendPalindrome1" $ testExtendPalindrome1 t
     , TestLabel "testExtendPalindrome2" $ testExtendPalindrome2 t
     , TestLabel "testExtendPalindrome3" $ testExtendPalindrome3 t
     , TestLabel "testExtendPalindrome4" $ testExtendPalindrome4 t

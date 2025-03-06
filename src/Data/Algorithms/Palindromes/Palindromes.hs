@@ -38,6 +38,7 @@ import Data.Algorithms.Palindromes.QuadraticAlgorithm
     )
 import Data.Array (Array, (!))
 import Data.Char (isAlpha, toLower)
+import Data.Foldable (toList)
 import Data.List (intercalate, maximumBy)
 
 import qualified Data.Bifunctor as BiFunc
@@ -223,10 +224,10 @@ palindromesAroundCentres
     positionTextInput =
         case (algorithmComplexity, gap, nrOfErrors) of
             (Just Linear, Nothing, Nothing) -> case palindromeVariant of
-                Just DNA -> reverse $ toList $ extendPalindromeS 2 0 input' [] S.empty 0 0
+                Just DNA -> reverse $ toList $ extendPalindromeS 2 0 input' S.empty 0 0
                 Just Word ->
                     reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0, [0])
-                _ -> reverse $ appendseq $ extendPalindromeS 1 1 input' [] S.empty 0 0
+                _ -> reverse $ toList $ extendPalindromeS 1 1 input' S.empty 0 0
             (Just Linear, _, _) ->
                 error
                     "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"

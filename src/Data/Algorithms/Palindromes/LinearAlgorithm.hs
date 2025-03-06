@@ -28,7 +28,7 @@ extendPalindromeS
     -> S.Seq Int -- length of palindromes that are still no
     -> Int -- the farthest index reached by any palindrome
     -> Int -- the length of the palindrome currently being expanded
-    -> ([Int], S.Seq Int)
+    -> S.Seq Int
 extendPalindromeS centerfactor tailfactor input =
     let ePS maximalPalindromesIn rightmost currentPalindrome
             | rightmost > lastPos =
@@ -36,7 +36,6 @@ extendPalindromeS centerfactor tailfactor input =
                 finalPalindromesS
                     centerfactor
                     currentPalindrome
-                    maximalPalindromesPre
                     (currentPalindrome S.<| maximalPalindromesIn)
                     maximalPalindromesIn
             | rightmost - currentPalindrome == first
@@ -80,20 +79,18 @@ extendPalindromeS centerfactor tailfactor input =
 finalPalindromesS
     :: Int -- centerfactor
     -> Int --
-    -> [Int]
     -> S.Seq Int
     -> S.Seq Int
-    -> ([Int], S.Seq Int)
-finalPalindromesS centerfactor nrOfCenters maximalPalindromesPre maximalPalindromesIn maximalPalindromesIn'
+    -> S.Seq Int
+finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindromesIn'
     | nrOfCenters == 0 =
-        (maximalPalindromesPre, maximalPalindromesIn)
+        maximalPalindromesIn
     | nrOfCenters > 0 =
         case S.viewl maximalPalindromesIn' of
             headq S.:< tailq ->
                 finalPalindromesS
                     centerfactor
                     (nrOfCenters - centerfactor)
-                    maximalPalindromesPre
                     (min headq (nrOfCenters - centerfactor) S.<| maximalPalindromesIn)
                     tailq
             S.EmptyL -> error "finalPalindromesS: empty sequence"

@@ -66,6 +66,21 @@ data Flag
     | LengthBetween Int Int
     | StandardInput
 
+-- | Data type to represent a single found palindrome
+data Palindrome
+    = Palindrome
+    { palCenterIndex :: Int
+    {- ^ The index of the center of this found palindrome from the
+    (possibly pre-processed) input text
+    -}
+    , palLength :: Int
+    -- ^ The length of the found palindrome
+    , palText :: String
+    {- ^ The text representing the found palindrome. Note that this must be a string,
+    not some abstract datatype.
+    -}
+    }
+
 {-
 -------------------------------------
   Begin functions to show single palindromes

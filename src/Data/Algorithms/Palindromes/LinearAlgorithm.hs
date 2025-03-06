@@ -25,13 +25,12 @@ extendPalindromeS
     => Int -- centerfactor;
     -> Int -- tailfactor
     -> V.Vector a -- input, with only alphabetic characters
-    -> [Int]
-    -> S.Seq Int
-    -> Int -- rightmost index
-    -> Int -- the current center
+    -> S.Seq Int -- length of palindromes that are still no
+    -> Int -- the farthest index reached by any palindrome
+    -> Int -- the length of the palindrome currently being expanded
     -> ([Int], S.Seq Int)
 extendPalindromeS centerfactor tailfactor input =
-    let ePS maximalPalindromesPre maximalPalindromesIn rightmost currentPalindrome
+    let ePS maximalPalindromesIn rightmost currentPalindrome
             | rightmost > lastPos =
                 -- reached the end of the array
                 finalPalindromesS
@@ -46,44 +45,45 @@ extendPalindromeS centerfactor tailfactor input =
                 -- or it cannot be extended
                 mCS
                     rightmost
-                    maximalPalindromesPre
                     (currentPalindrome S.<| maximalPalindromesIn)
                     maximalPalindromesIn
                     currentPalindrome
             | otherwise =
                 -- the current palindrome can be extended
-                let (left, rest) = splitAt 2 maximalPalindromesPre
-                in  trace (show maximalPalindromesPre) $
-                        ePS
-                            rest
-                            (foldr (flip (S.|>)) maximalPalindromesIn left)
-                            (rightmost + 1)
-                            (currentPalindrome + 2)
+                ePS
+                    maximalPalindromesIn
+                    (rightmost + 1)
+                    (currentPalindrome + 2)
           where
-            first = 0
-            lastPos = V.length input - 1
-        mCS rightmost maximalPalindromesPre maximalPalindromesIn maximalPalindromesIn' nrOfCenters
+            first = 0 -- first index of the input
+            lastPos = V.length input - 1 -- last index of the input
+        mCS rightmost maximalPalindromesIn maximalPalindromesIn' nrOfCenters
             | nrOfCenters == 0 =
                 -- the last centre is on the last element: try to extend the tail of length 1
-                ePS maximalPalindromesPre maximalPalindromesIn (rightmost + 1) tailfactor
+                ePS maximalPalindromesIn (rightmost + 1) tailfactor
             | nrOfCenters - centerfactor == S.index maximalPalindromesIn' 0 =
                 -- the previous element in the centre list reaches exactly to the end of the last
                 -- tail palindrome use the mirror property of palindromes to find the longest tail palindrome
-                ePS maximalPalindromesPre maximalPalindromesIn rightmost (nrOfCenters - centerfactor)
+                ePS maximalPalindromesIn rightmost (nrOfCenters - centerfactor)
             | otherwise =
                 -- move the centres one step add the length of the longest palindrome to the centres
                 case S.viewl maximalPalindromesIn' of
                     headq S.:< tailq ->
                         mCS
                             rightmost
-                            maximalPalindromesPre
                             (min headq (nrOfCenters - centerfactor) S.<| maximalPalindromesIn)
                             tailq
                             (nrOfCenters - centerfactor)
                     S.EmptyL -> error "extendPalindromeS: empty sequence"
     in  ePS
 
-finalPalindromesS :: Int -> Int -> [Int] -> S.Seq Int -> S.Seq Int -> ([Int], S.Seq Int)
+finalPalindromesS
+    :: Int -- centerfactor
+    -> Int --
+    -> [Int]
+    -> S.Seq Int
+    -> S.Seq Int
+    -> ([Int], S.Seq Int)
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesPre maximalPalindromesIn maximalPalindromesIn'
     | nrOfCenters == 0 =
         (maximalPalindromesPre, maximalPalindromesIn)

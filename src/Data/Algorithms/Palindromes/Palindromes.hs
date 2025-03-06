@@ -13,8 +13,7 @@
 -----------------------------------------------------------------------------
 
 module Data.Algorithms.Palindromes.Palindromes
-    ( finalPalindromesS
-    , palindrome
+    ( palindrome
     , palindromesAroundCentres
     ) where
 

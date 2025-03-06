@@ -32,6 +32,7 @@ Library
   exposed-modules:      Data.Algorithms.Palindromes.Palindromes
                         , Data.Algorithms.Palindromes.PalindromesUtils
                         , Data.Algorithms.Palindromes.QuadraticAlgorithm
+                        , Data.Algorithms.Palindromes.LinearAlgorithm
   build-depends:        base >= 4.17 && < 5
                         , array
                         , bytestring

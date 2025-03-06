@@ -195,8 +195,8 @@ surroundedByPunctuation begin end input
 ----------------------------------------------------
 -}
 
-appendseq :: ([a], S.Seq a) -> [a]
-appendseq (list, s) = toList s ++ list
+appendseq :: S.Seq a -> [a]
+appendseq s = toList s
 
 listArrayl0 :: [a] -> Array Int a
 listArrayl0 string = listArray (0, length string - 1) string

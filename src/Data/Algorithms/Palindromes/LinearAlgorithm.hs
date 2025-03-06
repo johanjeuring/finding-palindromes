@@ -25,10 +25,10 @@ extendPalindromeS
     => Int -- centerfactor;
     -> Int -- tailfactor
     -> V.Vector a -- input, with only alphabetic characters
-    -> S.Seq Int -- length of palindromes that are still no
-    -> Int -- the farthest index reached by any palindrome
+    -> S.Seq Int -- length of palindromes that are already found
+    -> Int -- the rightmost index which is checked by the algorithm
     -> Int -- the length of the palindrome currently being expanded
-    -> S.Seq Int
+    -> S.Seq Int -- the final list of palindrome lengths from
 extendPalindromeS centerfactor tailfactor input =
     let ePS maximalPalindromesIn rightmost currentPalindrome
             | rightmost > lastPos =
@@ -78,14 +78,16 @@ extendPalindromeS centerfactor tailfactor input =
 
 finalPalindromesS
     :: Int -- centerfactor
-    -> Int --
-    -> S.Seq Int
-    -> S.Seq Int
-    -> S.Seq Int
+    -> Int -- amount of centers that haven't been extended before finalizing extendPalindromeS
+    -> S.Seq Int -- the lengths of the palindromes that are found, including the current palindrome
+    -> S.Seq Int -- the lengths of the palindromes that are found, excluding the current palindrome
+    -> S.Seq Int -- the final sequence of
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindromesIn'
-    | nrOfCenters == 0 =
+    | nrOfCenters == 0 -- if the sequence is complete, return it
+        =
         maximalPalindromesIn
-    | nrOfCenters > 0 =
+    | nrOfCenters > 0 -- if the sequence is incomplete, add the centers that still need to be added
+        =
         case S.viewl maximalPalindromesIn' of
             headq S.:< tailq ->
                 finalPalindromesS

@@ -65,6 +65,7 @@ Test-Suite              property-tests
                         , UTWordPals
                         , PalindromeMethods
                         , UTDNAPals
+                        , UTPalindromesUtils
   build-depends:        base >= 3.0 && < 5
                         , array
                         , bytestring

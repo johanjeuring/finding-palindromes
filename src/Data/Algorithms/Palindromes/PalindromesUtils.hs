@@ -170,12 +170,16 @@ myIsLetterC c =
 
 {- |
   Checks whether the range specified by the first 2 parameters is surrounded by punctuation in the 3rd parameter.
+    If begin is out of bounds, it still returns True if there is punctuation after index end.
+    If end is out of bounds, it still returns True if there is punctuation before index begin.
+    If both are out of bounds return True
+    Note that out of bounds is considered True as this would be an end/start of a file which is considered punctuation
 -}
 surroundedByPunctuation :: Int -> Int -> V.Vector Char -> Bool
 surroundedByPunctuation begin end input
     | begin > afirst && end < alast =
         not (myIsLetterC ((V.!) input (begin - 1)))
-            && not (myIsLetterC ((V.!) input (end + 1)))
+            && not (myIsLetterC ((V.!) input (end + 1))) -- returns if the positions around begin and end are surrounded
     | begin <= afirst && end < alast = not (myIsLetterC ((V.!) input (end + 1)))
     | begin <= afirst && end >= alast = True
     | begin > afirst && end >= alast = not (myIsLetterC ((V.!) input (begin - 1)))
@@ -194,10 +198,11 @@ surroundedByPunctuation begin end input
   Begin foldable (Seq/Array/List) utility functions
 ----------------------------------------------------
 -}
-
+-- appends list at the end of the given sequence
 appendseq :: ([a], S.Seq a) -> [a]
 appendseq (list, s) = toList s ++ list
 
+-- construct array from string
 listArrayl0 :: [a] -> Array Int a
 listArrayl0 string = listArray (0, length string - 1) string
 
@@ -236,8 +241,8 @@ instance (Eq a) => Couplable a where
 --------------------------------------
 -}
 
--- | Datatype for the different DNA
-data DNA = A | T | C | G | N deriving (Show)
+-- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA has palindromes, instead couplable should be used
+data DNA = A | T | C | G | N deriving (Show, Eq)
 
 -- | Declare instance Couplable for DNA. A and T form a couple, C and G form a couple.
 instance {-# OVERLAPPING #-} Couplable DNA where

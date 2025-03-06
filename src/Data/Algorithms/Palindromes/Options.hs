@@ -15,8 +15,7 @@
 module Data.Algorithms.Palindromes.Options where
 
 import Data.Algorithms.Palindromes.Palindromes
-    ( dnaLengthGappedApproximatePalindromeAround
-    , palindrome
+    ( palindrome
     )
 import Data.Algorithms.Palindromes.PalindromesUtils (Flag (..), toDNA)
 import Data.Vector (fromList)

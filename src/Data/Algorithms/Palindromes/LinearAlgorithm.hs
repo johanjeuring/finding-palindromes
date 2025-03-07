@@ -42,10 +42,10 @@ extendPalindromeS centerfactor tailfactor input = ePS
                 maximalPalindromesIn
                 ++ (currentPalindrome : maximalPalindromesIn)
         | rightmost - currentPalindrome == first
-            || not (input V.! rightmost =:= (input V.! (rightmost - currentPalindrome - 1))) =
+            || not ((input V.! rightmost) =:= (input V.! (rightmost - currentPalindrome - 1))) =
             -- the current palindrome extends to the start of the array,
             -- or it cannot be extended
-            mCS
+            moveCenterS
                 rightmost
                 (currentPalindrome : maximalPalindromesIn)
                 maximalPalindromesIn
@@ -59,7 +59,7 @@ extendPalindromeS centerfactor tailfactor input = ePS
 
     first = 0 -- first index of the input
     lastPos = V.length input - 1 -- last index of the input
-    mCS rightmost maximalPalindromesIn maximalPalindromesIn' nrOfCenters
+    moveCenterS rightmost maximalPalindromesIn maximalPalindromesIn' nrOfCenters
         | nrOfCenters == 0 =
             -- the last centre is on the last element: try to extend the tail of length 1
             ePS maximalPalindromesIn (rightmost + 1) tailfactor
@@ -71,7 +71,7 @@ extendPalindromeS centerfactor tailfactor input = ePS
             -- move the centres one step add the length of the longest palindrome to the centres
             case maximalPalindromesIn' of
                 (headq : tailq) ->
-                    mCS
+                    moveCenterS
                         rightmost
                         (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
                         tailq

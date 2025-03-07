@@ -2,6 +2,7 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
     ( extendPalindromeS
     , extendTailWord
     , finalPalindromesS
+    , finalPalindromesS'
     ) where
 
 import Data.Algorithms.Palindromes.PalindromesUtils
@@ -35,11 +36,11 @@ extendPalindromeS centerfactor tailfactor input = ePS
     ePS maximalPalindromesIn rightmost currentPalindrome
         | rightmost > lastPos =
             -- reached the end of the array
-            finalPalindromesS
+            finalPalindromesS'
                 centerfactor
                 currentPalindrome
-                (currentPalindrome : maximalPalindromesIn)
                 maximalPalindromesIn
+                ++ (currentPalindrome : maximalPalindromesIn)
         | rightmost - currentPalindrome == first
             || not (input V.! rightmost =:= (input V.! (rightmost - currentPalindrome - 1))) =
             -- the current palindrome extends to the start of the array,
@@ -84,10 +85,10 @@ finalPalindromesS
     -> [Int] -- the lengths of the palindromes that are found, excluding the current palindrome
     -> [Int] -- the final sequence of found palindromes
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindromesIn'
-    | nrOfCenters == 0 -- if the sequence is complete, return it
+    | nrOfCenters <= 0 -- if the sequence is complete, return it
         =
         maximalPalindromesIn
-    | nrOfCenters > 0 -- if the sequence is incomplete, add the centers that still need to be added
+    | otherwise -- if the sequence is incomplete, add the centers that still need to be added
         =
         case maximalPalindromesIn' of
             (headq : tailq) ->
@@ -97,11 +98,23 @@ finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindrom
                     (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
                     tailq
             [] -> error "finalPalindromesS: empty sequence"
-    | otherwise =
-        error "finalPalindromesS: input < 0"
 
--- test test test test test test  test test test  test test test  test test test
--- test test test  test test test  test test test  test test test
+-- A more clear definition of finalPalindromesS', which does not use recursion
+finalPalindromesS'
+    :: Int -- centerfactor
+    -> Int -- amount of centers that haven't been extended before finalizing extendPalindromeS
+    -> [Int] -- the lengths of the palindromes that are found, excluding the current palindrome
+    -> [Int] -- the final sequence of found palindromes for each remaining center in reverse order
+finalPalindromesS' centerfactor nrOfCenters maximalPalindromesIn =
+    -- Truncate the mirrored candidates when needed.
+    zipWith min candidatesRev [0, centerfactor ..]
+  where
+    {- Candidates is the list of previously found palindromes we need to copy and possibly
+    truncate -}
+    candidates = take (nrOfCenters `div` centerfactor) maximalPalindromesIn
+    {- We need to 'mirror' the candidates to get the remaining palindromes length in the
+    right order.-}
+    candidatesRev = reverse candidates
 
 {-
 ---------------------------------------------------------------------

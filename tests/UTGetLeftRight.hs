@@ -13,6 +13,7 @@ testListGetLeftRight =
     , testCenterBetweenElemsOutOfBoundsRight
     , testCenterBetweenElemsZeroGap
     , testCenterBetweenElemsGapLargerThanInput
+    , testCenterBetweenElemsGapLargerThanInputCenterRightToMiddle
     , testCenterOnElem
     , testCenterOnElemEvenGap
     , testCenterOnElemOutOfBoundsLeft
@@ -20,6 +21,7 @@ testListGetLeftRight =
     , testCenterOnElemOutOfBoundsRight2
     , testCenterOnElemZeroGap
     , testCenterOnElemGapLargerThanInput
+    , testCenterOnElemGapLargerThanInputCenterRightToMiddle
     ]
 
 {-
@@ -81,8 +83,23 @@ testCenterBetweenElemsGapLargerThanInput =
     TestCase $
         assertEqual
             "testCenterBetweenElemsGapLargerThanInput"
-            (-1, 7)
-            (getLeftRightCenterOnElem 9 3 7)
+            (-1, 6)
+            (getLeftRightCenterBetweenElems 9 3 7)
+
+{- | Test whether getLeftRightCenterBetweenElems works as intended with a large gap that
+goes out of bounds to the left and to the right, where (elemIndex > lengthInput `div` 2).
+This test case makes sure that the gap does not go outside of the left bound and not
+outside of the right bound. In previous implementations, if the gap would go outside of
+the left bound it would be cut off, but it would not be checked whether the new gap length
+goes outside of the right bound after that, resulting in some gaps going far outside the
+right bounds.
+-}
+testCenterBetweenElemsGapLargerThanInputCenterRightToMiddle =
+    TestCase $
+        assertEqual
+            "testCenterBetweenElemsGapLargerThanInputCenterRightToMiddle"
+            (6, 7)
+            (getLeftRightCenterBetweenElems 20 7 7)
 
 {-
 ---------------------------------------------------
@@ -158,3 +175,14 @@ testCenterOnElemGapLargerThanInput =
             "testCenterOnElemGapLargerThanInput"
             (-1, 7)
             (getLeftRightCenterOnElem 9 3 7)
+
+{- Test whether getLeftRightCenterOnElem works as intended with a large gap that goes
+outside of the left and right bounds, where (elemIndex > lengthInput `div` 2). See comment
+on 'testCenterBetweenElemsGapMuchLargerThanInput' for why this must be checked.
+-}
+testCenterOnElemGapLargerThanInputCenterRightToMiddle =
+    TestCase $
+        assertEqual
+            "testCenterOnElemGapLargerThanInputCenterRightToMiddle"
+            (5, 7)
+            (getLeftRightCenterOnElem 20 6 7)

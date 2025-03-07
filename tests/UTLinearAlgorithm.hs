@@ -1,19 +1,37 @@
-module UTLinearAlgorithm where
+module UTLinearAlgorithm (testListLinearAlgorithm) where
 
-import Data.Algorithms.Palindromes.Palindromes as P
+import Data.Algorithms.Palindromes.LinearAlgorithm as P
 import Test.HUnit (Test (..), assertEqual)
 
--- testListQuadraticAlgorithm = [testFinalPalindromesS]
+testListLinearAlgorithm =
+    [ testFinalPalindromesSSimple
+    , testFinalPalindromesSCutOff
+    ]
 
--- testFinalPalindromesS =
---     TestCase $
---         assertEqual
---             "testFinalPalindromesS"
---             [0, 2, 0, 2, 0]
---             ( P.finalPalindromesS
---                 1
---                 21
---                 [0, 1, 0, 1, 2, 1, 7] -- length 7
---             )
+-- This test is based on input string "leepeel"
+testFinalPalindromesSSimple =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesSSimple"
+            [0, 1, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 1, 0]
+            ( P.finalPalindromesS
+                1
+                7
+                [7, 0, 1, 2, 1, 0, 1, 0]
+                [0, 1, 2, 1, 0, 1, 0]
+            )
 
--- "leepeel"
+-- This test is based on input string "aaaaaaaaabaaaaaa", so 9x 'a', 1x 'b' and 6x 'a'.
+testFinalPalindromesSCutOff =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesSCutOff"
+            ( [0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                ++ [8, 7, 6, 5, 4, 3, 2, 1, 0]
+            )
+            ( P.finalPalindromesS
+                1
+                13
+                [13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+            )

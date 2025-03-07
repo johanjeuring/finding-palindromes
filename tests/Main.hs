@@ -16,11 +16,12 @@ import PalindromeProperties (propPalindromesAroundCentres, propTextPalindrome)
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 import UTDNAPals (testListDNA)
+import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
+import UTLinearAlgorithm (testListLinearAlgorithm)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
 import UTTextPals (testListText)
 import UTWordPals (testListWords)
-import UTExtendPals (testListExtend)
 
 import qualified Data.Algorithms.Palindromes.PalindromesUtils as PU
 
@@ -35,6 +36,7 @@ tests =
             ++ testListQuadraticAlgorithm
             ++ testListExtend PU.Linear
             ++ testListExtend PU.Quadratic
+            ++ testListLinearAlgorithm
 
 main :: IO Counts
 main = do

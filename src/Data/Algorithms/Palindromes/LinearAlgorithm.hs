@@ -1,6 +1,7 @@
 module Data.Algorithms.Palindromes.LinearAlgorithm
     ( extendPalindromeS
     , extendTailWord
+    , finalPalindromesS
     ) where
 
 import Data.Algorithms.Palindromes.PalindromesUtils
@@ -81,18 +82,26 @@ finalPalindromesS
     -> Int -- amount of centers that haven't been extended before finalizing extendPalindromeS
     -> [Int] -- the lengths of the palindromes that are found, including the current palindrome
     -> [Int] -- the lengths of the palindromes that are found, excluding the current palindrome
-    -> [Int] -- the final sequence of
+    -> [Int] -- the final sequence of found palindromes
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn maximalPalindromesIn'
-    | nrOfCenters < 0 = error "finalPalindromesS: input < 0"
-    | nrOfCenters == 0 = maximalPalindromesIn
+    | nrOfCenters == 0 -- if the sequence is complete, return it
+        =
+        maximalPalindromesIn
+    | nrOfCenters > 0 -- if the sequence is incomplete, add the centers that still need to be added
+        =
+        case maximalPalindromesIn' of
+            (headq : tailq) ->
+                finalPalindromesS
+                    centerfactor
+                    (nrOfCenters - centerfactor)
+                    (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
+                    tailq
+            [] -> error "finalPalindromesS: empty sequence"
     | otherwise =
-        let updatedList =
-                zipWith
-                    -- (n - centerfactor) is exactly the theoretical maximum of the remaining maximal palindromes
-                    (\x n -> min x (n - centerfactor))
-                    maximalPalindromesIn'
-                    [nrOfCenters, nrOfCenters - centerfactor ..]
-        in  reverse updatedList ++ maximalPalindromesIn
+        error "finalPalindromesS: input < 0"
+
+-- test test test test test test  test test test  test test test  test test test
+-- test test test  test test test  test test test  test test test
 
 {-
 ---------------------------------------------------------------------

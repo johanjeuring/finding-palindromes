@@ -68,7 +68,7 @@ extendPalindromeS centerfactor tailfactor input = ePS
             -- tail palindrome use the mirror property of palindromes to find the longest tail palindrome
             ePS maximalPalindromesIn rightmost (nrOfCenters - centerfactor)
         | otherwise =
-            -- move the centres one step add the length of the longest palindrome to the centres
+            -- move the centres one step and add the length of the longest palindrome to the centres
             case maximalPalindromesIn' of
                 (headq : tailq) ->
                     moveCenterS

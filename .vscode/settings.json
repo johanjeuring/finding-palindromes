@@ -1,5 +1,6 @@
 {
     "haskell.formattingProvider": "fourmolu",
     "haskell.plugin.fourmolu.config.external": true,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "editor.wordWrapColumn": 90 
 }

@@ -1,14 +1,30 @@
 module UTLinearAlgorithm (testListLinearAlgorithm) where
 
-import Data.Algorithms.Palindromes.LinearAlgorithm as P
 import Test.HUnit (Test (..), assertEqual)
+import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
+import qualified Data.Vector as V
+import Control.Exception (assert)
+
+import Data.Algorithms.Palindromes.PalindromesUtils (toDNA)
 
 testListLinearAlgorithm =
     [ testFinalPalindromesSSimple
     , testFinalPalindromesSCutOff
     , testFinalPalindromesNrOfCentersZero
     , testFinalPalindromesSDNA
+    , testExtendPalindromeSSimple
+    , testExtendPalindromeSWhole
+    , testExtendPalindromeSIntertwined
+    , testExtendPalindromeSNothing
+    , testExtendPalindromeSEmpty
+    , testExtendPalindromeSDNA
     ]
+
+{-
+----------------------------------------------------------
+    Begin tests for finalPalindromeS
+----------------------------------------------------------
+-}
 
 testExtendPalindromeS =
     TestCase $
@@ -93,3 +109,111 @@ testFinalPalindromesSDNA =
                 -- [4, 0, 4, 0, 0]
                 [0, 4, 0, 0]
             )
+
+{-
+----------------------------------------------------------
+    End tests for finalPalindromeS
+----------------------------------------------------------
+-}
+{-
+----------------------------------------------------------
+    Begin tests for extendPalindromeS
+----------------------------------------------------------
+-}
+
+{- Test a simple small string with extendPalindromeS -}
+testExtendPalindromeSSimple =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSSimple"
+            [0, 1, 0, 3, 0, 1, 0, 1, 2, 1, 0]
+            ( P.extendPalindromeS
+                1
+                1
+                (V.fromList "nnaba")
+                []
+                0
+                0
+            )
+
+{- Test a string on extendPalindromeS consisting of one big palindrome. The output list should be symmetrical -}
+testExtendPalindromeSWhole =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSWhole"
+            [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
+            ( P.extendPalindromeS
+                1
+                1
+                (V.fromList "meetsysteem")
+                []
+                0
+                0
+            )
+
+{- Test a string on extendPalindromeS where two of the oalindromes overlap with each other, in this case "leepeel"
+and "peeleep" -}
+testExtendPalindromeSIntertwined =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSIntertwined"
+            [0, 1, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 1, 0]
+            ( P.extendPalindromeS
+                1
+                1
+                (V.fromList "leepeeleep")
+                []
+                0
+                0
+            )
+
+{- Test a string on extendPalindromeS not containing any palindromes -}
+testExtendPalindromeSNothing =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSNothing"
+            [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+            ( P.extendPalindromeS
+                1
+                1
+                (V.fromList "abcdefgh")
+                []
+                0
+                0
+            )
+
+{- Test an empty string on extendPalindromeS -}
+testExtendPalindromeSEmpty =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSEmpty"
+            [0]
+            ( P.extendPalindromeS
+                1
+                1
+                (V.fromList "")
+                []
+                0
+                0
+            )
+
+{- Test a DNA string on extendPalindromeS -}
+testExtendPalindromeSDNA =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSDNA"
+            [0, 2, 0, 6, 0, 2, 0]
+            ( P.extendPalindromeS
+                2
+                0
+                (toDNA (V.fromList "atgcat"))
+                []
+                0
+                0
+            )
+
+{-
+----------------------------------------------------------
+    End tests for finalPalindromeS
+----------------------------------------------------------
+-}

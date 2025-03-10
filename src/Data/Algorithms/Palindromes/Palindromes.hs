@@ -24,25 +24,20 @@ import Data.Algorithms.Palindromes.LinearAlgorithm
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
     , Flag (..)
-    , appendseq
     , showPalindrome
     , showPalindromeDNA
     , showTextPalindrome
-    , surroundedByPunctuation
     , toDNA
     , vecToArray
-    , (=:=)
     )
 import Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )
-import Data.Array (Array, (!))
+import Data.Array (Array)
 import Data.Char (isAlpha, toLower)
-import Data.Foldable (toList)
 import Data.List (intercalate, maximumBy)
 
 import qualified Data.Bifunctor as BiFunc
-import qualified Data.Sequence as S
 import qualified Data.Vector as V
 
 -----------------------------------------------------------------------------

@@ -45,7 +45,8 @@ Executable              palindromes
   Main-is:              Data/Algorithms/Palindromes/Main.hs
   ghc-options:          -Wall -O2 -rtsopts -threaded
   hs-source-dirs:       src  
-  other-modules:        Data.Algorithms.Palindromes.Options        
+  other-modules:        Data.Algorithms.Palindromes.LinearAlgorithm
+                        , Data.Algorithms.Palindromes.Options        
                         , Data.Algorithms.Palindromes.Palindromes
                         , Data.Algorithms.Palindromes.PalindromesUtils
                         , Data.Algorithms.Palindromes.QuadraticAlgorithm
@@ -60,6 +61,7 @@ Test-Suite              property-tests
   hs-source-dirs:       tests
   main-is:              Main.hs
   other-modules:        PalindromeProperties
+                        , UTExtendPals
                         , UTGetLeftRight
                         , UTQuadraticAlgorithm
                         , UTTextPals

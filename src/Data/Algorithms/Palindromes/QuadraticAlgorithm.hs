@@ -10,7 +10,7 @@ module Data.Algorithms.Palindromes.QuadraticAlgorithm
 
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable (..)
-    , Flag (DNA, Gap, NrOfErrors)
+    , Flag (DNA)
     )
 import Data.List as L
 import Data.Vector as V
@@ -70,17 +70,17 @@ getLeftRightCenterBetweenElems
     -- ^ The index of the element to the right of the center
     -> Int
     -> (Int, Int)
-getLeftRightCenterBetweenElems gapSize elemIndex lengthInput = (left, right)
+getLeftRightCenterBetweenElems gapSize element lengthInput = (left, right)
   where
     halfg = gapSize `div` 2
     halfg'
         -- Do not let the gap go outside the left bound of the input
-        | elemIndex < halfg = elemIndex
+        | element < halfg = element
         -- Do not let the gap go outside the right bound of the input
-        | elemIndex + halfg > lengthInput = lengthInput - elemIndex
+        | element + halfg > lengthInput = lengthInput - element
         | otherwise = halfg
-    left = elemIndex - 1 - halfg'
-    right = elemIndex + halfg'
+    left = element - 1 - halfg'
+    right = element + halfg'
 
 {- | Get the element index for the left and right characters to start expanding the
 palindrome from, essentially ignoring the gap. This function must be used when the
@@ -93,17 +93,17 @@ getLeftRightCenterOnElem
     -- ^ The index of the element on the center
     -> Int
     -> (Int, Int)
-getLeftRightCenterOnElem gapSize elem lengthInput = (left, right)
+getLeftRightCenterOnElem gapSize element lengthInput = (left, right)
   where
     halfg = (gapSize + 1) `div` 2
     halfg'
         -- Do not let the gap go outside the left bound of the input
-        | elem < halfg = elem + 1
+        | element < halfg = element + 1
         -- Do not let the gap go outside the right bound of the input
-        | elem + halfg > lengthInput = lengthInput - elem
+        | element + halfg > lengthInput = lengthInput - element
         | otherwise = halfg
-    left = elem - halfg'
-    right = elem + halfg'
+    left = element - halfg'
+    right = element + halfg'
 
 {-
 ---------------------------------------------------------------------
@@ -146,10 +146,10 @@ getLeftRightReflexive
     -- ^ the size of the whole input
     -> (Int, Int)
 getLeftRightReflexive gapSize center lengthInput
-    | even center = getLeftRightCenterBetweenElems gapSize elemIndex lengthInput
-    | otherwise = getLeftRightCenterOnElem gapSize elemIndex lengthInput
+    | even center = getLeftRightCenterBetweenElems gapSize element lengthInput
+    | otherwise = getLeftRightCenterOnElem gapSize element lengthInput
   where
-    elemIndex = center `div` 2
+    element = center `div` 2
 
 {-
 ---------------------------------------------------------------------

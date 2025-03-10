@@ -17,7 +17,7 @@ module Data.Algorithms.Palindromes.Options where
 import Data.Algorithms.Palindromes.Palindromes
     ( palindrome
     )
-import Data.Algorithms.Palindromes.PalindromesUtils (Flag (..), toDNA)
+import Data.Algorithms.Palindromes.PalindromesUtils (Flag (..))
 import Data.Vector (fromList)
 import System.Console.GetOpt
 

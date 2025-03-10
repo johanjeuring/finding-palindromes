@@ -5,19 +5,11 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
 
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
-    , Flag (..)
-    , appendseq
-    , showPalindrome
-    , showPalindromeDNA
-    , showTextPalindrome
     , surroundedByPunctuation
-    , toDNA
-    , vecToArray
     , (=:=)
     )
 
 import Data.Array (Array, (!))
-import qualified Data.Sequence as S
 import qualified Data.Vector as V
 
 extendPalindromeS

@@ -12,67 +12,110 @@ import Data.Algorithms.Palindromes.PalindromesUtils
     , (=:=)
     )
 import Data.Array (Array, (!))
+
 import qualified Data.Vector as V
 
 extendPalindromeS
     :: (Couplable a)
-    => Int -- centerfactor;
-    -> Int -- tailfactor
-    -> V.Vector a -- input, with only alphabetic characters
-    -> [Int] -- length of palindromes that are already found
-    -> Int -- the rightmost index which is checked by the algorithm
-    -> Int -- the length of the palindrome currently being expanded
-    -> [Int] -- the final list of palindrome lengths from
+    => Int
+    -- ^ centerfactor, the stepsize of the algorithm is 1 for text and 2 for DNA.
+    -> Int
+    -- ^ tailfactor, we are not sure whether this is needed anymore
+    -> V.Vector a
+    -- ^ input, with only the elements we want to find palindromes in
+    -> [Int]
+    -- ^ length of palindromes that are already found
+    -> Int
+    -- ^ the rightmost index which is checked by the algorithm
+    -> Int
+    -- ^ the length of the palindrome currently being expanded
+    -> [Int]
+    -- ^ the final list of palindrome lengths
 extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost currentPalindrome
-        | rightmost > lastPos =
-            -- reached the end of the array
-            finalPalindromesS'
-                centerfactor
-                currentPalindrome
-                maximalPalindromesIn
-                ++ (currentPalindrome : maximalPalindromesIn)
-        | rightmost - currentPalindrome == first
-            || not ((input V.! rightmost) =:= (input V.! (rightmost - currentPalindrome - 1))) =
-            -- the current palindrome extends to the start of the array,
-            -- or it cannot be extended
-            moveCenterS
-                (centerfactor, tailfactor, input)
-                rightmost
-                (currentPalindrome : maximalPalindromesIn)
-                maximalPalindromesIn
-                currentPalindrome
-        | otherwise =
-            -- the current palindrome can be extended
+    | rightmost > lastPos =
+        -- reached the end of the array
+        finalPalindromesS'
+            centerfactor
+            currentPalindrome
+            maximalPalindromesIn
+            ++ (currentPalindrome : maximalPalindromesIn)
+    | rightmost - currentPalindrome == first
+        || not ((input V.! rightmost) =:= (input V.! (rightmost - currentPalindrome - 1))) =
+        -- the current palindrome extends to the start of the array, or it cannot be
+        -- extended
+        moveCenterS
+            centerfactor
+            tailfactor
+            input
+            rightmost
+            (currentPalindrome : maximalPalindromesIn)
+            maximalPalindromesIn
+            currentPalindrome
+    | otherwise =
+        -- the current palindrome can be extended
+        extendPalindromeS
+            centerfactor
+            tailfactor
+            input
+            maximalPalindromesIn
+            (rightmost + 1)
+            (currentPalindrome + 2)
+  where
+    first = 0 -- first index of the input
+    lastPos = V.length input - 1 -- last index of the input
+
+moveCenterS
+    :: (Couplable a)
+    => Int
+    -> Int
+    -> V.Vector a
+    -> Int
+    -> [Int]
+    -> [Int]
+    -> Int
+    -> [Int]
+moveCenterS
+    centerfactor
+    tailfactor
+    input
+    rightmost
+    maximalPalindromesIn
+    maximalPalindromesIn'
+    nrOfCenters
+        | nrOfCenters == 0 =
+            -- the last centre is on the last element: try to extend the tail of length 1
             extendPalindromeS
                 centerfactor
                 tailfactor
                 input
                 maximalPalindromesIn
                 (rightmost + 1)
-                (currentPalindrome + 2)
-    where first = 0 -- first index of the input
-          lastPos = V.length input - 1 -- last index of the input
-
-moveCenterS :: (Int, Int, V.Vector a) -> Int -> [Int] -> [Int] -> Int -> [Int]
-moveCenterS (cf, tf, input) rightmost maximalPalindromesIn maximalPalindromesIn' nrOfCenters
-    | nrOfCenters == 0 =
-        -- the last centre is on the last element: try to extend the tail of length 1
-        extendPalindromeS cf tf input maximalPalindromesIn (rightmost + 1) tf
-    | nrOfCenters - cf == head maximalPalindromesIn' =
-        -- the previous element in the centre list reaches exactly to the end of the last
-        -- tail palindrome use the mirror property of palindromes to find the longest tail palindrome
-        extendPalindromeS cf tf input maximalPalindromesIn rightmost (nrOfCenters - cf)
-    | otherwise =
-        -- move the centres one step and add the length of the longest palindrome to the centres
-        case maximalPalindromesIn' of
-            (headq : tailq) ->
-                moveCenterS
-                    (cf, tf, input)
-                    rightmost
-                    (min headq (nrOfCenters - cf) : maximalPalindromesIn)
-                    tailq
-                    (nrOfCenters - cf)
-            [] -> error "extendPalindromeS: empty sequence"
+                tailfactor
+        | nrOfCenters - centerfactor == head maximalPalindromesIn' =
+            {- the previous element in the centre list reaches exactly to the end of the
+             last tail palindrome use the mirror property of palindromes to find the
+             longest tail palindrome -}
+            extendPalindromeS
+                centerfactor
+                tailfactor
+                input
+                maximalPalindromesIn
+                rightmost
+                (nrOfCenters - centerfactor)
+        | otherwise =
+            {- move the centres one step and add the length of the longest palindrome to
+            the centres -}
+            case maximalPalindromesIn' of
+                (headq : tailq) ->
+                    moveCenterS
+                        centerfactor
+                        tailfactor
+                        input
+                        rightmost
+                        (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
+                        tailq
+                        (nrOfCenters - centerfactor)
+                [] -> error "extendPalindromeS: empty sequence"
 
 finalPalindromesS
     :: Int -- centerfactor

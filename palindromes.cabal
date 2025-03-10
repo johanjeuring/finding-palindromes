@@ -46,7 +46,7 @@ Executable              palindromes
   Main-is:              Data/Algorithms/Palindromes/Main.hs
   ghc-options:          -Wall -O2 -rtsopts -threaded
   hs-source-dirs:       src  
-  other-modules:        Data.Algorithms.Palindromes.LinearAlgorithm        
+  other-modules:        Data.Algorithms.Palindromes.LinearAlgorithm
                         , Data.Algorithms.Palindromes.Options        
                         , Data.Algorithms.Palindromes.Palindromes
                         , Data.Algorithms.Palindromes.PalindromesUtils

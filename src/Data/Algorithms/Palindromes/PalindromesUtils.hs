@@ -30,7 +30,6 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , showTextPalindrome
     , myIsLetterC
     , surroundedByPunctuation
-    , appendseq
     , listArrayl0
     , vecToArray
     , toDNA
@@ -39,10 +38,9 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     ) where
 
 import Data.Array (Array, bounds, listArray, (!))
-import Data.Char (isControl, isPunctuation, isSpace, toUpper)
+import Data.Char (isControl, isPunctuation, isSpace)
 import Data.Foldable (Foldable (toList))
 
-import qualified Data.Sequence as S
 import qualified Data.Vector as V
 
 data Flag
@@ -195,16 +193,13 @@ surroundedByPunctuation begin end input
 ----------------------------------------------------
 -}
 
-appendseq :: S.Seq a -> [a]
-appendseq s = toList s
-
 listArrayl0 :: [a] -> Array Int a
 listArrayl0 string = listArray (0, length string - 1) string
 
 vecToArray :: V.Vector a -> Array Int a
-vecToArray v = listArray bounds content
+vecToArray v = listArray bound content
   where
-    bounds = (0, V.length v - 1)
+    bound = (0, V.length v - 1)
     content = V.toList v
 
 {-

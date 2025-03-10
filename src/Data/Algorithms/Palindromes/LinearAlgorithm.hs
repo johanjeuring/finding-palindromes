@@ -3,6 +3,7 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
     , extendTailWord
     , finalPalindromesS
     , finalPalindromesS'
+    , moveCenterS
     ) where
 
 import Data.Algorithms.Palindromes.PalindromesUtils
@@ -42,7 +43,7 @@ extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost c
                 currentPalindrome
         | otherwise =
             -- the current palindrome can be extended
-            extendPalindromes
+            extendPalindromeS
                 centerfactor
                 tailfactor
                 input
@@ -52,15 +53,15 @@ extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost c
     where first = 0 -- first index of the input
           lastPos = V.length input - 1 -- last index of the input
 
-moveCenters :: (Int, Int, V.Vector a) -> Int -> [Int] -> [Int] -> Int -> [Int]
+moveCenterS :: (Int, Int, V.Vector a) -> Int -> [Int] -> [Int] -> Int -> [Int]
 moveCenterS (cf, tf, input) rightmost maximalPalindromesIn maximalPalindromesIn' nrOfCenters
     | nrOfCenters == 0 =
         -- the last centre is on the last element: try to extend the tail of length 1
-        ePS cf tf input maximalPalindromesIn (rightmost + 1) tailfactor
-    | nrOfCenters - centerfactor == head maximalPalindromesIn' =
+        extendPalindromeS cf tf input maximalPalindromesIn (rightmost + 1) tf
+    | nrOfCenters - cf == head maximalPalindromesIn' =
         -- the previous element in the centre list reaches exactly to the end of the last
         -- tail palindrome use the mirror property of palindromes to find the longest tail palindrome
-        ePS cf tf input maximalPalindromesIn rightmost (nrOfCenters - centerfactor)
+        extendPalindromeS cf tf input maximalPalindromesIn rightmost (nrOfCenters - cf)
     | otherwise =
         -- move the centres one step and add the length of the longest palindrome to the centres
         case maximalPalindromesIn' of
@@ -68,9 +69,9 @@ moveCenterS (cf, tf, input) rightmost maximalPalindromesIn maximalPalindromesIn'
                 moveCenterS
                     (cf, tf, input)
                     rightmost
-                    (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
+                    (min headq (nrOfCenters - cf) : maximalPalindromesIn)
                     tailq
-                    (nrOfCenters - centerfactor)
+                    (nrOfCenters - cf)
             [] -> error "extendPalindromeS: empty sequence"
 
 finalPalindromesS

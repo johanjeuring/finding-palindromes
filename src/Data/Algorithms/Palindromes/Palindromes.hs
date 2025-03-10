@@ -22,8 +22,7 @@ import Data.Algorithms.Palindromes.LinearAlgorithm
     , extendTailWord
     )
 import Data.Algorithms.Palindromes.PalindromesUtils
-    ( Couplable
-    , Flag (..)
+    ( Flag (..)
     , showPalindrome
     , showPalindromeDNA
     , showTextPalindrome

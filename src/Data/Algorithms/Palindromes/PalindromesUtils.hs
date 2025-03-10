@@ -76,11 +76,11 @@ data Palindrome
     , palLength :: Int
     -- ^ The length of the found palindrome in the pre-processed input vector.
     , palStart :: Int
-    {- ^ The starting character index of the found palindrome in the original
+    {- ^ The (inclusive) starting character index of the found palindrome in the original
     (not pre-processed) input string
     -}
     , palEnd :: Int
-    {- ^ The ending character index of the found palindrome in the original
+    {- ^ The (exclusive) ending character index of the found palindrome in the original
     (not pre-processed) input string
     -}
     , palText :: String
@@ -92,10 +92,11 @@ data Palindrome
     }
 
 {- An example text Palindrome from plain input string "bab..ac" is
-(Palindrome 5 3 1 5 "ab..a"). The center is on the 'b' and has center index 5. The
+(Palindrome 5 3 1 6 "ab..a"). The center is on the 'b' and has center index 5. The
 pre-processed text palindrome is "aba", so the length is 3, and after adding back
-punctuation, the start character index is 1 (the first 'a')and the end character index
-is 5 (the second 'a'). The string representing this text palindrome is "ab..a". -}
+punctuation, the start character index is 1 (the first 'a') and the end character index
+is 6 (the 'c' after the second 'a'). The string representing this text palindrome is
+"ab..a". -}
 
 {-
 -------------------------------------

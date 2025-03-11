@@ -217,3 +217,99 @@ testExtendPalindromeSDNA =
     End tests for finalPalindromeS
 ----------------------------------------------------------
 -}
+
+{-
+----------------------------------------------------------
+    Begin tests for moveCenterS
+----------------------------------------------------------
+-}
+
+{- Test moveCenterS on a simple string -}
+testMoveCenterSSimple =
+    TestCase $
+        assertEqual
+            "testMoveCenterSSimple"
+            [0,1,0,1,4,1,0,1,4,1,0,3,0,1,0]
+            ( P.moveCenterS
+                1
+                1
+                (V.fromList "abaabba")
+                5
+                [4,1,0,3,0,1,0]
+                [1,0,3,0,1,0]
+                4
+            )
+
+{- Tests moveCenterS on a string, ensuring it passes through
+the first guard of moveCenterS by making rightmost = 0 -}
+testMoveCenterSGuard1 =
+    TestCase $
+        assertEqual
+            "testMoveCenterSGuard1"
+            [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]
+            ( P.moveCenterS
+                1
+                1
+                (V.fromList "abcdefgh")
+                4
+                [4,1,0,1,0,1,0,1,0]
+                [1,0,1,0,1,0,1,0]
+                0
+            )
+
+{- Tests moveCenterS on a string, ensuring it passes through
+the second guard of moveCenterS by ensuring 
+head maximalPalindromesIn' == nrOfCenters - centerfactor -}
+testMoveCenterSGuard2 =
+    TestCase $
+        assertEqual
+            "testMoveCenterSGuard2"
+            [0,1,0,1,0,1,0,1,2,3,4,3,2,1,0,1,0,1,0,1,0]
+            ( P.moveCenterS
+                1
+                1
+                (V.fromList "abcaaaaxyz")
+                7
+                [4,3,2,1,0,1,0,1,0,1,0]
+                [3,2,1,0,1,0,1,0,1,0]
+                4
+            )
+
+{- Tests moveCenterS on a string, ensuring it passes through
+the third guard of moveCenterS by ensuring neither
+rightmost = 0 and head maximalPalindromesIn' == nrOfCenters - centerfactor -}
+testMoveCenterSGuard3 =
+    TestCase $
+        assertEqual
+            "testMoveCenterSGuard3"
+            [0,1,0,1,2,1,0,1,0,1,0,11,0,1,0,1,0,1,2,1,0,1,0]
+            ( P.moveCenterS
+                1
+                1
+                (V.fromList "meetsysteem")
+                11
+                [11,0,1,0,1,0,1,2,1,0,1,0]
+                [0,1,0,1,0,1,2,1,0,1,0]
+                11
+            )
+
+testMoveCenterSDNA =
+    TestCase $
+        assertEqual
+            "testMoveCenterSDNA"
+            [0,2,0,0,0,6,0,0,0,2,0]
+            ( P.moveCenterS
+                2
+                0
+                (toDNA (V.fromList "atgacgtccg"))
+                8
+                [6,0,0,0,2,0]
+                [0,0,0,2,0]
+                6
+            )
+
+{-
+----------------------------------------------------------
+    End tests for moveCenterS
+----------------------------------------------------------
+-}

@@ -83,13 +83,33 @@ moveCenterS
     nrOfCenters
         | nrOfCenters == 0 =
             -- the last centre is on the last element: try to extend the tail of length 1
-            extendPalindromeS
-                centerfactor
-                tailfactor
-                input
-                maximalPalindromesIn
-                (rightmost + 1)
-                tailfactor
+            if centerfactor == 1
+                then
+                    if couplableWithItself input rightmost
+                        then
+                            extendPalindromeS
+                                centerfactor
+                                tailfactor
+                                input
+                                maximalPalindromesIn
+                                (rightmost + 1)
+                                1
+                        else
+                            extendPalindromeS
+                                centerfactor
+                                tailfactor
+                                input
+                                (0 : maximalPalindromesIn)
+                                (rightmost + 1)
+                                0
+                else
+                    extendPalindromeS
+                        centerfactor
+                        tailfactor
+                        input
+                        maximalPalindromesIn
+                        (rightmost + 1)
+                        0
         | nrOfCenters - centerfactor == head maximalPalindromesIn' =
             {- the previous element in the centre list reaches exactly to the end of the
              last tail palindrome use the mirror property of palindromes to find the
@@ -115,6 +135,13 @@ moveCenterS
                         tailq
                         (nrOfCenters - centerfactor)
                 [] -> error "extendPalindromeS: empty sequence"
+
+couplableWithItself :: (Couplable a) => V.Vector a -> Int -> Bool
+couplableWithItself input index
+    | index < 0 || index >= V.length input = False
+    | otherwise = element =:= element
+  where
+    element = input V.! index
 
 {- | After the current palindrome reached the end of the input vector, this function will
 find and return the final palindromes using the pal in pal property

@@ -1,7 +1,7 @@
 module UTLinearAlgorithm (testListLinearAlgorithm) where
 
 import Control.Exception (assert)
-import Data.Algorithms.Palindromes.PalindromesUtils (toDNA)
+import Data.Algorithms.Palindromes.PalindromesUtils (DNA (..), toDNA)
 import Test.HUnit (Test (..), assertEqual)
 
 import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
@@ -197,7 +197,7 @@ testExtendPalindromeSEmpty =
                 0
             )
 
-{- Test a DNA string on extendPalindromeS -}
+-- Test a DNA string on extendPalindromeS
 testExtendPalindromeSDNA =
     TestCase $
         assertEqual
@@ -206,7 +206,23 @@ testExtendPalindromeSDNA =
             ( P.extendPalindromeS
                 2
                 0
-                (toDNA (V.fromList "atgcat"))
+                (V.fromList [A, T, G, C, A, T])
+                []
+                0
+                0
+            )
+
+{- Test a DNA string on extendPalindromeS without skipping the centers on elements. If
+this works, non-reflexive, non-anti-reflexive datatypes will likely also work -}
+testExtendPalindromeSDNAAllCenters =
+    TestCase $
+        assertEqual
+            "testExtendPalindromeSDNAAllCenters"
+            [0, 0, 2, 0, 4, 0, 2, 0, 0, 0, 2, 0, 0]
+            ( P.extendPalindromeS
+                1
+                1
+                (V.fromList [A, T, G, C, G, C])
                 []
                 0
                 0

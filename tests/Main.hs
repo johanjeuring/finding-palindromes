@@ -18,6 +18,7 @@ import Test.QuickCheck (quickCheck)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
+import UTLinearAlgorithm (testListLinearAlgorithm)
 import UTPalindromesUtils (testListPalindromesUtils)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
 import UTTextPals (testListText)
@@ -36,6 +37,7 @@ tests =
             ++ testListQuadraticAlgorithm
             ++ testListExtend PU.Linear
             ++ testListExtend PU.Quadratic
+            ++ testListLinearAlgorithm
             ++ testListPalindromesUtils
 
 main :: IO Counts

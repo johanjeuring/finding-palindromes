@@ -3,7 +3,6 @@ module UTPalindromesUtils where
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable ((=:=))
     , DNA (A, C, G, T)
-    , appendseq
     , listArrayl0
     , myIsLetterC
     , surroundedByPunctuation
@@ -27,7 +26,6 @@ testListPalindromesUtils =
     , testOutOfBounds1SurroundedByPunctuation
     , testOutOfBounds2SurroundedByPunctuation
     , testOutOfBounds3SurroundedByPunctuation
-    , testAppendSeq
     , testlistArrayl0
     , testVecToArray
     ]
@@ -151,15 +149,6 @@ testOutOfBounds3SurroundedByPunctuation =
   Begin tests for foldable (Seq/Array/List) utility functions
 ----------------------------------------------------
 -}
-
-testAppendSeq =
-    TestCase
-        $ assertEqual
-            "testAppendSeq"
-            "ba"
-        $ appendseq
-            ("a", S.fromList "b")
-
 testlistArrayl0 =
     TestCase
         $ assertEqual

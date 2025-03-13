@@ -30,19 +30,18 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , showTextPalindrome
     , myIsLetterC
     , surroundedByPunctuation
-    , appendseq
     , listArrayl0
     , vecToArray
     , toDNA
     , Couplable
     , DNA (..)
+    , couplableWithItselfAtIndex
     ) where
 
 import Data.Array (Array, bounds, listArray, (!))
-import Data.Char (isControl, isPunctuation, isSpace, toUpper)
+import Data.Char (isControl, isPunctuation, isSpace)
 import Data.Foldable (Foldable (toList))
 
-import qualified Data.Sequence as S
 import qualified Data.Vector as V
 
 data Flag
@@ -215,18 +214,14 @@ surroundedByPunctuation begin end input
   Begin foldable (Seq/Array/List) utility functions
 ----------------------------------------------------
 -}
--- appends list at the end of the given sequence
-appendseq :: ([a], S.Seq a) -> [a]
-appendseq (list, s) = toList s ++ list
 
--- construct array from string
 listArrayl0 :: [a] -> Array Int a
 listArrayl0 string = listArray (0, length string - 1) string
 
 vecToArray :: V.Vector a -> Array Int a
-vecToArray v = listArray bounds content
+vecToArray v = listArray bound content
   where
-    bounds = (0, V.length v - 1)
+    bound = (0, V.length v - 1)
     content = V.toList v
 
 {-
@@ -289,4 +284,30 @@ charToDNA _ = error "Not a valid DNA string"
 --------------------------------------
   End DNA definition and functions
 --------------------------------------
+-}
+
+{-
+---------------------------------------
+  Begin functions for Couplable types
+---------------------------------------
+-}
+
+{- | Safe function which returns whether an element at an index in the input vector is
+  couplable with itself.
+-}
+couplableWithItselfAtIndex :: (Couplable a) => V.Vector a -> Int -> Bool
+couplableWithItselfAtIndex input index
+    | index < 0 || index >= V.length input = False
+    | otherwise = couplableWithItself element
+  where
+    element = input V.! index
+
+-- | Returns whether an element is couplable with itself.
+couplableWithItself :: (Couplable a) => a -> Bool
+couplableWithItself element = element =:= element
+
+{-
+---------------------------------------
+  End functions for Couplable types
+---------------------------------------
 -}

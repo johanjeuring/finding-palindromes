@@ -68,6 +68,7 @@ Test-Suite              property-tests
                         , UTExtendPals
                         , UTGetLeftRight
                         , UTLinearAlgorithm
+                        , UTPalindromesUtils
                         , UTQuadraticAlgorithm
                         , UTTextPals
                         , UTWordPals

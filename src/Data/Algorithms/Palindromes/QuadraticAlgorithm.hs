@@ -73,14 +73,16 @@ getLeftRightCenterBetweenElems
 getLeftRightCenterBetweenElems gapSize element lengthInput = (left, right)
   where
     halfg = gapSize `div` 2
-    halfg'
-        -- Do not let the gap go outside the left bound of the input
-        | element < halfg = element
-        -- Do not let the gap go outside the right bound of the input
-        | element + halfg > lengthInput = lengthInput - element
-        | otherwise = halfg
-    left = element - 1 - halfg'
-    right = element + halfg'
+    {- How far the gap can span to the left without going out of
+    bounds to the left. -}
+    leewayLeft = elemIndex
+    {- How far the gap can span to the right without going out of
+    bounds to the right. -}
+    leewayRight = lengthInput - elemIndex
+    -- make sure halfg' is not larger than leewayLeft or leewayRight
+    halfg' = L.minimum [halfg, leewayLeft, leewayRight]
+    left = elemIndex - 1 - halfg'
+    right = elemIndex + halfg'
 
 {- | Get the element index for the left and right characters to start expanding the
 palindrome from, essentially ignoring the gap. This function must be used when the
@@ -93,17 +95,19 @@ getLeftRightCenterOnElem
     -- ^ The index of the element on the center
     -> Int
     -> (Int, Int)
-getLeftRightCenterOnElem gapSize element lengthInput = (left, right)
+getLeftRightCenterOnElem gapSize elemIndex lengthInput = (left, right)
   where
     halfg = (gapSize + 1) `div` 2
-    halfg'
-        -- Do not let the gap go outside the left bound of the input
-        | element < halfg = element + 1
-        -- Do not let the gap go outside the right bound of the input
-        | element + halfg > lengthInput = lengthInput - element
-        | otherwise = halfg
-    left = element - halfg'
-    right = element + halfg'
+    {- How far the gap can span to the left without going out of
+    bounds to the left. -}
+    leewayLeft = elemIndex + 1
+    {- How far the gap can span to the right without going out of
+    bounds to the right. -}
+    leewayRight = lengthInput - elemIndex
+    -- make sure halfg' is not larger than leewayLeft or leewayRight
+    halfg' = L.minimum [halfg, leewayLeft, leewayRight]
+    left = elemIndex - halfg'
+    right = elemIndex + halfg'
 
 {-
 ---------------------------------------------------------------------

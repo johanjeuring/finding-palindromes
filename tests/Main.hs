@@ -19,6 +19,7 @@ import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
 import UTLinearAlgorithm (testListLinearAlgorithm)
+import UTPalindromesUtils (testListPalindromesUtils)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
 import UTTextPals (testListText)
 import UTWordPals (testListWords)
@@ -37,6 +38,7 @@ tests =
             ++ testListExtend PU.Linear
             ++ testListExtend PU.Quadratic
             ++ testListLinearAlgorithm
+            ++ testListPalindromesUtils
 
 main :: IO Counts
 main = do

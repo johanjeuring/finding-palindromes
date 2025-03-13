@@ -69,16 +69,33 @@ data Flag
 data Palindrome
     = Palindrome
     { palCenterIndex :: Int
-    {- ^ The index of the center of this found palindrome from the
-    (possibly pre-processed) input text
+    {- ^ The index of the center of this found palindrome from the pre-processed input
+    vector.
     -}
     , palLength :: Int
-    -- ^ The length of the found palindrome
+    -- ^ The length of the found palindrome in the pre-processed input vector.
+    , palStart :: Int
+    {- ^ The (inclusive) starting character index of the found palindrome in the original
+    (not pre-processed) input string
+    -}
+    , palEnd :: Int
+    {- ^ The (exclusive) ending character index of the found palindrome in the original
+    (not pre-processed) input string
+    -}
     , palText :: String
     {- ^ The text representing the found palindrome. Note that this must be a string,
-    not some abstract datatype.
+    not some abstract datatype. This string must be a subarray of the original
+    (not pre-processed) input string, meaning that e.g. present punctuation is in this
+    string.
     -}
     }
+
+{- An example text Palindrome from plain input string "bab..ac" is
+(Palindrome 5 3 1 6 "ab..a"). The center is on the 'b' and has center index 5. The
+pre-processed text palindrome is "aba", so the length is 3, and after adding back
+punctuation, the start character index is 1 (the first 'a') and the end character index
+is 6 (the 'c' after the second 'a'). The string representing this text palindrome is
+"ab..a". -}
 
 {-
 -------------------------------------
@@ -169,12 +186,16 @@ myIsLetterC c =
 
 {- |
   Checks whether the range specified by the first 2 parameters is surrounded by punctuation in the 3rd parameter.
+    If begin is out of bounds, it still returns True if there is punctuation after index end.
+    If end is out of bounds, it still returns True if there is punctuation before index begin.
+    If both are out of bounds return True
+    Note that out of bounds is considered True as this would be an end/start of a file which is considered punctuation
 -}
 surroundedByPunctuation :: Int -> Int -> V.Vector Char -> Bool
 surroundedByPunctuation begin end input
     | begin > afirst && end < alast =
         not (myIsLetterC ((V.!) input (begin - 1)))
-            && not (myIsLetterC ((V.!) input (end + 1)))
+            && not (myIsLetterC ((V.!) input (end + 1))) -- returns if the positions around begin and end are surrounded
     | begin <= afirst && end < alast = not (myIsLetterC ((V.!) input (end + 1)))
     | begin <= afirst && end >= alast = True
     | begin > afirst && end >= alast = not (myIsLetterC ((V.!) input (begin - 1)))
@@ -232,8 +253,8 @@ instance (Eq a) => Couplable a where
 --------------------------------------
 -}
 
--- | Datatype for the different DNA
-data DNA = A | T | C | G | N deriving (Show)
+-- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA has palindromes, instead couplable should be used
+data DNA = A | T | C | G | N deriving (Show, Eq)
 
 -- | Declare instance Couplable for DNA. A and T form a couple, C and G form a couple.
 instance {-# OVERLAPPING #-} Couplable DNA where

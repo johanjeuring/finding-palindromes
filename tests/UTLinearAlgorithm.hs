@@ -18,6 +18,11 @@ testListLinearAlgorithm =
     , testExtendPalindromeSNothing
     , testExtendPalindromeSEmpty
     , testExtendPalindromeSDNA
+    , testMoveCenterSSimple
+    , testMoveCenterSGuard1
+    , testMoveCenterSGuard2
+    , testMoveCenterSGuard3
+    , testMoveCenterSDNA
     ]
 
 {-
@@ -58,22 +63,21 @@ testFinalPalindromesSCutOff =
     TestCase $
         assertEqual
             "testFinalPalindromesSCutOff"
-            ( [ 0
-              , 1
-              , 2
-              , 3
-              , 4
-              , 5
-              , 6
-              , 5
-              , 4
-              , 3
-              , 2
-              , 1
-              , 0 {-, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                  ++ [8, 7, 6, 5, 4, 3, 2, 1, 0-}
-              ]
-            )
+            [ 0
+            , 1
+            , 2
+            , 3
+            , 4
+            , 5
+            , 6
+            , 5
+            , 4
+            , 3
+            , 2
+            , 1
+            , 0 {-, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                ++ [8, 7, 6, 5, 4, 3, 2, 1, 0-}
+            ]
             ( P.finalPalindromesS
                 1
                 13
@@ -214,7 +218,7 @@ testExtendPalindromeSDNA =
 
 {-
 ----------------------------------------------------------
-    End tests for finalPalindromeS
+    End tests for extendPalindromeS
 ----------------------------------------------------------
 -}
 
@@ -252,7 +256,7 @@ testMoveCenterSGuard1 =
                 1
                 (V.fromList "abcdefgh")
                 4
-                [4, 1, 0, 1, 0, 1, 0, 1, 0]
+                [0, 1, 0, 1, 0, 1, 0, 1, 0]
                 [1, 0, 1, 0, 1, 0, 1, 0]
                 0
             )
@@ -293,6 +297,7 @@ testMoveCenterSGuard3 =
                 11
             )
 
+{- Tests moveCenterS on a DNA string -}
 testMoveCenterSDNA =
     TestCase $
         assertEqual

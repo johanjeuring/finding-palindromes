@@ -43,8 +43,7 @@ extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost c
         -- the current palindrome extends to the start of the array, or it cannot be
         -- extended
         moveCenterS
-            centerfactor
-            tailfactor
+            (centerfactor == 2)
             input
             rightmost
             (currentPalindrome : maximalPalindromesIn)
@@ -65,8 +64,7 @@ extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost c
 
 moveCenterS
     :: (Couplable a)
-    => Int
-    -> Int
+    => Bool
     -> V.Vector a
     -> Int
     -> [Int]
@@ -74,8 +72,7 @@ moveCenterS
     -> Int
     -> [Int]
 moveCenterS
-    centerfactor
-    tailfactor
+    antiReflexive
     input
     rightmost
     maximalPalindromesIn
@@ -83,33 +80,30 @@ moveCenterS
     nrOfCenters
         | nrOfCenters == 0 =
             -- the last centre is on the last element: try to extend the tail of length 1
-            if centerfactor == 1
-                then
-                    if couplableWithItself input rightmost
-                        then
-                            extendPalindromeS
-                                centerfactor
-                                tailfactor
-                                input
-                                maximalPalindromesIn
-                                (rightmost + 1)
-                                1
-                        else
-                            extendPalindromeS
-                                centerfactor
-                                tailfactor
-                                input
-                                (0 : maximalPalindromesIn)
-                                (rightmost + 1)
-                                0
-                else
-                    extendPalindromeS
-                        centerfactor
-                        tailfactor
-                        input
-                        maximalPalindromesIn
-                        (rightmost + 1)
-                        0
+            let (newPalLength, inputForExtend) =
+                    case (antiReflexive, couplableWithItself input rightmost) of
+                        {- We have a non-anti-reflexive datatype and the element at
+                        rightmost is not couplable with itself. We have thus found an
+                        empty maximal palindrome. Add this to the list of found maximal
+                        palindromes and continue searching. The next palindrome to extend
+                        is the even palindrome with the center between rightmost and
+                        rightmost + 1. -}
+                        (False, False) -> (0, 0 : maximalPalindromesIn)
+                        {- We have a non-anti-reflexive datatype and the element at
+                        rightmost is couplable with itself. So, we found a palindrome of
+                        at least length 1 and we need to try to extend it further. -}
+                        (False, True) -> (1, maximalPalindromesIn)
+                        {- We have an anti-reflexive datatype, meaning that we will only
+                        look at centers between elements. We know the empty palindrome is
+                        present and we need to extend it further. -}
+                        (True, _) -> (0, maximalPalindromesIn)
+            in  extendPalindromeS
+                    centerfactor
+                    tailfactor
+                    input
+                    inputForExtend
+                    (rightmost + 1)
+                    newPalLength
         | nrOfCenters - centerfactor == head maximalPalindromesIn' =
             {- the previous element in the centre list reaches exactly to the end of the
              last tail palindrome use the mirror property of palindromes to find the
@@ -127,14 +121,21 @@ moveCenterS
             case maximalPalindromesIn' of
                 (headq : tailq) ->
                     moveCenterS
-                        centerfactor
-                        tailfactor
+                        antiReflexive
                         input
                         rightmost
                         (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
                         tailq
                         (nrOfCenters - centerfactor)
                 [] -> error "extendPalindromeS: empty sequence"
+      where
+        centerfactor
+            | antiReflexive = 2
+            | otherwise = 1
+
+        tailfactor
+            | antiReflexive = 0
+            | otherwise = 1
 
 couplableWithItself :: (Couplable a) => V.Vector a -> Int -> Bool
 couplableWithItself input index

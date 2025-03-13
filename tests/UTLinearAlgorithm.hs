@@ -252,8 +252,7 @@ testMoveCenterSSimple =
             "testMoveCenterSSimple"
             [0, 1, 0, 1, 4, 1, 0, 1, 4, 1, 0, 3, 0, 1, 0]
             ( P.moveCenterS
-                1
-                1
+                False
                 (V.fromList "abaabba")
                 5
                 [4, 1, 0, 3, 0, 1, 0]
@@ -269,8 +268,7 @@ testMoveCenterSGuard1 =
             "testMoveCenterSGuard1"
             [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.moveCenterS
-                1
-                1
+                False
                 (V.fromList "abcdefgh")
                 4
                 [0, 1, 0, 1, 0, 1, 0, 1, 0]
@@ -287,8 +285,7 @@ testMoveCenterSGuard2 =
             "testMoveCenterSGuard2"
             [0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.moveCenterS
-                1
-                1
+                False
                 (V.fromList "abcaaaaxyz")
                 7
                 [4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
@@ -305,8 +302,7 @@ testMoveCenterSGuard3 =
             "testMoveCenterSGuard3"
             [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
             ( P.moveCenterS
-                1
-                1
+                False
                 (V.fromList "meetsysteem")
                 11
                 [11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
@@ -321,8 +317,7 @@ testMoveCenterSDNA =
             "testMoveCenterSDNA"
             [0, 2, 0, 0, 0, 6, 0, 0, 0, 2, 0]
             ( P.moveCenterS
-                2
-                0
+                True
                 (toDNA (V.fromList "atgacgtccg"))
                 8
                 [6, 0, 0, 0, 2, 0]

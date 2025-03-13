@@ -33,7 +33,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
     | rightmost > lastPos =
         -- reached the end of the array
         finalPalindromesS
-            centerfactor
+            antiReflexive
             currentPalindrome
             maximalPalindromesIn
             ++ (currentPalindrome : maximalPalindromesIn)
@@ -59,9 +59,6 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
   where
     first = 0 -- first index of the input
     lastPos = V.length input - 1 -- last index of the input
-    {- If type is anti-reflexive, we can skip centers on elements, so take steps of
-    size 2. -}
-    centerfactor = if antiReflexive then 2 else 1
 
 moveCenterS
     :: (Couplable a)
@@ -141,15 +138,15 @@ moveCenterS
 find and return the final palindromes using the pal in pal property
 -}
 finalPalindromesS
-    :: Int
-    -- ^ centerfactor
+    :: Bool
+    -- ^ Indicates whether the input datatype is anti-reflexive
     -> Int
     -- ^ amount of centers that haven't been extended before finalizing extendPalindromeS
     -> [Int]
     -- ^ the lengths of the palindromes that are found, excluding the current palindrome
     -> [Int]
     -- ^ the final sequence of found palindromes for each remaining center in reverse order
-finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn =
+finalPalindromesS antiReflexive nrOfCenters maximalPalindromesIn =
     -- Truncate the mirrored candidates when needed.
     zipWith min candidatesRev [0, centerfactor ..]
   where
@@ -159,6 +156,9 @@ finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn =
     {- We need to 'mirror' the candidates to get the remaining palindromes length in the
     right order.-}
     candidatesRev = reverse candidates
+    {- If type is anti-reflexive, we can skip centers on elements, so take steps of
+    size 2. -}
+    centerfactor = if antiReflexive then 2 else 1
 
 {-
 ---------------------------------------------------------------------

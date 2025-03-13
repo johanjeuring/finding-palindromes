@@ -1,11 +1,11 @@
 module UTLinearAlgorithm (testListLinearAlgorithm) where
 
+import Control.Exception (assert)
+import Data.Algorithms.Palindromes.PalindromesUtils (toDNA)
 import Test.HUnit (Test (..), assertEqual)
+
 import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
 import qualified Data.Vector as V
-import Control.Exception (assert)
-
-import Data.Algorithms.Palindromes.PalindromesUtils (toDNA)
 
 testListLinearAlgorithm =
     [ testFinalPalindromesSSimple
@@ -31,7 +31,7 @@ testExtendPalindromeS =
         assertEqual
             "testFinalPalindromesSSimple"
             [0, 1, 0, 1, 2, 1, 0 {-, 7, 0, 1, 2, 1, 0, 1, 0-}]
-            ( P.finalPalindromesS'
+            ( P.finalPalindromesS
                 1
                 7
                 -- [7, 0, 1, 2, 1, 0, 1, 0]
@@ -45,7 +45,7 @@ testFinalPalindromesSSimple =
         assertEqual
             "testFinalPalindromesSSimple"
             [0, 1, 0, 1, 2, 1, 0 {-, 7, 0, 1, 2, 1, 0, 1, 0-}]
-            ( P.finalPalindromesS'
+            ( P.finalPalindromesS
                 1
                 7
                 -- [7, 0, 1, 2, 1, 0, 1, 0]
@@ -74,7 +74,7 @@ testFinalPalindromesSCutOff =
                   ++ [8, 7, 6, 5, 4, 3, 2, 1, 0-}
               ]
             )
-            ( P.finalPalindromesS'
+            ( P.finalPalindromesS
                 1
                 13
                 -- [13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
@@ -89,7 +89,7 @@ testFinalPalindromesNrOfCentersZero =
             "testFinalPalindromesNrOfCentersZero"
             []
             {-0, 1, 0, 1, 0, 1, 0, 1, 0-}
-            ( P.finalPalindromesS'
+            ( P.finalPalindromesS
                 1
                 0
                 -- [0, 1, 0, 1, 0, 1, 0, 1, 0]
@@ -103,7 +103,7 @@ testFinalPalindromesSDNA =
         assertEqual
             "testFinalPalindromesNrOfCentersZero"
             [0, 0 {-, 4, 0, 4, 0, 0-}]
-            ( P.finalPalindromesS'
+            ( P.finalPalindromesS
                 2
                 4
                 -- [4, 0, 4, 0, 0]
@@ -229,14 +229,14 @@ testMoveCenterSSimple =
     TestCase $
         assertEqual
             "testMoveCenterSSimple"
-            [0,1,0,1,4,1,0,1,4,1,0,3,0,1,0]
+            [0, 1, 0, 1, 4, 1, 0, 1, 4, 1, 0, 3, 0, 1, 0]
             ( P.moveCenterS
                 1
                 1
                 (V.fromList "abaabba")
                 5
-                [4,1,0,3,0,1,0]
-                [1,0,3,0,1,0]
+                [4, 1, 0, 3, 0, 1, 0]
+                [1, 0, 3, 0, 1, 0]
                 4
             )
 
@@ -246,32 +246,32 @@ testMoveCenterSGuard1 =
     TestCase $
         assertEqual
             "testMoveCenterSGuard1"
-            [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]
+            [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.moveCenterS
                 1
                 1
                 (V.fromList "abcdefgh")
                 4
-                [4,1,0,1,0,1,0,1,0]
-                [1,0,1,0,1,0,1,0]
+                [4, 1, 0, 1, 0, 1, 0, 1, 0]
+                [1, 0, 1, 0, 1, 0, 1, 0]
                 0
             )
 
 {- Tests moveCenterS on a string, ensuring it passes through
-the second guard of moveCenterS by ensuring 
+the second guard of moveCenterS by ensuring
 head maximalPalindromesIn' == nrOfCenters - centerfactor -}
 testMoveCenterSGuard2 =
     TestCase $
         assertEqual
             "testMoveCenterSGuard2"
-            [0,1,0,1,0,1,0,1,2,3,4,3,2,1,0,1,0,1,0,1,0]
+            [0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.moveCenterS
                 1
                 1
                 (V.fromList "abcaaaaxyz")
                 7
-                [4,3,2,1,0,1,0,1,0,1,0]
-                [3,2,1,0,1,0,1,0,1,0]
+                [4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
+                [3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
                 4
             )
 
@@ -282,14 +282,14 @@ testMoveCenterSGuard3 =
     TestCase $
         assertEqual
             "testMoveCenterSGuard3"
-            [0,1,0,1,2,1,0,1,0,1,0,11,0,1,0,1,0,1,2,1,0,1,0]
+            [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
             ( P.moveCenterS
                 1
                 1
                 (V.fromList "meetsysteem")
                 11
-                [11,0,1,0,1,0,1,2,1,0,1,0]
-                [0,1,0,1,0,1,2,1,0,1,0]
+                [11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
+                [0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
                 11
             )
 
@@ -297,14 +297,14 @@ testMoveCenterSDNA =
     TestCase $
         assertEqual
             "testMoveCenterSDNA"
-            [0,2,0,0,0,6,0,0,0,2,0]
+            [0, 2, 0, 0, 0, 6, 0, 0, 0, 2, 0]
             ( P.moveCenterS
                 2
                 0
                 (toDNA (V.fromList "atgacgtccg"))
                 8
-                [6,0,0,0,2,0]
-                [0,0,0,2,0]
+                [6, 0, 0, 0, 2, 0]
+                [0, 0, 0, 2, 0]
                 6
             )
 

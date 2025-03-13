@@ -18,6 +18,7 @@ testListLinearAlgorithm =
     , testExtendPalindromeSNothing
     , testExtendPalindromeSEmpty
     , testExtendPalindromeSDNA
+    , testExtendPalindromeSDNAAllCenters
     , testMoveCenterSSimple
     , testMoveCenterSGuard1
     , testMoveCenterSGuard2

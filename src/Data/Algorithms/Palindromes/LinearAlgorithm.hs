@@ -7,6 +7,7 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
 
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
+    , couplableWithItselfAtIndex
     , surroundedByPunctuation
     , (=:=)
     )
@@ -16,21 +17,19 @@ import qualified Data.Vector as V
 
 extendPalindromeS
     :: (Couplable a)
-    => Int
-    -- ^ centerfactor, the stepsize of the algorithm is 1 for text and 2 for DNA.
-    -> Int
-    -- ^ tailfactor, we are not sure whether this is needed anymore
+    => Bool
+    -- ^ Indicates whether the input datatype is anti-reflexive
     -> V.Vector a
     -- ^ input, with only the elements we want to find palindromes in
+    -> Int
+    -- ^ the rightmost index which is checked by the algorithm
     -> [Int]
     -- ^ length of palindromes that are already found
     -> Int
-    -- ^ the rightmost index which is checked by the algorithm
-    -> Int
     -- ^ the length of the palindrome currently being expanded
     -> [Int]
-    -- ^ the final list of palindrome lengths
-extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost currentPalindrome
+    -- ^ the final list of maximal palindrome lengths
+extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPalindrome
     | rightmost > lastPos =
         -- reached the end of the array
         finalPalindromesS
@@ -43,7 +42,7 @@ extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost c
         -- the current palindrome extends to the start of the array, or it cannot be
         -- extended
         moveCenterS
-            (centerfactor == 2)
+            antiReflexive
             input
             rightmost
             (currentPalindrome : maximalPalindromesIn)
@@ -52,25 +51,36 @@ extendPalindromeS centerfactor tailfactor input maximalPalindromesIn rightmost c
     | otherwise =
         -- the current palindrome can be extended
         extendPalindromeS
-            centerfactor
-            tailfactor
+            antiReflexive
             input
-            maximalPalindromesIn
             (rightmost + 1)
+            maximalPalindromesIn
             (currentPalindrome + 2)
   where
     first = 0 -- first index of the input
     lastPos = V.length input - 1 -- last index of the input
+    {- If type is anti-reflexive, we can skip centers on elements, so take steps of
+    size 2. -}
+    centerfactor = if antiReflexive then 2 else 1
 
 moveCenterS
     :: (Couplable a)
     => Bool
+    -- ^ Indicates whether the input datatype is anti-reflexive
     -> V.Vector a
+    -- ^ input, with only the elements we want to find palindromes in
     -> Int
+    -- ^ the rightmost index which is checked by the algorithm
     -> [Int]
+    -- ^ length of all maximal palindromes that are already found
     -> [Int]
+    {- ^ length of maximal palindromes that are already found, where head is always the
+    maximal palindrome at the 'mirrored' index
+    -}
     -> Int
+    -- ^ the number of centers moveCenterS still has to find maximal palindromes for
     -> [Int]
+    -- ^ the final list of maximal palindrome lengths
 moveCenterS
     antiReflexive
     input
@@ -79,41 +89,35 @@ moveCenterS
     maximalPalindromesIn'
     nrOfCenters
         | nrOfCenters == 0 =
-            -- the last centre is on the last element: try to extend the tail of length 1
+            -- the last centre is on the last element: try to extend the tail
             let (newPalLength, inputForExtend) =
-                    case (antiReflexive, couplableWithItself input rightmost) of
-                        {- We have a non-anti-reflexive datatype and the element at
-                        rightmost is not couplable with itself. We have thus found an
-                        empty maximal palindrome. Add this to the list of found maximal
-                        palindromes and continue searching. The next palindrome to extend
-                        is the even palindrome with the center between rightmost and
-                        rightmost + 1. -}
+                    case (antiReflexive, couplableWithItselfAtIndex input rightmost) of
+                        {- Non-anti-reflexive type, but element at `rightmost` is not
+                         self-couplable. We found an empty maximal palindrome. Add it to
+                         the list and continue searching. -}
                         (False, False) -> (0, 0 : maximalPalindromesIn)
-                        {- We have a non-anti-reflexive datatype and the element at
-                        rightmost is couplable with itself. So, we found a palindrome of
-                        at least length 1 and we need to try to extend it further. -}
+                        {- Non-anti-reflexive type, element at `rightmost` is
+                        self-couplable. Found a palindrome of at least length 1, so try to
+                        extend it. -}
                         (False, True) -> (1, maximalPalindromesIn)
-                        {- We have an anti-reflexive datatype, meaning that we will only
-                        look at centers between elements. We know the empty palindrome is
-                        present and we need to extend it further. -}
+                        {- Anti-reflexive type: only centers between elements matter. We
+                        assume an empty palindrome and continue extending. -}
                         (True, _) -> (0, maximalPalindromesIn)
             in  extendPalindromeS
-                    centerfactor
-                    tailfactor
+                    antiReflexive
                     input
-                    inputForExtend
                     (rightmost + 1)
+                    inputForExtend
                     newPalLength
         | nrOfCenters - centerfactor == head maximalPalindromesIn' =
-            {- the previous element in the centre list reaches exactly to the end of the
-             last tail palindrome use the mirror property of palindromes to find the
+            {- The previous element in the centre list reaches exactly to the end of the
+             last tail palindrome. Use the mirror property of palindromes to find the
              longest tail palindrome -}
             extendPalindromeS
-                centerfactor
-                tailfactor
+                antiReflexive
                 input
-                maximalPalindromesIn
                 rightmost
+                maximalPalindromesIn
                 (nrOfCenters - centerfactor)
         | otherwise =
             {- move the centres one step and add the length of the longest palindrome to
@@ -129,29 +133,22 @@ moveCenterS
                         (nrOfCenters - centerfactor)
                 [] -> error "extendPalindromeS: empty sequence"
       where
-        centerfactor
-            | antiReflexive = 2
-            | otherwise = 1
-
-        tailfactor
-            | antiReflexive = 0
-            | otherwise = 1
-
-couplableWithItself :: (Couplable a) => V.Vector a -> Int -> Bool
-couplableWithItself input index
-    | index < 0 || index >= V.length input = False
-    | otherwise = element =:= element
-  where
-    element = input V.! index
+        {- If type is anti-reflexive, we can skip centers on elements, so take steps of
+        size 2. -}
+        centerfactor = if antiReflexive then 2 else 1
 
 {- | After the current palindrome reached the end of the input vector, this function will
 find and return the final palindromes using the pal in pal property
 -}
 finalPalindromesS
-    :: Int -- centerfactor
-    -> Int -- amount of centers that haven't been extended before finalizing extendPalindromeS
-    -> [Int] -- the lengths of the palindromes that are found, excluding the current palindrome
-    -> [Int] -- the final sequence of found palindromes for each remaining center in reverse order
+    :: Int
+    -- ^ centerfactor
+    -> Int
+    -- ^ amount of centers that haven't been extended before finalizing extendPalindromeS
+    -> [Int]
+    -- ^ the lengths of the palindromes that are found, excluding the current palindrome
+    -> [Int]
+    -- ^ the final sequence of found palindromes for each remaining center in reverse order
 finalPalindromesS centerfactor nrOfCenters maximalPalindromesIn =
     -- Truncate the mirrored candidates when needed.
     zipWith min candidatesRev [0, centerfactor ..]

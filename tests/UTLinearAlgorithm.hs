@@ -133,11 +133,10 @@ testExtendPalindromeSSimple =
             "testExtendPalindromeSSimple"
             [0, 1, 0, 3, 0, 1, 0, 1, 2, 1, 0]
             ( P.extendPalindromeS
-                1
-                1
+                False
                 (V.fromList "nnaba")
-                []
                 0
+                []
                 0
             )
 
@@ -148,11 +147,10 @@ testExtendPalindromeSWhole =
             "testExtendPalindromeSWhole"
             [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
             ( P.extendPalindromeS
-                1
-                1
+                False
                 (V.fromList "meetsysteem")
-                []
                 0
+                []
                 0
             )
 
@@ -164,11 +162,10 @@ testExtendPalindromeSIntertwined =
             "testExtendPalindromeSIntertwined"
             [0, 1, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 1, 0]
             ( P.extendPalindromeS
-                1
-                1
+                False
                 (V.fromList "leepeeleep")
-                []
                 0
+                []
                 0
             )
 
@@ -179,11 +176,10 @@ testExtendPalindromeSNothing =
             "testExtendPalindromeSNothing"
             [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.extendPalindromeS
-                1
-                1
+                False
                 (V.fromList "abcdefgh")
-                []
                 0
+                []
                 0
             )
 
@@ -194,11 +190,10 @@ testExtendPalindromeSEmpty =
             "testExtendPalindromeSEmpty"
             [0]
             ( P.extendPalindromeS
-                1
-                1
+                False
                 (V.fromList "")
-                []
                 0
+                []
                 0
             )
 
@@ -209,11 +204,10 @@ testExtendPalindromeSDNA =
             "testExtendPalindromeSDNA"
             [0, 2, 0, 6, 0, 2, 0]
             ( P.extendPalindromeS
-                2
-                0
+                True
                 (V.fromList [A, T, G, C, A, T])
-                []
                 0
+                []
                 0
             )
 
@@ -225,11 +219,10 @@ testExtendPalindromeSDNAAllCenters =
             "testExtendPalindromeSDNAAllCenters"
             [0, 0, 2, 0, 4, 0, 2, 0, 0, 0, 2, 0, 0]
             ( P.extendPalindromeS
-                1
-                1
+                False
                 (V.fromList [A, T, G, C, G, C])
-                []
                 0
+                []
                 0
             )
 

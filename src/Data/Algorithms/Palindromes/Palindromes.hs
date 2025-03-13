@@ -218,10 +218,10 @@ palindromesAroundCentres
     positionTextInput =
         case (algorithmComplexity, gap, nrOfErrors) of
             (Just Linear, Nothing, Nothing) -> case palindromeVariant of
-                Just DNA -> reverse $ extendPalindromeS 2 0 input' [] 0 0
+                Just DNA -> reverse $ extendPalindromeS True input' 0 [] 0
                 Just Word ->
                     reverse $ map (head . snd) $ extendTailWord input input' positionTextInput [] 0 (0, [0])
-                _ -> reverse $ extendPalindromeS 1 1 input' [] 0 0
+                _ -> reverse $ extendPalindromeS False input' 0 [] 0
             (Just Linear, _, _) ->
                 error
                     "palindromesAroundCentres: cannot calculate approximate or gapped palindromes using the linear-time algorithm"

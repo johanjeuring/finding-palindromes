@@ -35,6 +35,7 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , toDNA
     , Couplable
     , DNA (..)
+    , couplableWithItselfAtIndex
     ) where
 
 import Data.Array (Array, bounds, listArray, (!))
@@ -262,4 +263,30 @@ charToDNA _ = error "Not a valid DNA string"
 --------------------------------------
   End DNA definition and functions
 --------------------------------------
+-}
+
+{-
+---------------------------------------
+  Begin functions for Couplable types
+---------------------------------------
+-}
+
+{- | Safe function which returns whether an element at an index in the input vector is
+  couplable with itself.
+-}
+couplableWithItselfAtIndex :: (Couplable a) => V.Vector a -> Int -> Bool
+couplableWithItselfAtIndex input index
+    | index < 0 || index >= V.length input = False
+    | otherwise = couplableWithItself element
+  where
+    element = input V.! index
+
+-- | Returns whether an element is couplable with itself.
+couplableWithItself :: (Couplable a) => a -> Bool
+couplableWithItself element = element =:= element
+
+{-
+---------------------------------------
+  End functions for Couplable types
+---------------------------------------
 -}

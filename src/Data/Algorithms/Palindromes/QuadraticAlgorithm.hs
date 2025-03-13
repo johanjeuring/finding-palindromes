@@ -70,19 +70,19 @@ getLeftRightCenterBetweenElems
     -- ^ The index of the element to the right of the center
     -> Int
     -> (Int, Int)
-getLeftRightCenterBetweenElems gapSize element lengthInput = (left, right)
+getLeftRightCenterBetweenElems gapSize elementIndex lengthInput = (left, right)
   where
     halfg = gapSize `div` 2
     {- How far the gap can span to the left without going out of
     bounds to the left. -}
-    leewayLeft = elemIndex
+    leewayLeft = elementIndex
     {- How far the gap can span to the right without going out of
     bounds to the right. -}
-    leewayRight = lengthInput - elemIndex
+    leewayRight = lengthInput - elementIndex
     -- make sure halfg' is not larger than leewayLeft or leewayRight
     halfg' = L.minimum [halfg, leewayLeft, leewayRight]
-    left = elemIndex - 1 - halfg'
-    right = elemIndex + halfg'
+    left = elementIndex - 1 - halfg'
+    right = elementIndex + halfg'
 
 {- | Get the element index for the left and right characters to start expanding the
 palindrome from, essentially ignoring the gap. This function must be used when the
@@ -95,19 +95,19 @@ getLeftRightCenterOnElem
     -- ^ The index of the element on the center
     -> Int
     -> (Int, Int)
-getLeftRightCenterOnElem gapSize elemIndex lengthInput = (left, right)
+getLeftRightCenterOnElem gapSize elementIndex lengthInput = (left, right)
   where
     halfg = (gapSize + 1) `div` 2
     {- How far the gap can span to the left without going out of
     bounds to the left. -}
-    leewayLeft = elemIndex + 1
+    leewayLeft = elementIndex + 1
     {- How far the gap can span to the right without going out of
     bounds to the right. -}
-    leewayRight = lengthInput - elemIndex
+    leewayRight = lengthInput - elementIndex
     -- make sure halfg' is not larger than leewayLeft or leewayRight
     halfg' = L.minimum [halfg, leewayLeft, leewayRight]
-    left = elemIndex - halfg'
-    right = elemIndex + halfg'
+    left = elementIndex - halfg'
+    right = elementIndex + halfg'
 
 {-
 ---------------------------------------------------------------------

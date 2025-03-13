@@ -8,11 +8,7 @@ import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
 import qualified Data.Vector as V
 
 testListLinearAlgorithm =
-    [ testFinalPalindromesSSimple
-    , testFinalPalindromesSCutOff
-    , testFinalPalindromesNrOfCentersZero
-    , testFinalPalindromesSDNA
-    , testExtendPalindromeSSimple
+    [ testExtendPalindromeSSimple
     , testExtendPalindromeSWhole
     , testExtendPalindromeSIntertwined
     , testExtendPalindromeSNothing
@@ -24,101 +20,18 @@ testListLinearAlgorithm =
     , testMoveCenterSGuard2
     , testMoveCenterSGuard3
     , testMoveCenterSDNA
+    , testMoveCenterSDNAAllCenters
+    , testFinalPalindromesSSimple
+    , testFinalPalindromesSCutOff
+    , testFinalPalindromesNrOfCentersZero
+    , testFinalPalindromesSDNA
     ]
 
-{-
-----------------------------------------------------------
-    Begin tests for finalPalindromeS
-----------------------------------------------------------
--}
-
-testExtendPalindromeS =
-    TestCase $
-        assertEqual
-            "testFinalPalindromesSSimple"
-            [0, 1, 0, 1, 2, 1, 0]
-            ( P.finalPalindromesS
-                False
-                7
-                [0, 1, 2, 1, 0, 1, 0]
-            )
-
-{- Test a simple case for finalPalindromesS, where no palindrome needs to be truncated.
-This test is based on input string "leepeel" -}
-testFinalPalindromesSSimple =
-    TestCase $
-        assertEqual
-            "testFinalPalindromesSSimple"
-            [0, 1, 0, 1, 2, 1, 0]
-            ( P.finalPalindromesS
-                False
-                7
-                [0, 1, 2, 1, 0, 1, 0]
-            )
-
-{- Test a case where some palindromes need to be truncated. This test is based on input
-string "aaaaaaaaabaaaaaa", so 9x 'a', 1x 'b' and 6x 'a'. -}
-testFinalPalindromesSCutOff =
-    TestCase $
-        assertEqual
-            "testFinalPalindromesSCutOff"
-            [ 0
-            , 1
-            , 2
-            , 3
-            , 4
-            , 5
-            , 6
-            , 5
-            , 4
-            , 3
-            , 2
-            , 1
-            , 0
-            ]
-            ( P.finalPalindromesS
-                False
-                13
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-            )
-
-{- Test a case where the palindrome initiating finalPalindromesS does not contain another
-palindrome. This test is based on input string "abcd". -}
-testFinalPalindromesNrOfCentersZero =
-    TestCase $
-        assertEqual
-            "testFinalPalindromesNrOfCentersZero"
-            []
-            ( P.finalPalindromesS
-                False
-                0
-                [1, 0, 1, 0, 1, 0, 1, 0]
-            )
-
-{- Test a DNA case with a palindrome in the palindrome which initiates finalPalindromeS.
-This test is based on input string "TGCATG" -}
-testFinalPalindromesSDNA =
-    TestCase $
-        assertEqual
-            "testFinalPalindromesNrOfCentersZero"
-            [0, 0]
-            ( P.finalPalindromesS
-                True
-                4
-                [0, 4, 0, 0]
-            )
-
-{-
-----------------------------------------------------------
-    End tests for finalPalindromeS
-----------------------------------------------------------
--}
 {-
 ----------------------------------------------------------
     Begin tests for extendPalindromeS
 ----------------------------------------------------------
 -}
-
 {- Test a simple small string with extendPalindromeS -}
 testExtendPalindromeSSimple =
     TestCase $
@@ -304,15 +217,107 @@ testMoveCenterSDNA =
             [0, 2, 0, 0, 0, 6, 0, 0, 0, 2, 0]
             ( P.moveCenterS
                 True
-                (toDNA (V.fromList "atgacgtccg"))
+                (V.fromList [A, T, G, A, C, G, T, C, C, G])
                 8
                 [6, 0, 0, 0, 2, 0]
                 [0, 0, 0, 2, 0]
                 6
             )
 
+{- Tests moveCenterS on a DNA string, not skipping any centers -}
+testMoveCenterSDNAAllCenters =
+    TestCase $
+        assertEqual
+            "testMoveCenterSDNAAllCenters"
+            [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0]
+            ( P.moveCenterS
+                False
+                (V.fromList [A, T, G, A, C, G, T, C, C, G])
+                8
+                [6, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0, 2, 0, 0]
+                6
+            )
+
 {-
 ----------------------------------------------------------
     End tests for moveCenterS
+----------------------------------------------------------
+-}
+
+{-
+----------------------------------------------------------
+    Begin tests for finalPalindromeS
+----------------------------------------------------------
+-}
+
+{- Test a simple case for finalPalindromesS, where no palindrome needs to be truncated.
+This test is based on input string "leepeel" -}
+testFinalPalindromesSSimple =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesSSimple"
+            [0, 1, 0, 1, 2, 1, 0]
+            ( P.finalPalindromesS
+                False
+                7
+                [0, 1, 2, 1, 0, 1, 0]
+            )
+
+{- Test a case where some palindromes need to be truncated. This test is based on input
+string "aaaaaaaaabaaaaaa", so 9x 'a', 1x 'b' and 6x 'a'. -}
+testFinalPalindromesSCutOff =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesSCutOff"
+            [ 0
+            , 1
+            , 2
+            , 3
+            , 4
+            , 5
+            , 6
+            , 5
+            , 4
+            , 3
+            , 2
+            , 1
+            , 0
+            ]
+            ( P.finalPalindromesS
+                False
+                13
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+            )
+
+{- Test a case where the palindrome initiating finalPalindromesS does not contain another
+palindrome. This test is based on input string "abcd". -}
+testFinalPalindromesNrOfCentersZero =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesNrOfCentersZero"
+            []
+            ( P.finalPalindromesS
+                False
+                0
+                [1, 0, 1, 0, 1, 0, 1, 0]
+            )
+
+{- Test a DNA case with a palindrome in the palindrome which initiates finalPalindromeS.
+This test is based on input string "TGCATG" -}
+testFinalPalindromesSDNA =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesNrOfCentersZero"
+            [0, 0]
+            ( P.finalPalindromesS
+                True
+                4
+                [0, 4, 0, 0]
+            )
+
+{-
+----------------------------------------------------------
+    End tests for finalPalindromeS
 ----------------------------------------------------------
 -}

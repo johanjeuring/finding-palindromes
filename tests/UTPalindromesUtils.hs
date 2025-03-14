@@ -3,6 +3,8 @@ module UTPalindromesUtils where
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable ((=:=))
     , DNA (A, C, G, T)
+    , couplableWithItself
+    , couplableWithItselfAtIndex
     , listArrayl0
     , myIsLetterC
     , surroundedByPunctuation
@@ -30,6 +32,13 @@ testListPalindromesUtils =
     , testVecToArray
     ]
         ++ testsCouplable
+        ++ [ testCouplableWithItselfTrue
+           , testCouplableWithItselfFalse
+           , testCouplableWithItselfAtIndexReflexive
+           , testCouplableWithItselfAtIndexAntiReflexive
+           , testCouplableWithItselfAtIndexOutOfLowerBound
+           , testCouplableWithItselfAtIndexOutOfUpperBound
+           ]
 
 {-
 -------------------------------------
@@ -180,4 +189,52 @@ testsCouplable =
 --------------------------------------
   End tests for DNA definition and functions
 --------------------------------------
+-}
+
+{-
+----------------------------------------------------------------------
+Begin tests for couplableWithItself and couplableWithItselfAtIndex
+----------------------------------------------------------------------
+-}
+
+-- | Test with an element that is couplable with itself.
+testCouplableWithItselfTrue =
+    "testCouplableWithItselfTrue"
+        ~: couplableWithItself 'b'
+        ~?= True
+
+-- | Test with an element that is not couplable with itself.
+testCouplableWithItselfFalse =
+    "testCouplableWithItselfFalse"
+        ~: couplableWithItself A
+        ~?= False
+
+-- | Test with a reflexive datatype and index in range.
+testCouplableWithItselfAtIndexReflexive =
+    "testCouplableWithItselfAtIndex"
+        ~: couplableWithItselfAtIndex (V.fromList "abc") 2
+        ~?= True
+
+-- | Test with an anti-reflexive datatype and index in range.
+testCouplableWithItselfAtIndexAntiReflexive =
+    "testCouplableWithItselfAtIndex"
+        ~: couplableWithItselfAtIndex (V.fromList [A, T, C]) 2
+        ~?= False
+
+-- | Test with an out of range index that is too small.
+testCouplableWithItselfAtIndexOutOfLowerBound =
+    "testCouplableWithItselfAtIndexOutOfLowerBound"
+        ~: couplableWithItselfAtIndex (V.fromList "abc") (-1)
+        ~?= False
+
+-- | Test with an out of range index that is too big.
+testCouplableWithItselfAtIndexOutOfUpperBound =
+    "testCouplableWithItselfAtIndexOutOfUpperBound"
+        ~: couplableWithItselfAtIndex (V.fromList "abc") 3
+        ~?= False
+
+{-
+----------------------------------------------------------------------
+End tests for couplableWithItself and couplableWithItselfAtIndex
+----------------------------------------------------------------------
 -}

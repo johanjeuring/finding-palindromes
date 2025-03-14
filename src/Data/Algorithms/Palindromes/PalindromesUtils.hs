@@ -35,6 +35,7 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , toDNA
     , Couplable
     , DNA (..)
+    , couplableWithItself
     , couplableWithItselfAtIndex
     ) where
 
@@ -292,6 +293,10 @@ charToDNA _ = error "Not a valid DNA string"
 ---------------------------------------
 -}
 
+-- | Returns whether an element is couplable with itself.
+couplableWithItself :: (Couplable a) => a -> Bool
+couplableWithItself element = element =:= element
+
 {- | Safe function which returns whether an element at an index in the input vector is
   couplable with itself.
 -}
@@ -301,10 +306,6 @@ couplableWithItselfAtIndex input index
     | otherwise = couplableWithItself element
   where
     element = input V.! index
-
--- | Returns whether an element is couplable with itself.
-couplableWithItself :: (Couplable a) => a -> Bool
-couplableWithItself element = element =:= element
 
 {-
 ---------------------------------------

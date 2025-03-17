@@ -3,7 +3,6 @@ module UTQuadraticAlgorithm (testListQuadraticAlgorithm) where
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable (..)
     , DNA (..)
-    , Flag (..)
     , (=:=)
     )
 import Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
@@ -46,10 +45,10 @@ testGappedApproximatePalindromesAroundCentresDNA =
             "testGappedApproximatePalindromesAroundCentresDNA"
             [0, 2, 0, 2, 0]
             ( Q.gappedApproximatePalindromesAroundCentres
-                (Just DNA)
+                True
+                0
+                0
                 (V.fromList [A, T, C, G])
-                0
-                0
             )
 
 -- | Test gappedApproximatePalindromesAroundCentres on some small text input
@@ -59,10 +58,10 @@ testGappedApproximatePalindromesAroundCentresText =
             "testGappedApproximatePalindromesAroundCentresText"
             [0, 1, 0, 1, 4, 1, 0, 3, 0, 1, 0]
             ( Q.gappedApproximatePalindromesAroundCentres
-                Nothing
+                False
+                0
+                0
                 (V.fromList "abbab")
-                0
-                0
             )
 
 {-

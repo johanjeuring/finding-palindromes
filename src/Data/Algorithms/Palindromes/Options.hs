@@ -1,6 +1,5 @@
 -- Did not yet translate all options. Complete the table in dispatchFlags.
 -- Default doesn't work yet
-
 -----------------------------------------------------------------------------
 --
 -- Module      :  Data.Algorithms.Palindromes.Options
@@ -12,14 +11,43 @@
 -- Portability :  portable
 --
 -----------------------------------------------------------------------------
+{-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
+
 module Data.Algorithms.Palindromes.Options where
 
-import Data.Algorithms.Palindromes.Palindromes
-    ( palindrome
+import Data.Algorithms.Palindromes.Combinators
+    ( Complexity (ComLinear, ComQuadratic, gapSize, maxError)
+    , LengthMod
+    , Output (..)
+    , Variant (..)
     )
-import Data.Algorithms.Palindromes.PalindromesUtils (Flag (..))
-import Data.Vector (fromList)
+import Data.Maybe (fromJust, isNothing)
 import System.Console.GetOpt
+    ( ArgDescr (..)
+    , OptDescr (..)
+    )
+
+data Flag
+    = Help
+    | StandardInput
+    | Complexity Complexity
+    | Variant Variant
+    | OutputFormat Output
+    | LengthMod LengthMod
+    | MinLength Int
+    | MaxLength Int
+
+defaultComplexity :: Complexity
+defaultComplexity = ComQuadratic{gapSize = 0, maxError = 0}
+
+defaultVariant :: Variant
+defaultVariant = VarText
+
+defaultOutput :: Output
+defaultOutput = OutWord
+
+defaultLengthMod :: LengthMod
+defaultLengthMod = (0, Nothing)
 
 -----------------------------------------------------------------------------
 -- Options
@@ -36,80 +64,65 @@ options =
         (NoArg Help)
         "This message"
     , Option
-        "p"
-        []
-        (NoArg Plain)
-        "Plain palindrome (default)"
-    , Option
-        "t"
-        []
-        (NoArg Text)
-        "Palindrome ignoring case, spacing and punctuation"
-    , Option
-        "w"
-        []
-        (NoArg Word)
-        "Palindrome surrounded by punctuation (if any)"
-    , Option
-        "d"
-        []
-        (NoArg DNA)
-        "DNA palindrome"
-    , Option
-        "l"
-        []
-        (NoArg Longest)
-        "Longest palindrome (deafult)"
-    , Option
-        "e"
-        []
-        (NoArg LengthLongest)
-        "Length of the longest palindrome"
-    , Option
-        "m"
-        []
-        (NoArg Maximal)
-        "Maximal palindrome around each position in the input"
-    , Option
-        "a"
-        []
-        (NoArg LengthMaximal)
-        "Length of the maximal palindrome around each position in the input"
-    , Option
-        "g"
-        []
-        (ReqArg (Gap . (read :: String -> Int)) "arg")
-        "Allow a gap of length [arg] in the palindrome"
-    , Option
-        "n"
-        []
-        (ReqArg (NrOfErrors . (read :: String -> Int)) "arg")
-        "Allow at most [arg] errors in the palindrome"
-    , Option
-        "b"
-        []
-        (ReqArg (LengthAtLeast . (read :: String -> Int)) "arg")
-        "Maximal palindromes of length at least [arg]"
-    , Option
-        "c"
-        []
-        (ReqArg (LengthAtMost . (read :: String -> Int)) "arg")
-        "Maximal palindromes (possibly cut off) of length at most [arg]"
-    , Option
-        "f"
-        []
-        (ReqArg (LengthExact . (read :: String -> Int)) "arg")
-        "Maximal palindromes (possibly cut off) of length exactly [arg]"
-    , Option
         "r"
         []
-        (NoArg Linear)
+        (NoArg (Complexity ComLinear))
         "Use the linear algorithm"
     , Option
         "q"
         []
-        (NoArg Quadratic)
-        "Use the potentially quadratic algorithm (default)"
+        (OptArg parseQuadratic "[gapSize] [errors]")
+        "Use the quadratic algorithm. Optionally use the argument <gapSize> <errors>"
+    , Option
+        "p"
+        []
+        (NoArg (Variant VarPlain))
+        "Plain palindrome (default)"
+    , Option
+        "t"
+        []
+        (NoArg (Variant VarText))
+        "Palindrome ignoring case, spacing and punctuation"
+    , Option
+        "w"
+        []
+        (NoArg (Variant VarPunctuation))
+        "Palindrome surrounded by punctuation (if any)"
+    , Option
+        "d"
+        []
+        (NoArg (Variant VarDNA))
+        "DNA palindrome"
+    , Option
+        "l"
+        []
+        (NoArg (OutputFormat OutWord))
+        "Longest palindrome (default)"
+    , Option
+        "e"
+        []
+        (NoArg (OutputFormat OutLength))
+        "Length of the longest palindrome"
+    , Option
+        "m"
+        []
+        (NoArg (OutputFormat OutWords))
+        "Maximal palindrome around each position in the input"
+    , Option
+        "a"
+        []
+        (NoArg (OutputFormat OutLengths))
+        "Length of the maximal palindrome around each position in the input"
+    , Option
+        "b"
+        []
+        (ReqArg (MinLength . (read :: String -> Int)) "arg")
+        "Maximal palindromes of length at least [arg]"
+    , Option
+        "c"
+        []
+        (ReqArg (MaxLength . (read :: String -> Int)) "arg")
+        "Maximal palindromes (possibly cut off) of length at most [arg]"
     , Option
         "i"
         []
@@ -118,7 +131,7 @@ options =
     , Option
         "x"
         []
-        (ReqArg (Extend . (read :: String -> Int)) "arg")
+        (ReqArg (OutputFormat . OutLengthAt . (read :: String -> Int)) "arg")
         "Extend a palindrome around center [arg]"
     ]
 
@@ -126,168 +139,91 @@ isHelp :: Flag -> Bool
 isHelp Help = True
 isHelp _ = False
 
-isPlain :: Flag -> Bool
-isPlain Plain = True
-isPlain _ = False
-
-isText :: Flag -> Bool
-isText Text = True
-isText _ = False
-
-isWord :: Flag -> Bool
-isWord Word = True
-isWord _ = False
-
-isDNA :: Flag -> Bool
-isDNA DNA = True
-isDNA _ = False
-
-isLongest :: Flag -> Bool
-isLongest Longest = True
-isLongest _ = False
-
-isLengthLongest :: Flag -> Bool
-isLengthLongest LengthLongest = True
-isLengthLongest _ = False
-
-isMaximal :: Flag -> Bool
-isMaximal Maximal = True
-isMaximal _ = False
-
-isLengthMaximal :: Flag -> Bool
-isLengthMaximal LengthMaximal = True
-isLengthMaximal _ = False
-
-isGap :: Flag -> Bool
-isGap (Gap _) = True
-isGap _ = False
-
-isNrOfErrors :: Flag -> Bool
-isNrOfErrors (NrOfErrors _) = True
-isNrOfErrors _ = False
-
-isLengthAtLeast :: Flag -> Bool
-isLengthAtLeast (LengthAtLeast _) = True
-isLengthAtLeast _ = False
-
-isLengthAtMost :: Flag -> Bool
-isLengthAtMost (LengthAtMost _) = True
-isLengthAtMost _ = False
-
-isLengthExact :: Flag -> Bool
-isLengthExact (LengthExact _) = True
-isLengthExact _ = False
-
-isLinear :: Flag -> Bool
-isLinear Linear = True
-isLinear _ = False
-
-isQuadratic :: Flag -> Bool
-isQuadratic Quadratic = True
-isQuadratic _ = False
-
 isStandardInput :: Flag -> Bool
 isStandardInput StandardInput = True
 isStandardInput _ = False
 
-isExtend :: Flag -> Bool
-isExtend (Extend _) = True
-isExtend _ = False
+parseQuadratic :: Maybe String -> Flag
+parseQuadratic str
+    | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
+    | null y =
+        error
+            ( "Invalid arguments for gapsize and errors ("
+                ++ fst nums
+                ++ " "
+                ++ snd nums
+                ++ "). Enter 2 numbers seperated by a +"
+            )
+    | otherwise =
+        Complexity ComQuadratic{gapSize = read (fst nums), maxError = read (snd nums)}
+  where
+    (x, y) = break (== '+') $ fromJust str
+    nums = (x, drop 1 y)
 
-palindromeVariant :: [Flag] -> Maybe Flag
-palindromeVariant flags
-    | any isHelp flags = Just Help
-    | any isPlain flags = Just Plain
-    | any isText flags = Just Text
-    | any isWord flags = Just Word
-    | any isDNA flags = Just DNA
-    | otherwise = Nothing
+-- functions to get each setting field from the input flags. If no flags are given to modify setting use default.
 
-outputFormat :: [Flag] -> Maybe Flag
-outputFormat flags
-    | any isLongest flags = Just Longest
-    | any isLengthLongest flags = Just LengthLongest
-    | any isMaximal flags = Just Maximal
-    | any isLengthMaximal flags = Just LengthMaximal
-    | any isExtend flags = Just $ head $ filter isExtend flags
-    | otherwise = Nothing
+getComplexity :: [Flag] -> Complexity
+getComplexity xs
+    | null complexityFlags = defaultComplexity
+    | length complexityFlags == 1 = c
+    | otherwise = error "Multiple complexity flags detected."
+  where
+    isComplexity :: Flag -> Bool
+    isComplexity (Complexity _) = True
+    isComplexity _ = False
+    complexityFlags :: [Flag]
+    complexityFlags = filter isComplexity xs
+    (Complexity c) = head complexityFlags
 
-algorithmComplexity :: [Flag] -> Maybe Flag
-algorithmComplexity flags
-    | any isLinear flags = Just Linear
-    | any isQuadratic flags = Just Quadratic
-    | otherwise = Nothing
+getVariant :: [Flag] -> Variant
+getVariant xs
+    | null variantFlags = defaultVariant
+    | length variantFlags == 1 = v
+    | otherwise = error "Multiple variant flags detected."
+  where
+    isVariant :: Flag -> Bool
+    isVariant (Variant _) = True
+    isVariant _ = False
+    variantFlags :: [Flag]
+    variantFlags = filter isVariant xs
+    (Variant v) = head variantFlags
 
-lengthModifier :: [Flag] -> Maybe Flag
-lengthModifier flags
-    | any isLengthExact flags = Just $ head $ filter isLengthExact flags
-    | any isLengthAtLeast flags
-        && any isLengthAtMost flags =
-        Just $ LengthBetween (getLengthAtLeasts flags) (getLengthAtMosts flags)
-    | any isLengthAtLeast flags = Just $ head $ filter isLengthAtLeast flags
-    | any isLengthAtMost flags = Just $ head $ filter isLengthAtMost flags
-    | otherwise = Nothing
+getOutputFormat :: [Flag] -> Output
+getOutputFormat xs
+    | null outputFlags = defaultOutput
+    | length outputFlags == 1 = o
+    | otherwise = error "Multiple output flags detected."
+  where
+    isOutput :: Flag -> Bool
+    isOutput (OutputFormat _) = True
+    isOutput _ = False
+    outputFlags :: [Flag]
+    outputFlags = filter isOutput xs
+    (OutputFormat o) = head outputFlags
 
-gap :: [Flag] -> Maybe Flag
-gap flags
-    | any isGap flags = Just $ head $ filter isGap flags
-    | otherwise = Nothing
-
-nrOfErrors :: [Flag] -> Maybe Flag
-nrOfErrors flags
-    | any isNrOfErrors flags = Just $ head $ filter isNrOfErrors flags
-    | otherwise = Nothing
-
-isLengthInBetween :: [Flag] -> Bool
-isLengthInBetween flags =
-    length flags == 2
-        && any isLengthAtLeast flags
-        && any isLengthAtMost flags
-
-getLengthAtLeast :: Flag -> Int
-getLengthAtLeast (LengthAtLeast n) = n
-getLengthAtLeast _ = error "No length at least specified"
-
-getLengthAtLeasts :: [Flag] -> Int
-getLengthAtLeasts flags = case filter isLengthAtLeast flags of
-    [lal] -> getLengthAtLeast lal
-    _ -> error "No or too many length at least specified"
-
-getLengthAtMost :: Flag -> Int
-getLengthAtMost (LengthAtMost n) = n
-getLengthAtMost _ = error "No length at most specified"
-
-getLengthAtMosts :: [Flag] -> Int
-getLengthAtMosts flags = case filter isLengthAtMost flags of
-    [lal] -> getLengthAtMost lal
-    _ -> error "No or too many length at least specified"
-
-handleOptions :: [Flag] -> (String -> String, Bool)
-handleOptions flags =
-    ( dispatchFlags
-        (palindromeVariant flags)
-        (outputFormat flags)
-        (algorithmComplexity flags)
-        (lengthModifier flags)
-        (gap flags)
-        (nrOfErrors flags)
-    , any isStandardInput flags
-    )
-
-dispatchFlags
-    :: Maybe Flag
-    -> Maybe Flag
-    -> Maybe Flag
-    -> Maybe Flag
-    -> Maybe Flag
-    -> Maybe Flag
-    -> String
-    -> String
-dispatchFlags pvariant out ac l gapSize errorCount b = case pvariant of
-    Nothing -> usageInfo headerHelpMessage options
-    Just Help -> usageInfo headerHelpMessage options
-    Just DNA -> palindrome pvariant out ac l gapSize errorCount (fromList b)
-    _ -> palindrome pvariant out ac l gapSize errorCount (fromList b)
+getLengthMod :: [Flag] -> LengthMod
+getLengthMod xs = (minLength, maxLength)
+  where
+    isMinLength (MinLength _) = True
+    isMinLength _ = False
+    isMaxLength (MaxLength _) = True
+    isMaxLength _ = False
+    mins :: [Flag]
+    mins = filter isMinLength xs
+    maxs :: [Flag]
+    maxs = filter isMaxLength xs
+    minLength :: Int
+    minLength
+        | null mins = 0
+        | length mins == 1 = minL
+        | otherwise = error "Multiple minimum lengths found."
+    maxLength :: Maybe Int
+    maxLength
+        | null maxs = Nothing
+        | length maxs == 1 = Just maxL
+        | otherwise = error "Multiple maximum lengths found."
+    (MinLength minL) = head mins
+    (MaxLength maxL) = head maxs
 
 headerHelpMessage :: String
 headerHelpMessage =

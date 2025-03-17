@@ -48,7 +48,7 @@
 >               False 
 >               (textPalindrome "draweth toward")
 >            )
->
+> -- The "word" palindrome tests below test punctuation palindromes, but it uses a deprecated function
 > testWordPalindrome1 = 
 >   TestCase (assertEqual 
 >               "wordPalindrome1" 

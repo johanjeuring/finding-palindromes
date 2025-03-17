@@ -13,7 +13,8 @@ Portability :  portable
 -}
 module Main where
 
-import Data.Algorithms.Palindromes.Options (handleOptions, options)
+import Data.Algorithms.Palindromes.Options (options)
+import Data.Algorithms.Palindromes.Settings (handleFlags)
 import System.Console.GetOpt (ArgOrder (Permute), getOpt)
 import System.Environment (getArgs)
 
@@ -24,7 +25,7 @@ import qualified System.IO as Sys
 -----------------------------------------------------------------------------
 
 handleFilesWith :: (String -> String) -> [String] -> IO ()
-handleFilesWith f [] = putStr $ f undefined
+handleFilesWith f [] = putStr $ f ""
 handleFilesWith f xs =
     let hFW filenames =
             case filenames of
@@ -41,9 +42,8 @@ handleFilesWith f xs =
 handleStandardInputWith :: (String -> String) -> IO ()
 handleStandardInputWith function =
     do
-        input <- getContents
+        input <- getLine
         putStrLn (function input)
-
 main :: IO ()
 main = do
     args <- getArgs
@@ -51,7 +51,7 @@ main = do
     if not (null errors)
         then putStrLn (concat errors)
         else
-            let (function, standardInput) = handleOptions optionArgs
+            let (function, standardInput) = handleFlags optionArgs
             in  if standardInput
                     then handleStandardInputWith function
                     else handleFilesWith function files

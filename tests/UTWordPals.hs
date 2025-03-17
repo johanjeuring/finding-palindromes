@@ -1,67 +1,105 @@
 module UTWordPals where
 
-import Data.Vector (fromList)
 import PalindromeMethods (longestWordPalindrome)
-import Test.HUnit (Test (..), assertEqual)
+import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 
-testWordPalindrome1
-    , testWordPalindrome2
-    , testWordPalindrome3
-    , testWordPalindrome4
-    , testWordPalindrome5
-    , testWordPalindrome6
-        :: Test
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as BC
 
-testListWords =
-    [ TestLabel "testWordPalindrome1" testWordPalindrome1
-    , TestLabel "testWordPalindrome2" testWordPalindrome2
-    , TestLabel "testWordPalindrome3" testWordPalindrome3
-    , TestLabel "testWordPalindrome4" testWordPalindrome4
-    , TestLabel "testWordPalindrome5" testWordPalindrome5
-    , TestLabel "testWordPalindrome6" testWordPalindrome6
-    , TestLabel "testWordPalindrome7" testWordPalindrome7
+testListWordPalindromes t =
+    [ testWord1 t
+    , testWord2 t
+    , testWord3 t
+    , testWord4 t
+    , testWord5 t
+    , testWord6 t
+    , testWord7 t
+    , testWord8 t
+    , testWord9 t
+    , testWord10 t
+    , testWord11 t
+    , testWord12 t
     ]
 
-testWordPalindrome1 =
-    TestCase $
-        assertEqual "wordPalindrome" " is non si, " $
-            longestWordPalindrome $
-                fromList "what is non si, not?"
+testWord1 t =
+    "testWord1"
+        ~: longestWordPalindrome
+            t
+            "abc def def abc"
+        ~?= "abc def def abc"
 
-testWordPalindrome2 =
-    TestCase $
-        assertEqual "wordPalindrome" " is non si" $
-            longestWordPalindrome $
-                fromList "what is non si"
+testWord2 t =
+    "testWord2"
+        ~: longestWordPalindrome
+            t
+            "abc abc def abcdefghi"
+        ~?= "abc abc"
 
-testWordPalindrome3 =
-    TestCase $
-        assertEqual "wordPalindrome" "is non si, " $
-            longestWordPalindrome $
-                fromList "is non si, not?"
+testWord3 t =
+    "testWord3"
+        ~: longestWordPalindrome
+            t
+            "AbC aBb a bb Abc aBC"
+        ~?= "Abc aBC"
 
-testWordPalindrome4 =
-    TestCase $
-        assertEqual "wordPalindrome" "" $
-            longestWordPalindrome $
-                fromList "aaaaba"
+testWord4 t =
+    "testWord4"
+        ~: longestWordPalindrome
+            t
+            "abc def     abc"
+        ~?= "abc def     abc"
 
-testWordPalindrome5 =
-    TestCase $
-        assertEqual "wordPalindrome" " a" $
-            longestWordPalindrome $
-                fromList "aaaab a"
+testWord5 t =
+    "testWord5"
+        ~: longestWordPalindrome
+            t
+            "abc., abc"
+        ~?= "abc., abc"
 
-testWordPalindrome6 =
-    TestCase $
-        assertEqual "wordPalindrome" " waaw " $
-            longestWordPalindrome $
-                fromList "w waaw wo waw"
+testWord6 t =
+    "testWord6"
+        ~: longestWordPalindrome
+            t
+            "abc.d   abcd .. . a"
+        ~?= "abc.d   abcd"
 
-testWordPalindrome7 =
-    TestCase
-        $ assertEqual
-            "wordPalindrome"
-            " v waaw v"
-        $ longestWordPalindrome
-        $ fromList "vwaawvxy v waaw v"
+testWord7 t =
+    "testWord7"
+        ~: longestWordPalindrome
+            t
+            "a a"
+        ~?= "a a"
+
+testWord8 t =
+    "testWord8"
+        ~: longestWordPalindrome
+            t
+            ""
+        ~?= ""
+testWord9 t =
+    "testWord9"
+        ~: longestWordPalindrome
+            t
+            " leading spaces"
+        ~?= "leading"
+
+testWord10 t =
+    "testWord10"
+        ~: longestWordPalindrome
+            t
+            "/.;/;,';,.,,leading garbage"
+        ~?= "leading"
+
+testWord11 t =
+    "testWord11"
+        ~: longestWordPalindrome
+            t
+            "several; different,.; characters .char-acter[s"
+        ~?= "characters .char-acter[s"
+
+testWord12 t =
+    "testWord12"
+        ~: longestWordPalindrome
+            t
+            "."
+        ~?= ""

@@ -54,6 +54,7 @@ Here are some examples of working flags:
     cabal run palindromes -- input.txt -wqm
     cabal run palindromes -- input.txt -dqm
     cabal run palindromes -- input.txt -dql -g 1 -n 3
+    cabal run palindromes -- input.txt -q3+0
 
 
 *This is were the old installation guide starts. This stould still be checked for accuracy.

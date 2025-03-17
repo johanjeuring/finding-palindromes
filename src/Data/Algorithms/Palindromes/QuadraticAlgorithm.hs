@@ -10,7 +10,6 @@ module Data.Algorithms.Palindromes.QuadraticAlgorithm
 
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable (..)
-    , Flag (DNA)
     )
 import Data.List as L
 import Data.Vector as V
@@ -20,18 +19,18 @@ This function runs in O(m), where m is the sum of palindrome sizes.
 -}
 gappedApproximatePalindromesAroundCentres
     :: (Couplable a)
-    => Maybe Flag
+    => Bool
+    -> Int
+    -> Int
     -> V.Vector a
-    -> Int
-    -> Int
     -> [Int]
-gappedApproximatePalindromesAroundCentres palindromeVariant input gapSize errorCount =
-    case palindromeVariant of
-        Just DNA ->
+gappedApproximatePalindromesAroundCentres isAntiReflexive gapSize errorCount input =
+    if isAntiReflexive
+        then
             L.map
                 (lengthPalAtCenterAntiReflexive input gapSize errorCount)
                 (if even gapSize then [0 .. V.length input] else [0 .. V.length input - 1])
-        _ ->
+        else
             L.map
                 (lengthPalAtCenterReflexive input gapSize errorCount)
                 [0 .. 2 * V.length input]
@@ -150,10 +149,10 @@ getLeftRightReflexive
     -- ^ the size of the whole input
     -> (Int, Int)
 getLeftRightReflexive gapSize center lengthInput
-    | even center = getLeftRightCenterBetweenElems gapSize element lengthInput
-    | otherwise = getLeftRightCenterOnElem gapSize element lengthInput
+    | even center = getLeftRightCenterBetweenElems gapSize elementIndex lengthInput
+    | otherwise = getLeftRightCenterOnElem gapSize elementIndex lengthInput
   where
-    element = center `div` 2
+    elementIndex = center `div` 2
 
 {-
 ---------------------------------------------------------------------

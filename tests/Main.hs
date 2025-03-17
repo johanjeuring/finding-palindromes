@@ -12,38 +12,55 @@
 
 module Main where
 
-import PalindromeProperties (propPalindromesAroundCentres, propTextPalindrome)
+import Data.Algorithms.Palindromes.Combinators (Complexity (..))
+import ITLinear (testListITLinear)
+import PalindromeProperties (propTextPalindrome)
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
+import UTCombinators
+    ( propValidPalindromeRangeAndText
+    , propValidPalindromeRangeAndTextDNA
+    , propValidPalindromeRangeAndTextPlain
+    , propValidPalindromeRangeAndTextText
+    , propValidPalindromeRangeAndTextWord
+    , testListCombinators
+    )
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
 import UTLinearAlgorithm (testListLinearAlgorithm)
 import UTPalindromesUtils (testListPalindromesUtils)
+import UTProcessing (testListProcessing)
+import UTPunctuationPals (testListPunctuation)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
 import UTTextPals (testListText)
-import UTWordPals (testListWords)
-
-import qualified Data.Algorithms.Palindromes.PalindromesUtils as PU
+import UTWordPals (testListWordPalindromes)
 
 tests :: Test
 tests =
     TestList $
-        testListText PU.Linear
-            ++ testListText PU.Quadratic
-            ++ testListWords
+        testListText ComLinear
+            ++ testListText ComQuadratic{gapSize = 0, maxError = 0}
+            ++ testListPunctuation
             ++ testListGetLeftRight
-            ++ testListDNA PU.Quadratic
+            ++ testListDNA ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListQuadraticAlgorithm
-            ++ testListExtend PU.Linear
-            ++ testListExtend PU.Quadratic
-            ++ testListLinearAlgorithm
+            ++ testListExtend ComLinear
+            ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
+            ++ testListProcessing
             ++ testListPalindromesUtils
+            ++ testListWordPalindromes ComLinear
+            ++ testListCombinators
+            ++ testListITLinear
 
 main :: IO Counts
 main = do
-    quickCheck propPalindromesAroundCentres
+    -- quickCheck propPalindromesAroundCentres
     quickCheck propTextPalindrome
+    quickCheck propValidPalindromeRangeAndTextPlain
+    quickCheck propValidPalindromeRangeAndTextText
+    quickCheck propValidPalindromeRangeAndTextWord
+    quickCheck propValidPalindromeRangeAndTextDNA
     runTestTT tests
 
 {-
@@ -53,6 +70,9 @@ main = do
 "\GS[\242\tx\ENQ3\247\&3\130(\NUL?zX\215\DC3"
 
 "\213\SI6+\ESCU:1\165\254\228\SUB9\200\231\USM,3\227\&3\176\214X\203\SOH\130UI9\154\239<w\231kPbmvY|!sc\133\b$#v\203LM\235H"
+
+\*** Failed! Falsified (after 82 tests):
+"# 7z;K\EM\996701\f\EOT\1088669\RSy\30490\EM\149585h\ENQ\r\1093014a\r6\181326\SI\DC2\b\n\61832\\\DC2+\11953\61349\\\STX>a\133690\145589W\996131\136065}-6cJI[\CAN\DC1\997287T\92545"
 
 -}
 

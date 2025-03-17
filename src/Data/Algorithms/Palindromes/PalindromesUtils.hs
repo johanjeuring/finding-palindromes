@@ -23,8 +23,7 @@
 {-# LANGUAGE UndecidableInstances #-}
 
 module Data.Algorithms.Palindromes.PalindromesUtils
-    ( Flag (..)
-    , showPalindromeDNA
+    ( showPalindromeDNA
     , (=:=)
     , showPalindrome
     , showTextPalindrome
@@ -35,6 +34,12 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , toDNA
     , Couplable
     , DNA (..)
+    , Palindrome (..)
+    , rangesToLengths
+    , lengthsToRanges
+    , indexedLengthToRange
+    , rangeToLength
+    , dnaToChar
     , couplableWithItself
     , couplableWithItselfAtIndex
     ) where
@@ -45,27 +50,6 @@ import Data.Foldable (Foldable (toList))
 
 import qualified Data.Vector as V
 
-data Flag
-    = Help
-    | Plain
-    | Text
-    | Word
-    | DNA
-    | Extend Int
-    | Linear
-    | Quadratic
-    | Longest
-    | LengthLongest
-    | Maximal
-    | LengthMaximal
-    | Gap Int
-    | NrOfErrors Int
-    | LengthAtLeast Int
-    | LengthAtMost Int
-    | LengthExact Int
-    | LengthBetween Int Int
-    | StandardInput
-
 -- | Data type to represent a single found palindrome
 data Palindrome
     = Palindrome
@@ -75,21 +59,16 @@ data Palindrome
     -}
     , palLength :: Int
     -- ^ The length of the found palindrome in the pre-processed input vector.
-    , palStart :: Int
-    {- ^ The (inclusive) starting character index of the found palindrome in the original
-    (not pre-processed) input string
-    -}
-    , palEnd :: Int
-    {- ^ The (exclusive) ending character index of the found palindrome in the original
-    (not pre-processed) input string
-    -}
     , palText :: String
     {- ^ The text representing the found palindrome. Note that this must be a string,
     not some abstract datatype. This string must be a subarray of the original
     (not pre-processed) input string, meaning that e.g. present punctuation is in this
     string.
     -}
+    , palRange :: (Int, Int)
+    -- ^ The start (inclusive) and end (exclusive) index of the palindrome in the original string
     }
+    deriving (Show, Eq)
 
 {- An example text Palindrome from plain input string "bab..ac" is
 (Palindrome 5 3 1 6 "ab..a"). The center is on the 'b' and has center index 5. The
@@ -204,6 +183,31 @@ surroundedByPunctuation begin end input
   where
     (afirst, alast) = (0, V.length input - 1)
 
+{- |
+  Convert a list of palindrome center lengths to a list of (start, end) pairs
+-}
+lengthsToRanges :: [Int] -> [(Int, Int)]
+lengthsToRanges lengths = map indexedLengthToRange indexedLengths
+  where
+    indexedLengths :: [(Int, Int)]
+    indexedLengths = zip [0 :: Int ..] lengths
+
+indexedLengthToRange :: (Int, Int) -> (Int, Int)
+indexedLengthToRange (index, len) = (startIndex, endIndex)
+  where
+    startIndex :: Int
+    startIndex = (index `div` 2) - (len `div` 2)
+    endIndex :: Int
+    endIndex = startIndex + len
+
+rangesToLengths :: [(Int, Int)] -> [Int]
+rangesToLengths = map rangeToLength
+
+rangeToLength :: (Int, Int) -> Int
+rangeToLength (start, end)
+    | end - start < 0 = 0
+    | otherwise = end - start
+
 {-
 --------------------------------------
   End punctuation utility functions
@@ -280,6 +284,13 @@ charToDNA 'c' = C
 charToDNA 'g' = G
 charToDNA 'n' = N
 charToDNA _ = error "Not a valid DNA string"
+
+dnaToChar :: DNA -> Char
+dnaToChar A = 'A'
+dnaToChar T = 'T'
+dnaToChar G = 'G'
+dnaToChar C = 'C'
+dnaToChar N = 'N'
 
 {-
 --------------------------------------

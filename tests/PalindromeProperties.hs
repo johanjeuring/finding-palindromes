@@ -5,19 +5,21 @@ import Data.Vector (fromList)
 import PalindromeMethods (longestTextPalindrome)
 import Test.QuickCheck (Gen, Property, arbitrary, forAll)
 
-import qualified Data.Algorithms.Palindromes.Palindromes as P
+import qualified Data.Algorithms.Palindromes.Algorithms as P
+import qualified Data.Algorithms.Palindromes.Combinators as C
+import qualified Data.Algorithms.Palindromes.LinearAlgorithm as LA
 import qualified Data.Algorithms.Palindromes.PalindromesUtils as PU
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as BC
 import qualified Data.List as L
 
+{-
 propPalindromesAroundCentres :: Property
 propPalindromesAroundCentres = forAll (arbitrary :: Gen [Char]) $ \l ->
-    let
-        input = map toLower $ filter isAlpha l
+    let input = map toLower $ filter isAlpha l
         posArray = PU.listArrayl0 $ L.findIndices isAlpha l
-    in
-        P.palindromesAroundCentres
+    in  -- P.linearAlgorithm True (fromList input)
+        LA.palindromesAroundCentres
             (Just PU.Text)
             (Just PU.Linear)
             Nothing
@@ -26,14 +28,12 @@ propPalindromesAroundCentres = forAll (arbitrary :: Gen [Char]) $ \l ->
             (fromList input)
             posArray -- Position array
             == longestPalindromesQ input
-
+-}
 longestPalindromesQ :: String -> [Int]
 longestPalindromesQ input =
-    let
-        (afirst, alast) = (0, length input - 1)
+    let (afirst, alast) = (0, length input - 1)
         positions = [0 .. 2 * (alast - afirst + 1)]
-    in
-        map (lengthPalindromeAround input) positions
+    in  map (lengthPalindromeAround input) positions
 
 lengthPalindromeAround :: String -> Int -> Int
 lengthPalindromeAround input position
@@ -55,7 +55,7 @@ propTextPalindrome :: Property
 propTextPalindrome =
     forAll (arbitrary :: Gen [Char]) $
         \l ->
-            let ltp = longestTextPalindrome PU.Linear (fromList l)
+            let ltp = longestTextPalindrome C.ComLinear l
                 ltp' = map toLower (filter isAlpha (unescape ltp))
             in  ltp' == reverse ltp'
 

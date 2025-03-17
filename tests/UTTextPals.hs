@@ -1,112 +1,50 @@
 module UTTextPals where
 
-import Data.Algorithms.Palindromes.PalindromesUtils (Flag)
+import Data.Algorithms.Palindromes.Combinators (Complexity)
 import Data.Vector (fromList)
 import PalindromeMethods (longestTextPalindrome)
-import Test.HUnit (Test (..), assertEqual)
+import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as BC
 
-testTextPalindrome1
-    , testTextPalindrome2
-    , testTextPalindrome3
-    , testTextPalindrome4
-    , testTextPalindrome5
-    , testTextPalindrome6
-    , testTextPalindrome7
-    , testTextPalindrome8
-    , testTextPalindrome9
-    , testTextPalindrome10
-    , testTextPalindrome11
-        :: Flag -> Test
-
+testListText :: Complexity -> [Test]
 testListText t =
-    [ TestLabel "testTextPalindrome10" $ testTextPalindrome10 t
-    , TestLabel "testTextPalindrome11" $ testTextPalindrome11 t
-    , TestLabel "testTextPalindrome1" $ testTextPalindrome1 t
-    , TestLabel "testTextPalindrome2" $ testTextPalindrome2 t
-    , TestLabel "testTextPalindrome3" $ testTextPalindrome3 t
-    , TestLabel "testTextPalindrome4" $ testTextPalindrome4 t
-    , TestLabel "testTextPalindrome5" $ testTextPalindrome5 t
-    , TestLabel "testTextPalindrome6" $ testTextPalindrome6 t
-    , TestLabel "testTextPalindrome7" $ testTextPalindrome7 t
-    , TestLabel "testTextPalindrome8" $ testTextPalindrome8 t
-    , TestLabel "testTextPalindrome9" $ testTextPalindrome9 t
+    [ testTextPalindrome10 t
+    , testTextPalindrome11 t
+    , testTextPalindrome1 t
+    , testTextPalindrome2 t
+    , testTextPalindrome3 t
+    , testTextPalindrome4 t
+    , testTextPalindrome5 t
+    , testTextPalindrome6 t
+    , testTextPalindrome7 t
+    , testTextPalindrome8 t
+    , testTextPalindrome9 t
     ]
 
-testTextPalindrome1 t =
-    TestCase $
-        assertEqual "textPalindrome1" "a,ba." $
-            longestTextPalindrome t $
-                fromList "abcdea,ba."
-
-testTextPalindrome2 t =
-    TestCase $
-        assertEqual "textPalindrome2" "a,ba" $
-            longestTextPalindrome t $
-                fromList "abcdea,ba"
-
-testTextPalindrome3 t =
-    TestCase $
-        assertEqual "textPalindrome3" ".a,ba" $
-            longestTextPalindrome t $
-                fromList "abcde.a,ba"
-
-testTextPalindrome4 t =
-    TestCase $
-        assertEqual "textPalindrome4" ".a,ba" $
-            longestTextPalindrome t $
-                fromList "abcde.a,baf"
-
-testTextPalindrome5 t =
-    TestCase $
-        assertEqual "textPalindrome5" ".ab,a" $
-            longestTextPalindrome t $
-                fromList ".ab,acdef"
-
-testTextPalindrome6 t =
-    TestCase $
-        assertEqual "textPalindrome6" "ab,a" $
-            longestTextPalindrome t $
-                fromList "ab,acdef"
-
-testTextPalindrome7 t =
-    TestCase $
-        assertEqual "textPalindrome7" "ab,a." $
-            longestTextPalindrome t $
-                fromList "ab,a.cdef"
-
-testTextPalindrome8 t =
-    TestCase $
-        assertEqual "textPalindrome8" ".ab,a." $
-            longestTextPalindrome t $
-                fromList "g.ab,a.cdef"
-
-testTextPalindrome9 t =
-    TestCase $
-        assertEqual "textPalindrome9" "" $
-            longestTextPalindrome t $
-                fromList ""
+testTextPalindrome1 t = "testTextPalindrome1" ~: longestTextPalindrome t "abcdea,ba." ~?= "a,ba"
+testTextPalindrome2 t = "testTextPalindrome2" ~: longestTextPalindrome t "abcdea,ba" ~?= "a,ba"
+testTextPalindrome3 t = "tesTextPalindrome3" ~: longestTextPalindrome t "abcde.a,ba" ~?= "a,ba"
+testTextPalindrome4 t = "tesTextPalindrome4" ~: longestTextPalindrome t "abcde.a,baf" ~?= "a,ba"
+testTextPalindrome5 t = "tesTextPalindrome5" ~: longestTextPalindrome t ".ab,acdef" ~?= "ab,a"
+testTextPalindrome6 t = "tesTextPalindrome6" ~: longestTextPalindrome t "ab,acdef" ~?= "ab,a"
+testTextPalindrome7 t = "tesTextPalindrome7" ~: longestTextPalindrome t "ab,a.cdef" ~?= "ab,a"
+testTextPalindrome8 t = "tesTextPalindrome8" ~: longestTextPalindrome t "g.ab,a.cdef" ~?= "ab,a"
+testTextPalindrome9 t = "tesTextPalindrome9" ~: longestTextPalindrome t "" ~?= ""
 
 testTextPalindrome10 t =
     TestCase $ do
         string <- readFile "./examples/palindromes/Damnitimmad.txt"
         assertEqual
-            "textPalindrome10"
-            ( filter
-                (\c -> c /= '\r' && c /= '\\' && c /= '\n')
-                string
-            )
-            $ longestTextPalindrome t (fromList string)
+            "tesTextPalindrome10"
+            (init string)
+            $ longestTextPalindrome t string
 
 testTextPalindrome11 t =
     TestCase $ do
         string <- readFile "./examples/palindromes/pal17.txt"
         assertEqual
-            "textPalindrome11"
-            ( filter
-                (\c -> c /= '\r' && c /= '\\' && c /= '\n')
-                string
-            )
-            $ longestTextPalindrome t (fromList string)
+            "tesTextPalindrome11"
+            (init string)
+            $ longestTextPalindrome t string

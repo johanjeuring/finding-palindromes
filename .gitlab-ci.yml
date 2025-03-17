@@ -26,3 +26,8 @@ unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
     - cabal test
+
+command-line-test-job:
+  stage: test
+  script:
+      - cabal run palindromes -- examples/palindromes/Damnitimmad.txt -t -q

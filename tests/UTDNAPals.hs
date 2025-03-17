@@ -1,6 +1,5 @@
 module UTDNAPals where
 
-import Data.Algorithms.Palindromes.PalindromesUtils (Flag)
 import Data.ByteString.Internal (w2c)
 import Data.Vector (fromList)
 import PalindromeMethods (longestDNAPalindrome)
@@ -16,12 +15,10 @@ testListDNA t =
 
 testDNAPalindrome1 t =
     TestCase $
-        assertEqual "palindrome1" "0 to 20\t\"gcgcgcatatatatgcgcgc\"\t20" $
-            longestDNAPalindrome t $
-                fromList "GCGCGCATATATATGCGCGC"
+        assertEqual "palindrome1" "gcgcgcatatatatgcgcgc" $
+            longestDNAPalindrome t "gcgcgcatatatatgcgcgc"
 
 testDNAPalindrome2 t =
     TestCase $
-        assertEqual "palindrome1" "0 to 6\t\"tatata\"\t6" $
-            longestDNAPalindrome t $
-                fromList "TATATA"
+        assertEqual "palindrome1" "tatata" $
+            longestDNAPalindrome t "tatata"

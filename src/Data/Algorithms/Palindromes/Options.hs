@@ -172,8 +172,8 @@ getComplexity xs
     isComplexity (Complexity _) = True
     isComplexity _ = False
     complexityFlags :: [Flag]
-    complexityFlags = filter isComplexity xs
-    (Complexity c) = head complexityFlags
+    complexityFlags@[com] = filter isComplexity xs
+    (Complexity c) = com
 
 getVariant :: [Flag] -> Variant
 getVariant xs
@@ -185,8 +185,8 @@ getVariant xs
     isVariant (Variant _) = True
     isVariant _ = False
     variantFlags :: [Flag]
-    variantFlags = filter isVariant xs
-    (Variant v) = head variantFlags
+    variantFlags@[var] = filter isVariant xs
+    (Variant v) = var
 
 getOutputFormat :: [Flag] -> Output
 getOutputFormat xs
@@ -198,8 +198,8 @@ getOutputFormat xs
     isOutput (OutputFormat _) = True
     isOutput _ = False
     outputFlags :: [Flag]
-    outputFlags = filter isOutput xs
-    (OutputFormat o) = head outputFlags
+    outputFlags@[out] = filter isOutput xs
+    (OutputFormat o) = out
 
 getLengthMod :: [Flag] -> LengthMod
 getLengthMod xs = (minLength, maxLength)
@@ -209,9 +209,9 @@ getLengthMod xs = (minLength, maxLength)
     isMaxLength (MaxLength _) = True
     isMaxLength _ = False
     mins :: [Flag]
-    mins = filter isMinLength xs
+    mins@[min] = filter isMinLength xs
     maxs :: [Flag]
-    maxs = filter isMaxLength xs
+    maxs@[max] = filter isMaxLength xs
     minLength :: Int
     minLength
         | null mins = 0
@@ -222,8 +222,8 @@ getLengthMod xs = (minLength, maxLength)
         | null maxs = Nothing
         | length maxs == 1 = Just maxL
         | otherwise = error "Multiple maximum lengths found."
-    (MinLength minL) = head mins
-    (MaxLength maxL) = head maxs
+    (MinLength minL) = min
+    (MaxLength maxL) = max
 
 headerHelpMessage :: String
 headerHelpMessage =

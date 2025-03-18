@@ -84,7 +84,7 @@ moveCenterS
     input
     rightmost
     maximalPalindromesIn
-    maximalPalindromesIn'
+    maximalPalindromesIn'@(headq : tailq)
     nrOfCenters
         | nrOfCenters == 0 =
             -- the last centre is on the last element: try to extend the tail
@@ -107,7 +107,7 @@ moveCenterS
                     (rightmost + 1)
                     inputForExtend
                     newPalLength
-        | nrOfCenters - centerfactor == head maximalPalindromesIn' =
+        | nrOfCenters - centerfactor == headq =
             {- The previous element in the centre list reaches exactly to the end of the
              last tail palindrome. Use the mirror property of palindromes to find the
              longest tail palindrome -}
@@ -120,16 +120,13 @@ moveCenterS
         | otherwise =
             {- move the centres one step and add the length of the longest palindrome to
             the centres -}
-            case maximalPalindromesIn' of
-                (headq : tailq) ->
-                    moveCenterS
-                        antiReflexive
-                        input
-                        rightmost
-                        (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
-                        tailq
-                        (nrOfCenters - centerfactor)
-                [] -> error "extendPalindromeS: empty sequence"
+            moveCenterS
+                antiReflexive
+                input
+                rightmost
+                (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
+                tailq
+                (nrOfCenters - centerfactor)
       where
         {- If type is anti-reflexive, we can skip centers on elements, so take steps of
         size 2. -}

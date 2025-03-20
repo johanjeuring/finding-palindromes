@@ -15,9 +15,6 @@ import Data.Vector (fromList)
 import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)
 
-instance Arbitrary DNA where
-    arbitrary = elements [A, T, C, G]
-
 testListCombinators =
     [ testCombinatorPlain
     , testCombinatorText
@@ -219,32 +216,3 @@ testCombinatorDNA =
              )
            ]
         ~?= createCombinator VarDNA (ComQuadratic 0 0) (0, Nothing) "ATA"
-
-propValidPalindromeRangeAndTextPlain :: Property
-propValidPalindromeRangeAndTextPlain = propValidPalindromeRangeAndText VarPlain
-propValidPalindromeRangeAndTextText :: Property
-propValidPalindromeRangeAndTextText = propValidPalindromeRangeAndText VarText
-propValidPalindromeRangeAndTextWord :: Property
-propValidPalindromeRangeAndTextWord = propValidPalindromeRangeAndText VarWord
-
--- | Test if all the generated Palindrome objects have a valid text related to the range property
-propValidPalindromeRangeAndText :: Variant -> Property
-propValidPalindromeRangeAndText variant = forAll (arbitrary :: Gen [Char]) $ \originalString ->
-    all
-        (`checkPalRangeAndText` originalString)
-        (createCombinator variant (ComQuadratic 0 0) (0, Nothing) originalString)
-
-propValidPalindromeRangeAndTextDNA :: Property
-propValidPalindromeRangeAndTextDNA = forAll (arbitrary :: Gen [DNA]) $ \dna ->
-    all
-        (`checkPalRangeAndText` map dnaToChar dna)
-        (createCombinator VarDNA (ComQuadratic 0 0) (0, Nothing) (map dnaToChar dna))
-
-{- | Check that taking the substring of the original text described by the start and end of the palRange
-property is equal to the palText property
--}
-checkPalRangeAndText :: Palindrome -> String -> Bool
-checkPalRangeAndText (Palindrome _ _ "" (x, y)) _ = x == y
-checkPalRangeAndText (Palindrome _ _ palText (start, end)) originalString = palText == substringFromRange
-  where
-    substringFromRange = take (end - start) (drop start originalString)

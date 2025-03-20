@@ -10,7 +10,8 @@
 --
 -----------------------------------------------------------------------------
 module Data.Algorithms.Palindromes.Settings
-    ( getSettings
+    ( Settings (..)
+    , getSettings
     , getOutput
     , defaultSettings
     , handleFlags

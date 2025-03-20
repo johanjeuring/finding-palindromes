@@ -15,16 +15,16 @@ module Main where
 import Data.Algorithms.Palindromes.Combinators (Complexity (..))
 import ITLinear (testListITLinear)
 import PalindromeProperties (propTextPalindrome)
-import Test.HUnit (Counts, Test (..), runTestTT)
-import Test.QuickCheck (quickCheck)
-import UTCombinators
+import QuickCheckProperties
     ( propValidPalindromeRangeAndText
     , propValidPalindromeRangeAndTextDNA
     , propValidPalindromeRangeAndTextPlain
     , propValidPalindromeRangeAndTextText
     , propValidPalindromeRangeAndTextWord
-    , testListCombinators
     )
+import Test.HUnit (Counts, Test (..), runTestTT)
+import Test.QuickCheck (quickCheck)
+import UTCombinators (testListCombinators)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)

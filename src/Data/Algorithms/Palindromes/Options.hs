@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternGuards #-}
 -- Did not yet translate all options. Complete the table in dispatchFlags.
 -- Default doesn't work yet
 -----------------------------------------------------------------------------
@@ -165,41 +166,38 @@ parseQuadratic str
 getComplexity :: [Flag] -> Complexity
 getComplexity xs
     | null complexityFlags = defaultComplexity
-    | length complexityFlags == 1 = c
+    | [Complexity c] <- complexityFlags = c
     | otherwise = error "Multiple complexity flags detected."
   where
     isComplexity :: Flag -> Bool
     isComplexity (Complexity _) = True
     isComplexity _ = False
     complexityFlags :: [Flag]
-    complexityFlags@[com] = filter isComplexity xs
-    (Complexity c) = com
+    complexityFlags = filter isComplexity xs
 
 getVariant :: [Flag] -> Variant
 getVariant xs
     | null variantFlags = defaultVariant
-    | length variantFlags == 1 = v
+    | [Variant v] <- variantFlags = v
     | otherwise = error "Multiple variant flags detected."
   where
     isVariant :: Flag -> Bool
     isVariant (Variant _) = True
     isVariant _ = False
     variantFlags :: [Flag]
-    variantFlags@[var] = filter isVariant xs
-    (Variant v) = var
+    variantFlags = filter isVariant xs
 
 getOutputFormat :: [Flag] -> Output
 getOutputFormat xs
     | null outputFlags = defaultOutput
-    | length outputFlags == 1 = o
+    | [OutputFormat o] <- outputFlags = o
     | otherwise = error "Multiple output flags detected."
   where
     isOutput :: Flag -> Bool
     isOutput (OutputFormat _) = True
     isOutput _ = False
     outputFlags :: [Flag]
-    outputFlags@[out] = filter isOutput xs
-    (OutputFormat o) = out
+    outputFlags = filter isOutput xs
 
 getLengthMod :: [Flag] -> LengthMod
 getLengthMod xs = (minLength, maxLength)
@@ -209,21 +207,19 @@ getLengthMod xs = (minLength, maxLength)
     isMaxLength (MaxLength _) = True
     isMaxLength _ = False
     mins :: [Flag]
-    mins@[min] = filter isMinLength xs
+    mins = filter isMinLength xs
     maxs :: [Flag]
-    maxs@[max] = filter isMaxLength xs
+    maxs = filter isMaxLength xs
     minLength :: Int
     minLength
         | null mins = 0
-        | length mins == 1 = minL
+        | [MinLength minL] <- mins = minL
         | otherwise = error "Multiple minimum lengths found."
     maxLength :: Maybe Int
     maxLength
         | null maxs = Nothing
-        | length maxs == 1 = Just maxL
+        | [MaxLength maxL] <- maxs = Just maxL
         | otherwise = error "Multiple maximum lengths found."
-    (MinLength minL) = min
-    (MaxLength maxL) = max
 
 headerHelpMessage :: String
 headerHelpMessage =

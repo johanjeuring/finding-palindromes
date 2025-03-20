@@ -7,10 +7,8 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
     , couplableWithItselfAtIndex
-    , surroundedByPunctuation
     , (=:=)
     )
-import Data.Array (Array, (!))
 
 import qualified Data.Vector as V
 
@@ -107,28 +105,32 @@ moveCenterS
                     (rightmost + 1)
                     inputForExtend
                     newPalLength
-        | nrOfCenters - centerfactor == head maximalPalindromesIn' =
-            {- The previous element in the centre list reaches exactly to the end of the
-             last tail palindrome. Use the mirror property of palindromes to find the
-             longest tail palindrome -}
-            extendPalindromeS
-                antiReflexive
-                input
-                rightmost
-                maximalPalindromesIn
-                (nrOfCenters - centerfactor)
         | otherwise =
             {- move the centres one step and add the length of the longest palindrome to
             the centres -}
             case maximalPalindromesIn' of
                 (headq : tailq) ->
-                    moveCenterS
-                        antiReflexive
-                        input
-                        rightmost
-                        (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
-                        tailq
-                        (nrOfCenters - centerfactor)
+                    if headq == nrOfCenters - centerfactor
+                        then
+                            {- The previous element in the centre list reaches exactly to the end of the
+                            last tail palindrome. Use the mirror property of palindromes to find the
+                            longest tail palindrome -}
+                            extendPalindromeS
+                                antiReflexive
+                                input
+                                rightmost
+                                maximalPalindromesIn
+                                (nrOfCenters - centerfactor)
+                        else
+                            {- move the centres one step and add the length of the longest palindrome to
+                            the centres -}
+                            moveCenterS
+                                antiReflexive
+                                input
+                                rightmost
+                                (min headq (nrOfCenters - centerfactor) : maximalPalindromesIn)
+                                tailq
+                                (nrOfCenters - centerfactor)
                 [] -> error "extendPalindromeS: empty sequence"
       where
         {- If type is anti-reflexive, we can skip centers on elements, so take steps of

@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternGuards #-}
 -- Did not yet translate all options. Complete the table in dispatchFlags.
 -- Default doesn't work yet
 -----------------------------------------------------------------------------
@@ -165,7 +166,7 @@ parseQuadratic str
 getComplexity :: [Flag] -> Complexity
 getComplexity xs
     | null complexityFlags = defaultComplexity
-    | length complexityFlags == 1 = c
+    | [Complexity c] <- complexityFlags = c
     | otherwise = error "Multiple complexity flags detected."
   where
     isComplexity :: Flag -> Bool
@@ -173,12 +174,11 @@ getComplexity xs
     isComplexity _ = False
     complexityFlags :: [Flag]
     complexityFlags = filter isComplexity xs
-    (Complexity c) = head complexityFlags
 
 getVariant :: [Flag] -> Variant
 getVariant xs
     | null variantFlags = defaultVariant
-    | length variantFlags == 1 = v
+    | [Variant v] <- variantFlags = v
     | otherwise = error "Multiple variant flags detected."
   where
     isVariant :: Flag -> Bool
@@ -186,12 +186,11 @@ getVariant xs
     isVariant _ = False
     variantFlags :: [Flag]
     variantFlags = filter isVariant xs
-    (Variant v) = head variantFlags
 
 getOutputFormat :: [Flag] -> Output
 getOutputFormat xs
     | null outputFlags = defaultOutput
-    | length outputFlags == 1 = o
+    | [OutputFormat o] <- outputFlags = o
     | otherwise = error "Multiple output flags detected."
   where
     isOutput :: Flag -> Bool
@@ -199,7 +198,6 @@ getOutputFormat xs
     isOutput _ = False
     outputFlags :: [Flag]
     outputFlags = filter isOutput xs
-    (OutputFormat o) = head outputFlags
 
 getLengthMod :: [Flag] -> LengthMod
 getLengthMod xs = (minLength, maxLength)
@@ -215,15 +213,13 @@ getLengthMod xs = (minLength, maxLength)
     minLength :: Int
     minLength
         | null mins = 0
-        | length mins == 1 = minL
+        | [MinLength minL] <- mins = minL
         | otherwise = error "Multiple minimum lengths found."
     maxLength :: Maybe Int
     maxLength
         | null maxs = Nothing
-        | length maxs == 1 = Just maxL
+        | [MaxLength maxL] <- maxs = Just maxL
         | otherwise = error "Multiple maximum lengths found."
-    (MinLength minL) = head mins
-    (MaxLength maxL) = head maxs
 
 headerHelpMessage :: String
 headerHelpMessage =

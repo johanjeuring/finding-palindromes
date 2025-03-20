@@ -112,6 +112,9 @@ moveCenterS
                 (headq : tailq) ->
                     if headq == nrOfCenters - centerfactor
                         then
+                            {- The previous element in the centre list reaches exactly to the end of the
+                            last tail palindrome. Use the mirror property of palindromes to find the
+                            longest tail palindrome -}
                             extendPalindromeS
                                 antiReflexive
                                 input
@@ -119,6 +122,8 @@ moveCenterS
                                 maximalPalindromesIn
                                 (nrOfCenters - centerfactor)
                         else
+                            {- move the centres one step and add the length of the longest palindrome to
+                            the centres -}
                             moveCenterS
                                 antiReflexive
                                 input

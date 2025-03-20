@@ -148,11 +148,12 @@ parseQuadratic str
     | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
     | null y =
         error
-            ( "Invalid arguments for gapsize and errors ("
+            ( "Invalid arguments for gapsize and errors. (gapsize, errors) = ("
                 ++ fst nums
-                ++ " "
+                ++ ", "
                 ++ snd nums
-                ++ "). Enter 2 numbers seperated by a +"
+                ++ "). q must be the last flag in a series of flags."
+                ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
         Complexity ComQuadratic{gapSize = read (fst nums), maxError = read (snd nums)}

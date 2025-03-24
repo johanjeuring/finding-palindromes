@@ -14,9 +14,9 @@ module Main where
 
 import Data.Algorithms.Palindromes.Combinators (Complexity (..))
 import ITLinear (testListITLinear)
-import PalindromeProperties (propTextPalindrome)
 import QuickCheckProperties
-    ( propValidPalindromeRangeAndText
+    ( propTextPalindrome
+    , propValidPalindromeRangeAndText
     , propValidPalindromeRangeAndTextDNA
     , propValidPalindromeRangeAndTextPlain
     , propValidPalindromeRangeAndTextText

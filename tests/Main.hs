@@ -15,12 +15,7 @@ module Main where
 import Data.Algorithms.Palindromes.Combinators (Complexity (..))
 import ITLinear (testListITLinear)
 import QuickCheckProperties
-    ( propTextPalindrome
-    , propValidPalindromeRangeAndText
-    , propValidPalindromeRangeAndTextDNA
-    , propValidPalindromeRangeAndTextPlain
-    , propValidPalindromeRangeAndTextText
-    , propValidPalindromeRangeAndTextWord
+    ( propertyList
     )
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
@@ -53,14 +48,12 @@ tests =
             ++ testListCombinators
             ++ testListITLinear
 
+runQuickCheck :: IO ()
+runQuickCheck = mapM_ quickCheck propertyList
+
 main :: IO Counts
 main = do
-    -- quickCheck propPalindromesAroundCentres
-    quickCheck propTextPalindrome
-    quickCheck propValidPalindromeRangeAndTextPlain
-    quickCheck propValidPalindromeRangeAndTextText
-    quickCheck propValidPalindromeRangeAndTextWord
-    quickCheck propValidPalindromeRangeAndTextDNA
+    runQuickCheck
     runTestTT tests
 
 {-

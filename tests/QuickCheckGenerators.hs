@@ -1,6 +1,6 @@
 module QuickCheckGenerators where
     
-import Test.QuickCheck (Gen, Property, arbitrary, forAll, listOf, oneof)
+import Test.QuickCheck (Gen, Property, arbitrary, forAll, listOf, oneof, generate)
 import Test.QuickCheck.Gen (genFloat, elements)
 {- 
 idea: generate a palindrome by randomly adding either characters or palindromes
@@ -22,4 +22,7 @@ genPalString = do
 
 -- generates a palindrome
 generatePalindrome:: Gen String
-generatePalindrome = arbitrary :: Gen String
+generatePalindrome = do
+    txt <- listOf (elements ['a'..'z'])
+    reverseTxt <- reverse txt
+    return txt ++ reverseTxt

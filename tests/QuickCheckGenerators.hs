@@ -22,7 +22,7 @@ todo:
 done - add string before and after genPal
 done - uneven pal
 done - add a random amount of pal in pals
-- look into errors
+- look into errors,
 done - look into gapped
 - look into dna
 done - look into non text
@@ -31,7 +31,6 @@ done - look into a new function that takes a variant/settings
 wont - somehow unit test all of this
 - can all chars safely be generated?
 
-note: right now gapped palindromes have gapped palinpals, is that bad?
 -}
 
 -- the maximum amount of palInPal depth the generated palindrome will have
@@ -73,7 +72,7 @@ genStandardPalString stringGenerator gap = do
             , genMultiPalInPal stringGenerator gap
             ]
     randomEnd <- stringGenerator
-    return $ randomStart ++ "---" ++ palGenerator ++ "---" ++ randomEnd
+    return $ randomStart ++ " --- " ++ palGenerator ++ " --- " ++ randomEnd
 
 -- generates a palindrome
 generatePalindrome :: Gen String -> Int -> Gen String
@@ -96,12 +95,15 @@ genMultiPalInPal stringGenerator gap = do
 -- a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
 palInPal :: Gen String -> Int -> Int -> String -> Gen String
 palInPal stringGenerator gap depth string = do
-    unevenOrGap <- generateGap stringGenerator gap
     case depth of
         0 -> return string
-        _ ->
+        1 -> do
+            unevenOrGap <- generateGap stringGenerator gap -- allows for uneven palindromes and gaps
+            return $ string ++ " -g- " ++ unevenOrGap ++ " -g- " ++ reverse string
+        _ -> do
+            uneven <- generateGap stringGenerator 1 -- allows for uneven palInPals
             palInPal stringGenerator gap (depth - 1) $
-                string ++ "-o-" ++ unevenOrGap ++ "-o-" ++ reverse string
+                string ++ " -u- " ++ uneven ++ " -u- " ++ reverse string
 
 -- generates a string with a max length of 'gapSetting'
 -- the string will be used to make gapped palindromes or uneven palindrome

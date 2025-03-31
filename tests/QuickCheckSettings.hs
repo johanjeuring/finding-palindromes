@@ -10,6 +10,7 @@ import Data.Algorithms.Palindromes.Combinators
     )
 import Data.Algorithms.Palindromes.Settings (Settings (..))
 
+-- | Settings where the palindrome type works with Char
 settingsListChar :: [Settings]
 settingsListChar =
     [ setting2
@@ -28,12 +29,15 @@ settingsListChar =
     , setting17
     ]
 
+-- | Settings where the palindrome type works with DNA
 settingsListDNA :: [Settings]
 settingsListDNA =
     [ setting1
     , setting5
     , setting10
     ]
+
+-- All settings that will be connected to the QuickCheck properties
 
 setting1 :: Settings
 setting1 =

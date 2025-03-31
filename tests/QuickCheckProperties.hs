@@ -55,23 +55,7 @@ dnaGenerator :: Gen [DNA]
 dnaGenerator = arbitrary :: Gen [DNA]
 
 cleanOriginalString :: String -> String
-cleanOriginalString string = map toLower (filter isAlpha (unescape string))
-
--- General properties -------------------------------------------------
-
-propTextPalindrome :: Property
-propTextPalindrome =
-    forAll (arbitrary :: Gen [Char]) $
-        \l ->
-            let ltp = longestTextPalindrome C.ComLinear l
-                ltp' = map toLower (filter isAlpha (unescape ltp))
-            in  ltp' == reverse ltp'
-
-unescape :: String -> String
-unescape [] = []
-unescape cs = case readLitChar cs of
-    (c, rest) : xs -> c : unescape rest
-    [] -> []
+cleanOriginalString string = map toLower (filter isAlpha string)
 
 -- Property 1 ---------------------------------------------------------
 

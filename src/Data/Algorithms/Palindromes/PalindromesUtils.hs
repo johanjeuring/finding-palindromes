@@ -40,6 +40,7 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , indexedLengthToRange
     , rangeToLength
     , dnaToChar
+    , charToDNA
     , couplableWithItself
     , couplableWithItselfAtIndex
     ) where

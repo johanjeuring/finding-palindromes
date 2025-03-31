@@ -80,10 +80,11 @@ test-suite property-tests
   hs-source-dirs: tests
   main-is:        Main.hs
   other-modules:
+    ITLinear
     PalindromeMethods
     PalindromeProperties
-    QuickCheckProperties
     QuickCheckGenerators
+    QuickCheckProperties
     QuickCheckSettings
     UTCombinators
     UTDNAPals
@@ -96,7 +97,6 @@ test-suite property-tests
     UTQuadraticAlgorithm
     UTTextPals
     UTWordPals
-    ITLinear
 
   build-depends:
       array

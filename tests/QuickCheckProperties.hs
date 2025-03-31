@@ -9,6 +9,7 @@ import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable (..)
     , DNA (A, C, G, T)
     , Palindrome (..)
+    , charToDNA
     , dnaToChar
     )
 import Data.Algorithms.Palindromes.Settings
@@ -16,6 +17,7 @@ import Data.Algorithms.Palindromes.Settings
     )
 import Data.Char (isAlpha, readLitChar, toLower)
 import PalindromeMethods (longestTextPalindrome)
+import QuickCheckSettings (settingsListChar, settingsListDNA)
 import Test.QuickCheck
     ( Arbitrary
     , Gen
@@ -27,23 +29,37 @@ import Test.QuickCheck
     , listOf
     , suchThat
     )
-import Text.ParserCombinators.ReadP (char)
 
 import qualified Data.Algorithms.Palindromes.Combinators as C
-import qualified QuickCheckSettings as QS
 
 instance Arbitrary DNA where
     arbitrary = elements [A, T, C, G]
 
 propertyList :: [Property]
 propertyList =
-    propTextPalindrome
-        : map propValidPalindromeRangeAndText QS.settingsList
-        ++ map propValidPalindromeReverse QS.settingsList
-        ++ map propValidPalLength QS.settingsList
-        -- ++ map propValidCenterIndex QS.settingsList
-        ++ map propValidPalRange QS.settingsList
-        ++ map propAllowedPalLength QS.settingsList
+    map propValidBoundariesChar settingsListChar
+        ++ map propValidBoundariesDNA settingsListDNA
+
+propertyListn :: [Property]
+propertyListn =
+    -- Property 1
+    map propValidPalindromeRangeAndTextChar settingsListChar
+        ++ map propValidPalindromeRangeAndTextDNA settingsListDNA
+        -- Property 2
+        ++ map propValidPalindromeReverseChar settingsListChar
+        ++ map propValidPalindromeReverseDNA settingsListDNA
+        -- Property 3
+        ++ map propValidPalLengthChar settingsListChar
+        ++ map propValidPalLengthDNA settingsListDNA
+        -- Property 4
+        ++ map propValidBoundariesChar settingsListChar
+        ++ map propValidBoundariesDNA settingsListDNA
+        -- Property 5
+        ++ map propValidPalRangeChar settingsListChar
+        ++ map propValidPalRangeDNA settingsListChar
+        -- Property 6
+        ++ map propAllowedPalLengthChar settingsListChar
+        ++ map propAllowedPalLengthDNA settingsListDNA
 
 charGenerator :: Gen Char
 charGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
@@ -60,8 +76,8 @@ cleanOriginalString string = map toLower (filter isAlpha string)
 -- Property 1 ---------------------------------------------------------
 
 -- | Test if all the generated Palindrome objects have a valid text related to the range property
-propValidPalindromeRangeAndText :: Settings -> Property
-propValidPalindromeRangeAndText settings = forAll stringGenerator $ \originalString ->
+propValidPalindromeRangeAndTextChar :: Settings -> Property
+propValidPalindromeRangeAndTextChar settings = forAll stringGenerator $ \originalString ->
     all
         (`checkPalRangeAndText` originalString)
         ( createCombinator
@@ -69,6 +85,17 @@ propValidPalindromeRangeAndText settings = forAll stringGenerator $ \originalStr
             (complexity settings)
             (lengthMod settings)
             originalString
+        )
+
+propValidPalindromeRangeAndTextDNA :: Settings -> Property
+propValidPalindromeRangeAndTextDNA settings = forAll dnaGenerator $ \dnaSeq ->
+    all
+        (`checkPalRangeAndText` map dnaToChar dnaSeq)
+        ( createCombinator
+            (variant settings)
+            (complexity settings)
+            (lengthMod settings)
+            (map dnaToChar dnaSeq)
         )
 
 {- | Check that taking the substring of the original text described by the start and end of the palRange
@@ -83,10 +110,10 @@ checkPalRangeAndText (Palindrome _ _ palText (start, end)) originalString = palT
 -- Property 2 ---------------------------------------------------------
 
 -- | Check that a found palindrome is actually a palindrome
-propValidPalindromeReverse :: Settings -> Property
-propValidPalindromeReverse settings = forAll stringGenerator $ \originalString ->
+propValidPalindromeReverseChar :: Settings -> Property
+propValidPalindromeReverseChar settings = forAll stringGenerator $ \originalString ->
     all
-        (isPalindromeGapsErrors settings)
+        (isPalindromeGapsErrorsChar settings)
         ( createCombinator
             (variant settings)
             (complexity settings)
@@ -94,19 +121,48 @@ propValidPalindromeReverse settings = forAll stringGenerator $ \originalString -
             originalString
         )
 
+propValidPalindromeReverseDNA :: Settings -> Property
+propValidPalindromeReverseDNA settings = forAll dnaGenerator $ \dnaSeq ->
+    all
+        (isPalindromeGapsErrorsDNA settings)
+        ( createCombinator
+            (variant settings)
+            (complexity settings)
+            (lengthMod settings)
+            (map dnaToChar dnaSeq)
+        )
+
 -- | Checks if the string is a palindrome, taking gaps and errors into account
-isPalindromeGapsErrors :: Settings -> Palindrome -> Bool
-isPalindromeGapsErrors settings pal = mismatches <= errors
+isPalindromeGapsErrorsChar :: Settings -> Palindrome -> Bool
+isPalindromeGapsErrorsChar settings pal = mismatches <= errors
   where
     pal' = case variant settings of
         VarWord -> removeGap gapLength (words (cleanOriginalString (palText pal)))
+        VarPlain -> removeGap gapLength (map (: []) (palText pal))
         _ -> removeGap gapLength (map (: []) (cleanOriginalString (palText pal)))
     (gapLength, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
         ComLinear -> (0, 0)
     mismatches =
         length
-            [() | i <- [0 .. (length pal' `div` 2) - 1], pal' !! i /= pal' !! (length pal' - 1 - i)]
+            [ ()
+            | i <- [0 .. (length pal' `div` 2) - 1]
+            , not $ (pal' !! i) =:= (pal' !! (length pal' - 1 - i))
+            ]
+
+isPalindromeGapsErrorsDNA :: Settings -> Palindrome -> Bool
+isPalindromeGapsErrorsDNA settings pal = mismatches <= errors
+  where
+    pal' = removeGap gapLength (map charToDNA (palText pal))
+    (gapLength, errors) = case complexity settings of
+        ComQuadratic gap err -> (gap, err)
+        ComLinear -> (0, 0)
+    mismatches =
+        length
+            [ ()
+            | i <- [0 .. (length pal' `div` 2) - 1]
+            , (pal' !! i) =:= (pal' !! (length pal' - 1 - i))
+            ]
 
 -- | Removes gap from palindrome
 removeGap :: Int -> [a] -> [a]
@@ -121,8 +177,8 @@ removeGap gapLength palindrome = take start palindrome ++ drop end palindrome
 
 -- Property 3 ---------------------------------------------------------
 
-propValidPalLength :: Settings -> Property
-propValidPalLength settings = forAll stringGenerator $ \originalString ->
+propValidPalLengthChar :: Settings -> Property
+propValidPalLengthChar settings = forAll stringGenerator $ \originalString ->
     all
         (validPalLength settings)
         ( createCombinator
@@ -132,17 +188,30 @@ propValidPalLength settings = forAll stringGenerator $ \originalString ->
             originalString
         )
 
+propValidPalLengthDNA :: Settings -> Property
+propValidPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
+    all
+        (validPalLength settings)
+        ( createCombinator
+            (variant settings)
+            (complexity settings)
+            (lengthMod settings)
+            (map dnaToChar dnaSeq)
+        )
+
 validPalLength :: Settings -> Palindrome -> Bool
 validPalLength settings pal = case variant settings of
-    VarWord -> length (words (cleanOriginalString $ palText pal)) == palLength pal
+    VarWord -> length (words (palText pal)) == palLength pal
+    VarPlain -> length (palText pal) == palLength pal
+    VarDNA -> length (palText pal) == palLength pal
     _ -> length (cleanOriginalString $ palText pal) == palLength pal
 
 -- Property 4 ---------------------------------------------------------
 
-propValidCenterIndex :: Settings -> Property
-propValidCenterIndex settings = forAll (arbitrary :: Gen [Char]) $ \originalString ->
+propValidBoundariesChar :: Settings -> Property
+propValidBoundariesChar settings = forAll stringGenerator $ \originalString ->
     all
-        (\pal -> let (start, end) = palRange pal in palCenterIndex pal == start + end)
+        (checkValidBoundaries settings)
         ( createCombinator
             (variant settings)
             (complexity settings)
@@ -150,9 +219,37 @@ propValidCenterIndex settings = forAll (arbitrary :: Gen [Char]) $ \originalStri
             originalString
         )
 
+propValidBoundariesDNA :: Settings -> Property
+propValidBoundariesDNA settings = forAll dnaGenerator $ \dnaSeq ->
+    all
+        (checkValidBoundaries settings)
+        ( createCombinator
+            (variant settings)
+            (complexity settings)
+            (lengthMod settings)
+            (map dnaToChar dnaSeq)
+        )
+
+checkValidBoundaries :: Settings -> Palindrome -> Bool
+checkValidBoundaries settings pal = case variant settings of
+    VarPlain -> let (s, e) = palRange pal in e - s == palLength pal
+    VarWord -> countWordsInRange (palRange pal) (palText pal) == palLength pal
+    VarDNA -> let (s, e) = palRange pal in e - s == palLength pal
+    _ ->
+        let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
+
+countWordsInRange :: (Int, Int) -> String -> Int
+countWordsInRange (s, e) palString = length . words $ take (e - s) (drop s palString)
+
+amountOfNonAlpha :: Int -> String -> Int
+amountOfNonAlpha acc [] = acc
+amountOfNonAlpha acc (x : xs)
+    | not (isAlpha x) = amountOfNonAlpha (acc + 1) xs
+    | otherwise = amountOfNonAlpha acc xs
+
 -- Property 5 ---------------------------------------------------------
-propValidPalRange :: Settings -> Property
-propValidPalRange settings = forAll stringGenerator $ \originalString ->
+propValidPalRangeChar :: Settings -> Property
+propValidPalRangeChar settings = forAll stringGenerator $ \originalString ->
     all
         (\pal -> fst (palRange pal) >= 0 && snd (palRange pal) <= length originalString)
         ( createCombinator
@@ -162,13 +259,20 @@ propValidPalRange settings = forAll stringGenerator $ \originalString ->
             originalString
         )
 
+propValidPalRangeDNA :: Settings -> Property
+propValidPalRangeDNA settings = forAll dnaGenerator $ \dnaSeq ->
+    all
+        (\pal -> fst (palRange pal) >= 0 && snd (palRange pal) <= length dnaSeq)
+        ( createCombinator
+            (variant settings)
+            (complexity settings)
+            (lengthMod settings)
+            (map dnaToChar dnaSeq)
+        )
+
 -- Property 6 ---------------------------------------------------------
-
--- Property 7 ---------------------------------------------------------
-
--- Property 8 ---------------------------------------------------------
-propAllowedPalLength :: Settings -> Property
-propAllowedPalLength settings = forAll stringGenerator $ \originalString ->
+propAllowedPalLengthChar :: Settings -> Property
+propAllowedPalLengthChar settings = forAll stringGenerator $ \originalString ->
     all
         (isAllowedPalLength settings)
         ( createCombinator
@@ -176,6 +280,17 @@ propAllowedPalLength settings = forAll stringGenerator $ \originalString ->
             (complexity settings)
             (lengthMod settings)
             originalString
+        )
+
+propAllowedPalLengthDNA :: Settings -> Property
+propAllowedPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
+    all
+        (isAllowedPalLength settings)
+        ( createCombinator
+            (variant settings)
+            (complexity settings)
+            (lengthMod settings)
+            (map dnaToChar dnaSeq)
         )
 
 isAllowedPalLength :: Settings -> Palindrome -> Bool

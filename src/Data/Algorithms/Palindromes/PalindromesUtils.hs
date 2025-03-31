@@ -47,6 +47,7 @@ module Data.Algorithms.Palindromes.PalindromesUtils
 import Data.Array (Array, bounds, listArray, (!))
 import Data.Char (isControl, isPunctuation, isSpace)
 import Data.Foldable (Foldable (toList))
+import Data.Maybe (fromJust, isNothing)
 
 import qualified Data.Vector as V
 
@@ -269,21 +270,23 @@ instance {-# OVERLAPPING #-} Couplable DNA where
     C =:= G = True
     _ =:= _ = False
 
-toDNA :: (Functor f) => f Char -> f DNA
-toDNA = fmap charToDNA
+toDNA :: (Functor f, Foldable f) => f Char -> Maybe (f DNA)
+toDNA x = if hasNothing then Nothing else Just $ fmap (fromJust . charToDNA) x
+  where
+    hasNothing = any (isNothing . charToDNA) x
 
-charToDNA :: Char -> DNA
-charToDNA 'A' = A
-charToDNA 'T' = T
-charToDNA 'C' = C
-charToDNA 'G' = G
-charToDNA 'N' = N
-charToDNA 'a' = A
-charToDNA 't' = T
-charToDNA 'c' = C
-charToDNA 'g' = G
-charToDNA 'n' = N
-charToDNA _ = error "Not a valid DNA string"
+charToDNA :: Char -> Maybe DNA
+charToDNA 'A' = Just A
+charToDNA 'T' = Just T
+charToDNA 'C' = Just C
+charToDNA 'G' = Just G
+charToDNA 'N' = Just N
+charToDNA 'a' = Just A
+charToDNA 't' = Just T
+charToDNA 'c' = Just C
+charToDNA 'g' = Just G
+charToDNA 'n' = Just N
+charToDNA _ = Nothing
 
 dnaToChar :: DNA -> Char
 dnaToChar A = 'A'

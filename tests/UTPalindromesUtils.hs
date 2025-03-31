@@ -12,6 +12,7 @@ import Data.Algorithms.Palindromes.PalindromesUtils
     , vecToArray
     )
 import Data.Array (listArray)
+import Data.Maybe (fromJust)
 import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 
 import qualified Data.Sequence as S
@@ -182,7 +183,7 @@ testsCouplable =
     , "testDNACouplable2" ~: T =:= A ~?= True
     , "testDNAIncouplable1" ~: A =:= C ~?= False
     , "testDNAIncouplable2" ~: A =:= A ~?= False
-    , "testCharToDNA" ~: toDNA "aA" ~?= [A, A]
+    , "testCharToDNA" ~: (fromJust . toDNA) "aA" ~?= [A, A]
     ]
 
 {-

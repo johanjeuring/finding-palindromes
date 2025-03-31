@@ -38,7 +38,7 @@ filterLetters' :: String -> V.Vector (Int, Char)
 filterLetters' x = V.filter (isLetter . snd) (V.indexed (V.fromList $ map toLower x))
 
 -- | A function that parses ATGCN to the DNA datatype
-textToDNA :: String -> V.Vector DNA
+textToDNA :: String -> Maybe (V.Vector DNA)
 textToDNA = toDNA . V.fromList
 
 -- | A function that filters the string so that only letters and spaces remain, then splits the result on every space so that only words remain.

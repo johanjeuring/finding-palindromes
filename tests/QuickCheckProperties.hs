@@ -35,13 +35,9 @@ import qualified Data.Algorithms.Palindromes.Combinators as C
 instance Arbitrary DNA where
     arbitrary = elements [A, T, C, G]
 
+-- List of to-be-tested properties, where each property is connected to all the settings
 propertyList :: [Property]
 propertyList =
-    map propValidBoundariesChar settingsListChar
-        ++ map propValidBoundariesDNA settingsListDNA
-
-propertyListn :: [Property]
-propertyListn =
     -- Property 1
     map propValidPalindromeRangeAndTextChar settingsListChar
         ++ map propValidPalindromeRangeAndTextDNA settingsListDNA
@@ -70,12 +66,13 @@ stringGenerator = listOf charGenerator
 dnaGenerator :: Gen [DNA]
 dnaGenerator = arbitrary :: Gen [DNA]
 
+-- | Filters the non-alphabetic characters from the input, before converting everything to lowercase
 cleanOriginalString :: String -> String
 cleanOriginalString string = map toLower (filter isAlpha string)
 
 -- Property 1 ---------------------------------------------------------
 
--- | Test if all the generated Palindrome objects have a valid text related to the range property
+-- | Test if all the generated Palindrome objects have a valid text related to the range property. Works for the palindrome variants that work with Char
 propValidPalindromeRangeAndTextChar :: Settings -> Property
 propValidPalindromeRangeAndTextChar settings = forAll stringGenerator $ \originalString ->
     all
@@ -87,6 +84,7 @@ propValidPalindromeRangeAndTextChar settings = forAll stringGenerator $ \origina
             originalString
         )
 
+-- | Test if all the generated Palindrome objects have a valid text related to the range property. Works for the DNA palindrome-variant
 propValidPalindromeRangeAndTextDNA :: Settings -> Property
 propValidPalindromeRangeAndTextDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
@@ -109,7 +107,7 @@ checkPalRangeAndText (Palindrome _ _ palText (start, end)) originalString = palT
 
 -- Property 2 ---------------------------------------------------------
 
--- | Check that a found palindrome is actually a palindrome
+-- | Check that a found character palindrome is actually a palindrome
 propValidPalindromeReverseChar :: Settings -> Property
 propValidPalindromeReverseChar settings = forAll stringGenerator $ \originalString ->
     all
@@ -121,6 +119,7 @@ propValidPalindromeReverseChar settings = forAll stringGenerator $ \originalStri
             originalString
         )
 
+-- | Check that a found DNA palindrome is actually a palindrome
 propValidPalindromeReverseDNA :: Settings -> Property
 propValidPalindromeReverseDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
@@ -132,7 +131,7 @@ propValidPalindromeReverseDNA settings = forAll dnaGenerator $ \dnaSeq ->
             (map dnaToChar dnaSeq)
         )
 
--- | Checks if the string is a palindrome, taking gaps and errors into account
+-- | Checks if the character string is a palindrome, taking gaps and errors into account
 isPalindromeGapsErrorsChar :: Settings -> Palindrome -> Bool
 isPalindromeGapsErrorsChar settings pal = mismatches <= errors
   where
@@ -150,6 +149,7 @@ isPalindromeGapsErrorsChar settings pal = mismatches <= errors
             , not $ (pal' !! i) =:= (pal' !! (length pal' - 1 - i))
             ]
 
+-- | Checks if the DNA string is a palindrome, taking gaps and errors into account
 isPalindromeGapsErrorsDNA :: Settings -> Palindrome -> Bool
 isPalindromeGapsErrorsDNA settings pal = mismatches <= errors
   where
@@ -177,6 +177,7 @@ removeGap gapLength palindrome = take start palindrome ++ drop end palindrome
 
 -- Property 3 ---------------------------------------------------------
 
+-- | Tests if the palLength of a character palindrome corresponds to the palText
 propValidPalLengthChar :: Settings -> Property
 propValidPalLengthChar settings = forAll stringGenerator $ \originalString ->
     all
@@ -188,6 +189,7 @@ propValidPalLengthChar settings = forAll stringGenerator $ \originalString ->
             originalString
         )
 
+-- | Tests if the palLength of a DNA palindrome corresponds to the palText
 propValidPalLengthDNA :: Settings -> Property
 propValidPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
@@ -199,6 +201,7 @@ propValidPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
             (map dnaToChar dnaSeq)
         )
 
+-- | Checks for every palindrome variant if the palLength corresponds to the length of palText
 validPalLength :: Settings -> Palindrome -> Bool
 validPalLength settings pal = case variant settings of
     VarWord -> length (words (palText pal)) == palLength pal
@@ -208,6 +211,7 @@ validPalLength settings pal = case variant settings of
 
 -- Property 4 ---------------------------------------------------------
 
+-- | Property for testing if the palindrome range of a character palindrome corresponds to the palindrome length
 propValidBoundariesChar :: Settings -> Property
 propValidBoundariesChar settings = forAll stringGenerator $ \originalString ->
     all
@@ -219,6 +223,7 @@ propValidBoundariesChar settings = forAll stringGenerator $ \originalString ->
             originalString
         )
 
+-- | Property for testing if the palindrome range of a DNA palindrome corresponds to the palindrome length
 propValidBoundariesDNA :: Settings -> Property
 propValidBoundariesDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
@@ -230,6 +235,7 @@ propValidBoundariesDNA settings = forAll dnaGenerator $ \dnaSeq ->
             (map dnaToChar dnaSeq)
         )
 
+-- | Tests if the palindrome range of a palindrome corresponds to the palindrome length
 checkValidBoundaries :: Settings -> Palindrome -> Bool
 checkValidBoundaries settings pal = case variant settings of
     VarPlain -> let (s, e) = palRange pal in e - s == palLength pal
@@ -238,9 +244,11 @@ checkValidBoundaries settings pal = case variant settings of
     _ ->
         let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
 
+-- | Counts the amount of words that are in the substring of the input string corresponding with the given range
 countWordsInRange :: (Int, Int) -> String -> Int
-countWordsInRange (s, e) palString = length . words $ take (e - s) (drop s palString)
+countWordsInRange (s, e) inputString = length . words $ take (e - s) (drop s inputString)
 
+-- | Counts the amount of non-alphabetic characters in the string
 amountOfNonAlpha :: Int -> String -> Int
 amountOfNonAlpha acc [] = acc
 amountOfNonAlpha acc (x : xs)
@@ -248,6 +256,8 @@ amountOfNonAlpha acc (x : xs)
     | otherwise = amountOfNonAlpha acc xs
 
 -- Property 5 ---------------------------------------------------------
+
+-- | Tests if the range boundaries of a character palindrome are not outside the bounds of the string
 propValidPalRangeChar :: Settings -> Property
 propValidPalRangeChar settings = forAll stringGenerator $ \originalString ->
     all
@@ -259,6 +269,7 @@ propValidPalRangeChar settings = forAll stringGenerator $ \originalString ->
             originalString
         )
 
+-- | Tests if the range boundaries of a DNA palindrome are not outside the bounds of the string
 propValidPalRangeDNA :: Settings -> Property
 propValidPalRangeDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
@@ -271,6 +282,8 @@ propValidPalRangeDNA settings = forAll dnaGenerator $ \dnaSeq ->
         )
 
 -- Property 6 ---------------------------------------------------------
+
+-- | Property for testing if the length of a character palindrome is allowed by the specified minimum and maximum length
 propAllowedPalLengthChar :: Settings -> Property
 propAllowedPalLengthChar settings = forAll stringGenerator $ \originalString ->
     all
@@ -282,6 +295,7 @@ propAllowedPalLengthChar settings = forAll stringGenerator $ \originalString ->
             originalString
         )
 
+-- | Property for testing if the length of a DNA palindrome is allowed by the specified minimum and maximum length
 propAllowedPalLengthDNA :: Settings -> Property
 propAllowedPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
@@ -293,6 +307,7 @@ propAllowedPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
             (map dnaToChar dnaSeq)
         )
 
+-- | Checks if the length of a palindrome is between the minimum and maximum length
 isAllowedPalLength :: Settings -> Palindrome -> Bool
 isAllowedPalLength settings pal = case lengthMod settings of
     (l, Just u) -> palLength pal >= l && palLength pal <= u

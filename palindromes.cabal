@@ -83,6 +83,7 @@ test-suite property-tests
     PalindromeMethods
     PalindromeProperties
     QuickCheckProperties
+    QuickCheckSettings
     UTCombinators
     UTDNAPals
     UTExtendPals

@@ -1,4 +1,9 @@
-module QuickCheckGenerators (dnaPalindromeGen, plainPalindromeGen, puncPalindromeGen) where
+module QuickCheckGenerators
+    ( generatePunctuationPal
+    , generatePlainPalindrome
+    , generateDNAPalindrome
+    , generateWordPalindrome
+    ) where
 
 import Data.Algorithms.Palindromes.Combinators
     ( Complexity (..)
@@ -20,9 +25,6 @@ import Test.QuickCheck
     )
 import Test.QuickCheck.Gen (elements, genFloat)
 
-instance Arbitrary DNA where
-    arbitrary = elements [A, T, C, G]
-
 {-
 todo:
 - look into errors,
@@ -35,31 +37,18 @@ todo:
 maxPalInPalGeneration :: Float
 maxPalInPalGeneration = 5
 
-puncPalindromeGen :: Settings -> Gen String
-puncPalindromeGen = genStandardPalString puncStringGenerator
+generatePunctuationPal :: Settings -> Gen String
+generatePunctuationPal = generatePalindromeString puncStringGenerator
 
-plainPalindromeGen :: Settings -> Gen String
-plainPalindromeGen = genStandardPalString plainStringGenerator
+generatePlainPalindrome :: Settings -> Gen String
+generatePlainPalindrome = generatePalindromeString plainStringGenerator
 
-dnaPalindromeGen :: Settings -> Gen [DNA]
-dnaPalindromeGen = genStandardPalString dnaStringGenerator
+generateDNAPalindrome :: Settings -> Gen [DNA]
+generateDNAPalindrome = generatePalindromeString dnaStringGenerator
 
 -- TODO
-wordPalindromeGen :: Settings -> Gen String
-wordPalindromeGen = genStandardPalString puncStringGenerator
-
-{- flag handler and exported function -}
-palStringGenerator :: (Arbitrary a) => Gen [a] -> Settings -> Gen [a]
-palStringGenerator gen settings = do
-    let (gap, error) = case complexity settings of
-            ComQuadratic{gapSize = gap, maxError = error} -> (gap, error)
-            _ -> (0, 0)
-    case variant settings of
-        -- varDNA -> genStandardPalString dnaStringGenerator gap
-        -- VarWord -> genStandardPalString gap
-        VarText -> genStandardPalString gen settings
-
--- _ -> genStandardPalString gen gap -- Plain palindromes
+generateWordPalindrome :: Settings -> Gen String
+generateWordPalindrome = generatePalindromeString puncStringGenerator
 
 -- generates random strings for punctuation palindromes
 -- these can be anything
@@ -70,30 +59,32 @@ puncStringGenerator = arbitrary :: Gen String
 plainStringGenerator :: Gen String
 plainStringGenerator = listOf (elements (['a' .. 'z'] ++ ['A' .. 'Z']))
 
-stringGenerator :: (Arbitrary a) => Gen [a]
-stringGenerator = arbitrary
+instance Arbitrary DNA where
+    arbitrary = elements [A, T, C, G]
 
 dnaStringGenerator :: Gen [DNA]
 dnaStringGenerator = arbitrary :: Gen [DNA]
 
 {- Generators for plain and punctuation palindromes -}
 -- generates either a string, palindrome or palInPal palindrome with random characters around them
-genStandardPalString :: (Arbitrary a) => Gen [a] -> Settings -> Gen [a]
-genStandardPalString stringGenerator settings = do
+generatePalindromeString :: (Arbitrary a) => Gen [a] -> Settings -> Gen [a]
+generatePalindromeString stringGenerator settings = do
+    -- get the gap and error settings from the complexity settings
     let (gap, error) = case complexity settings of
             ComQuadratic{gapSize = gap, maxError = error} -> (gap, error)
             _ -> (0, 0)
+    -- generate random string to add noise in front of the palindrome
     randomStart <- stringGenerator
+    -- generate the palindrome
     palGenerator <-
         oneof
             [ stringGenerator
             , generatePalindrome stringGenerator gap
-            , genMultiPalInPal stringGenerator gap
+            , multiPalInPal stringGenerator gap
             ]
+    -- generate random string to add noise behind the palindrome
     randomEnd <- stringGenerator
-    return palGenerator
-
--- \$ randomStart ++ palGenerator ++ randomEnd
+    return $ randomStart ++ palGenerator ++ randomEnd
 
 -- generates a palindrome
 generatePalindrome :: (Arbitrary a) => Gen [a] -> Int -> Gen [a]
@@ -103,8 +94,8 @@ generatePalindrome stringGenerator gap = do
 
 -- generates a palindrome with a random amount of palInPal depth
 -- note that a non palindrome can be generated if the random float is 0
-genMultiPalInPal :: (Arbitrary a) => Gen [a] -> Int -> Gen [a]
-genMultiPalInPal stringGenerator gap = do
+multiPalInPal :: (Arbitrary a) => Gen [a] -> Int -> Gen [a]
+multiPalInPal stringGenerator gap = do
     randomString <- stringGenerator
     randomFloat <- genFloat
     let -- Scale and round off float to generate a reasonable amount of palindromes

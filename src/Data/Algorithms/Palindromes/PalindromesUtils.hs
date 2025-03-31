@@ -273,7 +273,7 @@ instance {-# OVERLAPPING #-} Couplable DNA where
 toDNA :: (Functor f, Foldable f) => f Char -> Maybe (f DNA)
 toDNA x = if hasNothing then Nothing else Just $ fmap (fromJust . charToDNA) x
   where
-    hasNothing = foldr (\a b -> (isNothing . charToDNA) a || b) False x
+    hasNothing = any (isNothing . charToDNA) x
 
 charToDNA :: Char -> Maybe DNA
 charToDNA 'A' = Just A

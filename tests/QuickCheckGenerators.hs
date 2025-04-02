@@ -28,7 +28,6 @@ import Test.QuickCheck.Gen (elements, genFloat)
 {-
 todo:
 - look into errors,
-- look into word pals
 -}
 
 -- the maximum amount of palInPal depth the generated palindrome will have
@@ -46,9 +45,8 @@ generatePlainPalindrome = generatePalindromeString plainStringGenerator
 generateDNAPalindrome :: Settings -> Gen [DNA]
 generateDNAPalindrome = generatePalindromeString dnaStringGenerator
 
--- TODO
 generateWordPalindrome :: Settings -> Gen String
-generateWordPalindrome = generatePalindromeString puncStringGenerator
+generateWordPalindrome = generatePalindromeString wordStringGenerator
 
 -- generates random strings for punctuation palindromes
 -- these can be anything
@@ -64,6 +62,32 @@ instance Arbitrary DNA where
 
 dnaStringGenerator :: Gen [DNA]
 dnaStringGenerator = arbitrary :: Gen [DNA]
+
+randomWord :: Gen String
+randomWord = do
+    randomFloat <- genFloat
+    randomString <- arbitrary :: Gen String
+    let -- make a word of a random length between 2 and 7
+        randomWordLength = max 2 $ round $ 7 * randomFloat
+        randomWord = take randomWordLength randomString
+    return randomWord
+
+wordStringGenerator :: Gen [Char]
+wordStringGenerator = do
+    amountOfWords <- genFloat
+    let -- make a word of a random length between 2 and 7
+        randomWordAmount = round $ 5 * amountOfWords
+    wordStringGenerator' randomWordAmount
+
+wordStringGenerator' :: Int -> Gen [Char]
+wordStringGenerator' i = do
+    _randomWord <- randomWord
+    case i of
+        0 -> return []
+        1 -> return _randomWord
+        _ -> do
+            newWord <- wordStringGenerator' (i - 1)
+            return $ _randomWord ++ " " ++ newWord
 
 {- Generators for plain and punctuation palindromes -}
 -- generates either a string, palindrome or palInPal palindrome with random characters around them

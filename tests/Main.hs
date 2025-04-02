@@ -14,12 +14,12 @@ module Main where
 
 import Data.Algorithms.Palindromes.Combinators (Complexity (..))
 import ITLinear (testListITLinear)
+import ITQuadratic (testListITQuadratic)
 import PalindromeProperties (propTextPalindrome)
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 import UTCombinators
     ( propValidPalindromeRangeAndText
-    , propValidPalindromeRangeAndTextDNA
     , propValidPalindromeRangeAndTextPlain
     , propValidPalindromeRangeAndTextText
     , propValidPalindromeRangeAndTextWord
@@ -28,7 +28,6 @@ import UTCombinators
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
-import UTLinearAlgorithm (testListLinearAlgorithm)
 import UTPalindromesUtils (testListPalindromesUtils)
 import UTProcessing (testListProcessing)
 import UTPunctuationPals (testListPunctuation)
@@ -52,6 +51,7 @@ tests =
             ++ testListWordPalindromes ComLinear
             ++ testListCombinators
             ++ testListITLinear
+            ++ testListITQuadratic
 
 main :: IO Counts
 main = do
@@ -60,7 +60,6 @@ main = do
     quickCheck propValidPalindromeRangeAndTextPlain
     quickCheck propValidPalindromeRangeAndTextText
     quickCheck propValidPalindromeRangeAndTextWord
-    quickCheck propValidPalindromeRangeAndTextDNA
     runTestTT tests
 
 {-

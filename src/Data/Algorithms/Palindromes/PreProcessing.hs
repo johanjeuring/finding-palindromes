@@ -22,7 +22,7 @@ import Data.Algorithms.Palindromes.PalindromesUtils
     ( DNA
     , toDNA
     )
-import Data.Char (isLetter, isSpace, toLower)
+import Data.Char (isAlphaNum, isSpace, toLower)
 
 import qualified Data.Vector as V
 
@@ -31,11 +31,11 @@ import qualified Data.Vector as V
 
 -- | A function that filters the string so that only letters remain
 filterLetters :: String -> V.Vector Char
-filterLetters x = V.map toLower $ V.filter isLetter (V.fromList x)
+filterLetters x = V.map toLower $ V.filter isAlphaNum (V.fromList x)
 
 -- | A function that filters the string so that only letters remain, but remembers the original index of each character.
 filterLetters' :: String -> V.Vector (Int, Char)
-filterLetters' x = V.filter (isLetter . snd) (V.indexed (V.fromList $ map toLower x))
+filterLetters' x = V.filter (isAlphaNum . snd) (V.indexed (V.fromList $ map toLower x))
 
 -- | A function that parses ATGCN to the DNA datatype
 textToDNA :: String -> Maybe (V.Vector DNA)
@@ -43,4 +43,4 @@ textToDNA = toDNA . V.fromList
 
 -- | A function that filters the string so that only letters and spaces remain, then splits the result on every space so that only words remain.
 textToWords :: String -> V.Vector String
-textToWords x = V.fromList $ words $ map toLower $ filter (\a -> isLetter a || isSpace a) x
+textToWords x = V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a || isSpace a) x

@@ -1,12 +1,7 @@
 module UTDNAPals where
 
-import Data.ByteString.Internal (w2c)
-import Data.Vector (fromList)
 import PalindromeMethods (longestDNAPalindrome)
 import Test.HUnit (Test (..), assertEqual)
-
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as BC
 
 testListDNA t =
     [ TestLabel "testDNAPalindrome1" $ testDNAPalindrome1 t

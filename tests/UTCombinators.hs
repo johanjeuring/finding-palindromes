@@ -10,9 +10,7 @@ import Data.Algorithms.Palindromes.PalindromesUtils
     , Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
     , dnaToChar
     )
-import Data.Char (isAlpha, toLower)
-import Data.Vector (fromList)
-import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
+import Test.HUnit (Test (..), (~:), (~?=))
 import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)
 
 instance Arbitrary DNA where

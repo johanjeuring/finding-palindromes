@@ -1,6 +1,5 @@
 module UTLinearAlgorithm (testListLinearAlgorithm) where
 
-import Control.Exception (assert)
 import Data.Algorithms.Palindromes.PalindromesUtils (DNA (..), toDNA)
 import Test.HUnit (Test (..), assertEqual)
 

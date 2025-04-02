@@ -6,15 +6,11 @@ import Data.Algorithms.Palindromes.Combinators
     , Variant (..)
     , createReadableCombinator
     )
-import Data.Algorithms.Palindromes.LinearAlgorithm
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
     )
-import GHC.IO.Exception (IOErrorType (NoSuchThing))
 
 import qualified Data.Algorithms.Palindromes.Combinators as C
-import qualified Data.Algorithms.Palindromes.PalindromesUtils as PU
-import qualified Data.Vector as V
 
 {- takes a flag to edit the complexity
 to enable the usage of both algorithm types on the same unit tests -}
@@ -22,9 +18,6 @@ longestTextPalindrome :: Complexity -> String -> String
 longestTextPalindrome complexity =
     createReadableCombinator VarText OutWord complexity (0, Nothing)
 
-{- code that is probably usefull later:
-longestWordPalindrome :: PU.Flag -> B.ByteString -> String
-longestWordPalindrome t = palindrome (Just PU.Word) (Just PU.Longest) (Just t) Nothing Nothing Nothing -}
 longestWordPalindrome :: Complexity -> String -> String
 longestWordPalindrome t =
     createReadableCombinator
@@ -56,12 +49,3 @@ extendTextPalindrome complexity n =
         (OutWordAt n)
         complexity
         (0, Nothing)
-
-{-
-palindrome
-    (Just PU.Text)
-    (Just (PU.Extend n))
-    (Just complexity)
-    Nothing
-    Nothing
-    Nothing -}

@@ -5,8 +5,6 @@ import Test.HUnit (Test (..), assertEqual)
 
 import qualified Data.Algorithms.Palindromes.PostProcessing as Post
 import qualified Data.Algorithms.Palindromes.PreProcessing as Pre
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as BC
 
 testListProcessing =
     [ testFilterLetters

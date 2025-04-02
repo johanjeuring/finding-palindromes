@@ -23,14 +23,7 @@
 {-# LANGUAGE UndecidableInstances #-}
 
 module Data.Algorithms.Palindromes.PalindromesUtils
-    ( showPalindromeDNA
-    , (=:=)
-    , showPalindrome
-    , showTextPalindrome
-    , myIsLetterC
-    , surroundedByPunctuation
-    , listArrayl0
-    , vecToArray
+    ( (=:=)
     , toDNA
     , Couplable
     , DNA (..)
@@ -40,13 +33,9 @@ module Data.Algorithms.Palindromes.PalindromesUtils
     , indexedLengthToRange
     , rangeToLength
     , dnaToChar
-    , couplableWithItself
     , couplableWithItselfAtIndex
     ) where
 
-import Data.Array (Array, bounds, listArray, (!))
-import Data.Char (isControl, isPunctuation, isSpace)
-import Data.Foldable (Foldable (toList))
 import Data.Maybe (fromJust, isNothing)
 
 import qualified Data.Vector as V
@@ -78,112 +67,6 @@ punctuation, the start character index is 1 (the first 'a') and the end characte
 is 6 (the 'c' after the second 'a'). The string representing this text palindrome is
 "ab..a". -}
 
-{-
--------------------------------------
-  Begin functions to show single palindromes
--------------------------------------
--}
-
-{- |
-  Show palindrome generates a string of a single palindrome that is contained in the input.
-  The DNA version works with the assumption that every centre is between letters.
--}
-showPalindromeDNA :: (Show a) => V.Vector a -> (Int, Int) -> String
-showPalindromeDNA input (len, pos) =
-    let startpos = pos - len `div` 2
-    in  (show startpos ++)
-            . (" to " ++)
-            . (show (startpos + len) ++)
-            . ("\t" ++)
-            . (show (V.take len $ V.drop startpos input) ++)
-            . ("\t" ++)
-            $ show len
-
-{- |
-  Show palindrome generates a string of a single palindrome that is contained in the input.
-  This version works with the assumption that centres can be on top and between letters.
--}
-showPalindrome :: (Show a) => V.Vector a -> (Int, Int) -> String
-showPalindrome input (len, pos) = show a
-  where
-    startpos = pos `div` 2 - len `div` 2
-    a = V.take len $ V.drop startpos input
-
-{- |
-  Show palindrome generates a string of a single palindrome that is contained in the input.
-  This version works with the assumption that centres can be on top and between letters.
-  Due to the way `show` works with text symbols, this procedure is a bit longer than the generic version.
--}
-showTextPalindrome
-    :: V.Vector Char -> Array Int Int -> (Int, Int) -> String
-showTextPalindrome input positionTextInput (len, pos) =
-    let startpos = pos `div` 2 - len `div` 2
-        endpos =
-            if odd len
-                then pos `div` 2 + len `div` 2
-                else pos `div` 2 + len `div` 2 - 1
-        (pfirst, plast) = bounds positionTextInput
-        (ifirst, ilast) = (0, 1 + V.length input)
-    in  if endpos < startpos
-            then []
-            else
-                {-
-                   This block of code is used to add punctuation at the start
-                   and end of the palindrome to the returned value
-                -}
-                let start =
-                        if startpos > pfirst
-                            then (positionTextInput ! (startpos - 1)) + 1
-                            else ifirst
-                    end =
-                        if endpos < plast
-                            then (positionTextInput ! (endpos + 1)) - 1
-                            else ilast
-                in  toList $
-                        V.filter
-                            (\c -> c /= '\n' && c /= '\r')
-                            (V.take (end - start + 1) (V.drop start input))
-
-{-
--------------------------------------
-  End functions to show single palindromes
--------------------------------------
--}
-
-{-
---------------------------------------
-  Begin punctuation utility functions
---------------------------------------
--}
-
-{- |
-  Checks whether a character is a letter
--}
-myIsLetterC :: Char -> Bool
-myIsLetterC c =
-    not (isPunctuation c)
-        && not (isControl c)
-        && not (isSpace c)
-
-{- |
-  Checks whether the range specified by the first 2 parameters is surrounded by punctuation in the 3rd parameter.
-    If begin is out of bounds, it still returns True if there is punctuation after index end.
-    If end is out of bounds, it still returns True if there is punctuation before index begin.
-    If both are out of bounds return True
-    Note that out of bounds is considered True as this would be an end/start of a file which is considered punctuation
--}
-surroundedByPunctuation :: Int -> Int -> V.Vector Char -> Bool
-surroundedByPunctuation begin end input
-    | begin > afirst && end < alast =
-        not (myIsLetterC ((V.!) input (begin - 1)))
-            && not (myIsLetterC ((V.!) input (end + 1))) -- returns if the positions around begin and end are surrounded
-    | begin <= afirst && end < alast = not (myIsLetterC ((V.!) input (end + 1)))
-    | begin <= afirst && end >= alast = True
-    | begin > afirst && end >= alast = not (myIsLetterC ((V.!) input (begin - 1)))
-    | otherwise = error "surroundedByPunctuation"
-  where
-    (afirst, alast) = (0, V.length input - 1)
-
 {- |
   Convert a list of palindrome center lengths to a list of (start, end) pairs
 -}
@@ -208,27 +91,6 @@ rangeToLength :: (Int, Int) -> Int
 rangeToLength (start, end)
     | end - start < 0 = 0
     | otherwise = end - start
-
-{-
---------------------------------------
-  End punctuation utility functions
---------------------------------------
--}
-
-{-
-----------------------------------------------------
-  Begin foldable (Seq/Array/List) utility functions
-----------------------------------------------------
--}
-
-listArrayl0 :: [a] -> Array Int a
-listArrayl0 string = listArray (0, length string - 1) string
-
-vecToArray :: V.Vector a -> Array Int a
-vecToArray v = listArray bound content
-  where
-    bound = (0, V.length v - 1)
-    content = V.toList v
 
 {-
 -----------------------------
@@ -307,17 +169,13 @@ dnaToChar N = 'N'
 ---------------------------------------
 -}
 
--- | Returns whether an element is couplable with itself.
-couplableWithItself :: (Couplable a) => a -> Bool
-couplableWithItself element = element =:= element
-
 {- | Safe function which returns whether an element at an index in the input vector is
   couplable with itself.
 -}
 couplableWithItselfAtIndex :: (Couplable a) => V.Vector a -> Int -> Bool
 couplableWithItselfAtIndex input index
     | index < 0 || index >= V.length input = False
-    | otherwise = couplableWithItself element
+    | otherwise = element =:= element
   where
     element = input V.! index
 

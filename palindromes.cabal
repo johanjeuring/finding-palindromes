@@ -44,12 +44,7 @@ library
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
-      array
-    , base        >=4.17 && <5
-    , bytestring
-    , containers
-    , HUnit
-    , QuickCheck  >=2.14 && <3.0
+      base        >=4.17 && <5
     , vector
 
 executable palindromes
@@ -69,10 +64,7 @@ executable palindromes
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
-      array
-    , base        >=4.17 && <5
-    , bytestring
-    , containers
+      base        >=4.17 && <5
     , vector
 
 test-suite property-tests
@@ -96,10 +88,7 @@ test-suite property-tests
     ITLinear
 
   build-depends:
-      array
-    , base         >=3.0  && <5
-    , bytestring
-    , containers
+      base         >=3.0  && <5
     , HUnit
     , palindromes
     , QuickCheck   >=2.14 && <3.0

@@ -17,7 +17,7 @@
 module Data.Algorithms.Palindromes.Options where
 
 import Data.Algorithms.Palindromes.Combinators
-    ( Complexity (ComLinear, ComQuadratic, gapSize, maxError)
+    ( Complexity (..)
     , LengthMod
     , Output (..)
     , Variant (..)

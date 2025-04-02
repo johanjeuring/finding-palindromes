@@ -40,7 +40,7 @@ import Data.Algorithms.Palindromes.Output
     )
 import Data.Algorithms.Palindromes.PalindromesUtils
     ( Couplable
-    , DNA (..)
+    , DNA
     , Palindrome (..)
     , indexedLengthToRange
     )

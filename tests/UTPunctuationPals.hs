@@ -1,8 +1,7 @@
 module UTPunctuationPals where
 
-import Data.Vector (fromList)
 import PalindromeMethods (longestPunctuationPalindrome)
-import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
+import Test.HUnit (Test (..), (~:), (~?=))
 
 testListPunctuation :: [Test]
 testListPunctuation =

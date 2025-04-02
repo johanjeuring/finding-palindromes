@@ -1,12 +1,8 @@
 module UTTextPals where
 
 import Data.Algorithms.Palindromes.Combinators (Complexity)
-import Data.Vector (fromList)
 import PalindromeMethods (longestTextPalindrome)
 import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
-
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as BC
 
 testListText :: Complexity -> [Test]
 testListText t =

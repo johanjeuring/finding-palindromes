@@ -215,7 +215,7 @@ validPalLength settings pal = case variant settings of
 propValidBoundariesChar :: Settings -> Property
 propValidBoundariesChar settings = forAll stringGenerator $ \originalString ->
     all
-        (checkValidBoundaries settings)
+        (checkValidBoundariesChar settings originalString)
         ( createCombinator
             (variant settings)
             (complexity settings)
@@ -227,7 +227,7 @@ propValidBoundariesChar settings = forAll stringGenerator $ \originalString ->
 propValidBoundariesDNA :: Settings -> Property
 propValidBoundariesDNA settings = forAll dnaGenerator $ \dnaSeq ->
     all
-        (checkValidBoundaries settings)
+        (checkValidBoundariesDNA settings)
         ( createCombinator
             (variant settings)
             (complexity settings)
@@ -236,13 +236,15 @@ propValidBoundariesDNA settings = forAll dnaGenerator $ \dnaSeq ->
         )
 
 -- | Tests if the palindrome range of a palindrome corresponds to the palindrome length
-checkValidBoundaries :: Settings -> Palindrome -> Bool
-checkValidBoundaries settings pal = case variant settings of
+checkValidBoundariesChar :: Settings -> String -> Palindrome -> Bool
+checkValidBoundariesChar settings inputString pal = case variant settings of
     VarPlain -> let (s, e) = palRange pal in e - s == palLength pal
-    VarWord -> countWordsInRange (palRange pal) (palText pal) == palLength pal
-    VarDNA -> let (s, e) = palRange pal in e - s == palLength pal
+    VarWord -> countWordsInRange (palRange pal) inputString == palLength pal
     _ ->
         let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
+
+checkValidBoundariesDNA :: Settings -> Palindrome -> Bool
+checkValidBoundariesDNA settings pal = let (s, e) = palRange pal in e - s == palLength pal
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range
 countWordsInRange :: (Int, Int) -> String -> Int
@@ -310,5 +312,5 @@ propAllowedPalLengthDNA settings = forAll dnaGenerator $ \dnaSeq ->
 -- | Checks if the length of a palindrome is between the minimum and maximum length
 isAllowedPalLength :: Settings -> Palindrome -> Bool
 isAllowedPalLength settings pal = case lengthMod settings of
-    (l, Just u) -> palLength pal >= l && palLength pal <= u
-    (l, Nothing) -> palLength pal >= l
+    (l, Just u) -> palLength pal >= l && palLength pal <= u || palText pal == ""
+    (l, Nothing) -> palLength pal >= l || palText pal == ""

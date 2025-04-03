@@ -81,7 +81,6 @@ test-suite property-tests
   main-is:        Main.hs
   other-modules:
     PalindromeMethods
-    PalindromeProperties
     QuickCheckProperties
     QuickCheckSettings
     UTCombinators

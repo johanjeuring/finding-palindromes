@@ -34,13 +34,16 @@ library
   exposed-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.Combinators
+    Data.Algorithms.Palindromes.Couplable
+    Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
-    Data.Algorithms.Palindromes.PalindromesUtils
+    Data.Algorithms.Palindromes.Palindrome
     Data.Algorithms.Palindromes.PostProcessing
     Data.Algorithms.Palindromes.PreProcessing
     Data.Algorithms.Palindromes.QuadraticAlgorithm
+    Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
@@ -54,13 +57,16 @@ executable palindromes
   other-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.Combinators
+    Data.Algorithms.Palindromes.Couplable
+    Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
-    Data.Algorithms.Palindromes.PalindromesUtils
+    Data.Algorithms.Palindromes.Palindrome
     Data.Algorithms.Palindromes.PostProcessing
     Data.Algorithms.Palindromes.PreProcessing
     Data.Algorithms.Palindromes.QuadraticAlgorithm
+    Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
 
   build-depends:

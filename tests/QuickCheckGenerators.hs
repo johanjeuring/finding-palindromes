@@ -45,37 +45,37 @@ maxPalInPalGeneration :: Float
 maxPalInPalGeneration = 5
 
 generatePunctuationPal :: Settings -> Gen String
-generatePunctuationPal = generatePalindromeString puncStringGenerator
+generatePunctuationPal = generatePalindromeString puncCharGenerator
 
 generatePlainPalindrome :: Settings -> Gen String
-generatePlainPalindrome = generatePalindromeString plainStringGenerator
+generatePlainPalindrome = generatePalindromeString plainCharGenerator
 
 generateDNAPalindrome :: Settings -> Gen [DNA]
-generateDNAPalindrome = generatePalindromeString dnaStringGenerator
+generateDNAPalindrome = generatePalindromeString dnaCharGenerator
 
 generateWordPalindrome :: Settings -> Gen String
-generateWordPalindrome = wordToString . generatePalindromeString wordStringGenerator
+generateWordPalindrome = wordToString . generatePalindromeString wordGenerator
 
 wordToString :: Gen [[Char]] -> Gen String
 wordToString gen = do unwords <$> gen
 
 -- generates random strings for punctuation palindromes
 -- these can be anything
-puncStringGenerator :: Gen Char
-puncStringGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
+puncCharGenerator :: Gen Char
+puncCharGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
 
 -- generates random strings for plain palindromes
-plainStringGenerator :: Gen Char
-plainStringGenerator = elements (['a' .. 'z'] ++ ['A' .. 'Z'])
+plainCharGenerator :: Gen Char
+plainCharGenerator = elements (['a' .. 'z'] ++ ['A' .. 'Z'])
 
 instance Arbitrary DNA where
     arbitrary = elements [A, T, C, G]
 
-dnaStringGenerator :: Gen DNA
-dnaStringGenerator = arbitrary :: Gen DNA
+dnaCharGenerator :: Gen DNA
+dnaCharGenerator = arbitrary :: Gen DNA
 
-wordStringGenerator :: Gen [Char]
-wordStringGenerator = do
+wordGenerator :: Gen [Char]
+wordGenerator = do
     randomWordLength <- randomInt 2 7
     vectorOf randomWordLength $
         choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n']) -- TODO are these all possible characters?

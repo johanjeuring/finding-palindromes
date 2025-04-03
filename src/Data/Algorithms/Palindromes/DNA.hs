@@ -1,5 +1,8 @@
 module Data.Algorithms.Palindromes.DNA where
 
+import Data.Algorithms.Palindromes.Couplable (Couplable (..))
+import Data.Maybe (fromJust, isNothing)
+
 -- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA has palindromes, instead couplable should be used
 data DNA = A | T | C | G | N deriving (Show, Eq)
 

@@ -8,7 +8,7 @@ module Data.Algorithms.Palindromes.QuadraticAlgorithm
     , lengthApproximatePalindrome
     ) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
+import Data.Algorithms.Palindromes.Couplable
     ( Couplable (..)
     )
 import Data.List as L

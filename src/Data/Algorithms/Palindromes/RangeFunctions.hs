@@ -1,4 +1,9 @@
-module Data.Algorithms.Palindromes.RangeFunctions where
+module Data.Algorithms.Palindromes.RangeFunctions
+    ( lengthsToRanges
+    , indexedLengthToRange
+    , rangesToLengths
+    , rangeToLength
+    ) where
 
 {- |
   Convert a list of palindrome center lengths to a list of (start, end) pairs

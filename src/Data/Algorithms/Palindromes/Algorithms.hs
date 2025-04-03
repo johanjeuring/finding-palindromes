@@ -16,8 +16,8 @@ module Data.Algorithms.Palindromes.Algorithms
     , quadraticAlgorithm
     ) where
 
+import Data.Algorithms.Palindromes.Couplable (Couplable)
 import Data.Algorithms.Palindromes.LinearAlgorithm (extendPalindromeS)
-import Data.Algorithms.Palindromes.PalindromesUtils (Couplable)
 import Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )

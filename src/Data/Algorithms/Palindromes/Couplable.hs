@@ -1,4 +1,12 @@
-module Data.Algorithms.Palindromes.Couplable where
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
+
+module Data.Algorithms.Palindromes.Couplable
+    ( Couplable (..)
+    , couplableWithItselfAtIndex
+    ) where
+
+import Data.Vector as V
 
 {- |
   Shows that some element belongs to another element.

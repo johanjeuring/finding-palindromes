@@ -27,6 +27,8 @@ import Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
     )
+import Data.Algorithms.Palindromes.Couplable (Couplable)
+import Data.Algorithms.Palindromes.DNA (DNA)
 import Data.Algorithms.Palindromes.Output
     ( allLengths
     , allWords
@@ -38,12 +40,7 @@ import Data.Algorithms.Palindromes.Output
     , longestWord
     , wordAt
     )
-import Data.Algorithms.Palindromes.PalindromesUtils
-    ( Couplable
-    , DNA
-    , Palindrome (..)
-    , indexedLengthToRange
-    )
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 import Data.Algorithms.Palindromes.PostProcessing
     ( filterMax
     , filterMin
@@ -54,6 +51,7 @@ import Data.Algorithms.Palindromes.PreProcessing
     , textToDNA
     , textToWords
     )
+import Data.Algorithms.Palindromes.RangeFunctions (indexedLengthToRange)
 import Data.Maybe (fromJust, isNothing)
 
 import qualified Data.Vector as V

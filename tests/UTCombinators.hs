@@ -5,10 +5,9 @@ import Data.Algorithms.Palindromes.Combinators
     , Variant (VarDNA, VarPlain, VarText, VarWord)
     , createCombinator
     )
-import Data.Algorithms.Palindromes.PalindromesUtils
-    ( DNA (A, C, G, T)
-    , Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
-    , dnaToChar
+import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), dnaToChar)
+import Data.Algorithms.Palindromes.Palindrome
+    ( Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
     )
 import Test.HUnit (Test (..), (~:), (~?=))
 import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)

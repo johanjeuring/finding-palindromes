@@ -81,11 +81,11 @@ test-suite property-tests
     PalindromeMethods
     PalindromeProperties
     UTCombinators
+    UTCouplable
     UTDNAPals
     UTExtendPals
     UTGetLeftRight
     UTLinearAlgorithm
-    UTPalindromesUtils
     UTProcessing
     UTPunctuationPals
     UTQuadraticAlgorithm

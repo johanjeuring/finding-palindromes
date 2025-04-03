@@ -53,7 +53,7 @@ generateWordPalindrome = generatePalindromeString wordStringGenerator
 -- generates random strings for punctuation palindromes
 -- these can be anything
 puncStringGenerator :: Gen String
-puncStringGenerator = arbitrary :: Gen String
+puncStringGenerator = listOf (choose (' ', '~') `suchThat` (`notElem` ['\\', '"']))
 
 -- generates random strings for plain palindromes
 plainStringGenerator :: Gen String
@@ -68,7 +68,7 @@ dnaStringGenerator = arbitrary :: Gen [DNA]
 randomWord :: Gen String
 randomWord = do
     randomFloat <- genFloat
-    randomString <- listOf (choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])) -- arbitrary :: Gen String
+    randomString <- listOf (choose (' ', '~') `suchThat` (`notElem` ['\\', '"']))
     let -- make a word of a random length between 2 and 7
         randomWordLength = max 2 $ round $ 7 * randomFloat
         randomWord = take randomWordLength randomString

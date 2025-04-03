@@ -63,8 +63,8 @@ propertyList =
 stringGenerator :: Settings -> Gen String
 stringGenerator settings = case variant settings of
     VarWord -> generateWordPalindrome settings
-    VarPunctuation -> generatePunctuationPal settings
-    _ -> generatePlainPalindrome settings
+    VarPlain -> generatePlainPalindrome settings
+    _ -> generatePunctuationPal settings
 
 dnaGenerator :: Settings -> Gen [DNA]
 dnaGenerator = generateDNAPalindrome

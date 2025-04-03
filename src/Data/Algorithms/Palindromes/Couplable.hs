@@ -1,4 +1,15 @@
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-- \|
+-- Module      :  Data.Algorithms.Palindromes.Couplable
+-- Copyright   :  (c) 2007 - 2013 Johan Jeuring
+-- License     :  BSD3
+--
+-- Maintainer  :  johan@jeuring.net
+-- Stability   :  experimental
+-- Portability :  portable
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MonoLocalBinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Data.Algorithms.Palindromes.Couplable

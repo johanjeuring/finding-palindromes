@@ -1,3 +1,15 @@
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-- \|
+-- Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
+-- Copyright   :  (c) 2007 - 2013 Johan Jeuring
+-- License     :  BSD3
+--
+-- Maintainer  :  johan@jeuring.net
+-- Stability   :  experimental
+-- Portability :  portable
+{-# LANGUAGE MonoLocalBinds #-}
+
 module Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     , getLeftRightCenterBetweenElems

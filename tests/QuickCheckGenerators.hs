@@ -17,10 +17,12 @@ import Test.QuickCheck
     , Gen
     , Property
     , arbitrary
+    , choose
     , forAll
     , generate
     , listOf
     , oneof
+    , suchThat
     , vectorOf
     )
 import Test.QuickCheck.Gen (elements, genFloat)
@@ -66,7 +68,7 @@ dnaStringGenerator = arbitrary :: Gen [DNA]
 randomWord :: Gen String
 randomWord = do
     randomFloat <- genFloat
-    randomString <- arbitrary :: Gen String
+    randomString <- listOf (choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])) -- arbitrary :: Gen String
     let -- make a word of a random length between 2 and 7
         randomWordLength = max 2 $ round $ 7 * randomFloat
         randomWord = take randomWordLength randomString

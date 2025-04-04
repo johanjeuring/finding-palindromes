@@ -18,7 +18,7 @@ module Data.Algorithms.Palindromes.PreProcessing
     , textToWords
     ) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
+import Data.Algorithms.Palindromes.DNA
     ( DNA
     , toDNA
     )

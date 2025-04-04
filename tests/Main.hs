@@ -25,10 +25,10 @@ import UTCombinators
     , propValidPalindromeRangeAndTextWord
     , testListCombinators
     )
+import UTCouplable (testListCouplable)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
-import UTPalindromesUtils (testListPalindromesUtils)
 import UTProcessing (testListProcessing)
 import UTPunctuationPals (testListPunctuation)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
@@ -47,7 +47,7 @@ tests =
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListProcessing
-            ++ testListPalindromesUtils
+            ++ testListCouplable
             ++ testListWordPalindromes ComLinear
             ++ testListCombinators
             ++ testListITLinear

@@ -6,7 +6,7 @@ import Data.Algorithms.Palindromes.Combinators
     , Variant (..)
     , createReadableCombinator
     )
-import Data.Algorithms.Palindromes.PalindromesUtils
+import Data.Algorithms.Palindromes.Couplable
     ( Couplable
     )
 

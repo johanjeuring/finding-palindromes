@@ -1,9 +1,11 @@
-module UTPalindromesUtils where
+module UTCouplable where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
+import Data.Algorithms.Palindromes.Couplable
     ( Couplable ((=:=))
-    , DNA (A, C, G, T)
     , couplableWithItselfAtIndex
+    )
+import Data.Algorithms.Palindromes.DNA
+    ( DNA (A, C, G, T)
     , toDNA
     )
 import Data.Maybe (fromJust)
@@ -11,8 +13,8 @@ import Test.HUnit (Test (..), (~:), (~?=))
 
 import qualified Data.Vector as V
 
-testListPalindromesUtils :: [Test]
-testListPalindromesUtils =
+testListCouplable :: [Test]
+testListCouplable =
     testsCouplable
         ++ [ testCouplableWithItselfTrue
            , testCouplableWithItselfFalse

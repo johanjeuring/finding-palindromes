@@ -22,7 +22,7 @@ module Data.Algorithms.Palindromes.Output
     , wordAt
     ) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
+import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     )
 import Data.Algorithms.Palindromes.PreProcessing

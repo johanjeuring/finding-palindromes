@@ -1,7 +1,5 @@
 -----------------------------------------------------------------------------
-
 -----------------------------------------------------------------------------
-
 -- \|
 -- Module      :  Data.Algorithms.Palindromes.Algorithms
 -- Copyright   :  (c) 2007 - 2013 Johan Jeuring
@@ -10,14 +8,15 @@
 -- Maintainer  :  johan@jeuring.net
 -- Stability   :  experimental
 -- Portability :  portable
+{-# LANGUAGE MonoLocalBinds #-}
 
 module Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
     ) where
 
+import Data.Algorithms.Palindromes.Couplable (Couplable)
 import Data.Algorithms.Palindromes.LinearAlgorithm (extendPalindromeS)
-import Data.Algorithms.Palindromes.PalindromesUtils (Couplable)
 import Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )

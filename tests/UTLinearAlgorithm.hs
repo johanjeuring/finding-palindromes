@@ -1,6 +1,6 @@
 module UTLinearAlgorithm (testListLinearAlgorithm) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils (DNA (..), toDNA)
+import Data.Algorithms.Palindromes.DNA (DNA (..), toDNA)
 import Test.HUnit (Test (..), assertEqual)
 
 import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P

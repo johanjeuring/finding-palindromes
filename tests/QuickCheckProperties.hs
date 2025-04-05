@@ -38,9 +38,14 @@ import Test.QuickCheck
 
 import qualified Data.Algorithms.Palindromes.Combinators as C
 
--- List of to-be-tested properties, where each property is connected to all the settings
 propertyList :: [Property]
 propertyList =
+    map propValidPalindromeReverseChar settingsListChar
+        ++ map propValidPalindromeReverseDNA settingsListDNA
+
+-- List of to-be-tested properties, where each property is connected to all the settings
+propertyListx :: [Property]
+propertyListx =
     -- Property 1
     map propValidPalindromeRangeAndTextChar settingsListChar
         ++ map propValidPalindromeRangeAndTextDNA settingsListDNA
@@ -164,7 +169,7 @@ isPalindromeGapsErrorsDNA settings pal = mismatches <= errors
         length
             [ ()
             | i <- [0 .. (length pal' `div` 2) - 1]
-            , (pal' !! i) =:= (pal' !! (length pal' - 1 - i))
+            , not $ (pal' !! i) =:= (pal' !! (length pal' - 1 - i))
             ]
 
 -- | Removes gap from palindrome

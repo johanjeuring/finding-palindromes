@@ -4,7 +4,7 @@ import Data.Char (isAlpha, readLitChar, toLower)
 import PalindromeMethods (longestTextPalindrome)
 import Test.QuickCheck (Gen, Property, arbitrary, forAll)
 
-import qualified Data.Algorithms.Palindromes.Combinators as C
+import qualified Data.Algorithms.Palindromes.Finders as C
 import qualified Data.Algorithms.Palindromes.LinearAlgorithm as LA
 
 longestPalindromesQ :: String -> [Int]

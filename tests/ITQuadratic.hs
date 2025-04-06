@@ -1,10 +1,10 @@
 module ITQuadratic where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , OutputFormat (..)
     , Variant (..)
-    , createReadableCombinator
+    , findPalindromesFormatted
     )
 import Test.HUnit (Test (..), (~:), (~?=))
 
@@ -88,7 +88,7 @@ testListITQuadratic =
 -- String: Contains a gapped palindrome with punctuation
 testITQuadratic1 =
     "testITQuadratic1"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -99,7 +99,7 @@ testITQuadratic1 =
 -- String: Contains a nested palindrome with punctuation
 testITQuadratic2 =
     "testITQuadratic2"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -110,7 +110,7 @@ testITQuadratic2 =
 -- String: Does not contain a palindrome
 testITQuadratic3 =
     "testITQuadratic3"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 4, maxError = 4}
@@ -121,7 +121,7 @@ testITQuadratic3 =
 -- String: Contains a gapped even palindrome
 testITQuadratic4 =
     "testITQuadratic4"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -134,7 +134,7 @@ testITQuadratic4 =
 -- String: Contains an odd-gapped dna palindrome
 testITQuadratic5 =
     "testITQuadratic5"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWords
             ComQuadratic{gapSize = 1, maxError = 2}
@@ -146,7 +146,7 @@ testITQuadratic5 =
 -- String: Contains an even nested palindrome
 testITQuadratic6 =
     "testITQuadratic6"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -157,7 +157,7 @@ testITQuadratic6 =
 -- String: Contains an even gapped palindrome with punctuation
 testITQuadratic7 =
     "testITQuadratic7"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComQuadratic{gapSize = 4, maxError = 4}
@@ -169,7 +169,7 @@ testITQuadratic7 =
 -- String: Contains an odd gapped palindrome
 testITQuadratic8 =
     "testITQuadratic8"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComQuadratic{gapSize = 1, maxError = 2}
@@ -181,7 +181,7 @@ testITQuadratic8 =
 -- String: Contains an odd gapped palindrome
 testITQuadratic9 =
     "testITQuadratic9"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -193,7 +193,7 @@ testITQuadratic9 =
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic10 =
     "testITQuadratic10"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWords
             ComQuadratic{gapSize = 5, maxError = 5}
@@ -205,7 +205,7 @@ testITQuadratic10 =
 -- String: Contains a palindrome with punctuation
 testITQuadratic11 =
     "testITQuadratic11"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -216,7 +216,7 @@ testITQuadratic11 =
 -- String: Contains an even palindrome
 testITQuadratic12 =
     "testITQuadratic12"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -227,7 +227,7 @@ testITQuadratic12 =
 -- String: Contains an approximate palindrome
 testITQuadratic13 =
     "testITQuadratic13"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -238,7 +238,7 @@ testITQuadratic13 =
 -- String: Contains no palindrome
 testITQuadratic14 =
     "testITQuadratic14"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 6, maxError = 6}
@@ -249,7 +249,7 @@ testITQuadratic14 =
 -- String: Contains an even palindrome with punctuation
 testITQuadratic15 =
     "testITQuadratic15"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComQuadratic{gapSize = 1, maxError = 2}
@@ -260,7 +260,7 @@ testITQuadratic15 =
 -- String: Contains an even palindrome
 testITQuadratic16 =
     "testITQuadratic16"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -271,7 +271,7 @@ testITQuadratic16 =
 -- String: Contains an odd palindrome with punctuation. Contains a special character.
 testITQuadratic17 =
     "testITQuadratic17"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -282,7 +282,7 @@ testITQuadratic17 =
 -- String: Contains an odd palindrome
 testITQuadratic18 =
     "testITQuadratic18"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComQuadratic{gapSize = 5, maxError = 5}
@@ -293,7 +293,7 @@ testITQuadratic18 =
 -- String: Contains an approximate palindrome with punctuation
 testITQuadratic19 =
     "testITQuadratic19"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -304,7 +304,7 @@ testITQuadratic19 =
 -- String: Contains no palindrome, contains punctuation
 testITQuadratic20 =
     "testITQuadratic20"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -315,7 +315,7 @@ testITQuadratic20 =
 -- String: Contains an odd approximate palindrome, with punctuation
 testITQuadratic21 =
     "testITQuadratic21"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 10, maxError = 10}
@@ -326,7 +326,7 @@ testITQuadratic21 =
 -- String: Contains an odd approximate palindrome
 testITQuadratic22 =
     "testITQuadratic22"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -337,7 +337,7 @@ testITQuadratic22 =
 -- String: Contains an even gapped palindrome, with punctuation
 testITQuadratic23 =
     "testITQuadratic23"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComQuadratic{gapSize = 1, maxError = 2}
@@ -348,7 +348,7 @@ testITQuadratic23 =
 -- String: Contains an even gapped palindrome
 testITQuadratic24 =
     "testITQuadratic24"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -359,7 +359,7 @@ testITQuadratic24 =
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic25 =
     "testITQuadratic25"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComQuadratic{gapSize = 10, maxError = 10}
@@ -370,7 +370,7 @@ testITQuadratic25 =
 -- String: Contains an odd gapped palindrome
 testITQuadratic26 =
     "testITQuadratic26"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComQuadratic{gapSize = 3, maxError = 2}
@@ -381,7 +381,7 @@ testITQuadratic26 =
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITQuadratic27 =
     "testITQuadratic27"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -392,7 +392,7 @@ testITQuadratic27 =
 -- String: Contains an even palindrome
 testITQuadratic28 =
     "testITQuadratic28"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComQuadratic{gapSize = 9, maxError = 9}
@@ -403,7 +403,7 @@ testITQuadratic28 =
 -- String: Contains an odd palindrome
 testITQuadratic29 =
     "testITQuadratic29"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -414,7 +414,7 @@ testITQuadratic29 =
 -- String: Contains an odd palindrome with punctuation
 testITQuadratic30 =
     "testITQuadratic30"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -425,7 +425,7 @@ testITQuadratic30 =
 -- String: Contains an even palindrome with punctuation
 testITQuadratic31 =
     "testITQuadratic31"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWord
             ComQuadratic{gapSize = 3, maxError = 2}
@@ -436,7 +436,7 @@ testITQuadratic31 =
 -- String: Conains an even gapped palindrome
 testITQuadratic32 =
     "testITQuadratic32"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -447,7 +447,7 @@ testITQuadratic32 =
 -- String: Contains an even palindrome with punctuation
 testITQuadratic33 =
     "testITQuadratic33"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWords
             ComQuadratic{gapSize = 10, maxError = 5}
@@ -458,7 +458,7 @@ testITQuadratic33 =
 -- String: Contains an odd punctuation palindrome
 testITQuadratic34 =
     "testITQuadratic34"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -469,7 +469,7 @@ testITQuadratic34 =
 -- String: Contains an odd punctuation palindrome
 testITQuadratic35 =
     "testITQuadratic35"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -480,7 +480,7 @@ testITQuadratic35 =
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic36 =
     "testITQuadratic36"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -491,7 +491,7 @@ testITQuadratic36 =
 -- String: Contains an approximate, even palindrome with punctuation
 testITQuadratic37 =
     "testITQuadratic37"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -502,7 +502,7 @@ testITQuadratic37 =
 -- String: Contains an approximate odd palindrome
 testITQuadratic38 =
     "testITQuadratic38"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -513,7 +513,7 @@ testITQuadratic38 =
 -- String: Contains no palindrome, with punctuation
 testITQuadratic39 =
     "testITQuadratic39"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -524,7 +524,7 @@ testITQuadratic39 =
 -- String: Contains no palindrome
 testITQuadratic40 =
     "testITQuadratic40"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLength
             ComQuadratic{gapSize = 6, maxError = 3}
@@ -535,7 +535,7 @@ testITQuadratic40 =
 -- String: Contains an even palindrome, contains punctuation and special characters
 testITQuadratic41 =
     "testITQuadratic41"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -546,7 +546,7 @@ testITQuadratic41 =
 -- String: Contains an even palindrome
 testITQuadratic42 =
     "testITQuadratic42"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWords
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -557,7 +557,7 @@ testITQuadratic42 =
 -- String: Contains an odd palindrome, contains punctuations and special characters
 testITQuadratic43 =
     "testITQuadratic43"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -568,7 +568,7 @@ testITQuadratic43 =
 -- String: Contains an odd palindrome
 testITQuadratic44 =
     "testITQuadratic44"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWords
             ComQuadratic{gapSize = 5, maxError = 2}
@@ -579,7 +579,7 @@ testITQuadratic44 =
 -- String: Contains an approximate even palindrome
 testITQuadratic45 =
     "testITQuadratic45"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLength
             ComQuadratic{gapSize = 1, maxError = 2}
@@ -590,7 +590,7 @@ testITQuadratic45 =
 -- String: Contains an approximate even palindrome
 testITQuadratic46 =
     "testITQuadratic46"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComQuadratic{gapSize = 2, maxError = 0}
@@ -601,7 +601,7 @@ testITQuadratic46 =
 -- String: Contains an approximate odd palindrome
 testITQuadratic47 =
     "testITQuadratic47"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -612,7 +612,7 @@ testITQuadratic47 =
 -- String: Contains an approximate odd palindrome
 testITQuadratic48 =
     "testITQuadratic48"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComQuadratic{gapSize = 7, maxError = 7}
@@ -623,7 +623,7 @@ testITQuadratic48 =
 -- String: Contains an even gapped palindrome with punctuation
 testITQuadratic49 =
     "testITQuadratic49"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
@@ -634,7 +634,7 @@ testITQuadratic49 =
 -- String: Contains an even gapped palindrome
 testITQuadratic50 =
     "testITQuadratic50"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
@@ -645,7 +645,7 @@ testITQuadratic50 =
 -- String: Contains an odd gapped palindrome
 testITQuadratic51 =
     "testITQuadratic51"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 8}
@@ -656,7 +656,7 @@ testITQuadratic51 =
 -- String: Contains an odd gapped palindrome
 testITQuadratic52 =
     "testITQuadratic52"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComQuadratic{gapSize = 3, maxError = 0}
@@ -667,7 +667,7 @@ testITQuadratic52 =
 -- String: Contains an even palindrome with punctuation
 testITQuadratic53 =
     "testITQuadratic53"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWords
             ComQuadratic{gapSize = 1, maxError = 2}
@@ -678,7 +678,7 @@ testITQuadratic53 =
 -- String: Contains an even palindrome
 testITQuadratic54 =
     "testITQuadratic54"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWords
             (ComQuadratic 0 0)
@@ -689,7 +689,7 @@ testITQuadratic54 =
 -- String: Contains an odd palindrome
 testITQuadratic55 =
     "testITQuadratic55"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLength
             (ComQuadratic 9 9)
@@ -700,7 +700,7 @@ testITQuadratic55 =
 -- String: Contains an odd palindrome with punctuation
 testITQuadratic56 =
     "testITQuadratic56"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             (ComQuadratic 3 2)
@@ -711,7 +711,7 @@ testITQuadratic56 =
 -- String: Contains no palindromes, has punctuation
 testITQuadratic57 =
     "testITQuadratic57"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             (ComQuadratic 0 1)
@@ -722,7 +722,7 @@ testITQuadratic57 =
 -- String: Contains no palindromes
 testITQuadratic58 =
     "testITQuadratic58"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLengths
             (ComQuadratic 0 0)
@@ -733,7 +733,7 @@ testITQuadratic58 =
 -- String: Contains an even palindrome, has punctuation
 testITQuadratic59 =
     "testITQuadratic59"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             (ComQuadratic 0 1)
@@ -744,7 +744,7 @@ testITQuadratic59 =
 -- String: Contains an even palindrome
 testITQuadratic60 =
     "testITQuadratic60"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             (ComQuadratic 1 2)
@@ -755,7 +755,7 @@ testITQuadratic60 =
 -- String: Contains an odd palindrome, contains multiple spaces
 testITQuadratic61 =
     "testITQuadratic61"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             (ComQuadratic 3 3)
@@ -766,7 +766,7 @@ testITQuadratic61 =
 -- String: Contains an odd palindrome
 testITQuadratic62 =
     "testITQuadratic62"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             (ComQuadratic 0 9)
@@ -777,7 +777,7 @@ testITQuadratic62 =
 -- String: Contains an approximate even palindrome with punctuation
 testITQuadratic63 =
     "testITQuadratic63"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             (ComQuadratic 0 2)
@@ -788,7 +788,7 @@ testITQuadratic63 =
 -- String: Contains an approximate even palindrome
 testITQuadratic64 =
     "testITQuadratic64"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             (ComQuadratic 0 1)
@@ -799,7 +799,7 @@ testITQuadratic64 =
 -- String: Contains odd approximate palindrome, has punctuation
 testITQuadratic65 =
     "testITQuadratic65"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             (ComQuadratic 0 0)
@@ -810,7 +810,7 @@ testITQuadratic65 =
 -- String: Contains odd approximate palindrome
 testITQuadratic66 =
     "testITQuadratic66"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLengths
             (ComQuadratic 9 9)
@@ -821,7 +821,7 @@ testITQuadratic66 =
 -- String: Contains a gapped even palindrome with punctuation
 testITQuadratic67 =
     "testITQuadratic67"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLengths
             (ComQuadratic 2 0)
@@ -832,7 +832,7 @@ testITQuadratic67 =
 -- String: Contains a gapped even palindrome
 testITQuadratic68 =
     "testITQuadratic68"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             (ComQuadratic 2 1)
@@ -843,7 +843,7 @@ testITQuadratic68 =
 -- String: Contains a gapped odd palindrome with punctuation
 testITQuadratic69 =
     "testITQuadratic69"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             (ComQuadratic 3 1)
@@ -854,7 +854,7 @@ testITQuadratic69 =
 -- String: Contains a gapped odd palindrome
 testITQuadratic70 =
     "testITQuadratic70"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             (ComQuadratic 3 0)
@@ -865,7 +865,7 @@ testITQuadratic70 =
 -- String: Contains an even palindrome with punctuation
 testITQuadratic71 =
     "testITQuadratic71"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             (ComQuadratic 6 6)
@@ -876,7 +876,7 @@ testITQuadratic71 =
 -- String: Contains an even palindrome
 testITQuadratic72 =
     "testITQuadratic72"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLengths
             (ComQuadratic 0 0)
@@ -887,7 +887,7 @@ testITQuadratic72 =
 -- String: Contains an odd palindrome with punctuation
 testITQuadratic73 =
     "testITQuadratic73"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             (ComQuadratic 0 1)
@@ -898,7 +898,7 @@ testITQuadratic73 =
 -- String: Contains an odd palindrome
 testITQuadratic74 =
     "testITQuadratic74"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             (ComQuadratic 1 2)

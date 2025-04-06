@@ -3,24 +3,21 @@
 -----------------------------------------------------------------------------
 
 -- \|
--- Module      :  Data.Algorithms.Palindromes.Combinators
+-- Module      :  Data.Algorithms.Palindromes.Finders
 -- Copyright   :  (c) 2007 - 2013 Johan Jeuring
 -- License     :  BSD3
 --
 -- Maintainer  :  johan@jeuring.net
 -- Stability   :  experimental
 -- Portability :  portable
-module Data.Algorithms.Palindromes.Combinators
-    ( createCombinator
-    , createPartialCombinator
-    , createReadableCombinator
+module Data.Algorithms.Palindromes.Finders
+    ( findPalindromes
+    , findPalindromeLengths
+    , findPalindromesFormatted
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
     , LengthMod
-    , PartialCombinator
-    , ReadableCombinator
-    , Combinator
     ) where
 
 import Data.Algorithms.Palindromes.Algorithms
@@ -87,18 +84,14 @@ data Complexity
 -- | The minimum and maximum length of the palindromes you want to find.
 type LengthMod = (Int, Maybe Int)
 
-type PartialCombinator = String -> [Int]
-type Combinator = String -> [Palindrome]
-type ReadableCombinator = String -> String
-
 {- |
-    A partial combinator is a function consisting of three phases:
+    This function consists of three phases:
     The pre-processing phase, the algorithm phase and the post-processing phase.
     It returns a list of integers, which corresponds to the lengths of the maximal palindromes around each center.
 -}
-createPartialCombinator
-    :: Variant -> Complexity -> LengthMod -> PartialCombinator
-createPartialCombinator variant complexity (minlength, maxlength') input = (post . preAlg) input
+findPalindromeLengths
+    :: Variant -> Complexity -> LengthMod -> String -> [Int]
+findPalindromeLengths variant complexity (minlength, maxlength') input = (post . preAlg) input
   where
     -- The pre-processing phase parses the text input based on the Variant provided to a vector of PalEq items.
     preAlg :: String -> [Int]
@@ -141,13 +134,13 @@ createPartialCombinator variant complexity (minlength, maxlength') input = (post
         | otherwise = fromJust maxlength'
 
 {- |
-    A combinator is a function consisting of 4 phases:
+    This function consisting of 4 phases:
     The pre-processing phase, the algorithm phase, the post-processing phase and the parsing phase.
-    The first three phases are taken from the partial combinator.
+    The first three phases are taken from the findPalindromesLengths.
     The final phase parses the [Int] to a [Palindrome], as defined in PalindromesUtils.hs.
 -}
-createCombinator :: Variant -> Complexity -> LengthMod -> Combinator
-createCombinator variant complexity lengthmod input = map lengthToPalindrome lengths
+findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
+findPalindromes variant complexity lengthmod input = map lengthToPalindrome lengths
   where
     lengthToPalindrome :: (Int, Int) -> Palindrome
     lengthToPalindrome (index, len) =
@@ -160,7 +153,7 @@ createCombinator variant complexity lengthmod input = map lengthToPalindrome len
 
     -- A list of tuples containing the center index and the length of the maximal palindrome.
     lengths :: [(Int, Int)]
-    lengths = zip [0 ..] $ createPartialCombinator variant complexity lengthmod input
+    lengths = zip [0 ..] $ findPalindromeLengths variant complexity lengthmod input
 
     -- A function that converts a (center index, length) pair to a (start index, end index) pair
     indicesInOriginal :: (Int, Int) -> (Int, Int)
@@ -177,19 +170,19 @@ createCombinator variant complexity lengthmod input = map lengthToPalindrome len
         dnaRange = (i - (l `div` 2), i + (l `div` 2))
 
 {- |
-    A readable combinator is a function that consists of 5 phases:
+    This is a function that consists of 5 phases:
     The pre-processing, the algorithm phase, the post processing phase, the parsing phase and the output phase.
-    The first 3 are handled by the partial combinator and the first 4 are handled by the combinator.
+    The first 3 are handled by the findPalindromeLengths and the first 4 are handled by the findPalindromes.
     The final phase takes the OutputFormat flag into account and returns a String that can be printed.
 -}
-createReadableCombinator
-    :: Variant -> OutputFormat -> Complexity -> LengthMod -> ReadableCombinator
-createReadableCombinator variant outputFormat complexity lengthmod input = text
+findPalindromesFormatted
+    :: Variant -> OutputFormat -> Complexity -> LengthMod -> String -> String
+findPalindromesFormatted variant outputFormat complexity lengthmod input = text
   where
     result :: [Palindrome]
-    result = createCombinator variant complexity lengthmod input
+    result = findPalindromes variant complexity lengthmod input
     lengths :: [Int]
-    lengths = createPartialCombinator variant complexity lengthmod input
+    lengths = findPalindromeLengths variant complexity lengthmod input
     text :: String
     text = case outputFormat of
         OutLength -> longestLength lengths

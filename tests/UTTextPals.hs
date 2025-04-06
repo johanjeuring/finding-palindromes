@@ -1,6 +1,6 @@
 module UTTextPals where
 
-import Data.Algorithms.Palindromes.Combinators (Complexity)
+import Data.Algorithms.Palindromes.Finders (Complexity)
 import PalindromeMethods (longestTextPalindrome)
 import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 

@@ -1,10 +1,10 @@
 module ITLinear where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , OutputFormat (..)
     , Variant (..)
-    , createReadableCombinator
+    , findPalindromesFormatted
     )
 import Test.HUnit (Test (..), (~:), (~?=))
 
@@ -74,7 +74,7 @@ testListITLinear =
 -- String: Has punctuation, is even
 testITLinear1 =
     "testITLinear1"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComLinear
@@ -85,7 +85,7 @@ testITLinear1 =
 -- String: Even palindrome
 testITLinear2 =
     "testITLinear2"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLength
             ComLinear
@@ -96,7 +96,7 @@ testITLinear2 =
 -- String: Has punctuation, even nested palindromes
 testITLinear3 =
     "testITLinear3"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             ComLinear
@@ -107,7 +107,7 @@ testITLinear3 =
 -- String: No palindromes
 testITLinear4 =
     "testITLinear4"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComLinear
@@ -118,7 +118,7 @@ testITLinear4 =
 -- String: Even, has punctuation
 testITLinear5 =
     "testITLinear5"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLengths
             ComLinear
@@ -129,7 +129,7 @@ testITLinear5 =
 -- String: Even, has punctuation
 testITLinear6 =
     "testITLinear6"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComLinear
@@ -140,7 +140,7 @@ testITLinear6 =
 -- String: Not a palindrome. Contains no punctuation
 testITLinear7 =
     "testITLinear7"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComLinear
@@ -151,7 +151,7 @@ testITLinear7 =
 -- String: Contains an even punctuation palindrome
 testITLinear8 =
     "testITLinear8"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComLinear
@@ -162,7 +162,7 @@ testITLinear8 =
 -- String: Contains an even palindrome
 testITLinear9 =
     "testITLinear9"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComLinear
@@ -173,7 +173,7 @@ testITLinear9 =
 -- String: Contains an even, nested palindrome
 testITLinear10 =
     "testITLinear10"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComLinear
@@ -184,7 +184,7 @@ testITLinear10 =
 -- String: Contains an even palindrome, contains punctuation
 testITLinear11 =
     "testITLinear11"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWords
             ComLinear
@@ -195,7 +195,7 @@ testITLinear11 =
 -- String: Contains a nested odd palindrome.
 testITLinear12 =
     "testITLinear12"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWord
             ComLinear
@@ -206,7 +206,7 @@ testITLinear12 =
 -- String: Contains an odd palindrome
 testITLinear13 =
     "testITLinear13"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLengths
             ComLinear
@@ -217,7 +217,7 @@ testITLinear13 =
 -- String: Contains an even palindrome
 testITLinear14 =
     "testITLinear14"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             ComLinear
@@ -228,7 +228,7 @@ testITLinear14 =
 -- String: Contains an odd punctuation palindrome
 testITLinear15 =
     "testITLinear15"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComLinear
@@ -239,7 +239,7 @@ testITLinear15 =
 -- String: Contains no palindrome, contains punctuation
 testITLinear16 =
     "testITLinear16"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWords
             ComLinear
@@ -250,7 +250,7 @@ testITLinear16 =
 -- String: Contains no palindrome
 testITLinear17 =
     "testITLinear17"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComLinear
@@ -261,7 +261,7 @@ testITLinear17 =
 -- String: Contains an odd palindrome with punctuation
 testITLinear18 =
     "testITLinear18"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             ComLinear
@@ -272,7 +272,7 @@ testITLinear18 =
 -- String: Contains an even punctuation palindrome
 testITLinear19 =
     "testITLinear19"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLength
             ComLinear
@@ -283,7 +283,7 @@ testITLinear19 =
 -- String: Contains an even nested palindrome
 testITLinear20 =
     "testITLinear20"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComLinear
@@ -294,7 +294,7 @@ testITLinear20 =
 -- String: Contains an even nested palindrome
 testITLinear21 =
     "testITLinear21"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             ComLinear
@@ -305,7 +305,7 @@ testITLinear21 =
 -- String: Contains an odd palindrome
 testITLinear22 =
     "testITLinear22"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             ComLinear
@@ -316,7 +316,7 @@ testITLinear22 =
 -- String: Contains a nested even palindrome
 testITLinear23 =
     "testITLinear23"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLengths
             ComLinear
@@ -327,7 +327,7 @@ testITLinear23 =
 -- String: Contains an even palindrom with punctuation
 testITLinear24 =
     "testITLinear24"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComLinear
@@ -338,7 +338,7 @@ testITLinear24 =
 -- String: Contains an odd nested palindrome
 testITLinear25 =
     "testITLinear25"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComLinear
@@ -349,7 +349,7 @@ testITLinear25 =
 -- String: Contains an odd palindrome with punctuation
 testITLinear26 =
     "testITLinear26"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComLinear
@@ -360,7 +360,7 @@ testITLinear26 =
 -- String: Contains a nested odd palindrome
 testITLinear27 =
     "testITLinear27"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLength
             ComLinear
@@ -371,7 +371,7 @@ testITLinear27 =
 -- String: Contains an even palindrome, contains punctuation
 testITLinear28 =
     "testITLinear28"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComLinear
@@ -382,7 +382,7 @@ testITLinear28 =
 -- String: Contains an even nested palindrome with punctuation
 testITLinear29 =
     "testITLinear29"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWord
             ComLinear
@@ -393,7 +393,7 @@ testITLinear29 =
 -- String: Contains an odd nested palindrome
 testITLinear30 =
     "testITLinear30"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComLinear
@@ -404,7 +404,7 @@ testITLinear30 =
 -- String: Contains an even nested palindrome with punctuation
 testITLinear31 =
     "testITLinear31"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComLinear
@@ -415,7 +415,7 @@ testITLinear31 =
 -- String: Contains an even palindrome
 testITLinear32 =
     "testITLinear32"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWord
             ComLinear
@@ -426,7 +426,7 @@ testITLinear32 =
 -- String: Contains an even nested palindrome with punctuation
 testITLinear33 =
     "testITLinear33"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComLinear
@@ -437,7 +437,7 @@ testITLinear33 =
 -- String: Contains an even palindrome with punctuation
 testITLinear34 =
     "testITLinear34"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWords
             ComLinear
@@ -448,7 +448,7 @@ testITLinear34 =
 -- String: Contains no palindrome, contains punctuation
 testITLinear35 =
     "testITLinear35"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             ComLinear
@@ -459,7 +459,7 @@ testITLinear35 =
 -- String: Contains an odd palindrome with punctuation
 testITLinear36 =
     "testITLinear36"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             ComLinear
@@ -470,7 +470,7 @@ testITLinear36 =
 -- String: Contains an even nested palindrome
 testITLinear37 =
     "testITLinear37"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWords
             ComLinear
@@ -481,7 +481,7 @@ testITLinear37 =
 -- String: Contains no palindrome, contains punctuation
 testITLinear38 =
     "testITLinear38"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLengths
             ComLinear
@@ -492,7 +492,7 @@ testITLinear38 =
 -- String: Contains an even palindrome
 testITLinear39 =
     "testITLinear39"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComLinear
@@ -503,7 +503,7 @@ testITLinear39 =
 -- String: Contains no palindrome, contains punctuation
 testITLinear40 =
     "testITLinear40"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLengths
             ComLinear
@@ -514,7 +514,7 @@ testITLinear40 =
 -- String: Contains no palindrome
 testITLinear41 =
     "testITLinear41"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComLinear
@@ -525,7 +525,7 @@ testITLinear41 =
 -- String: Contains an odd punctuation palindrome
 testITLinear42 =
     "testITLinear42"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLengths
             ComLinear
@@ -536,7 +536,7 @@ testITLinear42 =
 -- String: Contains an odd palindrome
 testITLinear43 =
     "testITLinear43"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComLinear
@@ -547,7 +547,7 @@ testITLinear43 =
 -- String: Contains an odd nested palindrome
 testITLinear44 =
     "testITLinear44"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWord
             ComLinear
@@ -558,7 +558,7 @@ testITLinear44 =
 -- String: Contains an odd nested palindrome
 testITLinear45 =
     "testITLinear45"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWords
             ComLinear
@@ -569,7 +569,7 @@ testITLinear45 =
 -- String: Contains an odd nested palindrome
 testITLinear46 =
     "testITLinear46"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutWord
             ComLinear
@@ -580,7 +580,7 @@ testITLinear46 =
 -- String: Contains an odd palindrome with punctuation
 testITLinear47 =
     "testITLinear47"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComLinear
@@ -591,7 +591,7 @@ testITLinear47 =
 -- String: Contains an even nested palindrome with punctuation
 testITLinear48 =
     "testITLinear48"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWords
             ComLinear
@@ -602,7 +602,7 @@ testITLinear48 =
 -- String: Contains an odd palindrome with punctuation
 testITLinear49 =
     "testITLinear49"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutWord
             ComLinear
@@ -613,7 +613,7 @@ testITLinear49 =
 -- String: Contains no punctuation palindrome
 testITLinear50 =
     "testITLinear50"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPunctuation
             OutLength
             ComLinear
@@ -624,7 +624,7 @@ testITLinear50 =
 -- String: Contains an odd and an even palindrome
 testITLinear51 =
     "testITLinear51"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutLengths
             ComLinear
@@ -635,7 +635,7 @@ testITLinear51 =
 -- String: Contains an even palindrome with punctuation
 testITLinear52 =
     "testITLinear52"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutLengths
             ComLinear
@@ -646,7 +646,7 @@ testITLinear52 =
 -- String: Contains an even punctuation palindrome
 testITLinear53 =
     "testITLinear53"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComLinear
@@ -657,7 +657,7 @@ testITLinear53 =
 -- String: Contains an even palindrome
 testITLinear54 =
     "testITLinear54"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutWord
             ComLinear
@@ -668,7 +668,7 @@ testITLinear54 =
 -- String: Contains an odd nested palindrome
 testITLinear55 =
     "testITLinear55"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComLinear
@@ -679,7 +679,7 @@ testITLinear55 =
 -- String: Contains an even nested palindrome
 testITLinear56 =
     "testITLinear56"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarDNA
             OutLength
             ComLinear
@@ -690,7 +690,7 @@ testITLinear56 =
 -- String: Contains an even palindrome with punctuation
 testITLinear57 =
     "testITLinear57"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComLinear
@@ -701,7 +701,7 @@ testITLinear57 =
 -- String: Contains no palindrome
 testITLinear58 =
     "testITLinear58"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarWord
             OutWord
             ComLinear
@@ -712,7 +712,7 @@ testITLinear58 =
 -- String: Contains an odd palindrome
 testITLinear59 =
     "testITLinear59"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarText
             OutWords
             ComLinear
@@ -723,7 +723,7 @@ testITLinear59 =
 -- String: Contains an odd punctuation palindrome
 testITLinear60 =
     "testITLinear60"
-        ~: createReadableCombinator
+        ~: findPalindromesFormatted
             VarPlain
             OutLength
             ComLinear

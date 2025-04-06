@@ -16,7 +16,7 @@
 
 module Data.Algorithms.Palindromes.Options where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , LengthMod
     , OutputFormat (..)

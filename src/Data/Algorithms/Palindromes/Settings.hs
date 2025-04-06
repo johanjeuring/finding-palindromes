@@ -20,7 +20,7 @@ where
 import Data.Algorithms.Palindromes.Combinators
     ( Complexity (..)
     , LengthMod
-    , Output (..)
+    , OutputFormat (..)
     , Variant (..)
     , createReadableCombinator
     )
@@ -28,7 +28,7 @@ import Data.Algorithms.Palindromes.Options
     ( Flag
     , defaultComplexity
     , defaultLengthMod
-    , defaultOutput
+    , defaultOutputFormat
     , defaultVariant
     , getComplexity
     , getLengthMod
@@ -39,7 +39,11 @@ import Data.Algorithms.Palindromes.Options
 
 -- | Data type with all settings required for running algorithm
 data Settings = Settings
-    {complexity :: Complexity, variant :: Variant, output :: Output, lengthMod :: LengthMod}
+    { complexity :: Complexity
+    , variant :: Variant
+    , outputFormat :: OutputFormat
+    , lengthMod :: LengthMod
+    }
 
 -- | If no flags are given to modify settings default settings are used
 defaultSettings :: Settings
@@ -47,7 +51,7 @@ defaultSettings =
     Settings
         { complexity = defaultComplexity
         , variant = defaultVariant
-        , output = defaultOutput
+        , outputFormat = defaultOutputFormat
         , lengthMod = defaultLengthMod
         }
 
@@ -56,13 +60,13 @@ getSettings flags =
     Settings
         { complexity = getComplexity flags
         , variant = getVariant flags
-        , output = getOutputFormat flags
+        , outputFormat = getOutputFormat flags
         , lengthMod = getLengthMod flags
         }
 
 -- | should be the same as createReadable combinator, but now with settings as input type instead of four different fields.
 getOutput :: Settings -> (String -> String)
-getOutput (Settings{complexity = c, variant = v, output = o, lengthMod = l}) = createReadableCombinator v o c l
+getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) = createReadableCombinator v o c l
 
 {- | Does what handle options currently does. Except that it getsSetting and the output instead of a lot of maybe flags into dispatchflags.
 | TODO: find out whethere we can separate the bool from this function as it is not pretty.

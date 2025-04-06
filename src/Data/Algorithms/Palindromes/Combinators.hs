@@ -15,7 +15,7 @@ module Data.Algorithms.Palindromes.Combinators
     , createPartialCombinator
     , createReadableCombinator
     , Variant (..)
-    , Output (..)
+    , OutputFormat (..)
     , Complexity (..)
     , LengthMod
     , PartialCombinator
@@ -67,7 +67,7 @@ data Variant
       VarPlain
     | -- | Compare words instead of individual characters to look for palindromes.
       VarWord
-data Output
+data OutputFormat
     = -- | The length of the longest palindrome
       OutLength
     | -- | The longest palindrome as text
@@ -180,18 +180,18 @@ createCombinator variant complexity lengthmod input = map lengthToPalindrome len
     A readable combinator is a function that consists of 5 phases:
     The pre-processing, the algorithm phase, the post processing phase, the parsing phase and the output phase.
     The first 3 are handled by the partial combinator and the first 4 are handled by the combinator.
-    The final phase takes the Output flag into account and returns a String that can be printed.
+    The final phase takes the OutputFormat flag into account and returns a String that can be printed.
 -}
 createReadableCombinator
-    :: Variant -> Output -> Complexity -> LengthMod -> ReadableCombinator
-createReadableCombinator variant output complexity lengthmod input = text
+    :: Variant -> OutputFormat -> Complexity -> LengthMod -> ReadableCombinator
+createReadableCombinator variant outputFormat complexity lengthmod input = text
   where
     result :: [Palindrome]
     result = createCombinator variant complexity lengthmod input
     lengths :: [Int]
     lengths = createPartialCombinator variant complexity lengthmod input
     text :: String
-    text = case output of
+    text = case outputFormat of
         OutLength -> longestLength lengths
         OutWord -> longestWord result
         OutLengths -> allLengths lengths

@@ -2,7 +2,7 @@ module ITQuadratic where
 
 import Data.Algorithms.Palindromes.Combinators
     ( Complexity (..)
-    , Output (..)
+    , OutputFormat (..)
     , Variant (..)
     , createReadableCombinator
     )

@@ -6,8 +6,8 @@ import Data.Algorithms.Palindromes.Combinators
     , Variant (..)
     , createReadableCombinator
     )
-import Data.Algorithms.Palindromes.Couplable
-    ( Couplable
+import Data.Algorithms.Palindromes.PalEq
+    ( PalEq
     )
 
 import qualified Data.Algorithms.Palindromes.Combinators as C

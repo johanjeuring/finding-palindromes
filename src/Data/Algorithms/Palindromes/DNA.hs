@@ -13,16 +13,16 @@
 
 module Data.Algorithms.Palindromes.DNA where
 
-import Data.Algorithms.Palindromes.Couplable (Couplable ((=:=)))
+import Data.Algorithms.Palindromes.PalEq (PalEq ((=:=)))
 import Data.Maybe (fromJust, isNothing)
 
 {- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA
-  has palindromes, instead couplable should be used.
+  has palindromes, instead PalEq should be used.
 -}
 data DNA = A | T | C | G | N deriving (Show, Eq)
 
--- | Declare instance Couplable for DNA. A and T form a couple, C and G form a couple.
-instance {-# OVERLAPPING #-} Couplable DNA where
+-- | Declare instance PalEq for DNA. A and T form a couple, C and G form a couple.
+instance {-# OVERLAPPING #-} PalEq DNA where
     A =:= T = True
     T =:= A = True
     G =:= C = True

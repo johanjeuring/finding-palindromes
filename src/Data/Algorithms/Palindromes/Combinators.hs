@@ -27,7 +27,6 @@ import Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
     )
-import Data.Algorithms.Palindromes.Couplable (Couplable)
 import Data.Algorithms.Palindromes.DNA (DNA)
 import Data.Algorithms.Palindromes.Output
     ( allLengths
@@ -40,6 +39,7 @@ import Data.Algorithms.Palindromes.Output
     , longestWord
     , wordAt
     )
+import Data.Algorithms.Palindromes.PalEq (PalEq)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 import Data.Algorithms.Palindromes.PostProcessing
     ( filterMax
@@ -100,7 +100,7 @@ createPartialCombinator
     :: Variant -> Complexity -> LengthMod -> PartialCombinator
 createPartialCombinator variant complexity (minlength, maxlength') input = (post . preAlg) input
   where
-    -- The pre-processing phase parses the text input based on the Variant provided to a vector of Couplable items.
+    -- The pre-processing phase parses the text input based on the Variant provided to a vector of PalEq items.
     preAlg :: String -> [Int]
     preAlg = case variant of
         VarText -> alg . filterLetters
@@ -118,7 +118,7 @@ createPartialCombinator variant complexity (minlength, maxlength') input = (post
     parseDna = textToDNA . V.toList . filterLetters
 
     -- The algorithm phase runs one of the algorithms that finds the maximal palindromes around all centers.
-    alg :: (Couplable b) => V.Vector b -> [Int]
+    alg :: (PalEq b) => V.Vector b -> [Int]
     alg = case complexity of
         ComLinear -> linearAlgorithm isAntiReflexive
         _ -> quadraticAlgorithm isAntiReflexive (gapSize complexity) (maxError complexity)

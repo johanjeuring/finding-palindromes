@@ -6,13 +6,13 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
     , moveCenterS
     ) where
 
-import Data.Algorithms.Palindromes.Couplable (Couplable (..), couplableWithItselfAtIndex)
+import Data.Algorithms.Palindromes.PalEq (PalEq (..), palEqToItselfAtIndex)
 
 import qualified Data.Vector as V
 
 -- | This function will traverse an input linearly, using an accumulator
 extendPalindromeS
-    :: (Couplable a)
+    :: (PalEq a)
     => Bool
     -- ^ Indicates whether the input datatype is anti-reflexive
     -> V.Vector a
@@ -58,7 +58,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
 
 -- | If the current palindrome cannot be extended anymore, this function will move the centers one step
 moveCenterS
-    :: (Couplable a)
+    :: (PalEq a)
     => Bool
     -- ^ Indicates whether the input datatype is anti-reflexive
     -> V.Vector a
@@ -85,13 +85,13 @@ moveCenterS
         | nrOfCenters == 0 =
             -- the last centre is on the last element: try to extend the tail
             let (newPalLength, inputForExtend) =
-                    case (antiReflexive, couplableWithItselfAtIndex input rightmost) of
+                    case (antiReflexive, palEqToItselfAtIndex input rightmost) of
                         {- Non-anti-reflexive type, but element at `rightmost` is not
-                         self-couplable. We found an empty maximal palindrome. Add it to
+                         PalEq to itself. We found an empty maximal palindrome. Add it to
                          the list and continue searching. -}
                         (False, False) -> (0, 0 : maximalPalindromesIn)
                         {- Non-anti-reflexive type, element at `rightmost` is
-                        self-couplable. Found a palindrome of at least length 1, so try to
+                        PalEq to itself. Found a palindrome of at least length 1, so try to
                         extend it. -}
                         (False, True) -> (1, maximalPalindromesIn)
                         {- Anti-reflexive type: only centers between elements matter. We

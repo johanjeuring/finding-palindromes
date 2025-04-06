@@ -20,8 +20,8 @@ module Data.Algorithms.Palindromes.QuadraticAlgorithm
     , lengthApproximatePalindrome
     ) where
 
-import Data.Algorithms.Palindromes.Couplable
-    ( Couplable (..)
+import Data.Algorithms.Palindromes.PalEq
+    ( PalEq (..)
     )
 import Data.List as L
 import Data.Vector as V
@@ -30,7 +30,7 @@ import Data.Vector as V
 This function runs in O(m), where m is the sum of palindrome sizes.
 -}
 gappedApproximatePalindromesAroundCentres
-    :: (Couplable a)
+    :: (PalEq a)
     => Bool
     -> Int
     -> Int
@@ -52,7 +52,7 @@ Allows a maximum of errorCount errors. This function runs in O(k), where k is th
 found palindrome.
 -}
 lengthApproximatePalindrome
-    :: (Couplable a) => V.Vector a -> Int -> Int -> Int -> Int
+    :: (PalEq a) => V.Vector a -> Int -> Int -> Int -> Int
 lengthApproximatePalindrome input errorCount start end
     | start < 0 || end > lastPos = end - start - 1
     | (input V.! start) =:= (input V.! end) =
@@ -134,7 +134,7 @@ getLeftRightCenterOnElem gapSize elementIndex lengthInput = (left, right)
 
 -- | The length of the maximal palindrome around the specified center
 lengthPalAtCenterReflexive
-    :: (Couplable a)
+    :: (PalEq a)
     => V.Vector a
     -- ^ The total vector to find palindromes in
     -> Int
@@ -179,7 +179,7 @@ getLeftRightReflexive gapSize center lengthInput
 -}
 
 lengthPalAtCenterAntiReflexive
-    :: (Couplable a)
+    :: (PalEq a)
     => V.Vector a
     -- ^ The total vector to find palindromes in
     -> Int

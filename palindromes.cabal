@@ -34,7 +34,7 @@ library
   exposed-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.Combinators
-    Data.Algorithms.Palindromes.Couplable
+    Data.Algorithms.Palindromes.PalEq
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
@@ -57,7 +57,7 @@ executable palindromes
   other-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.Combinators
-    Data.Algorithms.Palindromes.Couplable
+    Data.Algorithms.Palindromes.PalEq
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
@@ -81,7 +81,7 @@ test-suite property-tests
     PalindromeMethods
     PalindromeProperties
     UTCombinators
-    UTCouplable
+    UTPalEq
     UTDNAPals
     UTExtendPals
     UTGetLeftRight

@@ -1,5 +1,6 @@
+cabal-version:      3.12
 name:               palindromes
-version:            0.4
+version:            0.5
 synopsis:           Finding palindromes in strings
 homepage:           http://www.jeuring.net/homepage/palindromes/index.html
 description:
@@ -8,7 +9,7 @@ description:
 
 category:           Algorithms
 copyright:          (c) 2007 - 2013 Johan Jeuring
-license:            BSD3
+license:            BSD-3-Clause
 license-file:       LICENSE
 author:             Johan Jeuring
 maintainer:         johan@jeuring.net
@@ -17,16 +18,14 @@ extra-source-files:
   CREDITS
   README
   RELEASE_HISTORY
-  tests/Main.hs
 
 build-type:         Simple
-cabal-version:      >=1.8
-tested-with:        GHC ==7.4.1
+tested-with:        GHC >=9.10 && < 9.11
 
 source-repository this
   type:     svn
   location: https://svn.science.uu.nl/repos/sci.jeuri101.palindromes
-  tag:      0.4
+  tag:      0.5
 
 --------------------------------------------------------------------------------
 library
@@ -47,8 +46,8 @@ library
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
-      base        >=4.17 && <5
-    , vector
+      base        >=4.17      && <5
+    , vector      >=0.13.1.0  && <0.14
 
 executable palindromes
   main-is:        Data/Algorithms/Palindromes/Main.hs
@@ -70,10 +69,10 @@ executable palindromes
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
-      base        >=4.17 && <5
-    , vector
+      base        >=4.17      && <5
+    , vector      >=0.13.1.0  && <0.14
 
-test-suite property-tests
+test-suite tests-palindromes
   type:           exitcode-stdio-1.0
   hs-source-dirs: tests
   main-is:        Main.hs
@@ -95,10 +94,8 @@ test-suite property-tests
     ITQuadratic
 
   build-depends:
-      base         >=3.0  && <5
-    , HUnit
-    , palindromes
-    , QuickCheck   >=2.14 && <3.0
-    , vector
-
---------------------------------------------------------------------------------
+      base         >=4.17     && <5
+    , HUnit        >=1.6      && <1.7
+    , palindromes  >=0.5      && < 0.6
+    , QuickCheck   >=2.14     && <3.0
+    , vector       >=0.13.1.0 && <0.14

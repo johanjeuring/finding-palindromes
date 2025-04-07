@@ -1,6 +1,11 @@
 Release history:
 
 --------
+07042025 Version 0.5
+--------
+Does a big clean up of the whole package: generalize the input data type, define a new output type, rewrite functions to be clearer, split the package into more modules, split the pre- and post-processing from the algorithms themselves, add Haddock documentation, change the way punctuation palindromes are found and add many unit tests and some QuickCheck generators and properties.
+
+--------
 08072012 Version 0.4
 --------
 Cleaned up the options, to make them available for other kinds

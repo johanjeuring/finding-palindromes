@@ -12,17 +12,17 @@
 
 module Main where
 
-import Data.Algorithms.Palindromes.Combinators (Complexity (..))
+import Data.Algorithms.Palindromes.Finders (Complexity (..))
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
 import QuickCheckProperties (propertyList)
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
-import UTCombinators (testListCombinators)
-import UTCouplable (testListCouplable)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
+import UTFinders (testListFinders)
 import UTGetLeftRight (testListGetLeftRight)
+import UTPalEq (testListPalEq)
 import UTProcessing (testListProcessing)
 import UTPunctuationPals (testListPunctuation)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
@@ -41,9 +41,9 @@ tests =
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListProcessing
-            ++ testListCouplable
+            ++ testListPalEq
             ++ testListWordPalindromes ComLinear
-            ++ testListCombinators
+            ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic
 

@@ -1,26 +1,26 @@
 module PalindromeMethods where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
-    , Output (..)
+    , OutputFormat (..)
     , Variant (..)
-    , createReadableCombinator
+    , findPalindromesFormatted
     )
-import Data.Algorithms.Palindromes.Couplable
-    ( Couplable
+import Data.Algorithms.Palindromes.PalEq
+    ( PalEq
     )
 
-import qualified Data.Algorithms.Palindromes.Combinators as C
+import qualified Data.Algorithms.Palindromes.Finders as C
 
 {- takes a flag to edit the complexity
 to enable the usage of both algorithm types on the same unit tests -}
 longestTextPalindrome :: Complexity -> String -> String
 longestTextPalindrome complexity =
-    createReadableCombinator VarText OutWord complexity (0, Nothing)
+    findPalindromesFormatted VarText OutWord complexity (0, Nothing)
 
 longestWordPalindrome :: Complexity -> String -> String
 longestWordPalindrome t =
-    createReadableCombinator
+    findPalindromesFormatted
         VarWord
         OutWord
         t
@@ -28,7 +28,7 @@ longestWordPalindrome t =
 
 longestPunctuationPalindrome :: String -> String
 longestPunctuationPalindrome =
-    createReadableCombinator
+    findPalindromesFormatted
         VarPunctuation
         OutWord
         ComLinear
@@ -36,7 +36,7 @@ longestPunctuationPalindrome =
 
 longestDNAPalindrome :: Complexity -> String -> String
 longestDNAPalindrome complexity =
-    createReadableCombinator
+    findPalindromesFormatted
         VarDNA
         OutWord
         complexity
@@ -44,7 +44,7 @@ longestDNAPalindrome complexity =
 
 extendTextPalindrome :: Complexity -> Int -> String -> String
 extendTextPalindrome complexity n =
-    createReadableCombinator
+    findPalindromesFormatted
         VarText
         (OutWordAt n)
         complexity

@@ -27,7 +27,7 @@ import Data.Char (isAlphaNum, isSpace, toLower)
 import qualified Data.Vector as V
 
 -- Make sure all functions are of the type
--- (Couplable b) => String -> [b]
+-- (PalEq b) => String -> [b]
 
 -- | A function that filters the string so that only letters remain
 filterLetters :: String -> V.Vector Char

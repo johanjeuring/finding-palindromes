@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -- \|
--- Module      :  Data.Algorithms.Palindromes.Couplable
+-- Module      :  Data.Algorithms.Palindromes.PalEq
 -- Copyright   :  (c) 2007 - 2013 Johan Jeuring
 -- License     :  BSD3
 --
@@ -12,9 +12,9 @@
 {-# LANGUAGE MonoLocalBinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Data.Algorithms.Palindromes.Couplable
-    ( Couplable (..)
-    , couplableWithItselfAtIndex
+module Data.Algorithms.Palindromes.PalEq
+    ( PalEq (..)
+    , palEqToItselfAtIndex
     ) where
 
 import Data.Vector as V
@@ -23,18 +23,18 @@ import Data.Vector as V
   Shows that some element belongs to another element.
   For example, A belongs to T in DNA, and 'z' belongs to 'z' in normal text.
 -}
-class Couplable a where
+class PalEq a where
     (=:=) :: a -> a -> Bool
 
--- | Define Couplable instance for any a of class Eq. Just use the equality relation.
-instance (Eq a) => Couplable a where
+-- | Define PalEq instance for any a of class Eq. Just use the equality relation.
+instance (Eq a) => PalEq a where
     (=:=) = (==)
 
 {- | Safe function which returns whether an element at an index in the input vector is
-  couplable with itself.
+  PalEq to itself.
 -}
-couplableWithItselfAtIndex :: (Couplable a) => V.Vector a -> Int -> Bool
-couplableWithItselfAtIndex input index
+palEqToItselfAtIndex :: (PalEq a) => V.Vector a -> Int -> Bool
+palEqToItselfAtIndex input index
     | index < 0 || index >= V.length input = False
     | otherwise = element =:= element
   where

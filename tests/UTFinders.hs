@@ -1,26 +1,29 @@
-module UTCombinators where
+module UTFinders where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), dnaToChar)
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComQuadratic)
     , Variant (VarDNA, VarPlain, VarText, VarWord)
-    , createCombinator
+    , findPalindromes
     )
-import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), dnaToChar)
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
     )
 import Test.HUnit (Test (..), (~:), (~?=))
 import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)
 
-testListCombinators =
-    [ testCombinatorPlain
-    , testCombinatorText
-    , testCombinatorDNA
-    , testCombinatorWord
+instance Arbitrary DNA where
+    arbitrary = elements [A, T, C, G]
+
+testListFinders =
+    [ testFinderPlain
+    , testFinderText
+    , testFinderDNA
+    , testFinderWord
     ]
 
-testCombinatorPlain =
-    "testCombinatorPlain"
+testFinderPlain =
+    "testFinderPlain"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -71,10 +74,10 @@ testCombinatorPlain =
                 }
              )
            ]
-        ~?= createCombinator VarPlain (ComQuadratic 0 0) (0, Nothing) "aba"
+        ~?= findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing) "aba"
 
-testCombinatorText =
-    "testCombinatorText"
+testFinderText =
+    "testFinderText"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -125,10 +128,10 @@ testCombinatorText =
                 }
              )
            ]
-        ~?= createCombinator VarText (ComQuadratic 0 0) (0, Nothing) "ab'A"
+        ~?= findPalindromes VarText (ComQuadratic 0 0) (0, Nothing) "ab'A"
 
-testCombinatorWord =
-    "testCombinatorWord"
+testFinderWord =
+    "testFinderWord"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -179,10 +182,10 @@ testCombinatorWord =
                 }
              )
            ]
-        ~?= createCombinator VarWord (ComQuadratic 0 0) (0, Nothing) "aba' bbb\n aba"
+        ~?= findPalindromes VarWord (ComQuadratic 0 0) (0, Nothing) "aba' bbb\n aba"
 
-testCombinatorDNA =
-    "testCombinatorDNA"
+testFinderDNA =
+    "testFinderDNA"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -212,4 +215,4 @@ testCombinatorDNA =
                 }
              )
            ]
-        ~?= createCombinator VarDNA (ComQuadratic 0 0) (0, Nothing) "ATA"
+        ~?= findPalindromes VarDNA (ComQuadratic 0 0) (0, Nothing) "ATA"

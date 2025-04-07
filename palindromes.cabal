@@ -94,7 +94,6 @@ test-suite property-tests
     UTQuadraticAlgorithm
     UTTextPals
     UTWordPals
-    ITLinear
     ITQuadratic
 
   build-depends:

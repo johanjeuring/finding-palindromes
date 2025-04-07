@@ -34,8 +34,12 @@ import Data.Algorithms.Palindromes.Options
     , getLengthMod
     , getOutputFormat
     , getVariant
+    , headerHelpMessage
+    , isHelp
     , isStandardInput
+    , options
     )
+import System.Console.GetOpt (usageInfo)
 
 -- | Data type with all settings required for running algorithm
 data Settings = Settings
@@ -76,4 +80,9 @@ handleFlags
     -> ( String -> String -- function from input to output
        , Bool -- if input is standard input TODO: find out what standard input is and how it works...
        )
-handleFlags flags = (getOutput (getSettings flags), any isStandardInput flags)
+handleFlags flags =
+    ( if any isHelp flags || null flags
+        then (\_ -> usageInfo headerHelpMessage options)
+        else getOutput (getSettings flags)
+    , any isStandardInput flags
+    )

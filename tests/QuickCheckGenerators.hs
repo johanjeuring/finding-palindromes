@@ -5,12 +5,13 @@ module QuickCheckGenerators
     , generateWordPalindrome
     ) where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.DNA (DNA (..))
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
-    , Output (..)
+    , OutputFormat (..)
     , Variant (VarDNA, VarPlain, VarText, VarWord)
     )
-import Data.Algorithms.Palindromes.PalindromesUtils (Couplable (..), DNA (..))
+import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 import Data.Algorithms.Palindromes.Settings (Settings (..))
 import Data.List (intercalate)
 import Test.QuickCheck
@@ -66,7 +67,7 @@ wordToString gen = do unwords <$> gen
 
 -- | Generates random strings for punctuation palindromes, these can be anything
 puncCharGenerator :: Gen Char
-puncCharGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
+puncCharGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
 -- | Generates random strings for plain palindromes
 plainCharGenerator :: Gen Char
@@ -85,7 +86,7 @@ wordGenerator :: Gen [Char]
 wordGenerator = do
     randomWordLength <- randomInt 2 7
     vectorOf randomWordLength $
-        choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
+        choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
 {- Generators for plain and punctuation palindromes -}
 

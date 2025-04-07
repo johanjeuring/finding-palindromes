@@ -83,7 +83,6 @@ test-suite property-tests
     QuickCheckProperties
     QuickCheckSettings
     QuickCheckGenerators
-    UTCouplable
     UTFinders
     UTPalEq
     UTDNAPals

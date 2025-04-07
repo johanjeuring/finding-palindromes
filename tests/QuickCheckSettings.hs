@@ -3,9 +3,9 @@ module QuickCheckSettings
     , settingsListDNA
     ) where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComLinear, ComQuadratic)
-    , Output (OutLength, OutLengths, OutWord, OutWords)
+    , OutputFormat (OutLength, OutLengths, OutWord, OutWords)
     , Variant (VarDNA, VarPlain, VarText, VarWord)
     )
 import Data.Algorithms.Palindromes.Settings (Settings (..))

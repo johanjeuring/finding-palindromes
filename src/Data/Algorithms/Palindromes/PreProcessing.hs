@@ -16,7 +16,7 @@ module Data.Algorithms.Palindromes.PreProcessing
     , filterLetters'
     , textToDNA
     , textToWords
-    , textToWords'
+    , textToWordsWithIndices
     ) where
 
 import Data.Algorithms.Palindromes.DNA
@@ -47,8 +47,8 @@ textToWords :: String -> V.Vector String
 textToWords x = V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a || isSpace a) x
 
 -- | A function that filters the string so that only letters and spaces remain, then splits the result on every space so that only words remain. It remembers the original start and end index of each word.
-textToWords' :: String -> V.Vector ((Int, Int), [Char])
-textToWords' x = V.fromList $ map toWord $ words' indexedCharacters
+textToWordsWithIndices :: String -> V.Vector ((Int, Int), [Char])
+textToWordsWithIndices x = V.fromList $ map toWord $ wordsWithIndices indexedCharacters
   where
     indexedCharacters :: [(Int, Char)]
     indexedCharacters = V.toList $ filterSpaceAndLetters x
@@ -61,10 +61,10 @@ textToWords' x = V.fromList $ map toWord $ words' indexedCharacters
         )
 
     -- The words function as written in Prelude, but on indexed characters
-    words' :: [(Int, Char)] -> [[(Int, Char)]]
-    words' s
+    wordsWithIndices :: [(Int, Char)] -> [[(Int, Char)]]
+    wordsWithIndices s
         | null checking = []
-        | otherwise = word : words' remaining
+        | otherwise = word : wordsWithIndices remaining
       where
         checking = dropWhile (isSpace . snd) s
         (word, remaining) = break (isSpace . snd) checking

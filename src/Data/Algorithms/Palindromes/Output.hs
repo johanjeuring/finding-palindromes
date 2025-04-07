@@ -27,7 +27,7 @@ import Data.Algorithms.Palindromes.Palindrome
     )
 import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters'
-    , textToWords'
+    , textToWordsWithIndices
     )
 import Data.Char
     ( isAlphaNum
@@ -61,7 +61,7 @@ indicesInOutputWord (start', end') input
     | otherwise = (startIndex, startIndex)
   where
     wordsWithIndices :: V.Vector ((Int, Int), String)
-    wordsWithIndices = textToWords' input
+    wordsWithIndices = textToWordsWithIndices input
 
     maxIndex :: Int
     maxIndex = length input

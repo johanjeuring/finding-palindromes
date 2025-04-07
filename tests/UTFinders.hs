@@ -1,11 +1,11 @@
-module UTCombinators where
+module UTFinders where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), dnaToChar)
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComQuadratic)
     , Variant (VarDNA, VarPlain, VarText, VarWord)
-    , createCombinator
+    , findPalindromes
     )
-import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), dnaToChar)
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
     )
@@ -15,15 +15,15 @@ import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)
 instance Arbitrary DNA where
     arbitrary = elements [A, T, C, G]
 
-testListCombinators =
-    [ testCombinatorPlain
-    , testCombinatorText
-    , testCombinatorDNA
-    , testCombinatorWord
+testListFinders =
+    [ testFinderPlain
+    , testFinderText
+    , testFinderDNA
+    , testFinderWord
     ]
 
-testCombinatorPlain =
-    "testCombinatorPlain"
+testFinderPlain =
+    "testFinderPlain"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -74,10 +74,10 @@ testCombinatorPlain =
                 }
              )
            ]
-        ~?= createCombinator VarPlain (ComQuadratic 0 0) (0, Nothing) "aba"
+        ~?= findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing) "aba"
 
-testCombinatorText =
-    "testCombinatorText"
+testFinderText =
+    "testFinderText"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -128,10 +128,10 @@ testCombinatorText =
                 }
              )
            ]
-        ~?= createCombinator VarText (ComQuadratic 0 0) (0, Nothing) "ab'A"
+        ~?= findPalindromes VarText (ComQuadratic 0 0) (0, Nothing) "ab'A"
 
-testCombinatorWord =
-    "testCombinatorWord"
+testFinderWord =
+    "testFinderWord"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -182,10 +182,10 @@ testCombinatorWord =
                 }
              )
            ]
-        ~?= createCombinator VarWord (ComQuadratic 0 0) (0, Nothing) "aba' bbb\n aba"
+        ~?= findPalindromes VarWord (ComQuadratic 0 0) (0, Nothing) "aba' bbb\n aba"
 
-testCombinatorDNA =
-    "testCombinatorDNA"
+testFinderDNA =
+    "testFinderDNA"
         ~: [ ( Palindrome
                 { palCenterIndex = 0
                 , palLength = 0
@@ -215,7 +215,7 @@ testCombinatorDNA =
                 }
              )
            ]
-        ~?= createCombinator VarDNA (ComQuadratic 0 0) (0, Nothing) "ATA"
+        ~?= findPalindromes VarDNA (ComQuadratic 0 0) (0, Nothing) "ATA"
 
 propValidPalindromeRangeAndTextPlain :: Property
 propValidPalindromeRangeAndTextPlain = propValidPalindromeRangeAndText VarPlain
@@ -229,13 +229,13 @@ propValidPalindromeRangeAndText :: Variant -> Property
 propValidPalindromeRangeAndText variant = forAll (arbitrary :: Gen [Char]) $ \originalString ->
     all
         (`checkPalRangeAndText` originalString)
-        (createCombinator variant (ComQuadratic 0 0) (0, Nothing) originalString)
+        (findPalindromes variant (ComQuadratic 0 0) (0, Nothing) originalString)
 
 propValidPalindromeRangeAndTextDNA :: Property
 propValidPalindromeRangeAndTextDNA = forAll (arbitrary :: Gen [DNA]) $ \dna ->
     all
         (`checkPalRangeAndText` map dnaToChar dna)
-        (createCombinator VarDNA (ComQuadratic 0 0) (0, Nothing) (map dnaToChar dna))
+        (findPalindromes VarDNA (ComQuadratic 0 0) (0, Nothing) (map dnaToChar dna))
 
 {- | Check that taking the substring of the original text described by the start and end of the palRange
 property is equal to the palText property

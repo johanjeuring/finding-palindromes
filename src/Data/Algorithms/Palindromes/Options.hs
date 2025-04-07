@@ -16,10 +16,10 @@
 
 module Data.Algorithms.Palindromes.Options where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , LengthMod
-    , Output (..)
+    , OutputFormat (..)
     , Variant (..)
     )
 import Data.Maybe (fromJust, isNothing)
@@ -33,7 +33,7 @@ data Flag
     | StandardInput
     | Complexity Complexity
     | Variant Variant
-    | OutputFormat Output
+    | OutputFormat OutputFormat
     | LengthMod LengthMod
     | MinLength Int
     | MaxLength Int
@@ -44,8 +44,8 @@ defaultComplexity = ComQuadratic{gapSize = 0, maxError = 0}
 defaultVariant :: Variant
 defaultVariant = VarText
 
-defaultOutput :: Output
-defaultOutput = OutWord
+defaultOutputFormat :: OutputFormat
+defaultOutputFormat = OutWord
 
 defaultLengthMod :: LengthMod
 defaultLengthMod = (0, Nothing)
@@ -193,17 +193,17 @@ getVariant xs
     variantFlags :: [Flag]
     variantFlags = filter isVariant xs
 
-getOutputFormat :: [Flag] -> Output
+getOutputFormat :: [Flag] -> OutputFormat
 getOutputFormat xs
-    | null outputFlags = defaultOutput
-    | [OutputFormat o] <- outputFlags = o
-    | otherwise = error "Multiple output flags detected."
+    | null outputFormatFlags = defaultOutputFormat
+    | [OutputFormat o] <- outputFormatFlags = o
+    | otherwise = error "Multiple outputFormat flags detected."
   where
-    isOutput :: Flag -> Bool
-    isOutput (OutputFormat _) = True
-    isOutput _ = False
-    outputFlags :: [Flag]
-    outputFlags = filter isOutput xs
+    isOutputFormat :: Flag -> Bool
+    isOutputFormat (OutputFormat _) = True
+    isOutputFormat _ = False
+    outputFormatFlags :: [Flag]
+    outputFormatFlags = filter isOutputFormat xs
 
 getLengthMod :: [Flag] -> LengthMod
 getLengthMod xs = (minLength, maxLength)

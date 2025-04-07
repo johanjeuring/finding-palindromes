@@ -157,7 +157,7 @@ testCenterOnElemOutOfBoundsRight2 =
 
 {- | Test input with gapsize of zero and center on element. The output must have left
 and right equal to the element index so the not anti-reflexive function can check
-whether the element on the index is couplable with itself.
+whether the element on the index is PalEq to itself.
 -}
 testCenterOnElemZeroGap =
     TestCase $

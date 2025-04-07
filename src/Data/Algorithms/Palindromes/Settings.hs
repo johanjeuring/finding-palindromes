@@ -17,18 +17,18 @@ module Data.Algorithms.Palindromes.Settings
     )
 where
 
-import Data.Algorithms.Palindromes.Combinators
+import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , LengthMod
-    , Output (..)
+    , OutputFormat (..)
     , Variant (..)
-    , createReadableCombinator
+    , findPalindromesFormatted
     )
 import Data.Algorithms.Palindromes.Options
     ( Flag
     , defaultComplexity
     , defaultLengthMod
-    , defaultOutput
+    , defaultOutputFormat
     , defaultVariant
     , getComplexity
     , getLengthMod
@@ -39,7 +39,11 @@ import Data.Algorithms.Palindromes.Options
 
 -- | Data type with all settings required for running algorithm
 data Settings = Settings
-    {complexity :: Complexity, variant :: Variant, output :: Output, lengthMod :: LengthMod}
+    { complexity :: Complexity
+    , variant :: Variant
+    , outputFormat :: OutputFormat
+    , lengthMod :: LengthMod
+    }
 
 -- | If no flags are given to modify settings default settings are used
 defaultSettings :: Settings
@@ -47,7 +51,7 @@ defaultSettings =
     Settings
         { complexity = defaultComplexity
         , variant = defaultVariant
-        , output = defaultOutput
+        , outputFormat = defaultOutputFormat
         , lengthMod = defaultLengthMod
         }
 
@@ -56,13 +60,13 @@ getSettings flags =
     Settings
         { complexity = getComplexity flags
         , variant = getVariant flags
-        , output = getOutputFormat flags
+        , outputFormat = getOutputFormat flags
         , lengthMod = getLengthMod flags
         }
 
--- | should be the same as createReadable combinator, but now with settings as input type instead of four different fields.
+-- | should be the same as findPalindromesFormatted, but now with settings as input type instead of four different fields.
 getOutput :: Settings -> (String -> String)
-getOutput (Settings{complexity = c, variant = v, output = o, lengthMod = l}) = createReadableCombinator v o c l
+getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) = findPalindromesFormatted v o c l
 
 {- | Does what handle options currently does. Except that it getsSetting and the output instead of a lot of maybe flags into dispatchflags.
 | TODO: find out whethere we can separate the bool from this function as it is not pretty.
@@ -73,11 +77,3 @@ handleFlags
        , Bool -- if input is standard input TODO: find out what standard input is and how it works...
        )
 handleFlags flags = (getOutput (getSettings flags), any isStandardInput flags)
-
-{-
-Proposal:
-> Rename combinators to something more descriptive
-> Edit readable combininator to take settings (or write function call to get fields from settings)
-> Rename output Data type to outputFormat
->T
- -}

@@ -33,9 +33,9 @@ TODOs:
 - apply and test addErrors function
 done - change [a] gen to a gen
 done - make new word pal generators
-- look into which characters make a new line character for word palindromes so these are not generated in strings
+done - look into which characters make a new line character for word palindromes so these are not generated in strings
 - make the testing faster
-- apply haddock style comments
+done - apply haddock style comments
 -}
 
 -- the maximum amount of palInPal depth the generated palindrome will have
@@ -44,44 +44,52 @@ done - make new word pal generators
 maxPalInPalGeneration :: Float
 maxPalInPalGeneration = 5
 
+-- | Constructs a Gen String for punctuation palindromes, based on the algorithm settings being used
 generatePunctuationPal :: Settings -> Gen String
 generatePunctuationPal = generatePalindromeString puncCharGenerator
 
+-- | Constructs a Gen String for plain palindromes, based on the algorithm settings being used
 generatePlainPalindrome :: Settings -> Gen String
 generatePlainPalindrome = generatePalindromeString plainCharGenerator
 
+-- | Constructs a Gen [DNA] for DNA palindromes, based on the algorithm settings being used
 generateDNAPalindrome :: Settings -> Gen [DNA]
 generateDNAPalindrome = generatePalindromeString dnaCharGenerator
 
+-- | Constructs a Gen String for word palindromes, based on the algorithm settings being used
 generateWordPalindrome :: Settings -> Gen String
 generateWordPalindrome = wordToString . generatePalindromeString wordGenerator
 
+-- | Converts a Gen [String] to a Gen String by concatenating the strings in the list with a space
 wordToString :: Gen [[Char]] -> Gen String
 wordToString gen = do unwords <$> gen
 
--- generates random strings for punctuation palindromes
--- these can be anything
+-- | Generates random strings for punctuation palindromes, these can be anything
 puncCharGenerator :: Gen Char
 puncCharGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
 
--- generates random strings for plain palindromes
+-- | Generates random strings for plain palindromes
 plainCharGenerator :: Gen Char
 plainCharGenerator = elements (['a' .. 'z'] ++ ['A' .. 'Z'])
 
+-- makes DNA an instance of Arbitrary, so random DNA strings can be generated
 instance Arbitrary DNA where
     arbitrary = elements [A, T, C, G]
 
+-- | Simple Gen [DNA]
 dnaCharGenerator :: Gen DNA
 dnaCharGenerator = arbitrary :: Gen DNA
 
+-- | Randomly generates one word with length between 2 and 7
 wordGenerator :: Gen [Char]
 wordGenerator = do
     randomWordLength <- randomInt 2 7
     vectorOf randomWordLength $
-        choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n']) -- TODO are these all possible characters?
+        choose (' ', '~') `suchThat` (`notElem` ['\\', '"'])
 
 {- Generators for plain and punctuation palindromes -}
--- generates either a string, palindrome or palInPal palindrome with random characters around them
+
+-- | Generates either a string, palindrome or palInPal palindrome with random characters around them
 generatePalindromeString :: (Arbitrary a) => Gen a -> Settings -> Gen [a]
 generatePalindromeString charGenerator settings = do
     -- get the gap and error settings from the complexity settings
@@ -101,24 +109,24 @@ generatePalindromeString charGenerator settings = do
     randomEnd <- listOf charGenerator
     return $ randomStart ++ palGenerator ++ randomEnd
 
--- generates a palindrome
+-- | Generates a palindrome
 generatePalindrome :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 generatePalindrome charGenerator gap = do
     randomString <- listOf charGenerator
     palInPal charGenerator gap 1 randomString
 
--- generates a palindrome with a random amount of palInPal depth
--- note that a non palindrome can be generated if the random float is 0
+-- | generates a palindrome with a random amount of palInPal depth, note that a non palindrome can be generated if the random float is 0
 multiPalInPal :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 multiPalInPal charGenerator gap = do
     randomString <- listOf charGenerator
     palInPalDepth <- randomInt 0 maxPalInPalGeneration -- generate a random int between 0 and maxDepth
     palInPal charGenerator gap palInPalDepth randomString
 
--- generate a palindrome from string with Int amount of palindromes
--- a depth of 0 gives the input back, (pal)
--- a depth of 1 gives a palindrome with one level of palindrome (pallap)
--- a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
+{- | Generate a palindrome from string with Int amount of palindromes -
+a depth of 0 gives the input back, (pal) -
+a depth of 1 gives a palindrome with one level of palindrome (pallap) -
+a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
+-}
 palInPal :: (Arbitrary a) => Gen a -> Int -> Int -> [a] -> Gen [a]
 palInPal charGenerator gap depth string = do
     case depth of
@@ -131,9 +139,10 @@ palInPal charGenerator gap depth string = do
             palInPal charGenerator gap (depth - 1) $
                 string ++ uneven ++ reverse string
 
--- generates a string with a max length of 'gapSetting'
--- the string will be used to make gapped palindromes or uneven palindrome
--- even pals are reprented by this string being empty
+{- | generates a string with a max length of 'gapSetting' -
+the string will be used to make gapped palindromes or uneven palindrome -
+even pals are reprented by this string being empty
+-}
 generateGap :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 generateGap charGenerator gapSetting = do
     randomString <- listOf charGenerator
@@ -141,7 +150,7 @@ generateGap charGenerator gapSetting = do
     randomGapLength <- randomInt 0 maxGapLength
     return $ take randomGapLength randomString -- generates a string of length 'randomGapLength'
 
--- generate x amount of errors in a string
+-- | Generate x amount of errors in a string
 addErrors :: Int -> Gen a -> Gen [a]
 addErrors error charGenerator = do
     randomString <- listOf charGenerator
@@ -156,8 +165,9 @@ addErrors error charGenerator = do
         replaceErrors (i : is) (e : es) str = replaceErrors is es $ take i str ++ [e] ++ drop (i + 1) str
     return $ replaceErrors errorIndices replacementChars randomString
 
--- int generator helper function
--- gets a minimum and maximum value and generates a random int between them
+{- | Int generator helper function
+gets a minimum and maximum value and generates a random int between them
+-}
 randomInt :: Float -> Float -> Gen Int
 randomInt _min _max = do
     randomFloat <- genFloat

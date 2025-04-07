@@ -38,14 +38,9 @@ import Test.QuickCheck
 
 import qualified Data.Algorithms.Palindromes.Combinators as C
 
+-- List of to-be-tested properties, where each property is connected to all the settings
 propertyList :: [Property]
 propertyList =
-    map propValidPalindromeReverseChar settingsListChar
-        ++ map propValidPalindromeReverseDNA settingsListDNA
-
--- List of to-be-tested properties, where each property is connected to all the settings
-propertyListx :: [Property]
-propertyListx =
     -- Property 1
     map propValidPalindromeRangeAndTextChar settingsListChar
         ++ map propValidPalindromeRangeAndTextDNA settingsListDNA
@@ -65,12 +60,14 @@ propertyListx =
         ++ map propAllowedPalLengthChar settingsListChar
         ++ map propAllowedPalLengthDNA settingsListDNA
 
+-- | Makes a Gen String based on the variant that is being used
 stringGenerator :: Settings -> Gen String
 stringGenerator settings = case variant settings of
     VarWord -> generateWordPalindrome settings
     VarPlain -> generatePlainPalindrome settings
     _ -> generatePunctuationPal settings
 
+-- | Makes a Gen DNA based on the variant that is being used
 dnaGenerator :: Settings -> Gen [DNA]
 dnaGenerator = generateDNAPalindrome
 
@@ -243,7 +240,7 @@ propValidBoundariesDNA settings = forAll (dnaGenerator settings) $ \dnaSeq ->
             (map dnaToChar dnaSeq)
         )
 
--- | Tests if the palindrome range of a palindrome corresponds to the palindrome length
+-- | Tests if the palindrome range of a character palindrome corresponds to the palindrome length
 checkValidBoundariesChar :: Settings -> String -> Palindrome -> Bool
 checkValidBoundariesChar settings inputString pal = case variant settings of
     VarPlain -> let (s, e) = palRange pal in e - s == palLength pal
@@ -251,6 +248,7 @@ checkValidBoundariesChar settings inputString pal = case variant settings of
     _ ->
         let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
 
+-- | Tests if the palindrome range of a DNA palindrome corresponds to the palindrome length
 checkValidBoundariesDNA :: Settings -> Palindrome -> Bool
 checkValidBoundariesDNA settings pal = let (s, e) = palRange pal in e - s == palLength pal
 

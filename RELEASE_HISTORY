@@ -10,8 +10,9 @@ Does a big clean up of the whole package:
 - Split the package into more modules.
 - Split the pre- and post-processing from the algorithms themselves. This allows for adding more pre- and postprocessing easily in the future.
 - Add Haddock documentation. Every function has a Haddock-style comment, allowing Haddock to make automatic documentation for the package.
+- Add support for word palindromes.
 - Change the way punctuation palindromes are found. Every punctuation palindrome is a substring of the maximal palindrome at the same center. So, we find punctuation palindromes easily by shrinking maximal palindromes until we have a punctuation palindrome, solving this problem with a post-processing solution.
-- Add many unit tests
+- Add many unit tests.
 - Add QuickCheck generators for texts with (large) palindromes and properties for palindromes.
 
 --------

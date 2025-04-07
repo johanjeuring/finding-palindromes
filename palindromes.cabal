@@ -1,3 +1,4 @@
+cabal-version:      3.12
 name:               palindromes
 version:            0.5
 synopsis:           Finding palindromes in strings
@@ -8,7 +9,7 @@ description:
 
 category:           Algorithms
 copyright:          (c) 2007 - 2013 Johan Jeuring
-license:            BSD3
+license:            BSD-3-Clause
 license-file:       LICENSE
 author:             Johan Jeuring
 maintainer:         johan@jeuring.net
@@ -19,13 +20,12 @@ extra-source-files:
   RELEASE_HISTORY
 
 build-type:         Simple
-cabal-version:      >=1.8
 tested-with:        GHC >=9.10 && < 9.11
 
 source-repository this
   type:     svn
   location: https://svn.science.uu.nl/repos/sci.jeuri101.palindromes
-  tag:      0.4
+  tag:      0.5
 
 --------------------------------------------------------------------------------
 library

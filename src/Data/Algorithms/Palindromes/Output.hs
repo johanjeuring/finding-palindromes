@@ -1,15 +1,13 @@
------------------------------------------------------------------------------
+{- |
+Module      :  Data.Algorithms.Palindromes.Output
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
 
------------------------------------------------------------------------------
-
--- \|
--- Module      :  Data.Algorithms.Palindromes.Output
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
+This module contains functions that apply different ways of formatting the output of the algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
+-}
 module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
@@ -34,6 +32,7 @@ import Data.Char
     )
 import Data.List (intercalate)
 
+import qualified Data.Algorithms.Palindromes.Palindrome as Data.Algorithms
 import qualified Data.Vector as V
 
 {- | Takes a start and an end index in the filtered string and returns the indices

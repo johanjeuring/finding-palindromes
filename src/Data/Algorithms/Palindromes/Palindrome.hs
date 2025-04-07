@@ -1,3 +1,13 @@
+{- |
+Module      :  Data.Algorithms.Palindromes.Palindrome
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+Describes the palindrome datatype.
+-}
 module Data.Algorithms.Palindromes.Palindrome where
 
 -- | Data type to represent a single found palindrome

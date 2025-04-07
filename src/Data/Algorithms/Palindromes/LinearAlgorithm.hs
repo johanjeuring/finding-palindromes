@@ -1,5 +1,15 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
+{- |
+Module      :  Data.Algorithms.Palindromes.LinearAlgorithm
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+This module contains an implementation of a linear algorithm to find palindromes.
+-}
 module Data.Algorithms.Palindromes.LinearAlgorithm
     ( extendPalindromeS
     , finalPalindromesS
@@ -10,7 +20,7 @@ import Data.Algorithms.Palindromes.PalEq (PalEq (..), palEqToItselfAtIndex)
 
 import qualified Data.Vector as V
 
--- | This function will traverse an input linearly, using an accumulator
+-- | This function traverses input linearly, using an accumulator.
 extendPalindromeS
     :: (PalEq a)
     => Bool

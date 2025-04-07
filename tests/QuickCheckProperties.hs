@@ -11,8 +11,8 @@ import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 import Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     )
-import Data.Char (isAlpha, readLitChar, toLower)
-import PalindromeMethods (longestTextPalindrome)
+import Data.Char (isAlphaNum, isSpace, readLitChar, toLower)
+import Data.Maybe (fromJust)
 import QuickCheckGenerators
     ( generateDNAPalindrome
     , generatePlainPalindrome
@@ -32,14 +32,14 @@ import Test.QuickCheck
     , suchThat
     )
 
-propertyList :: [Property]
-propertyList =
-    map propValidPalLengthChar settingsListChar
-        ++ map propValidPalLengthDNA settingsListDNA
-
--- List of to-be-tested properties, where each property is connected to all the settings
 propertyListx :: [Property]
 propertyListx =
+    map propValidPalindromeReverseChar settingsListChar
+        ++ map propValidPalindromeReverseDNA settingsListDNA
+
+-- List of to-be-tested properties, where each property is connected to all the settings
+propertyList :: [Property]
+propertyList =
     -- Property 1
     map propValidPalindromeRangeAndTextChar settingsListChar
         ++ map propValidPalindromeRangeAndTextDNA settingsListDNA
@@ -72,7 +72,7 @@ dnaGenerator = generateDNAPalindrome
 
 -- | Filters the non-alphabetic characters from the input, before converting everything to lowercase
 cleanOriginalString :: String -> String
-cleanOriginalString string = map toLower (filter isAlpha string)
+cleanOriginalString string = map toLower (filter (\a -> isAlphaNum a || isSpace a) string)
 
 -- Property 1 ---------------------------------------------------------
 
@@ -157,7 +157,7 @@ isPalindromeGapsErrorsChar settings pal = mismatches <= errors
 isPalindromeGapsErrorsDNA :: Settings -> Palindrome -> Bool
 isPalindromeGapsErrorsDNA settings pal = mismatches <= errors
   where
-    pal' = removeGap gapLength (map charToDNA (palText pal))
+    pal' = removeGap gapLength (map (fromJust . charToDNA) (palText pal))
     (gapLength, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
         ComLinear -> (0, 0)
@@ -208,7 +208,7 @@ propValidPalLengthDNA settings = forAll (dnaGenerator settings) $ \dnaSeq ->
 -- | Checks for every palindrome variant if the palLength corresponds to the length of palText
 validPalLength :: Settings -> Palindrome -> Bool
 validPalLength settings pal = case variant settings of
-    VarWord -> length (words (palText pal)) == palLength pal
+    VarWord -> length (words (cleanOriginalString (palText pal))) == palLength pal
     VarPlain -> length (palText pal) == palLength pal
     VarDNA -> length (palText pal) == palLength pal
     _ -> length (cleanOriginalString $ palText pal) == palLength pal
@@ -253,13 +253,13 @@ checkValidBoundariesDNA settings pal = let (s, e) = palRange pal in e - s == pal
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range
 countWordsInRange :: (Int, Int) -> String -> Int
-countWordsInRange (s, e) inputString = length . words $ take (e - s) (drop s inputString)
+countWordsInRange (s, e) inputString = length . words $ cleanOriginalString $ take (e - s) (drop s inputString)
 
 -- | Counts the amount of non-alphabetic characters in the string
 amountOfNonAlpha :: Int -> String -> Int
 amountOfNonAlpha acc [] = acc
 amountOfNonAlpha acc (x : xs)
-    | not (isAlpha x) = amountOfNonAlpha (acc + 1) xs
+    | not (isAlphaNum x) = amountOfNonAlpha (acc + 1) xs
     | otherwise = amountOfNonAlpha acc xs
 
 -- Property 5 ---------------------------------------------------------

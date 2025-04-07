@@ -103,7 +103,8 @@ generatePalindromeString charGenerator settings = do
     palGenerator <-
         oneof
             [ listOf charGenerator
-            , generatePalindrome charGenerator gap -- TODO addErrors error $ generatePalindrome stringGenerator gap
+            , generatePalindrome charGenerator gap --
+            , addErrors error charGenerator
             , multiPalInPal charGenerator gap
             ]
     -- generate random string to add noise behind the palindrome

@@ -1,10 +1,7 @@
 module UTWordPals where
 
 import PalindromeMethods (longestWordPalindrome)
-import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
-
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as BC
+import Test.HUnit (Test (..), (~:), (~?=))
 
 testListWordPalindromes t =
     [ testWord1 t

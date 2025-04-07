@@ -18,11 +18,11 @@ module Data.Algorithms.Palindromes.PostProcessing
     , filterPunctuation
     ) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
+import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
+import Data.Algorithms.Palindromes.RangeFunctions
     ( lengthsToRanges
     , rangeToLength
     )
-import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
 import Data.Char (isLetter)
 
 import qualified Data.Vector as V

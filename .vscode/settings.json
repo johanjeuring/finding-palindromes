@@ -2,5 +2,11 @@
     "haskell.formattingProvider": "fourmolu",
     "haskell.plugin.fourmolu.config.external": true,
     "editor.formatOnSave": true,
-    "editor.wordWrapColumn": 90 
+    "editor.wordWrapColumn": 90,
+    "[haskell]": {
+        "editor.defaultFormatter": "haskell.haskell"
+    },
+    "[cabal]": {
+        "editor.defaultFormatter": "berberman.vscode-cabal-fmt"
+    }
 }

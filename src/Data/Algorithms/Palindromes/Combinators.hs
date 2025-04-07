@@ -27,6 +27,8 @@ import Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
     )
+import Data.Algorithms.Palindromes.Couplable (Couplable)
+import Data.Algorithms.Palindromes.DNA (DNA)
 import Data.Algorithms.Palindromes.Output
     ( allLengths
     , allWords
@@ -38,11 +40,7 @@ import Data.Algorithms.Palindromes.Output
     , longestWord
     , wordAt
     )
-import Data.Algorithms.Palindromes.PalindromesUtils
-    ( Couplable
-    , Palindrome (..)
-    , indexedLengthToRange
-    )
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 import Data.Algorithms.Palindromes.PostProcessing
     ( filterMax
     , filterMin
@@ -53,6 +51,7 @@ import Data.Algorithms.Palindromes.PreProcessing
     , textToDNA
     , textToWords
     )
+import Data.Algorithms.Palindromes.RangeFunctions (indexedLengthToRange)
 import Data.Maybe (fromJust, isNothing)
 
 import qualified Data.Vector as V
@@ -106,9 +105,17 @@ createPartialCombinator variant complexity (minlength, maxlength') input = (post
     preAlg = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
-        VarDNA -> alg . textToDNA . V.toList . filterLetters
+        VarDNA -> alg . tryParse
         VarWord -> alg . textToWords
         _ -> alg . V.fromList
+
+    -- If trying to parse the string to DNA would fail, throw a more readable error
+    tryParse :: String -> V.Vector DNA
+    tryParse x
+        | (isNothing . parseDna) x = error "Invalid DNA string"
+        | otherwise = (fromJust . parseDna) x
+    parseDna :: String -> Maybe (V.Vector DNA)
+    parseDna = textToDNA . V.toList . filterLetters
 
     -- The algorithm phase runs one of the algorithms that finds the maximal palindromes around all centers.
     alg :: (Couplable b) => V.Vector b -> [Int]

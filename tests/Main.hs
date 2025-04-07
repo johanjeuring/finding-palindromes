@@ -14,17 +14,15 @@ module Main where
 
 import Data.Algorithms.Palindromes.Combinators (Complexity (..))
 import ITLinear (testListITLinear)
-import QuickCheckProperties
-    ( propertyList
-    )
+import ITQuadratic (testListITQuadratic)
+import QuickCheckProperties (propertyList)
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 import UTCombinators (testListCombinators)
+import UTCouplable (testListCouplable)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTGetLeftRight (testListGetLeftRight)
-import UTLinearAlgorithm (testListLinearAlgorithm)
-import UTPalindromesUtils (testListPalindromesUtils)
 import UTProcessing (testListProcessing)
 import UTPunctuationPals (testListPunctuation)
 import UTQuadraticAlgorithm (testListQuadraticAlgorithm)
@@ -43,10 +41,11 @@ tests =
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListProcessing
-            ++ testListPalindromesUtils
+            ++ testListCouplable
             ++ testListWordPalindromes ComLinear
             ++ testListCombinators
             ++ testListITLinear
+            ++ testListITQuadratic
 
 runQuickCheck :: IO ()
 runQuickCheck = mapM_ quickCheck propertyList

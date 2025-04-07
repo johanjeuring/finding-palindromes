@@ -1,9 +1,7 @@
 module UTQuadraticAlgorithm (testListQuadraticAlgorithm) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
-    ( Couplable (..)
-    , DNA (..)
-    , (=:=)
+import Data.Algorithms.Palindromes.DNA
+    ( DNA (..)
     )
 import Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
 import Data.Vector as V

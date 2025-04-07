@@ -34,22 +34,20 @@ library
   exposed-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.Combinators
+    Data.Algorithms.Palindromes.Couplable
+    Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
-    Data.Algorithms.Palindromes.PalindromesUtils
+    Data.Algorithms.Palindromes.Palindrome
     Data.Algorithms.Palindromes.PostProcessing
     Data.Algorithms.Palindromes.PreProcessing
     Data.Algorithms.Palindromes.QuadraticAlgorithm
+    Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
-      array
-    , base        >=4.17 && <5
-    , bytestring
-    , containers
-    , HUnit
-    , QuickCheck  >=2.14 && <3.0
+      base        >=4.17 && <5
     , vector
 
 executable palindromes
@@ -59,20 +57,20 @@ executable palindromes
   other-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.Combinators
+    Data.Algorithms.Palindromes.Couplable
+    Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
-    Data.Algorithms.Palindromes.PalindromesUtils
+    Data.Algorithms.Palindromes.Palindrome
     Data.Algorithms.Palindromes.PostProcessing
     Data.Algorithms.Palindromes.PreProcessing
     Data.Algorithms.Palindromes.QuadraticAlgorithm
+    Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
 
   build-depends:
-      array
-    , base        >=4.17 && <5
-    , bytestring
-    , containers
+      base        >=4.17 && <5
     , vector
 
 test-suite property-tests
@@ -86,22 +84,21 @@ test-suite property-tests
     QuickCheckSettings
     QuickCheckGenerators
     UTCombinators
+    UTCouplable
     UTDNAPals
     UTExtendPals
     UTGetLeftRight
     UTLinearAlgorithm
-    UTPalindromesUtils
     UTProcessing
     UTPunctuationPals
     UTQuadraticAlgorithm
     UTTextPals
     UTWordPals
+    ITLinear
+    ITQuadratic
 
   build-depends:
-      array
-    , base         >=3.0  && <5
-    , bytestring
-    , containers
+      base         >=3.0  && <5
     , HUnit
     , palindromes
     , QuickCheck   >=2.14 && <3.0

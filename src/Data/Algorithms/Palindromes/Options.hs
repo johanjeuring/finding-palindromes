@@ -17,7 +17,7 @@
 module Data.Algorithms.Palindromes.Options where
 
 import Data.Algorithms.Palindromes.Combinators
-    ( Complexity (ComLinear, ComQuadratic, gapSize, maxError)
+    ( Complexity (..)
     , LengthMod
     , Output (..)
     , Variant (..)
@@ -85,10 +85,15 @@ options =
         (NoArg (Variant VarText))
         "Palindrome ignoring case, spacing and punctuation"
     , Option
-        "w"
+        "u"
         []
         (NoArg (Variant VarPunctuation))
         "Palindrome surrounded by punctuation (if any)"
+    , Option
+        "w"
+        []
+        (NoArg (Variant VarWord))
+        "Word palindrome"
     , Option
         "d"
         []

@@ -1,14 +1,12 @@
+{-# LANGUAGE MonoLocalBinds #-}
+
 module Data.Algorithms.Palindromes.LinearAlgorithm
     ( extendPalindromeS
     , finalPalindromesS
     , moveCenterS
     ) where
 
-import Data.Algorithms.Palindromes.PalindromesUtils
-    ( Couplable
-    , couplableWithItselfAtIndex
-    , (=:=)
-    )
+import Data.Algorithms.Palindromes.Couplable (Couplable (..), couplableWithItselfAtIndex)
 
 import qualified Data.Vector as V
 

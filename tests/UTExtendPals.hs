@@ -1,7 +1,6 @@
 module UTExtendPals where
 
 import Data.Algorithms.Palindromes.Combinators (Complexity)
-import Data.Vector (fromList)
 import PalindromeMethods (extendTextPalindrome)
 import Test.HUnit (Test (..), assertEqual)
 

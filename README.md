@@ -4,9 +4,9 @@ Palindromes is a package for finding palindromes in files.
 
 ## Features
 
-The primary features of Palindromes include:
+Palindromes includes two algorithms: a linear and a quadratic worst time complexity algorithm.
 
-A linear and quadratic time algorithm for:
+The linear and quadratic algorithm support:
 
 - Finding plain palindromes
 - Finding text palindromes,
@@ -16,7 +16,7 @@ A linear and quadratic time algorithm for:
 - Finding word palindromes,
   palindromes made up of words instead of characters.
 
-A quadratic time algorithm for:
+Furthermore, the quadratic algorithm supports:
 
 - Finding punctuation palindromes,
   text palindromes surrounded by (if at all) non-letters.

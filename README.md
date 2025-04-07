@@ -6,21 +6,26 @@ Palindromes is a package for finding palindromes in files.
 
 The primary features of Palindromes include:
 
-- Linear-time algorithm for finding plain palindromes
-- Linear-time algorithm for finding text palindromes,
+A linear and quadratic time algorithm for:
+
+- Finding plain palindromes
+- Finding text palindromes,
   ignoring spaces, case of characters, and punctuation
   symbols.
-- Linear-time algorithm for finding palindromes in DNA.
-- Linear-time algorithm for finding word palindromes,
+- Finding palindromes in DNA.
+- Finding word palindromes,
   palindromes made up of words instead of characters.
-- Quadratic-time algorithm for finding punctuation palindromes,
+
+A quadratic time algorithm for:
+
+- Finding punctuation palindromes,
   text palindromes surrounded by (if at all) non-letters.
   This is always quadratic because it requires a quadratic postprocessing step.
   However, you can still choose between a quadratic or linear algorithm for finding the palindromes themselves.
-- Quadratic-time algorithm for finding approximate
-  palindromes, in which a limited number of symbols
+- Finding approximate palindromes,
+  in which a limited number of symbols
   may be substituted by other symbols.
-- Quadratic-time algorithm for finding palindromes with
+- Finding palindromes with
   gaps in the center.
 
 ## Requirements

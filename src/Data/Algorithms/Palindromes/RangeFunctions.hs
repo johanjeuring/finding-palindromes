@@ -1,16 +1,13 @@
------------------------------------------------------------------------------
+{- |
+Module      :  Data.Algorithms.Palindromes.RangeFunctions
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
 
------------------------------------------------------------------------------
-
--- \|
--- Module      :  Data.Algorithms.Palindromes.RangeFunctions
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
-
+Describes functions that do range calculations.
+-}
 module Data.Algorithms.Palindromes.RangeFunctions
     ( lengthsToRanges
     , indexedLengthToRange

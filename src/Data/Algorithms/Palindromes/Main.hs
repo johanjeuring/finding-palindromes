@@ -1,15 +1,12 @@
------------------------------------------------------------------------------
-
------------------------------------------------------------------------------
-
 {- |
 Module      :  Data.Algorithms.Palindromes.Main
 Copyright   :  (c) 2007 - 2013 Johan Jeuring
 License     :  BSD3
-
 Maintainer  :  johan@jeuring.net
 Stability   :  experimental
 Portability :  portable
+
+Handles commandline.
 -}
 module Main where
 

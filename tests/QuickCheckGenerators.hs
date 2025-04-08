@@ -29,21 +29,14 @@ import Test.QuickCheck
     )
 import Test.QuickCheck.Gen (elements, genFloat)
 
-{-
-TODOs:
-- apply and test addErrors function
-done - change [a] gen to a gen
-done - make new word pal generators
-done - look into which characters make a new line character for word palindromes so these are not generated in strings
-- make the testing faster
-done - apply haddock style comments
--}
-
+maxPalInPalGeneration, minWordLength, maxWordLength :: Int
 -- the maximum amount of palInPal depth the generated palindrome will have
 -- a Depth of 1 gives a palindrome with one level of palindrome (pallap)
 -- a Depth of 2 gives a palindrome with two levels of palindromes (pallappallap) etc
-maxPalInPalGeneration :: Float
 maxPalInPalGeneration = 5
+-- The minimum and maximum length of the generated words
+minWordLength = 2
+maxWordLength = 7
 
 -- | Constructs a Gen String for punctuation palindromes, based on the algorithm settings being used
 generatePunctuationPal :: Settings -> Gen String
@@ -84,7 +77,7 @@ dnaCharGenerator = arbitrary :: Gen DNA
 -- | Randomly generates one word with length between 2 and 7
 wordGenerator :: Gen [Char]
 wordGenerator = do
-    randomWordLength <- randomInt 2 7
+    randomWordLength <- choose (minWordLength, maxWordLength)
     vectorOf randomWordLength $
         choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
@@ -103,9 +96,8 @@ generatePalindromeString charGenerator settings = do
     palGenerator <-
         oneof
             [ listOf charGenerator
-            , generatePalindrome charGenerator gap --
-            , addErrors error charGenerator
-            , multiPalInPal charGenerator gap
+            , addErrors error charGenerator $ generatePalindrome charGenerator gap
+            , addErrors error charGenerator $ multiPalInPal charGenerator gap
             ]
     -- generate random string to add noise behind the palindrome
     randomEnd <- listOf charGenerator
@@ -121,7 +113,7 @@ generatePalindrome charGenerator gap = do
 multiPalInPal :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 multiPalInPal charGenerator gap = do
     randomString <- listOf charGenerator
-    palInPalDepth <- randomInt 0 maxPalInPalGeneration -- generate a random int between 0 and maxDepth
+    palInPalDepth <- choose (0, maxPalInPalGeneration) -- generate a random int between 0 and maxDepth
     palInPal charGenerator gap palInPalDepth randomString
 
 {- | Generate a palindrome from string with Int amount of palindromes -
@@ -149,30 +141,23 @@ generateGap :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 generateGap charGenerator gapSetting = do
     randomString <- listOf charGenerator
     let maxGapLength = fromIntegral $ max gapSetting 1 -- the maxGaplength is always set to at least 1 to account for uneven palindromes
-    randomGapLength <- randomInt 0 maxGapLength
+    randomGapLength <- choose (0, maxGapLength)
     return $ take randomGapLength randomString -- generates a string of length 'randomGapLength'
 
 -- | Generate x amount of errors in a string
-addErrors :: Int -> Gen a -> Gen [a]
-addErrors error charGenerator = do
-    randomString <- listOf charGenerator
-    -- generate x indices on which the errors will be applied
-    errorIndices <- vectorOf error $ randomInt 0 $ fromIntegral $ length randomString
-    -- generate x random characters to replace the characters at the error indices
-    replacementChars <- vectorOf error charGenerator
-    let -- replacementChars = take error randomChars
-        -- replace the characters at the error indices with the replacement characters
-        replaceErrors :: [Int] -> [a] -> [a] -> [a]
-        replaceErrors [] _ str = str
-        replaceErrors (i : is) (e : es) str = replaceErrors is es $ take i str ++ [e] ++ drop (i + 1) str
-    return $ replaceErrors errorIndices replacementChars randomString
-
-{- | Int generator helper function
-gets a minimum and maximum value and generates a random int between them
--}
-randomInt :: Float -> Float -> Gen Int
-randomInt _min _max = do
-    randomFloat <- genFloat
-    let maxValue = _max * randomFloat
-        randomInt = round $ max _min maxValue
-    return randomInt
+addErrors :: Int -> Gen a -> Gen [a] -> Gen [a]
+addErrors error charGenerator palGenerator = case error of
+    0 -> palGenerator
+    _ -> do
+        randomError <- choose (0, error)
+        _palGenerator <- palGenerator
+        -- generate x indices on which the errors will be applied
+        errorIndices <- vectorOf randomError $ choose (0, length _palGenerator)
+        -- generate x random characters to replace the characters at the error indices
+        replacementChars <- vectorOf randomError charGenerator
+        let -- replacementChars = take error randomChars
+            -- replace the characters at the error indices with the replacement characters
+            replaceErrors :: [Int] -> [a] -> [a] -> [a]
+            replaceErrors [] _ str = str
+            replaceErrors (i : is) (e : es) str = replaceErrors is es $ take i str ++ [e] ++ drop (i + 1) str
+        return $ replaceErrors errorIndices replacementChars _palGenerator

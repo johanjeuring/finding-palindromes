@@ -8,6 +8,10 @@ Maintainer  :  johan@jeuring.net
 Stability   :  experimental
 Portability :  portable
 
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
 This module is the core of this package and contains the functions that find palindromes.
 Most useful perhaps is the findPalindromesFormatted which also formats the palindrome based on the outputFormat data type as described in this module.
 For more statistics the findPalindromes which outputs a palindrome can be used.

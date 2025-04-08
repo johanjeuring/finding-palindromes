@@ -6,6 +6,10 @@ Maintainer  :  johan@jeuring.net
 Stability   :  experimental
 Portability :  portable
 
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
 This module contains the DNA datatype and corresponding functions.
 This type encodes a representation for DNA that can be used as input for finding palindromes.
 -}

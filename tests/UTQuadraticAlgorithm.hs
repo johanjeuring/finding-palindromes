@@ -1,11 +1,16 @@
+{- This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences) -}
+
 module UTQuadraticAlgorithm (testListQuadraticAlgorithm) where
 
 import Data.Algorithms.Palindromes.DNA
     ( DNA (..)
     )
-import Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
-import Data.Vector as V
 import Test.HUnit (Test (..), assertEqual)
+
+import qualified Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
+import qualified Data.Vector as V
 
 testListQuadraticAlgorithm =
     [ testGappedApproximatePalindromesAroundCentresDNA

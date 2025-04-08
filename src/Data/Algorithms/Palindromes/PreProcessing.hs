@@ -24,7 +24,7 @@ import Data.Algorithms.Palindromes.DNA
     ( DNA
     , toDNA
     )
-import Data.Char (isAlphaNum, isLetter, isSpace, toLower)
+import Data.Char (isAlphaNum, isSpace, toLower)
 
 import qualified Data.Vector as V
 
@@ -49,13 +49,14 @@ textToWords x = V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a ||
 
 -- | A function that filters the string so that only letters and spaces remain, then splits the result on every space so that only words remain. It remembers the original start and end index of each word.
 textToWordsWithIndices :: String -> V.Vector ((Int, Int), [Char])
-textToWordsWithIndices x = V.fromList $ map toWord $ wordsWithIndices indexedCharacters
+textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexedCharacters
   where
     indexedCharacters :: [(Int, Char)]
-    indexedCharacters = V.toList $ filterSpaceAndLetters x
+    indexedCharacters = V.toList $ filterSpaceAndLetters input
 
     -- Convert a list of indexed characters to an indexed string
     toWord :: [(Int, Char)] -> ((Int, Int), [Char])
+    toWord [] = error "Empty string"
     toWord word@(firstIndexedChar : _) =
         ( (fst firstIndexedChar, fst (last word) + 1)
         , map snd word
@@ -71,7 +72,7 @@ textToWordsWithIndices x = V.fromList $ map toWord $ wordsWithIndices indexedCha
         (word, remaining) = break (isSpace . snd) checking
 
     filterSpaceAndLetters :: String -> V.Vector (Int, Char)
-    filterSpaceAndLetters x =
+    filterSpaceAndLetters w =
         V.filter
             (\x -> (isAlphaNum . snd) x || (isSpace . snd) x)
-            (V.indexed (V.fromList $ map toLower x))
+            (V.indexed (V.fromList $ map toLower w))

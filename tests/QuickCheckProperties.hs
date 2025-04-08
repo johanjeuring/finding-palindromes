@@ -16,7 +16,7 @@ import Data.Maybe (fromJust)
 import QuickCheckGenerators
     ( generateDNAPalindrome
     , generatePlainPalindrome
-    , generatePunctuationPal
+    , generatePuncPalindrome
     , generateWordPalindrome
     )
 import QuickCheckSettings (settingsListChar, settingsListDNA)
@@ -31,11 +31,6 @@ import Test.QuickCheck
     , listOf
     , suchThat
     )
-
-propertyListx :: [Property]
-propertyListx =
-    map propValidPalindromeReverseChar settingsListChar
-        ++ map propValidPalindromeReverseDNA settingsListDNA
 
 -- List of to-be-tested properties, where each property is connected to all the settings
 propertyList :: [Property]
@@ -64,11 +59,8 @@ stringGenerator :: Settings -> Gen String
 stringGenerator settings = case variant settings of
     VarWord -> generateWordPalindrome settings
     VarPlain -> generatePlainPalindrome settings
-    _ -> generatePunctuationPal settings
-
--- | Makes a Gen DNA based on the variant that is being used
-dnaGenerator :: Settings -> Gen [DNA]
-dnaGenerator = generateDNAPalindrome
+    VarDNA -> generateDNAPalindrome settings
+    _ -> generatePuncPalindrome settings
 
 -- | Filters the non-alphabetic characters from the input, before converting everything to lowercase
 cleanOriginalString :: String -> String
@@ -115,7 +107,7 @@ checkPalRangeAndText (Palindrome _ _ palText (start, end)) originalString = palT
 propValidPalindromeReverseChar :: Settings -> Property
 propValidPalindromeReverseChar settings = forAll (stringGenerator settings) $ \originalString ->
     all
-        (isPalindromeGapsErrorsChar settings)
+        (extractPalEq settings)
         ( findPalindromes
             (variant settings)
             (complexity settings)
@@ -127,7 +119,7 @@ propValidPalindromeReverseChar settings = forAll (stringGenerator settings) $ \o
 propValidPalindromeReverseDNA :: Settings -> Property
 propValidPalindromeReverseDNA settings = forAll (dnaGenerator settings) $ \dnaSeq ->
     all
-        (isPalindromeGapsErrorsDNA settings)
+        (extractPalEq settings)
         ( findPalindromes
             (variant settings)
             (complexity settings)
@@ -135,32 +127,26 @@ propValidPalindromeReverseDNA settings = forAll (dnaGenerator settings) $ \dnaSe
             (map dnaToChar dnaSeq)
         )
 
--- | Checks if the character string is a palindrome, taking gaps and errors into account
-isPalindromeGapsErrorsChar :: Settings -> Palindrome -> Bool
-isPalindromeGapsErrorsChar settings pal = mismatches <= errors
+extractPalEq :: Settings -> Palindrome -> Bool
+extractPalEq settings pal = case variant settings of
+    VarWord ->
+        checkMismatches errors $
+            removeGap gapLength (words (cleanOriginalString (palText pal)))
+    VarPlain -> checkMismatches errors $ removeGap gapLength (palText pal)
+    VarDNA ->
+        checkMismatches errors $
+            removeGap gapLength (map (fromJust . charToDNA) (palText pal))
+    _ ->
+        checkMismatches errors $ removeGap gapLength (cleanOriginalString (palText pal))
   where
-    pal' = case variant settings of
-        VarWord -> removeGap gapLength (words (cleanOriginalString (palText pal)))
-        VarPlain -> removeGap gapLength (map (: []) (palText pal))
-        _ -> removeGap gapLength (map (: []) (cleanOriginalString (palText pal)))
     (gapLength, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
         ComLinear -> (0, 0)
-    mismatches =
-        length
-            [ ()
-            | i <- [0 .. (length pal' `div` 2) - 1]
-            , not $ (pal' !! i) =:= (pal' !! (length pal' - 1 - i))
-            ]
 
--- | Checks if the DNA string is a palindrome, taking gaps and errors into account
-isPalindromeGapsErrorsDNA :: Settings -> Palindrome -> Bool
-isPalindromeGapsErrorsDNA settings pal = mismatches <= errors
+-- | Checks if the character string is a palindrome, taking gaps and errors into account
+checkMismatches :: (PalEq a) => Int -> [a] -> Bool
+checkMismatches errors pal' = mismatches <= errors
   where
-    pal' = removeGap gapLength (map (fromJust . charToDNA) (palText pal))
-    (gapLength, errors) = case complexity settings of
-        ComQuadratic gap err -> (gap, err)
-        ComLinear -> (0, 0)
     mismatches =
         length
             [ ()
@@ -169,7 +155,7 @@ isPalindromeGapsErrorsDNA settings pal = mismatches <= errors
             ]
 
 -- | Removes gap from palindrome
-removeGap :: Int -> [a] -> [a]
+removeGap :: (PalEq a) => Int -> [a] -> [a]
 removeGap gapLength palindrome = take start palindrome ++ drop end palindrome
   where
     start = (length palindrome - toRemove) `div` 2
@@ -219,7 +205,7 @@ validPalLength settings pal = case variant settings of
 propValidBoundariesChar :: Settings -> Property
 propValidBoundariesChar settings = forAll (stringGenerator settings) $ \originalString ->
     all
-        (checkValidBoundariesChar settings originalString)
+        (checkValidBoundaries settings originalString)
         ( findPalindromes
             (variant settings)
             (complexity settings)
@@ -231,7 +217,7 @@ propValidBoundariesChar settings = forAll (stringGenerator settings) $ \original
 propValidBoundariesDNA :: Settings -> Property
 propValidBoundariesDNA settings = forAll (dnaGenerator settings) $ \dnaSeq ->
     all
-        (checkValidBoundariesDNA settings)
+        (checkValidBoundaries settings (map dnaToChar dnaSeq))
         ( findPalindromes
             (variant settings)
             (complexity settings)
@@ -239,17 +225,13 @@ propValidBoundariesDNA settings = forAll (dnaGenerator settings) $ \dnaSeq ->
             (map dnaToChar dnaSeq)
         )
 
--- | Tests if the palindrome range of a character palindrome corresponds to the palindrome length
-checkValidBoundariesChar :: Settings -> String -> Palindrome -> Bool
-checkValidBoundariesChar settings inputString pal = case variant settings of
-    VarPlain -> let (s, e) = palRange pal in e - s == palLength pal
+-- | Tests if the palindrome range of a palindrome corresponds to the palindrome length
+checkValidBoundaries :: Settings -> String -> Palindrome -> Bool
+checkValidBoundaries settings inputString pal = case variant settings of
     VarWord -> countWordsInRange (palRange pal) inputString == palLength pal
-    _ ->
+    VarText ->
         let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
-
--- | Tests if the palindrome range of a DNA palindrome corresponds to the palindrome length
-checkValidBoundariesDNA :: Settings -> Palindrome -> Bool
-checkValidBoundariesDNA settings pal = let (s, e) = palRange pal in e - s == palLength pal
+    _ -> let (s, e) = palRange pal in e - s == palLength pal
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range
 countWordsInRange :: (Int, Int) -> String -> Int

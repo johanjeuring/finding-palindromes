@@ -1,6 +1,5 @@
 module QuickCheckSettings
-    ( settingsListChar
-    , settingsListDNA
+    ( settingsList
     ) where
 
 import Data.Algorithms.Palindromes.Finders
@@ -11,15 +10,18 @@ import Data.Algorithms.Palindromes.Finders
 import Data.Algorithms.Palindromes.Settings (Settings (..))
 
 -- | Settings where the palindrome type works with Char
-settingsListChar :: [Settings]
-settingsListChar =
-    [ setting2
+settingsList :: [Settings]
+settingsList =
+    [ setting1
+    , setting2
     , setting3
     , setting4
+    , setting5
     , setting6
     , setting7
     , setting8
     , setting9
+    , setting10
     , setting11
     , setting12
     , setting13
@@ -27,14 +29,6 @@ settingsListChar =
     , setting15
     , setting16
     , setting17
-    ]
-
--- | Settings where the palindrome type works with DNA
-settingsListDNA :: [Settings]
-settingsListDNA =
-    [ setting1
-    , setting5
-    , setting10
     ]
 
 -- All settings that will be connected to the QuickCheck properties

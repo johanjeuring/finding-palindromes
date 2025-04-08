@@ -1,11 +1,8 @@
 module QuickCheckGenerators
-    ( generatePunctuationPal
-    , generatePlainPalindrome
-    , generateDNAPalindrome
-    , generateWordPalindrome
+    ( generatePalindromes
     ) where
 
-import Data.Algorithms.Palindromes.DNA (DNA (..))
+import Data.Algorithms.Palindromes.DNA (DNA (..), dnaToChar)
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , OutputFormat (..)
@@ -38,21 +35,13 @@ maxPalInPalGeneration = 5
 minWordLength = 2
 maxWordLength = 7
 
--- | Constructs a Gen String for punctuation palindromes, based on the algorithm settings being used
-generatePunctuationPal :: Settings -> Gen String
-generatePunctuationPal = generatePalindromeString puncCharGenerator
-
--- | Constructs a Gen String for plain palindromes, based on the algorithm settings being used
-generatePlainPalindrome :: Settings -> Gen String
-generatePlainPalindrome = generatePalindromeString plainCharGenerator
-
--- | Constructs a Gen [DNA] for DNA palindromes, based on the algorithm settings being used
-generateDNAPalindrome :: Settings -> Gen [DNA]
-generateDNAPalindrome = generatePalindromeString dnaCharGenerator
-
--- | Constructs a Gen String for word palindromes, based on the algorithm settings being used
-generateWordPalindrome :: Settings -> Gen String
-generateWordPalindrome = wordToString . generatePalindromeString wordGenerator
+-- | Constructs a Gen String for palindromes, based on the algorithm settings being used
+generatePalindromes :: Settings -> Gen String
+generatePalindromes settings = case variant settings of
+    VarPlain -> generatePalindromeString plainCharGenerator settings
+    VarDNA -> generatePalindromeString (fmap dnaToChar dnaCharGenerator) settings
+    VarWord -> wordToString $ generatePalindromeString wordGenerator settings
+    _ -> generatePalindromeString puncCharGenerator settings
 
 -- | Converts a Gen [String] to a Gen String by concatenating the strings in the list with a space
 wordToString :: Gen [[Char]] -> Gen String

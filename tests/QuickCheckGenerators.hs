@@ -52,8 +52,10 @@ puncCharGenerator :: Gen Char
 puncCharGenerator = choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
 -- | Generates random strings for plain palindromes
+alphabetPlain = ['a' .. 'z'] ++ ['A' .. 'Z']
+
 plainCharGenerator :: Gen Char
-plainCharGenerator = elements (['a' .. 'z'] ++ ['A' .. 'Z'])
+plainCharGenerator = elements alphabetPlain
 
 -- makes DNA an instance of Arbitrary, so random DNA strings can be generated
 instance Arbitrary DNA where

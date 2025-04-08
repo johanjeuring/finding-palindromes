@@ -11,6 +11,7 @@ import Data.Algorithms.Palindromes.Finders
 import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 import Data.Algorithms.Palindromes.Settings (Settings (..))
 import Data.List (intercalate)
+import Data.Vector (Vector (..), fromList, toList, (//))
 import Test.QuickCheck
     ( Arbitrary (..)
     , Gen
@@ -72,8 +73,6 @@ wordGenerator = do
     vectorOf randomWordLength $
         choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
-{- Generators for plain and punctuation palindromes -}
-
 -- | Generates either a string, palindrome or palInPal palindrome with random characters around them
 generatePalindromeString :: (Arbitrary a) => Gen a -> Settings -> Gen [a]
 generatePalindromeString charGenerator settings = do
@@ -100,7 +99,7 @@ generatePalindrome charGenerator gap = do
     randomString <- listOf charGenerator
     palInPal charGenerator gap 1 randomString
 
--- | generates a palindrome with a random amount of palInPal depth, note that a non palindrome can be generated if the random float is 0
+-- | generates a palindrome with a random amount of palInPal depth, note that a non palindrome can be generated if the random number is 0
 multiPalInPal :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 multiPalInPal charGenerator gap = do
     randomString <- listOf charGenerator
@@ -143,12 +142,13 @@ addErrors error charGenerator palGenerator = case error of
         randomError <- choose (0, error)
         _palGenerator <- palGenerator
         -- generate x indices on which the errors will be applied
-        errorIndices <- vectorOf randomError $ choose (0, length _palGenerator)
+        errorIndices <- vectorOf randomError $ choose (0, max 0 $ -1 + length _palGenerator)
         -- generate x random characters to replace the characters at the error indices
         replacementChars <- vectorOf randomError charGenerator
-        let -- replacementChars = take error randomChars
-            -- replace the characters at the error indices with the replacement characters
-            replaceErrors :: [Int] -> [a] -> [a] -> [a]
-            replaceErrors [] _ str = str
-            replaceErrors (i : is) (e : es) str = replaceErrors is es $ take i str ++ [e] ++ drop (i + 1) str
-        return $ replaceErrors errorIndices replacementChars _palGenerator
+        let -- replace the characters at the error indices with the replacement characters
+            -- we do this by converting into and from a vector
+            errorZip = zip errorIndices replacementChars
+            replaceErrors = toList $ replaceErrors' errorZip $ fromList _palGenerator
+            replaceErrors' :: [(Int, a)] -> Vector a -> Vector a
+            replaceErrors' zip _palGenerator = _palGenerator // zip
+        if null _palGenerator || randomError == 0 then palGenerator else return replaceErrors

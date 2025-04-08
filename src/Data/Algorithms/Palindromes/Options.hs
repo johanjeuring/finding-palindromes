@@ -58,10 +58,9 @@ defaultLengthMod = (0, Nothing)
 -- Options
 -----------------------------------------------------------------------------
 
-{- I am using single letter options here (except for help): getOpt handles
-options too flexible: in case a letter within a multiple letter option is
-recognized, it is taken as a single letter option.
-Options describe the input flags that can be used in the command line. -}
+{- Options describe the input flags that can be used in the command line. Only single
+letter options are used (except "help"), because if a letter within a multiple letter
+option is recognized, it is taken as a single letter option. -}
 options :: [OptDescr Flag]
 options =
     [ Option
@@ -151,12 +150,14 @@ isHelp :: Flag -> Bool
 isHelp Help = True
 isHelp _ = False
 
--- | Detects help standard input flag constructor.
+-- | Detects standard input flag constructor.
 isStandardInput :: Flag -> Bool
 isStandardInput StandardInput = True
 isStandardInput _ = False
 
--- | Parses the optional error and gap input to a Flag. If invalid inputs are given throw error.
+{- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
+error is thrown.
+-}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
     | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
@@ -175,9 +176,9 @@ parseQuadratic str
     (x, y) = break (== '+') $ fromJust str
     nums = (x, drop 1 y)
 
-{- | From all input flags gets the complexity setting.
-If more than one complexity flag is given it throws error, as this is not suppported by our program.
-If none are give it use default.
+{- | From all input flags, gets the complexity setting. If more than one complexity flag
+is given, it throws an error, as this is not suppported by our program. If none are give it
+uses the default option.
 -}
 getComplexity :: [Flag] -> Complexity
 getComplexity xs
@@ -191,9 +192,9 @@ getComplexity xs
     complexityFlags :: [Flag]
     complexityFlags = filter isComplexity xs
 
-{- | From all input flags gets the variant Setting.
-If more than one variant flag is given it throws error, as this is not suppported by our program.
-If none are give it use default.
+{- | From all input flags, gets the variant setting. If more than one variant flag is
+given, it throws an error, as this is not suppported by our program. If none are give it
+uses the default option.
 -}
 getVariant :: [Flag] -> Variant
 getVariant xs
@@ -207,9 +208,9 @@ getVariant xs
     variantFlags :: [Flag]
     variantFlags = filter isVariant xs
 
-{- | From all input flags gets the outputFormat Setting.
-If more than one outputFormat flag is given it throws error, as this is not suppported by our program.
-If none are give it use default.
+{- | From all input flags, gets the output format setting. If more than one output format
+flag is given, it throws an error, as this is not suppported by our program. If none are
+give it uses the default option.
 -}
 getOutputFormat :: [Flag] -> OutputFormat
 getOutputFormat xs
@@ -223,9 +224,9 @@ getOutputFormat xs
     outputFormatFlags :: [Flag]
     outputFormatFlags = filter isOutputFormat xs
 
-{- | From all input flags gets the LengthModifier Setting.
-If more than one Lengthmodifier flag is given it throws error, as this is not suppported by our program.
-If none are give it use default.
+{- | From all input flags, gets the length modifier setting. If more than one length
+modifier flag is given, it throws an error, as this is not suppported by our program. If
+none are give it uses the default option.
 -}
 getLengthMod :: [Flag] -> LengthMod
 getLengthMod xs = (minLength, maxLength)
@@ -254,6 +255,6 @@ headerHelpMessage :: String
 headerHelpMessage =
     "*********************\n"
         ++ "* Palindrome Finder *\n"
-        ++ "* version 0.4       *\n"
+        ++ "* version 0.5       *\n"
         ++ "*********************\n"
         ++ "Usage:"

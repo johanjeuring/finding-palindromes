@@ -76,10 +76,12 @@ getSettings flags =
 
 -- | should be the same as findPalindromesFormatted, but using the settings datatype.
 getOutput :: Settings -> (String -> String)
-getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) = findPalindromesFormatted v o c l
+getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) =
+    findPalindromesFormatted v o c l
 
-{- | Based on input flags gets a tuple with a function that directly encapsuling everything from the input string to the output string.
-Also encodes whether inputstring is from a file or standard input.
+{- | Based on input flags, gets a tuple with a function that directly encapsulates
+everything from the input string to the output string. Also encodes whether input string
+is from a file or standard input.
 -}
 handleFlags
     :: [Flag]

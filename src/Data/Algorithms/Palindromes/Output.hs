@@ -10,7 +10,8 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-This module contains functions that apply different ways of formatting the output of the algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
+This module contains functions that apply different ways of formatting the output of the
+algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
 -}
 module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
@@ -48,8 +49,8 @@ indicesInOutputText (start', end') input
     start = fst $ originalIndices V.! start'
     end = fst (originalIndices V.! (end' - 1)) + 1
 
-{- | Takes a start and end index in the list of words and returns the start and end indices
-of the text of the word palindrome in the original string
+{- | Takes a start and end index in the list of words and returns the start and end
+indices of the text of the word palindrome in the original string
 -}
 indicesInOutputWord :: (Int, Int) -> String -> (Int, Int)
 indicesInOutputWord (start', end') input
@@ -95,14 +96,16 @@ longestWord input = palText longest
 allLengths :: [Int] -> String
 allLengths = show
 
-{- | All maximal palindromes as a list of text
-Same as show $ map palText input except this doesn't apply show to the palindrome strings as that will turn \n into \\n
+{- | All maximal palindromes as a list of strings. Same as show $ map palText input except
+this doesn't apply show to the palindrome strings as that will turn \n into \\n.
 -}
 allWords :: [Palindrome] -> String
 allWords input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
 
+-- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String
 lengthAt n lengths = show $ lengths !! n
 
+-- | Get the maximal palindrome string at the specified center index.
 wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = palText $ pals !! n

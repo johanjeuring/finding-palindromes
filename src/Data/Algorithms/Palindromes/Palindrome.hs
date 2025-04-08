@@ -30,7 +30,9 @@ data Palindrome
     string.
     -}
     , palRange :: (Int, Int)
-    -- ^ The start (inclusive) and end (exclusive) index of the palindrome in the original string
+    {- ^ The start (inclusive) and end (exclusive) index of the palindrome in the original
+    string.
+    -}
     }
     deriving (Show, Eq)
 

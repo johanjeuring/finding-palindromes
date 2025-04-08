@@ -15,7 +15,7 @@ University within the Software Project course.
 This module Contains two functions that run algorithms for finding palindromes.
 One runs a linear time algorithms and the other a quadratic algorithm.
 These assume text has been preprocessed.
-They return the max length of the palindrome at each center index.
+They return a list with the length of the maximal palindrome at each center index.
 -}
 module Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
@@ -30,8 +30,8 @@ import Data.Algorithms.Palindromes.QuadraticAlgorithm
 
 import qualified Data.Vector as V
 
-{-- | Search for palindromes using the linear time algorithm.
-Returns a list of a list of the maximum length palindrome that was found at each center index in the input.
+{- | Search for palindromes using the linear time algorithm. Returns a list of the maximum
+length palindromes which were found at each center index in the input.
 -}
 linearAlgorithm
     :: (PalEq a)
@@ -39,11 +39,14 @@ linearAlgorithm
     -- ^ isAntiReflexive, antireflexive types only need to check even indices
     -> V.Vector a
     -> [Int]
-linearAlgorithm isAntiReflexive input = reverse $ extendPalindromeS isAntiReflexive input 0 [] 0
+linearAlgorithm isAntiReflexive input =
+    reverse $
+        extendPalindromeS isAntiReflexive input 0 [] 0
 
-{-- | Search for palindromes using the quadratic algorithm.
-Returns a list of a list of the maximum length palindrome that was found at each center index in the input.
-Gaps allow the palindrome to have a gap at the center of given length, errors allow n mistakes in the palindrome of given Int.
+{- | Search for palindromes using the quadratic algorithm. Returns a list of the maximum
+length palindromes which were found at each center index in the input. Gaps allow the
+palindrome to have a gap at the center of given length. Errors allow some substitution
+mistakes in the palindrome.
 -}
 quadraticAlgorithm
     :: (PalEq a)

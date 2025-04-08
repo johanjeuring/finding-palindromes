@@ -11,7 +11,8 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
 This module contains the DNA datatype and corresponding functions.
-This type encodes a representation for DNA that can be used as input for finding palindromes.
+This type encodes a representation for DNA that can be used as input for finding
+palindromes.
 -}
 module Data.Algorithms.Palindromes.DNA where
 

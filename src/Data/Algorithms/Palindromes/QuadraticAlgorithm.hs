@@ -52,8 +52,8 @@ gappedApproximatePalindromesAroundCentres isAntiReflexive gapSize errorCount inp
                 [0 .. 2 * V.length input]
 
 {- | Keep expanding the palindrome around the given center to get the maximal palindrome.
-Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of the
-found palindrome.
+Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of
+the found palindrome.
 -}
 lengthApproximatePalindrome
     :: (PalEq a) => V.Vector a -> Int -> Int -> Int -> Int

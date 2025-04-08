@@ -31,13 +31,8 @@ import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters'
     , textToWordsWithIndices
     )
-import Data.Char
-    ( isAlphaNum
-    , isSpace
-    )
 import Data.List (intercalate)
 
-import qualified Data.Algorithms.Palindromes.Palindrome as Data.Algorithms
 import qualified Data.Vector as V
 
 {- | Takes a start and an end index in the filtered string and returns the indices

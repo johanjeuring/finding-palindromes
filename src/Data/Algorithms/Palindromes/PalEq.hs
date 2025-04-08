@@ -14,9 +14,9 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-This module describes the class PalEq. This is equality but for palindromes.
-For many types with an instance of equality this can be used as such.
-Some types however such as DNA, where we want characters to match to other characters we create our own instance.
+This module describes the class PalEq. This is equality but for palindromes. For many
+types with an instance of equality this can be used as such. Some types however such as
+DNA, where we want characters to match to other characters we create our own instance.
 This generalizes equal to a "palindromic equals".
 -}
 module Data.Algorithms.Palindromes.PalEq
@@ -26,9 +26,8 @@ module Data.Algorithms.Palindromes.PalEq
 
 import Data.Vector as V
 
-{- |
-  Shows that some element belongs to another element.
-  For example, A belongs to T in DNA, and 'z' belongs to 'z' in normal text.
+{- | Shows that some element belongs to another element.
+For example, A belongs to T in DNA, and 'z' belongs to 'z' in normal text.
 -}
 class PalEq a where
     (=:=) :: a -> a -> Bool
@@ -38,7 +37,7 @@ instance (Eq a) => PalEq a where
     (=:=) = (==)
 
 {- | Safe function which returns whether an element at an index in the input vector is
-  PalEq to itself.
+PalEq to itself.
 -}
 palEqToItselfAtIndex :: (PalEq a) => V.Vector a -> Int -> Bool
 palEqToItselfAtIndex input index

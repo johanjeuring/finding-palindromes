@@ -10,8 +10,9 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-Describes postprocessing functions. The Palindromes package uses these to apply a length modifier if one is set,
-and for the punctuation type to shorten palindromes to punctuation.
+Describes postprocessing functions. The Palindromes package uses these to apply a length
+modifier if one is set, and for the punctuation type to shorten palindromes to
+punctuation.
 -}
 module Data.Algorithms.Palindromes.PostProcessing
     ( filterMin
@@ -37,11 +38,14 @@ filterMax max_ = map (\x -> if x > max_ then 0 else x)
 filterExact :: Int -> [Int] -> [Int]
 filterExact n = map (\x -> if x == n then x else 0)
 
--- | This function changes a list of text palindrome lengths to a list of punctuation palindrome lengths by making the lengths shorter where needed.
+{- | This function changes a list of text palindrome lengths to a list of punctuation
+palindrome lengths by making the lengths shorter where needed.
+-}
 filterPunctuation :: String -> [Int] -> [Int]
 filterPunctuation input lengths = map (rangeToLength . shrinkRange) $ lengthsToRanges lengths
   where
-    -- Shrinks a range on both sides until the resulting range is surrounded by punctuation in the original input
+    {- Shrinks a range on both sides until the resulting range is surrounded by
+    punctuation in the original input. -}
     shrinkRange :: (Int, Int) -> (Int, Int)
     shrinkRange (startIndex, endIndex)
         | startIndex == endIndex = (startIndex, endIndex)

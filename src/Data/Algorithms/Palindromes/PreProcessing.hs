@@ -10,7 +10,8 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-Functions for converting string input to different variants that can be used in the algorithms.
+Functions for converting string input to different variants that can be used in the
+algorithms.
 -}
 module Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
@@ -35,7 +36,9 @@ import qualified Data.Vector as V
 filterLetters :: String -> V.Vector Char
 filterLetters x = V.map toLower $ V.filter isAlphaNum (V.fromList x)
 
--- | A function that filters the string so that only letters remain, but remembers the original index of each character.
+{- | A function that filters the string so that only letters remain, but remembers the
+original index of each character.
+-}
 filterLetters' :: String -> V.Vector (Int, Char)
 filterLetters' x = V.filter (isAlphaNum . snd) (V.indexed (V.fromList $ map toLower x))
 
@@ -43,11 +46,16 @@ filterLetters' x = V.filter (isAlphaNum . snd) (V.indexed (V.fromList $ map toLo
 textToDNA :: String -> Maybe (V.Vector DNA)
 textToDNA = toDNA . V.fromList
 
--- | A function that filters the string so that only letters and spaces remain, then splits the result on every space so that only words remain.
+{- | A function that filters the string so that only letters and spaces remain, then
+splits the result on every space so that only words remain.
+-}
 textToWords :: String -> V.Vector String
 textToWords x = V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a || isSpace a) x
 
--- | A function that filters the string so that only letters and spaces remain, then splits the result on every space so that only words remain. It remembers the original start and end index of each word.
+{- | A function that filters the string so that only letters and spaces remain, then
+splits the result on every space so that only words remain. It remembers the original
+start and end index of each word.
+-}
 textToWordsWithIndices :: String -> V.Vector ((Int, Int), [Char])
 textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexedCharacters
   where

@@ -66,9 +66,8 @@ palindrome we want to find.
 data Variant
     = -- | Convert the text to DNA, then match A with T and G with C.
       VarDNA
-    | {- | Find text palindromes, then shrink each palindrome until it is surrounded by
-      punctuation so that no palindrome can contain only part of a word.
-      -}
+    | -- | Find text palindromes, then shrink each palindrome until it is surrounded by
+      --       punctuation so that no palindrome can contain only part of a word.
       VarPunctuation
     | -- | Find palindromes only based on letters, ignore all other characters.
       VarText
@@ -137,7 +136,11 @@ findPalindromeLengths variant complexity (minlength, maxlength') input =
     alg :: (PalEq b) => V.Vector b -> [Int]
     alg = case complexity of
         ComLinear -> linearAlgorithm isAntiReflexive
-        _ -> quadraticAlgorithm isAntiReflexive (gapSize complexity) (maxError complexity)
+        _ ->
+            quadraticAlgorithm
+                (isAntiReflexive && even (gapSize complexity))
+                (gapSize complexity)
+                (maxError complexity)
 
     {- We distinguish this case since for anti reflexive coupleables (only DNA currently)
     we only need to run on even indices saving time and space. -}
@@ -189,14 +192,15 @@ findPalindromes variant complexity lengthmod input = map lengthToPalindrome leng
     indicesInOriginal il@(i, l) = case variant of
         VarText -> indicesInOutputText range input
         VarPunctuation -> indicesInOutputText range input
-        VarDNA -> indicesInOutputText dnaRange input
+        VarDNA -> indicesInOutputText (dnaRange complexity) input
         VarPlain -> range
         VarWord -> indicesInOutputWord range input
       where
         range :: (Int, Int)
         range = indexedLengthToRange il
-        dnaRange :: (Int, Int)
-        dnaRange = (i - (l `div` 2), i + (l `div` 2))
+        dnaRange :: Complexity -> (Int, Int)
+        dnaRange ComLinear = (i - (l `div` 2), i + (l `div` 2))
+        dnaRange (ComQuadratic gap _) = if even gap then dnaRange ComLinear else range
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

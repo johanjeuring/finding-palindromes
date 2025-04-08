@@ -1,15 +1,21 @@
------------------------------------------------------------------------------
+{-# LANGUAGE MonoLocalBinds #-}
 
------------------------------------------------------------------------------
+{- |
+Module      :  Data.Algorithms.Palindromes.Finders
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
 
--- \|
--- Module      :  Data.Algorithms.Palindromes.Finders
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
+This module is the core of this package and contains the functions that find palindromes.
+Most useful perhaps is the findPalindromesFormatted which also formats the palindrome based on the outputFormat data type as described in this module.
+For more statistics the findPalindromes which outputs a palindrome can be used.
+-}
 module Data.Algorithms.Palindromes.Finders
     ( findPalindromes
     , findPalindromeLengths
@@ -53,30 +59,37 @@ import Data.Maybe (fromJust, isNothing)
 
 import qualified Data.Vector as V
 
+-- | Used as a setting for palindrome finding functions. This describes the kind of palindrome we want to find.
 data Variant
     = -- | Convert the text to DNA, then match A with T and G with C.
       VarDNA
-    | -- | Find text palindromes, then shrink the palindromes so that all palindromes are surrounded by punctuation.
+    | -- | Find text palindromes, then shrink the palindromes to punctuation so that no palindrome can contain only part of a word.
       VarPunctuation
-    | -- | Ignore all characters that are not letters.
+    | -- | Find palindromes only based on letters, ignore all other characters.
       VarText
     | -- | Find palindromes in the text exactly as it was given.
       VarPlain
     | -- | Compare words instead of individual characters to look for palindromes.
       VarWord
+
+-- | Used to describe different possible output formats of palindromes. Used a setting in finding functions.
 data OutputFormat
-    = -- | The length of the longest palindrome
+    = -- | Output the length of the longest palindrome
       OutLength
-    | -- | The longest palindrome as text
+    | -- | Output longest palindrome as text
       OutWord
-    | -- | The lengths of all maximal palindromes around each center
+    | -- | Output the lengths of all maximal palindromes around each center
       OutLengths
-    | -- | All maximal palindromes around each center as text
+    | -- | Output all maximal palindromes around each center as text
       OutWords
-    | -- | The length of the palindrome at a certain center index
+    | -- | Output the length of the palindrome at a certain center index
       OutLengthAt Int
-    | -- | The palindrome at a certain center index as text
+    | -- | Output the palindrome at a certain center index as text
       OutWordAt Int
+
+{- | Used as a setting for what algorithm to run.
+The quadratic algorithm also has functionality for icluding gaps and errors, therefore this is given as an extra setting.
+-}
 data Complexity
     = ComLinear
     | ComQuadratic {gapSize :: Int, maxError :: Int}
@@ -85,9 +98,9 @@ data Complexity
 type LengthMod = (Int, Maybe Int)
 
 {- |
-    This function consists of three phases:
+    This function combines three phases based on the settings and input given:
     The pre-processing phase, the algorithm phase and the post-processing phase.
-    It returns a list of integers, which corresponds to the lengths of the maximal palindromes around each center.
+    It finds and returns a list of integers, which corresponds to the lengths of the maximal palindromes around each center.
 -}
 findPalindromeLengths
     :: Variant -> Complexity -> LengthMod -> String -> [Int]
@@ -134,10 +147,10 @@ findPalindromeLengths variant complexity (minlength, maxlength') input = (post .
         | otherwise = fromJust maxlength'
 
 {- |
-    This function consisting of 4 phases:
+    This function combines four phases based on the settings and input given:
     The pre-processing phase, the algorithm phase, the post-processing phase and the parsing phase.
-    The first three phases are taken from the findPalindromesLengths.
-    The final phase parses the [Int] to a [Palindrome], as defined in PalindromesUtils.hs.
+    The final phase parses the [Int] to a [Palindrome].
+    The function returns a list of the data type Palindrome with a palindrome at each center index.
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
 findPalindromes variant complexity lengthmod input = map lengthToPalindrome lengths
@@ -170,10 +183,10 @@ findPalindromes variant complexity lengthmod input = map lengthToPalindrome leng
         dnaRange = (i - (l `div` 2), i + (l `div` 2))
 
 {- |
-    This is a function that consists of 5 phases:
+    This function combines four phases based on the settings and input given:
     The pre-processing, the algorithm phase, the post processing phase, the parsing phase and the output phase.
-    The first 3 are handled by the findPalindromeLengths and the first 4 are handled by the findPalindromes.
     The final phase takes the OutputFormat flag into account and returns a String that can be printed.
+    It return the palindrome found using the settings, formatted to the given outputFormat.
 -}
 findPalindromesFormatted
     :: Variant -> OutputFormat -> Complexity -> LengthMod -> String -> String

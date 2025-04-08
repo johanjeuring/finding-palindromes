@@ -1,16 +1,18 @@
------------------------------------------------------------------------------
+{- |
+Module      :  Data.Algorithms.Palindromes.PostProcessing
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
 
------------------------------------------------------------------------------
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
 
--- \|
--- Module      :  Data.Algorithms.Palindromes.PostProcessing
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
-
+Describes postprocessing functions. The Palindromes package uses these to apply a length modifier if one is set,
+and for the punctuation type to shorten palindromes to punctuation.
+-}
 module Data.Algorithms.Palindromes.PostProcessing
     ( filterMin
     , filterMax

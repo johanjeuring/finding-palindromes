@@ -1,15 +1,19 @@
------------------------------------------------------------------------------
------------------------------------------------------------------------------
--- \|
--- Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
 {-# LANGUAGE MonoLocalBinds #-}
 
+{- |
+Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
+This module contains an implementation of a quadratic algorithm to find palindromes.
+-}
 module Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     , getLeftRightCenterBetweenElems

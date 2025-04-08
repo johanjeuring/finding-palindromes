@@ -1,16 +1,18 @@
------------------------------------------------------------------------------
+{- |
+Module      :  Data.Algorithms.Palindromes.DNA
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
 
------------------------------------------------------------------------------
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
 
--- \|
--- Module      :  Data.Algorithms.Palindromes.DNA
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
-
+This module contains the DNA datatype and corresponding functions.
+This type encodes a representation for DNA that can be used as input for finding palindromes.
+-}
 module Data.Algorithms.Palindromes.DNA where
 
 import Data.Algorithms.Palindromes.PalEq (PalEq ((=:=)))

@@ -5,7 +5,7 @@ module QuickCheckSettings
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComLinear, ComQuadratic)
     , OutputFormat (OutLength, OutLengths, OutWord, OutWords)
-    , Variant (VarDNA, VarPlain, VarText, VarWord)
+    , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
     )
 import Data.Algorithms.Palindromes.Settings (Settings (..))
 
@@ -29,126 +29,156 @@ settingsList =
     , setting15
     , setting16
     , setting17
+    , setting18
+    , setting19
+    , setting20
+    , setting21
     ]
-
--- All settings that will be connected to the QuickCheck properties
 
 setting1 :: Settings
 setting1 =
     Settings
         ComLinear
-        VarDNA
+        VarWord
         OutLength
-        (10, Just 100)
+        (10, Nothing)
 setting2 :: Settings
 setting2 =
     Settings
-        (ComQuadratic 3 5)
-        VarPlain
+        (ComQuadratic 10 5)
+        VarPunctuation
         OutLength
         (3, Nothing)
 setting3 :: Settings
 setting3 =
     Settings
-        (ComQuadratic 10 0)
-        VarWord
+        (ComQuadratic 3 1)
+        VarPlain
         OutLength
         (0, Just 5)
 setting4 :: Settings
 setting4 =
     Settings
-        (ComQuadratic 0 1)
-        VarWord
-        OutLength
-        (3, Just 100)
-setting5 :: Settings
-setting5 =
-    Settings
         (ComQuadratic 3 5)
-        VarDNA
-        OutLength
-        (0, Just 5)
-setting6 :: Settings
-setting6 =
-    Settings
-        (ComQuadratic 10 5)
         VarText
         OutLength
         (10, Just 100)
+setting5 :: Settings
+setting5 =
+    Settings
+        (ComQuadratic 10 0)
+        VarPlain
+        OutLength
+        (0, Nothing)
+setting6 :: Settings
+setting6 =
+    Settings
+        (ComQuadratic 0 1)
+        VarWord
+        OutLength
+        (3, Just 5)
 setting7 :: Settings
 setting7 =
     Settings
-        (ComQuadratic 3 1)
-        VarPlain
+        (ComQuadratic 10 5)
+        VarWord
         OutLength
         (0, Just 100)
 setting8 :: Settings
 setting8 =
     Settings
-        (ComQuadratic 0 1)
+        (ComQuadratic 10 0)
         VarText
         OutLength
-        (0, Nothing)
+        (3, Just 5)
 setting9 :: Settings
 setting9 =
     Settings
-        (ComQuadratic 0 1)
-        VarPlain
+        (ComQuadratic 3 0)
+        VarWord
         OutLength
-        (0, Just 5)
+        (3, Nothing)
 setting10 :: Settings
 setting10 =
+    Settings
+        (ComQuadratic 0 1)
+        VarPunctuation
+        OutLength
+        (0, Just 100)
+setting11 :: Settings
+setting11 =
+    Settings
+        (ComQuadratic 0 5)
+        VarPlain
+        OutLength
+        (3, Just 100)
+setting12 :: Settings
+setting12 =
     Settings
         (ComQuadratic 10 1)
         VarDNA
         OutLength
-        (3, Nothing)
-setting11 :: Settings
-setting11 =
-    Settings
-        ComLinear
-        VarPlain
-        OutLength
         (10, Nothing)
-setting12 :: Settings
-setting12 =
-    Settings
-        (ComQuadratic 3 0)
-        VarText
-        OutLength
-        (3, Just 5)
 setting13 :: Settings
 setting13 =
     Settings
-        ComLinear
-        VarWord
+        (ComQuadratic 3 0)
+        VarDNA
         OutLength
-        (3, Just 5)
+        (3, Just 100)
 setting14 :: Settings
 setting14 =
     Settings
-        (ComQuadratic 3 5)
-        VarWord
+        (ComQuadratic 0 5)
+        VarDNA
         OutLength
-        (10, Nothing)
+        (0, Nothing)
 setting15 :: Settings
 setting15 =
     Settings
         ComLinear
-        VarText
+        VarPunctuation
         OutLength
-        (0, Just 100)
+        (3, Just 5)
 setting16 :: Settings
 setting16 =
     Settings
-        (ComQuadratic 0 5)
-        VarText
+        ComLinear
+        VarDNA
         OutLength
-        (0, Just 5)
+        (0, Just 100)
 setting17 :: Settings
 setting17 =
     Settings
-        (ComQuadratic 10 5)
+        (ComQuadratic 3 1)
+        VarPunctuation
+        OutLength
+        (10, Nothing)
+setting18 :: Settings
+setting18 =
+    Settings
+        (ComQuadratic 0 1)
+        VarText
+        OutLength
+        (0, Nothing)
+setting19 :: Settings
+setting19 =
+    Settings
+        ComLinear
         VarPlain
+        OutLength
+        (10, Nothing)
+setting20 :: Settings
+setting20 =
+    Settings
+        (ComQuadratic 0 5)
+        VarPlain
+        OutLength
+        (3, Just 5)
+setting21 :: Settings
+setting21 =
+    Settings
+        ComLinear
+        VarText
         OutLength
         (10, Nothing)

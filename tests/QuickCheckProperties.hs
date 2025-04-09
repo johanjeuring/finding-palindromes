@@ -168,6 +168,7 @@ checkValidBoundaries settings inputString pal = case variant settings of
     VarWord -> countWordsInRange (palRange pal) inputString == palLength pal
     VarText ->
         let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
+    VarPunctuation -> let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
     _ -> let (s, e) = palRange pal in e - s == palLength pal
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range

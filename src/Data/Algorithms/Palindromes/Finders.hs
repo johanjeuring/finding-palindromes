@@ -66,8 +66,9 @@ palindrome we want to find.
 data Variant
     = -- | Convert the text to DNA, then match A with T and G with C.
       VarDNA
-    | -- | Find text palindromes, then shrink each palindrome until it is surrounded by
-      --       punctuation so that no palindrome can contain only part of a word.
+    | {- | Find text palindromes, then shrink each palindrome until it is surrounded by
+      punctuation so that no palindrome can contain only part of a word.
+      -}
       VarPunctuation
     | -- | Find palindromes only based on letters, ignore all other characters.
       VarText

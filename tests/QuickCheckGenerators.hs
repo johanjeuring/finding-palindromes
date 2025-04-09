@@ -110,6 +110,9 @@ multiPalInPal charGenerator gap = do
 a depth of 0 gives the input back, (pal) -
 a depth of 1 gives a palindrome with one level of palindrome (pallap) -
 a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
+
+depth o(1)
+depth 1 O(n*2^k + ... )
 -}
 palInPal :: (Arbitrary a) => Gen a -> Int -> Int -> [a] -> Gen [a]
 palInPal charGenerator gap depth string = do
@@ -129,10 +132,9 @@ even pals are reprented by this string being empty
 -}
 generateGap :: (Arbitrary a) => Gen a -> Int -> Gen [a]
 generateGap charGenerator gapSetting = do
-    randomString <- listOf charGenerator
     let maxGapLength = fromIntegral $ max gapSetting 1 -- the maxGaplength is always set to at least 1 to account for uneven palindromes
     randomGapLength <- choose (0, maxGapLength)
-    return $ take randomGapLength randomString -- generates a string of length 'randomGapLength'
+    vectorOf randomGapLength charGenerator -- generates a string of length 'randomGapLength'
 
 -- | Generate x amount of errors in a string
 addErrors :: Int -> Gen a -> Gen [a] -> Gen [a]

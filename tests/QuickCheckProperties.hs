@@ -116,7 +116,7 @@ checkMismatches errors pal' = mismatches <= errors
             ]
 
 -- | Removes gap from palindrome
-removeGap :: (PalEq a) => Int -> [a] -> [a]
+removeGap :: Int -> [a] -> [a]
 removeGap gapLength palindrome = take start palindrome ++ drop end palindrome
   where
     start = (length palindrome - toRemove) `div` 2

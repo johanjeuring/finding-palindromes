@@ -18,6 +18,7 @@ import Test.QuickCheck
     , Property
     , arbitrary
     , choose
+    , chooseInt
     , forAll
     , generate
     , listOf
@@ -69,7 +70,7 @@ dnaCharGenerator = arbitrary :: Gen DNA
 -- | Randomly generates one word with length between 2 and 7
 wordGenerator :: Gen [Char]
 wordGenerator = do
-    randomWordLength <- choose (minWordLength, maxWordLength)
+    randomWordLength <- chooseInt (minWordLength, maxWordLength)
     vectorOf randomWordLength $
         choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 

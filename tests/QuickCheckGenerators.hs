@@ -31,9 +31,9 @@ maxPalInPalGeneration, minWordLength, maxWordLength :: Int
 -- the maximum amount of palInPal depth the generated palindrome will have
 -- a Depth of 1 gives a palindrome with one level of palindrome (pallap)
 -- a Depth of 2 gives a palindrome with two levels of palindromes (pallappallap) etc
-maxPalInPalGeneration = 5
+maxPalInPalGeneration = 2
 -- The minimum and maximum length of the generated words
-minWordLength = 2
+minWordLength = 1
 maxWordLength = 7
 
 -- | Constructs a Gen String for palindromes, based on the algorithm settings being used
@@ -110,9 +110,6 @@ multiPalInPal charGenerator gap = do
 a depth of 0 gives the input back, (pal) -
 a depth of 1 gives a palindrome with one level of palindrome (pallap) -
 a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
-
-depth o(1)
-depth 1 O(n*2^k + ... )
 -}
 palInPal :: (Arbitrary a) => Gen a -> Int -> Int -> [a] -> Gen [a]
 palInPal charGenerator gap depth string = do

@@ -1,15 +1,19 @@
------------------------------------------------------------------------------
------------------------------------------------------------------------------
--- \|
--- Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
 {-# LANGUAGE MonoLocalBinds #-}
 
+{- |
+Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
+This module contains an implementation of a quadratic algorithm to find palindromes.
+-}
 module Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     , getLeftRightCenterBetweenElems
@@ -48,8 +52,8 @@ gappedApproximatePalindromesAroundCentres isAntiReflexive gapSize errorCount inp
                 [0 .. 2 * V.length input]
 
 {- | Keep expanding the palindrome around the given center to get the maximal palindrome.
-Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of the
-found palindrome.
+Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of
+the found palindrome.
 -}
 lengthApproximatePalindrome
     :: (PalEq a) => V.Vector a -> Int -> Int -> Int -> Int

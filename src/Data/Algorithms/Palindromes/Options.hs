@@ -1,19 +1,23 @@
 {-# LANGUAGE PatternGuards #-}
 -- Did not yet translate all options. Complete the table in dispatchFlags.
 -- Default doesn't work yet
------------------------------------------------------------------------------
---
--- Module      :  Data.Algorithms.Palindromes.Options
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
---
------------------------------------------------------------------------------
 {-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
 
+{- |
+Module      :  Data.Algorithms.Palindromes.Options
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
+Gives the options for flags that can be input in the command line.
+Also contains the functions that are used to convert these flags to their corresponding datatype.
+-}
 module Data.Algorithms.Palindromes.Options where
 
 import Data.Algorithms.Palindromes.Finders
@@ -54,9 +58,9 @@ defaultLengthMod = (0, Nothing)
 -- Options
 -----------------------------------------------------------------------------
 
--- I am using single letter options here (except for help): getOpt handles
--- options too flexible: in case a letter within a multiple letter option is
--- recognized, it is taken as a single letter option.
+{- Options describe the input flags that can be used in the command line. Only single
+letter options are used (except "help"), because if a letter within a multiple letter
+option is recognized, it is taken as a single letter option. -}
 options :: [OptDescr Flag]
 options =
     [ Option
@@ -141,14 +145,19 @@ options =
         "Extend a palindrome around center [arg]"
     ]
 
+-- | Detects help flag constructor.
 isHelp :: Flag -> Bool
 isHelp Help = True
 isHelp _ = False
 
+-- | Detects standard input flag constructor.
 isStandardInput :: Flag -> Bool
 isStandardInput StandardInput = True
 isStandardInput _ = False
 
+{- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
+error is thrown.
+-}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
     | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
@@ -167,8 +176,10 @@ parseQuadratic str
     (x, y) = break (== '+') $ fromJust str
     nums = (x, drop 1 y)
 
--- functions to get each setting field from the input flags. If no flags are given to modify setting use default.
-
+{- | From all input flags, gets the complexity setting. If more than one complexity flag
+is given, it throws an error, as this is not suppported by our program. If none are give it
+uses the default option.
+-}
 getComplexity :: [Flag] -> Complexity
 getComplexity xs
     | null complexityFlags = defaultComplexity
@@ -181,6 +192,10 @@ getComplexity xs
     complexityFlags :: [Flag]
     complexityFlags = filter isComplexity xs
 
+{- | From all input flags, gets the variant setting. If more than one variant flag is
+given, it throws an error, as this is not suppported by our program. If none are give it
+uses the default option.
+-}
 getVariant :: [Flag] -> Variant
 getVariant xs
     | null variantFlags = defaultVariant
@@ -193,6 +208,10 @@ getVariant xs
     variantFlags :: [Flag]
     variantFlags = filter isVariant xs
 
+{- | From all input flags, gets the output format setting. If more than one output format
+flag is given, it throws an error, as this is not suppported by our program. If none are
+give it uses the default option.
+-}
 getOutputFormat :: [Flag] -> OutputFormat
 getOutputFormat xs
     | null outputFormatFlags = defaultOutputFormat
@@ -205,6 +224,10 @@ getOutputFormat xs
     outputFormatFlags :: [Flag]
     outputFormatFlags = filter isOutputFormat xs
 
+{- | From all input flags, gets the length modifier setting. If more than one length
+modifier flag is given, it throws an error, as this is not suppported by our program. If
+none are give it uses the default option.
+-}
 getLengthMod :: [Flag] -> LengthMod
 getLengthMod xs = (minLength, maxLength)
   where
@@ -227,10 +250,11 @@ getLengthMod xs = (minLength, maxLength)
         | [MaxLength maxL] <- maxs = Just maxL
         | otherwise = error "Multiple maximum lengths found."
 
+-- | The header of the help message.
 headerHelpMessage :: String
 headerHelpMessage =
     "*********************\n"
         ++ "* Palindrome Finder *\n"
-        ++ "* version 0.4       *\n"
+        ++ "* version 0.5       *\n"
         ++ "*********************\n"
         ++ "Usage:"

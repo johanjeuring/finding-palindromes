@@ -1,14 +1,19 @@
------------------------------------------------------------------------------
---
--- Module      :  Data.Algorithms.Palindromes.Settings
--- Copyright   :  (c) 2007 - 2013 Johan Jeuring
--- License     :  BSD3
---
--- Maintainer  :  johan@jeuring.net
--- Stability   :  experimental
--- Portability :  portable
---
------------------------------------------------------------------------------
+{- |
+Module      :  Data.Algorithms.Palindromes.Settings
+Copyright   :  (c) 2007 - 2013 Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences)
+
+Describes the settings for the palindrome finder functions.
+Functions that are used to get settings,
+and therefore also functions that apply settings to go from input to output are also described here.
+-}
 module Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     , getSettings
@@ -35,10 +40,14 @@ import Data.Algorithms.Palindromes.Options
     , getLengthMod
     , getOutputFormat
     , getVariant
+    , headerHelpMessage
+    , isHelp
     , isStandardInput
+    , options
     )
+import System.Console.GetOpt (usageInfo)
 
--- | Data type with all settings required for running algorithm
+-- | Data type with all the settings required for running algorithm.
 data Settings = Settings
     { complexity :: Complexity
     , variant :: Variant
@@ -56,6 +65,7 @@ defaultSettings =
         , lengthMod = defaultLengthMod
         }
 
+-- | Gets settings from the list of input flags. Uses default if no flags are given.
 getSettings :: [Flag] -> Settings
 getSettings flags =
     Settings
@@ -65,16 +75,23 @@ getSettings flags =
         , lengthMod = getLengthMod flags
         }
 
--- | should be the same as findPalindromesFormatted, but now with settings as input type instead of four different fields.
+-- | should be the same as findPalindromesFormatted, but using the settings datatype.
 getOutput :: Settings -> (String -> String)
-getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) = findPalindromesFormatted v o c l
+getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) =
+    findPalindromesFormatted v o c l
 
-{- | Does what handle options currently does. Except that it getsSetting and the output instead of a lot of maybe flags into dispatchflags.
-| TODO: find out whethere we can separate the bool from this function as it is not pretty.
+{- | Based on input flags, gets a tuple with a function that directly encapsulates
+everything from the input string to the output string. Also encodes whether input string
+is from a file or standard input.
 -}
 handleFlags
     :: [Flag]
     -> ( String -> String -- function from input to output
-       , Bool -- if input is standard input TODO: find out what standard input is and how it works...
+       , Bool -- if input is standard input
        )
-handleFlags flags = (getOutput (getSettings flags), any isStandardInput flags)
+handleFlags flags =
+    ( if any isHelp flags || null flags
+        then (\_ -> usageInfo headerHelpMessage options)
+        else getOutput (getSettings flags)
+    , any isStandardInput flags
+    )

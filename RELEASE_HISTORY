@@ -1,6 +1,21 @@
 Release history:
 
 --------
+07042025 Version 0.5
+--------
+Does a big clean up of the whole package:
+- Generalize the input data type. Any abstract data type of the PalEq class, with the (=:=) operator, can be the input for the palindrome finding algorithms.
+- Define a new output type. This can be found in src\Data\Algorithms\Palindromes\Palindrome.hs.
+- Rewrite functions to be clearer.
+- Split the package into more modules.
+- Split the pre- and post-processing from the algorithms themselves. This allows for adding more pre- and postprocessing easily in the future.
+- Add Haddock documentation. Every function has a Haddock-style comment, allowing Haddock to make automatic documentation for the package.
+- Add support for word palindromes.
+- Change the way punctuation palindromes are found. Every punctuation palindrome is a substring of the maximal palindrome at the same center. So, we find punctuation palindromes easily by shrinking maximal palindromes until we have a punctuation palindrome, solving this problem with a post-processing solution.
+- Add many unit tests.
+- Add QuickCheck generators for texts with (large) palindromes and properties for palindromes.
+
+--------
 08072012 Version 0.4
 --------
 Cleaned up the options, to make them available for other kinds

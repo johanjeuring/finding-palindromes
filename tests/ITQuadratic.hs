@@ -17,13 +17,13 @@ testListITQuadratic =
     , testITQuadratic2
     , testITQuadratic3
     , testITQuadratic4
-    , -- , testITQuadratic5
-      testITQuadratic6
+    , testITQuadratic5
+    , testITQuadratic6
     , testITQuadratic7
-    , -- , testITQuadratic8
-      testITQuadratic9
-    , -- , testITQuadratic10
-      testITQuadratic11
+    , testITQuadratic8
+    , testITQuadratic9
+    , testITQuadratic10
+    , testITQuadratic11
     , testITQuadratic12
     , testITQuadratic13
     , testITQuadratic14
@@ -133,8 +133,6 @@ testITQuadratic4 =
             "ACCT"
         ~?= "[0,2,4,2,0]"
 
-{-
-
 -- String: Contains an odd-gapped dna palindrome
 testITQuadratic5 =
     "testITQuadratic5"
@@ -144,8 +142,7 @@ testITQuadratic5 =
             ComQuadratic{gapSize = 1, maxError = 2}
             (3, Just 6)
             "“AC\nTA..,TTCT”"
-        ~?= "[\"\",\"A\",\"\", \"ACT\",\"\",\"T\",\"TA\",\"A\",\"AT\",\"T\",\"\",\"T\",\"TC\",\"C\",\"CT\",\"T\",\"\"]"
--}
+        ~?= "[\"\",\"\",\"\",\"AC\nT\",\"AC\nTA\",\"AC\nTA..,T\",\"AC\nTA..,TT\",\"C\nTA..,TT\",\"\",\"\",\"A..,TTC\",\"A..,TTCT\",\"TTCT\",\"TCT\",\"\",\"\",\"\"]"
 
 -- String: Contains an even nested palindrome
 testITQuadratic6 =
@@ -169,7 +166,6 @@ testITQuadratic7 =
             "Ac\nC,T”"
         ~?= "Ac"
 
-{-
 -- String: Contains an odd gapped palindrome
 testITQuadratic8 =
     "testITQuadratic8"
@@ -180,7 +176,6 @@ testITQuadratic8 =
             (2, Just 3)
             "ACTATTCT"
         ~?= "ACT"
--}
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic9 =
@@ -193,7 +188,6 @@ testITQuadratic9 =
             "AGGGT"
         ~?= "2"
 
-{-
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic10 =
     "testITQuadratic10"
@@ -204,7 +198,6 @@ testITQuadratic10 =
             (0, Nothing)
             "A;G;G;G;T"
         ~?= "[\"\",\"A\",\"A;G\",\"A;G;G\",\"A;G;G;G\",\"A;G;G;G;T\",\"G;G;G;T\",\"G;G;T\",\"G;T\",\"T\",\"\"]"
--}
 
 -- String: Contains a palindrome with punctuation
 testITQuadratic11 =

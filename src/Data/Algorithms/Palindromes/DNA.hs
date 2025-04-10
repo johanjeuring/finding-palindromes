@@ -32,7 +32,6 @@ instance {-# OVERLAPPING #-} PalEq DNA where
     G =:= C = True
     C =:= G = True
     _ =:= _ = False
-    complement = compDNA
 
 {- | Parsed a foldable with chars to a foldable with the DNA datatype. Returns Nothing if
   the input cannot be fully parsed to DNA.
@@ -63,11 +62,3 @@ dnaToChar T = 'T'
 dnaToChar G = 'G'
 dnaToChar C = 'C'
 dnaToChar N = 'N'
-
--- | Converts the DNA datatype to its complement
-compDNA :: DNA -> DNA
-compDNA A = T
-compDNA T = A
-compDNA C = G
-compDNA G = C
-compDNA N = N

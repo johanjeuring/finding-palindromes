@@ -16,7 +16,7 @@ maintainer:         johan@jeuring.net
 stability:          experimental
 extra-source-files:
   CREDITS
-  README
+  README.md
   RELEASE_HISTORY
 
 build-type:         Simple

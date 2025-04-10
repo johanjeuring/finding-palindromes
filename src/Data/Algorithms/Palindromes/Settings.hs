@@ -45,6 +45,7 @@ import Data.Algorithms.Palindromes.Options
     , isStandardInput
     , options
     )
+import Data.List (intercalate)
 import System.Console.GetOpt (usageInfo)
 
 -- | Data type with all the settings required for running algorithm.
@@ -54,6 +55,16 @@ data Settings = Settings
     , outputFormat :: OutputFormat
     , lengthMod :: LengthMod
     }
+
+instance Show Settings where
+    show settings = intercalate ", " settingsSpecs
+      where
+        settingsSpecs =
+            [ show (complexity settings)
+            , show (variant settings)
+            , show (outputFormat settings)
+            , show (lengthMod settings)
+            ]
 
 -- | If no flags are given to modify settings default settings are used
 defaultSettings :: Settings

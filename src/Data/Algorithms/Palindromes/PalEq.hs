@@ -31,12 +31,10 @@ For example, A belongs to T in DNA, and 'z' belongs to 'z' in normal text.
 -}
 class PalEq a where
     (=:=) :: a -> a -> Bool
-    complement :: a -> a
 
 -- | Define PalEq instance for any a of class Eq. Just use the equality relation.
 instance (Eq a) => PalEq a where
     (=:=) = (==)
-    complement = id
 
 {- | Safe function which returns whether an element at an index in the input vector is
 PalEq to itself.

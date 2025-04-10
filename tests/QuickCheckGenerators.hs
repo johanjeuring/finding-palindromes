@@ -40,10 +40,18 @@ maxWordLength = 7
 -- | Constructs a Gen String for palindromes, based on the algorithm settings being used
 generatePalindromes :: Settings -> Gen String
 generatePalindromes settings = case variant settings of
-    VarPlain -> generatePalindromeString plainCharGenerator settings
-    VarDNA -> generatePalindromeString (fmap dnaToChar dnaCharGenerator) settings
-    VarWord -> wordToString $ generatePalindromeString wordGenerator settings
-    _ -> generatePalindromeString puncCharGenerator settings
+    VarPlain -> generatePalindromeString id plainCharGenerator settings
+    VarDNA -> map dnaToChar <$> generatePalindromeString compDNA dnaCharGenerator settings
+    VarWord -> wordToString $ generatePalindromeString id wordGenerator settings
+    _ -> generatePalindromeString id puncCharGenerator settings
+
+-- | Converts the DNA datatype to it's complement
+compDNA :: DNA -> DNA
+compDNA A = T
+compDNA T = A
+compDNA C = G
+compDNA G = C
+compDNA N = N
 
 -- | Converts a Gen [String] to a Gen String by concatenating the strings in the list with a space
 wordToString :: Gen [[Char]] -> Gen String
@@ -74,9 +82,14 @@ wordGenerator = do
     vectorOf randomWordLength $
         choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
--- | Generates either a string, palindrome or palInPal palindrome with random characters around them
-generatePalindromeString :: (Arbitrary a, PalEq a) => Gen a -> Settings -> Gen [a]
-generatePalindromeString charGenerator settings = do
+{- | Generates either a string, palindrome or palInPal palindrome with random characters
+around them. The function passes a function palComp all the way down to palInPal. This is
+a bit weird, but defining a complement function in the PalEq datatype means that the (=:=)
+function must be injective, which is an unnecessary restriction otherwise.
+-}
+generatePalindromeString
+    :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Settings -> Gen [a]
+generatePalindromeString palComp charGenerator settings = do
     -- get the gap and error settings from the complexity settings
     let (gap, error) = case complexity settings of
             ComQuadratic{gapSize = gap, maxError = error} -> (gap, error)
@@ -88,45 +101,45 @@ generatePalindromeString charGenerator settings = do
     palGenerator <-
         oneof
             [ listOf charGenerator
-            , addErrors error charGenerator $ generatePalindrome charGenerator gap
-            , addErrors error charGenerator $ multiPalInPal charGenerator gap
+            , addErrors error charGenerator $ generatePalindrome palComp charGenerator gap
+            , addErrors error charGenerator $ multiPalInPal palComp charGenerator gap
             ]
     -- generate random string to add noise behind the palindrome
     randomEnd <- listOf charGenerator
     return $ randomStart ++ palGenerator ++ randomEnd
 
 -- | Generates a palindrome
-generatePalindrome :: (Arbitrary a, PalEq a) => Gen a -> Int -> Gen [a]
-generatePalindrome charGenerator gap = do
+generatePalindrome :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Int -> Gen [a]
+generatePalindrome palComp charGenerator gap = do
     randomString <- listOf charGenerator
-    palInPal charGenerator gap 1 randomString
+    palInPal palComp charGenerator gap 1 randomString
 
 -- | generates a palindrome with a random amount of palInPal depth, note that a non palindrome can be generated if the random number is 0
-multiPalInPal :: (Arbitrary a, PalEq a) => Gen a -> Int -> Gen [a]
-multiPalInPal charGenerator gap = do
+multiPalInPal :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Int -> Gen [a]
+multiPalInPal palComp charGenerator gap = do
     randomString <- listOf charGenerator
     palInPalDepth <- choose (0, maxPalInPalGeneration) -- generate a random int between 0 and maxDepth
-    palInPal charGenerator gap palInPalDepth randomString
+    palInPal palComp charGenerator gap palInPalDepth randomString
 
 {- | Generate a palindrome from string with Int amount of palindromes -
 a depth of 0 gives the input back, (pal) -
 a depth of 1 gives a palindrome with one level of palindrome (pallap) -
 a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
 -}
-palInPal :: (Arbitrary a, PalEq a) => Gen a -> Int -> Int -> [a] -> Gen [a]
-palInPal charGenerator gap depth string = do
+palInPal :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Int -> Int -> [a] -> Gen [a]
+palInPal palComp charGenerator gap depth string = do
     case depth of
         0 -> return string
         1 -> do
             unevenOrGap <- generateGap charGenerator gap -- allows for uneven palindromes and gaps
-            return $ string ++ unevenOrGap ++ reversePal string
+            return $ string ++ unevenOrGap ++ reversePal palComp string
         _ -> do
             uneven <- generateGap charGenerator 1 -- allows for uneven palInPals
-            palInPal charGenerator gap (depth - 1) $
-                string ++ uneven ++ reversePal string
+            palInPal palComp charGenerator gap (depth - 1) $
+                string ++ uneven ++ reversePal palComp string
 
-reversePal :: (PalEq a) => [a] -> [a]
-reversePal = reverse . map complement
+reversePal :: (PalEq a) => (a -> a) -> [a] -> [a]
+reversePal palComp = reverse . map palComp
 
 {- | generates a string with a max length of 'gapSetting' -
 the string will be used to make gapped palindromes or uneven palindrome -

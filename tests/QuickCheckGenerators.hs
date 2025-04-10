@@ -82,9 +82,10 @@ wordGenerator = do
     vectorOf randomWordLength $
         choose (' ', '~') `suchThat` (`notElem` ['\\', '"', ' ', '\n'])
 
-{- | Generates either a string, palindrome or palInPal palindrome with random characters around them.
-The function passes a function palComp all the way down to palInPal, this is a bit odd, but the other
- way was to constrict the usage of palEq, which can lead to bigger problems
+{- | Generates either a string, palindrome or palInPal palindrome with random characters
+around them. The function passes a function palComp all the way down to palInPal. This is
+a bit weird, but defining a complement function in the PalEq datatype means that the (=:=)
+function must be injective, which is an unnecessary restriction otherwise.
 -}
 generatePalindromeString
     :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Settings -> Gen [a]

@@ -76,6 +76,7 @@ data Variant
       VarPlain
     | -- | Compare words instead of individual characters to look for palindromes.
       VarWord
+    deriving (Show)
 
 {- | Used to describe different possible output formats of palindromes. Used as a setting
 in finding functions.
@@ -93,6 +94,7 @@ data OutputFormat
       OutLengthAt Int
     | -- | Output the palindrome at a certain center index as text
       OutWordAt Int
+    deriving (Show)
 
 {- | Used as a setting for what algorithm to run. The quadratic algorithm also has
 functionality for including gaps and errors, therefore this is given as an extra setting.
@@ -100,6 +102,7 @@ functionality for including gaps and errors, therefore this is given as an extra
 data Complexity
     = ComLinear
     | ComQuadratic {gapSize :: Int, maxError :: Int}
+    deriving (Show)
 
 -- | The minimum and maximum length of the palindromes you want to find.
 type LengthMod = (Int, Maybe Int)

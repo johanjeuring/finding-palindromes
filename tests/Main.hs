@@ -18,18 +18,12 @@ module Main where
 import Data.Algorithms.Palindromes.Finders (Complexity (..))
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
-import PalindromeProperties (propTextPalindrome)
+import QuickCheckProperties (propertyList)
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
-import UTFinders
-    ( propValidPalindromeRangeAndText
-    , propValidPalindromeRangeAndTextPlain
-    , propValidPalindromeRangeAndTextText
-    , propValidPalindromeRangeAndTextWord
-    , testListFinders
-    )
+import UTFinders (testListFinders)
 import UTGetLeftRight (testListGetLeftRight)
 import UTPalEq (testListPalEq)
 import UTProcessing (testListProcessing)
@@ -56,13 +50,12 @@ tests =
             ++ testListITLinear
             ++ testListITQuadratic
 
+runQuickCheck :: IO ()
+runQuickCheck = mapM_ quickCheck propertyList
+
 main :: IO Counts
 main = do
-    -- quickCheck propPalindromesAroundCentres
-    quickCheck propTextPalindrome
-    quickCheck propValidPalindromeRangeAndTextPlain
-    quickCheck propValidPalindromeRangeAndTextText
-    quickCheck propValidPalindromeRangeAndTextWord
+    runQuickCheck
     runTestTT tests
 
 {-

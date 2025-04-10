@@ -126,7 +126,7 @@ palInPal charGenerator gap depth string = do
                 string ++ uneven ++ reversePal string
 
 reversePal :: (PalEq a) => [a] -> [a]
-reversePal = map complement
+reversePal = reverse . map complement
 
 {- | generates a string with a max length of 'gapSetting' -
 the string will be used to make gapped palindromes or uneven palindrome -

@@ -60,5 +60,6 @@ filterPunctuation input lengths = map (rangeToLength . shrinkRange) $ lengthsToR
         originalEnd = fst $ filterLetters' input V.! (endIndex - 1)
     punctuationAt :: Int -> Bool
     punctuationAt i
-        | i < length input && i >= 0 = (not . isLetter) $ V.fromList input V.! i
+        | i < length input && i >= 0 = (not . isLetter) $ inputAsVector V.! i
         | otherwise = True
+    inputAsVector = V.fromList input

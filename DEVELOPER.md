@@ -73,6 +73,26 @@ cabal test
 
 This will run all the quickCheck properties as well as unit tests.
 
+## Benchmarking
+
+To run a benchmark you need to put the files you want to benchmark into the benchmarking-files folder. Then run:
+
+```
+cabal bench
+```
+
+If you have problems with this try either:
+
+```
+cabal bench --enable-benchmarking
+```
+
+or
+
+```
+cabal build --enable-benchmarking
+```
+
 ## Running functions in terminal
 
 To run and test a function in terminal use:

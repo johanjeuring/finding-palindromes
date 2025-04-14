@@ -46,7 +46,14 @@ If in visual studio code you also need to install the haskell-linter extension.
 
 ## Autoformatting with fourmolu and cabal-fmt
 
-For Fourmolu you need a modern version of ghc. The base version needs to be atleast 4.19 so the GHC version should be atleast 9.8.2.
+To properly run fourmolu you need 4 things.
+
+- Atleast GHC 9.8.2
+- Fourmolu version 0.18.0
+- The VSCode extension Run on Save
+- C:\Cabal\bin should be part of your system path
+
+For fourmolu 0.18.0 the base version needs to be atleast 4.19 so the GHC version should be atleast 9.8.2.
 
 Then to install fourmolu run
 

@@ -4,8 +4,9 @@ University within the Software Project course.
 
 module UTWordPals where
 
-import PalindromeMethods (longestWordPalindrome)
 import Test.HUnit (Test (..), (~:), (~?=))
+
+import PalindromeMethods (longestWordPalindrome)
 
 testListWordPalindromes t =
     [ testWord1 t

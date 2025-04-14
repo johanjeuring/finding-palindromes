@@ -4,11 +4,12 @@ University within the Software Project course.
 
 module UTGetLeftRight (testListGetLeftRight) where
 
+import Test.HUnit (Test (..), assertEqual)
+
 import Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( getLeftRightCenterBetweenElems
     , getLeftRightCenterOnElem
     )
-import Test.HUnit (Test (..), assertEqual)
 
 testListGetLeftRight =
     [ testCenterBetweenElems

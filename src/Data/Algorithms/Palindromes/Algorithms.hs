@@ -22,13 +22,13 @@ module Data.Algorithms.Palindromes.Algorithms
     , quadraticAlgorithm
     ) where
 
+import qualified Data.Vector as V
+
 import Data.Algorithms.Palindromes.LinearAlgorithm (extendPalindromeS)
 import Data.Algorithms.Palindromes.PalEq (PalEq)
 import Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )
-
-import qualified Data.Vector as V
 
 {- | Search for palindromes using the linear time algorithm. Returns a list of the maximum
 length palindromes which were found at each center index in the input.

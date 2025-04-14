@@ -14,12 +14,13 @@ Handles commandline.
 -}
 module Main where
 
-import Data.Algorithms.Palindromes.Options (options)
-import Data.Algorithms.Palindromes.Settings (handleFlags)
 import System.Console.GetOpt (ArgOrder (Permute), getOpt)
 import System.Environment (getArgs)
 
 import qualified System.IO as Sys
+
+import Data.Algorithms.Palindromes.Options (options)
+import Data.Algorithms.Palindromes.Settings (handleFlags)
 
 -----------------------------------------------------------------------------
 -- main

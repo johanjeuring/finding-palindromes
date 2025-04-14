@@ -27,6 +27,10 @@ module Data.Algorithms.Palindromes.Finders
     , LengthMod
     ) where
 
+import Data.Maybe (fromJust, isNothing)
+
+import qualified Data.Vector as V
+
 import Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
@@ -56,9 +60,6 @@ import Data.Algorithms.Palindromes.PreProcessing
     , textToWords
     )
 import Data.Algorithms.Palindromes.RangeFunctions (indexedLengthToRange)
-import Data.Maybe (fromJust, isNothing)
-
-import qualified Data.Vector as V
 
 {- | Used as a setting for palindrome finding functions. This describes the kind of
 palindrome we want to find.

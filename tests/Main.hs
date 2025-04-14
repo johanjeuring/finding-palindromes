@@ -15,12 +15,13 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
 module Main where
 
+import Test.HUnit (Counts, Test (..), runTestTT)
+import Test.QuickCheck (quickCheck)
+
 import Data.Algorithms.Palindromes.Finders (Complexity (..))
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
 import QuickCheckProperties (propertyList)
-import Test.HUnit (Counts, Test (..), runTestTT)
-import Test.QuickCheck (quickCheck)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTFinders (testListFinders)

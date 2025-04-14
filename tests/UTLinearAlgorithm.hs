@@ -4,11 +4,13 @@ University within the Software Project course.
 
 module UTLinearAlgorithm (testListLinearAlgorithm) where
 
-import Data.Algorithms.Palindromes.DNA (DNA (..), toDNA)
 import Test.HUnit (Test (..), assertEqual)
 
-import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
 import qualified Data.Vector as V
+
+import Data.Algorithms.Palindromes.DNA (DNA (..), toDNA)
+
+import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
 
 testListLinearAlgorithm =
     [ testExtendPalindromeSSimple

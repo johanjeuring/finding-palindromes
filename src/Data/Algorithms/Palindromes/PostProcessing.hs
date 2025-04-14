@@ -21,14 +21,15 @@ module Data.Algorithms.Palindromes.PostProcessing
     , filterPunctuation
     ) where
 
+import Data.Char (isLetter)
+
+import qualified Data.Vector as V
+
 import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
 import Data.Algorithms.Palindromes.RangeFunctions
     ( lengthsToRanges
     , rangeToLength
     )
-import Data.Char (isLetter)
-
-import qualified Data.Vector as V
 
 -- Length modifier filtering
 filterMin :: Int -> [Int] -> [Int]

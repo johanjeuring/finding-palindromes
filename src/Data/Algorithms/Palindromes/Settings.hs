@@ -23,6 +23,9 @@ module Data.Algorithms.Palindromes.Settings
     )
 where
 
+import Data.List (intercalate)
+import System.Console.GetOpt (usageInfo)
+
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , LengthMod
@@ -45,8 +48,6 @@ import Data.Algorithms.Palindromes.Options
     , isStandardInput
     , options
     )
-import Data.List (intercalate)
-import System.Console.GetOpt (usageInfo)
 
 -- | Data type with all the settings required for running algorithm.
 data Settings = Settings

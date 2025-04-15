@@ -101,3 +101,14 @@ test-suite tests-palindromes
     , palindromes  >=0.5      && <0.6
     , QuickCheck   >=2.14     && <3.0
     , vector       >=0.13.1.0 && <0.14
+
+benchmark benchmark
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: benchmarking
+  main-is:        Main.hs
+  build-depends:
+    , base         >=4.17 && <5
+    , criterion    >=1.6  && <1.7
+    , directory
+    , palindromes  >=0.5  && <0.6
+    , strict

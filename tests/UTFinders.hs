@@ -1,5 +1,8 @@
 module UTFinders where
 
+import Test.HUnit (Test (..), (~:), (~?=))
+import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)
+
 import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), dnaToChar)
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComQuadratic)
@@ -9,8 +12,6 @@ import Data.Algorithms.Palindromes.Finders
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
     )
-import Test.HUnit (Test (..), (~:), (~?=))
-import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)
 
 instance Arbitrary DNA where
     arbitrary = elements [A, T, C, G]

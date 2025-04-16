@@ -1,20 +1,7 @@
 module QuickCheckProperties where
 
-import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
-import Data.Algorithms.Palindromes.Finders
-    ( Complexity (ComLinear, ComQuadratic)
-    , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
-    , findPalindromes
-    )
-import Data.Algorithms.Palindromes.PalEq (PalEq (..))
-import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
-import Data.Algorithms.Palindromes.Settings
-    ( Settings (..)
-    )
 import Data.Char (isAlphaNum, isSpace, readLitChar, toLower)
 import Data.Maybe (fromJust)
-import QuickCheckGenerators (generatePalindromes)
-import QuickCheckSettings (settingsList)
 import Test.QuickCheck
     ( Arbitrary
     , Gen
@@ -27,6 +14,20 @@ import Test.QuickCheck
     , listOf
     , suchThat
     )
+
+import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
+import Data.Algorithms.Palindromes.Finders
+    ( Complexity (ComLinear, ComQuadratic)
+    , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
+    , findPalindromes
+    )
+import Data.Algorithms.Palindromes.PalEq (PalEq (..))
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
+import Data.Algorithms.Palindromes.Settings
+    ( Settings (..)
+    )
+import QuickCheckGenerators (generatePalindromes)
+import QuickCheckSettings (settingsList)
 
 -- List of to-be-tested properties, where each property is connected to all the settings
 propertyList :: [Property]

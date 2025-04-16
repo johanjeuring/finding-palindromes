@@ -4,9 +4,10 @@ University within the Software Project course.
 
 module UTExtendPals where
 
+import Test.HUnit (Test (..), assertEqual)
+
 import Data.Algorithms.Palindromes.Finders (Complexity)
 import PalindromeMethods (extendTextPalindrome)
-import Test.HUnit (Test (..), assertEqual)
 
 testExtendPalindrome1
     , testExtendPalindrome2

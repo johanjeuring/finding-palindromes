@@ -4,8 +4,9 @@ University within the Software Project course.
 
 module UTPunctuationPals where
 
-import PalindromeMethods (longestPunctuationPalindrome)
 import Test.HUnit (Test (..), (~:), (~?=))
+
+import PalindromeMethods (longestPunctuationPalindrome)
 
 testListPunctuation :: [Test]
 testListPunctuation =

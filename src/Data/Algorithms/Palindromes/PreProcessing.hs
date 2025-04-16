@@ -21,11 +21,12 @@ module Data.Algorithms.Palindromes.PreProcessing
     , textToWordsWithIndices
     ) where
 
+import Data.Char (isAlphaNum, isSpace, toLower)
+
 import Data.Algorithms.Palindromes.DNA
     ( DNA
     , toDNA
     )
-import Data.Char (isAlphaNum, isSpace, toLower)
 
 import qualified Data.Vector as V
 

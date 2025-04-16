@@ -25,6 +25,8 @@ module Data.Algorithms.Palindromes.Output
     , wordAt
     ) where
 
+import Data.List (intercalate)
+
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     )
@@ -32,7 +34,6 @@ import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters'
     , textToWordsWithIndices
     )
-import Data.List (intercalate)
 
 import qualified Data.Vector as V
 

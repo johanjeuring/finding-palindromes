@@ -4,9 +4,10 @@ University within the Software Project course.
 
 module UTTextPals where
 
+import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
+
 import Data.Algorithms.Palindromes.Finders (Complexity)
 import PalindromeMethods (longestTextPalindrome)
-import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 
 testListText :: Complexity -> [Test]
 testListText t =

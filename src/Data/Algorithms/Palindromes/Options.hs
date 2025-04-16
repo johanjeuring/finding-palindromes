@@ -20,16 +20,17 @@ Also contains the functions that are used to convert these flags to their corres
 -}
 module Data.Algorithms.Palindromes.Options where
 
+import Data.Maybe (fromJust, isNothing)
+import System.Console.GetOpt
+    ( ArgDescr (..)
+    , OptDescr (..)
+    )
+
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , LengthMod
     , OutputFormat (..)
     , Variant (..)
-    )
-import Data.Maybe (fromJust, isNothing)
-import System.Console.GetOpt
-    ( ArgDescr (..)
-    , OptDescr (..)
     )
 
 data Flag

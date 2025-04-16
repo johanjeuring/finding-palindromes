@@ -14,7 +14,25 @@ comma-style: leading
 import-export-style: leading
 
 # Rules for grouping import declarations
-import-grouping: by-scope-then-qualified
+import-grouping:
+  - name: "Non-qualified imports from Hackage packages."
+    rules:
+      - match: all
+        priority: 100
+        qualified: no
+  - name: "Non-qualified imports from Local packages."
+    rules:
+      - match: local-modules
+        qualified: no
+  - name: "Qualified imports from Hackage packages."
+    rules:
+      - match: all
+        priority: 100
+        qualified: yes
+  - name: "Qualified imports from Local packages."
+    rules:
+      - match: local-modules
+        qualified: yes
 
 # Whether to full-indent or half-indent 'where' bindings past the preceding body
 indent-wheres: false
@@ -69,4 +87,3 @@ reexports: []
 
 # Modules defined by the current Cabal package for import grouping
 local-modules: []
-

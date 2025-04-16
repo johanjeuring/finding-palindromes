@@ -3,6 +3,9 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
 module UTPalEq where
 
+import Data.Maybe (fromJust)
+import Test.HUnit (Test (..), (~:), (~?=))
+
 import Data.Algorithms.Palindromes.DNA
     ( DNA (A, C, G, T)
     , toDNA
@@ -11,8 +14,6 @@ import Data.Algorithms.Palindromes.PalEq
     ( PalEq ((=:=))
     , palEqToItselfAtIndex
     )
-import Data.Maybe (fromJust)
-import Test.HUnit (Test (..), (~:), (~?=))
 
 import qualified Data.Vector as V
 

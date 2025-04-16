@@ -2,14 +2,6 @@ module QuickCheckGenerators
     ( generatePalindromes
     ) where
 
-import Data.Algorithms.Palindromes.DNA (DNA (..), dnaToChar)
-import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
-    , OutputFormat (..)
-    , Variant (VarDNA, VarPlain, VarText, VarWord)
-    )
-import Data.Algorithms.Palindromes.PalEq (PalEq (..))
-import Data.Algorithms.Palindromes.Settings (Settings (..))
 import Data.List (intercalate)
 import Data.Vector (Vector (..), fromList, toList, (//))
 import Test.QuickCheck
@@ -27,6 +19,15 @@ import Test.QuickCheck
     , vectorOf
     )
 import Test.QuickCheck.Gen (elements, genFloat)
+
+import Data.Algorithms.Palindromes.DNA (DNA (..), dnaToChar)
+import Data.Algorithms.Palindromes.Finders
+    ( Complexity (..)
+    , OutputFormat (..)
+    , Variant (VarDNA, VarPlain, VarText, VarWord)
+    )
+import Data.Algorithms.Palindromes.PalEq (PalEq (..))
+import Data.Algorithms.Palindromes.Settings (Settings (..))
 
 maxPalInPalGeneration, minWordLength, maxWordLength :: Int
 -- the maximum amount of palInPal depth the generated palindrome will have

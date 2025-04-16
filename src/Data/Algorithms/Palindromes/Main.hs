@@ -17,10 +17,10 @@ module Main where
 import System.Console.GetOpt (ArgOrder (Permute), getOpt)
 import System.Environment (getArgs)
 
-import qualified System.IO as Sys
-
 import Data.Algorithms.Palindromes.Options (options)
 import Data.Algorithms.Palindromes.Settings (handleFlags)
+
+import qualified System.IO as Sys
 
 -----------------------------------------------------------------------------
 -- main

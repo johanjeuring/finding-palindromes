@@ -23,12 +23,12 @@ module Data.Algorithms.Palindromes.PreProcessing
 
 import Data.Char (isAlphaNum, isSpace, toLower)
 
-import qualified Data.Vector as V
-
 import Data.Algorithms.Palindromes.DNA
     ( DNA
     , toDNA
     )
+
+import qualified Data.Vector as V
 
 -- Make sure all functions are of the type
 -- (PalEq b) => String -> [b]

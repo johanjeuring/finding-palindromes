@@ -27,8 +27,6 @@ module Data.Algorithms.Palindromes.Output
 
 import Data.List (intercalate)
 
-import qualified Data.Vector as V
-
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     )
@@ -36,6 +34,8 @@ import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters'
     , textToWordsWithIndices
     )
+
+import qualified Data.Vector as V
 
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string

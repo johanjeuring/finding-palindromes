@@ -20,9 +20,9 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
     , moveCenterS
     ) where
 
-import qualified Data.Vector as V
-
 import Data.Algorithms.Palindromes.PalEq (PalEq (..), palEqToItselfAtIndex)
+
+import qualified Data.Vector as V
 
 -- | This function traverses input linearly, using an accumulator.
 extendPalindromeS

@@ -6,11 +6,11 @@ module UTQuadraticAlgorithm (testListQuadraticAlgorithm) where
 
 import Test.HUnit (Test (..), assertEqual)
 
-import qualified Data.Vector as V
-
 import Data.Algorithms.Palindromes.DNA
     ( DNA (..)
     )
+
+import qualified Data.Vector as V
 
 import qualified Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
 

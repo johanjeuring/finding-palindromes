@@ -6,8 +6,6 @@ module UTPalEq where
 import Data.Maybe (fromJust)
 import Test.HUnit (Test (..), (~:), (~?=))
 
-import qualified Data.Vector as V
-
 import Data.Algorithms.Palindromes.DNA
     ( DNA (A, C, G, T)
     , toDNA
@@ -16,6 +14,8 @@ import Data.Algorithms.Palindromes.PalEq
     ( PalEq ((=:=))
     , palEqToItselfAtIndex
     )
+
+import qualified Data.Vector as V
 
 testListPalEq :: [Test]
 testListPalEq =

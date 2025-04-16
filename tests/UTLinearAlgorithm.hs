@@ -6,9 +6,9 @@ module UTLinearAlgorithm (testListLinearAlgorithm) where
 
 import Test.HUnit (Test (..), assertEqual)
 
-import qualified Data.Vector as V
-
 import Data.Algorithms.Palindromes.DNA (DNA (..), toDNA)
+
+import qualified Data.Vector as V
 
 import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
 

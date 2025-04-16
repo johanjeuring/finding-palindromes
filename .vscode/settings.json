@@ -11,7 +11,7 @@
         "commands": [
             {
                 "match": ".hs",
-                "cmd": "fourmolu -i ${file}"
+                "cmd": "fourmolu -i \"${file}\""
             },
         ]
     }

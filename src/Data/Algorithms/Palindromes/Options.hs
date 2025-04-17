@@ -78,17 +78,17 @@ options =
         "q"
         []
         (OptArg parseQuadratic "[gapSize] [errors]")
-        "Use the quadratic algorithm. Optionally use the argument <gapSize> <errors>"
+        "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
         "p"
         []
         (NoArg (Variant VarPlain))
-        "Plain palindrome (default)"
+        "Plain palindrome"
     , Option
         "t"
         []
         (NoArg (Variant VarText))
-        "Palindrome ignoring case, spacing and punctuation"
+        "Palindrome ignoring case, spacing and punctuation (default)"
     , Option
         "u"
         []

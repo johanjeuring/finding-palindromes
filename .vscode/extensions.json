@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "haskell.haskell",
-        "berberman.vscode-cabal-fmt"
+        "berberman.vscode-cabal-fmt",
+        "emeraldwalk.RunOnSave"
     ]
 }

@@ -26,8 +26,8 @@ module Data.Algorithms.Palindromes.PalEq
 
 import Data.Vector as V
 
-{- | Shows that some element belongs to another element.
-For example, A belongs to T in DNA, and 'z' belongs to 'z' in normal text.
+{- |  “(=:=) determines whether or not two elements are equal when finding palindromes.
+This is not always standard equality for example, A (=:=) T in DNA, and 'z' (=:=) 'z' in normal text.
 -}
 class PalEq a where
     (=:=) :: a -> a -> Bool

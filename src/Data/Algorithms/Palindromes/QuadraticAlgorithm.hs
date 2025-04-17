@@ -24,11 +24,12 @@ module Data.Algorithms.Palindromes.QuadraticAlgorithm
     , lengthApproximatePalindrome
     ) where
 
+import Data.List as L
+import Data.Vector as V
+
 import Data.Algorithms.Palindromes.PalEq
     ( PalEq (..)
     )
-import Data.List as L
-import Data.Vector as V
 
 {- | For each center, finds the maximal palindrome around this center.
 This function runs in O(m), where m is the sum of palindrome sizes.

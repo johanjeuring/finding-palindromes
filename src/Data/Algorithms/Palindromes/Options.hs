@@ -20,16 +20,17 @@ Also contains the functions that are used to convert these flags to their corres
 -}
 module Data.Algorithms.Palindromes.Options where
 
+import Data.Maybe (fromJust, isNothing)
+import System.Console.GetOpt
+    ( ArgDescr (..)
+    , OptDescr (..)
+    )
+
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , LengthMod
     , OutputFormat (..)
     , Variant (..)
-    )
-import Data.Maybe (fromJust, isNothing)
-import System.Console.GetOpt
-    ( ArgDescr (..)
-    , OptDescr (..)
     )
 
 data Flag
@@ -77,17 +78,17 @@ options =
         "q"
         []
         (OptArg parseQuadratic "[gapSize] [errors]")
-        "Use the quadratic algorithm. Optionally use the argument <gapSize> <errors>"
+        "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
         "p"
         []
         (NoArg (Variant VarPlain))
-        "Plain palindrome (default)"
+        "Plain palindrome"
     , Option
         "t"
         []
         (NoArg (Variant VarText))
-        "Palindrome ignoring case, spacing and punctuation"
+        "Palindrome ignoring case, spacing and punctuation (default)"
     , Option
         "u"
         []

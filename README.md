@@ -43,7 +43,7 @@ Palindromes has the following requirements:
 _If you have [cabal-install]_, you should use that to install the package,
 because it will handle everything for you.
 
-    cabal install palindromes
+    cabal install exe:palindromes
 
 _If you don't have cabal-install_, you must download the [Palindromes package]
 from HackageDB and install it manually. Get the `tar.gz` file and decompress it.

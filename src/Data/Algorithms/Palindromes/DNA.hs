@@ -16,9 +16,10 @@ palindromes.
 -}
 module Data.Algorithms.Palindromes.DNA where
 
-import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 import Data.Char (toUpper)
 import Data.Maybe (fromJust, isNothing)
+
+import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 
 {- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA
   has palindromes, instead PalEq should be used.

@@ -27,6 +27,8 @@ module Data.Algorithms.Palindromes.Finders
     , LengthMod
     ) where
 
+import Data.Maybe (fromJust, isNothing)
+
 import Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
@@ -56,7 +58,6 @@ import Data.Algorithms.Palindromes.PreProcessing
     , textToWords
     )
 import Data.Algorithms.Palindromes.RangeFunctions (indexedLengthToRange)
-import Data.Maybe (fromJust, isNothing)
 
 import qualified Data.Vector as V
 

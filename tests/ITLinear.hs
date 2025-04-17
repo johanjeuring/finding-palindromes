@@ -4,13 +4,14 @@ University within the Software Project course.
 
 module ITLinear where
 
+import Test.HUnit (Test (..), (~:), (~?=))
+
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , OutputFormat (..)
     , Variant (..)
     , findPalindromesFormatted
     )
-import Test.HUnit (Test (..), (~:), (~?=))
 
 testListITLinear =
     [ testITLinear1

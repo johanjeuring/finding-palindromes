@@ -4,8 +4,9 @@ University within the Software Project course.
 
 module UTDNAPals where
 
-import PalindromeMethods (longestDNAPalindrome)
 import Test.HUnit (Test (..), assertEqual)
+
+import PalindromeMethods (longestDNAPalindrome)
 
 testListDNA t =
     [ TestLabel "testDNAPalindrome1" $ testDNAPalindrome1 t

@@ -37,7 +37,7 @@ data Palindrome
     deriving (Show, Eq)
 
 {- An example text Palindrome from plain input string "bab..ac" is
-(Palindrome 5 3 1 6 "ab..a"). The center is on the 'b' and has center index 5. The
+(Palindrome 5 3 "ab..a" (1,6)). The center is on the 'b' and has center index 5. The
 pre-processed text palindrome is "aba", so the length is 3, and after adding back
 punctuation, the start character index is 1 (the first 'a') and the end character index
 is 6 (the 'c' after the second 'a'). The string representing this text palindrome is

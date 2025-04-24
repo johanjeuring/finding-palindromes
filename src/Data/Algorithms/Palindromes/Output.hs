@@ -30,39 +30,31 @@ import Data.List (intercalate)
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     )
-import Data.Algorithms.Palindromes.PreProcessing
-    ( filterLetters'
-    , textToWordsWithIndices
-    )
 
 import qualified Data.Vector as V
 
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: (Int, Int) -> String -> (Int, Int)
-indicesInOutputText (start', end') input
+indicesInOutputText :: (Int, Int) -> String -> V.Vector (Int, Char) -> (Int, Int)
+indicesInOutputText (start', end') input originalIndices
     | start' >= length originalIndices = (length input, length input)
     | end' - start' > 0 = (start, end)
     | otherwise = (start, start)
   where
-    originalIndices = filterLetters' input
     start = fst $ originalIndices V.! start'
     end = fst (originalIndices V.! (end' - 1)) + 1
 
 {- | Takes a start and end index in the list of words and returns the start and end
 indices of the text of the word palindrome in the original string
 -}
-indicesInOutputWord :: (Int, Int) -> String -> (Int, Int)
-indicesInOutputWord (start', end') input
+indicesInOutputWord :: (Int, Int) -> String -> V.Vector ((Int, Int), String) -> (Int, Int)
+indicesInOutputWord (start', end') input wordsWithIndices
     | start' >= length wordsWithIndices =
         (maxIndex, maxIndex)
     | end' - start' > 0 = (startIndex, endIndex)
     | otherwise = (startIndex, startIndex)
   where
-    wordsWithIndices :: V.Vector ((Int, Int), String)
-    wordsWithIndices = textToWordsWithIndices input
-
     maxIndex :: Int
     maxIndex = length input
 

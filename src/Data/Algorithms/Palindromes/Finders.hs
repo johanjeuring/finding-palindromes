@@ -54,8 +54,10 @@ import Data.Algorithms.Palindromes.PostProcessing
     )
 import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
+    , filterLetters'
     , textToDNA
     , textToWords
+    , textToWordsWithIndices
     )
 import Data.Algorithms.Palindromes.RangeFunctions (indexedLengthToRange)
 
@@ -195,11 +197,11 @@ findPalindromes variant complexity lengthmod input = map lengthToPalindrome leng
     index) pair. -}
     indicesInOriginal :: (Int, Int) -> (Int, Int)
     indicesInOriginal il@(i, l) = case variant of
-        VarText -> indicesInOutputText range input
-        VarPunctuation -> indicesInOutputText range input
-        VarDNA -> indicesInOutputText (dnaRange complexity) input
+        VarText -> indicesInOutputText range input (filterLetters' input)
+        VarPunctuation -> indicesInOutputText range input (filterLetters' input)
+        VarDNA -> indicesInOutputText (dnaRange complexity) input (filterLetters' input)
         VarPlain -> range
-        VarWord -> indicesInOutputWord range input
+        VarWord -> indicesInOutputWord range input (textToWordsWithIndices input)
       where
         range :: (Int, Int)
         range = indexedLengthToRange il

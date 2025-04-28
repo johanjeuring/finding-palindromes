@@ -56,7 +56,7 @@ testFilterMax =
         assertEqual
             "testFilterMax"
             [1, 2, 0, 0, 0]
-            (Post.filterMax 2 [1, 2, 3, 0, 5])
+            (Post.filterMax (Just 2) [1, 2, 3, 0, 5])
 testFilterPunctuationOnlySpace =
     TestCase $
         assertEqual

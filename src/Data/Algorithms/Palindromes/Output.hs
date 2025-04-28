@@ -26,6 +26,7 @@ module Data.Algorithms.Palindromes.Output
     ) where
 
 import Data.List (intercalate)
+import Data.Maybe (fromMaybe)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
@@ -92,8 +93,18 @@ allLengths = show
 {- | All maximal palindromes as a list of strings. Same as show $ map palText input except
 this doesn't apply show to the palindrome strings as that will turn \n into \\n.
 -}
-allWords :: [Palindrome] -> String
-allWords input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
+allWords :: [Palindrome] -> (Int, Maybe Int) -> String
+allWords input (minlen, maxlen) = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") filteredInput) ++ "]"
+  where
+    filteredInput :: [Palindrome]
+    filteredInput =
+        filter
+            ( \pal ->
+                palLength pal /= 0
+                    && palLength pal <= fromMaybe (length input) maxlen
+                    && palLength pal >= minlen
+            )
+            input
 
 -- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String

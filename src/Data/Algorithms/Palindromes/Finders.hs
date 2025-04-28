@@ -117,7 +117,7 @@ around each center.
 -}
 findPalindromeLengths
     :: Variant -> Complexity -> LengthMod -> String -> [Int]
-findPalindromeLengths variant complexity (minlength, maxlength') input =
+findPalindromeLengths variant complexity (minlength, maxlength) input =
     (post . preAlg) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
@@ -166,10 +166,6 @@ findPalindromeLengths variant complexity (minlength, maxlength') input =
                 . filterMax maxlength
                 . filterPunctuation input
         _ -> filterMin minlength . filterMax maxlength
-    maxlength :: Int
-    maxlength
-        | isNothing maxlength' = length input
-        | otherwise = fromJust maxlength'
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing phase, the algorithm phase, the post-processing phase and the parsing
@@ -223,11 +219,13 @@ findPalindromesFormatted variant outputFormat complexity lengthmod input = text
     result = findPalindromes variant complexity lengthmod input
     lengths :: [Int]
     lengths = findPalindromeLengths variant complexity lengthmod input
+    unfilteredResults :: [Palindrome]
+    unfilteredResults = findPalindromes variant complexity (0, Nothing) input
     text :: String
     text = case outputFormat of
         OutLength -> longestLength lengths
         OutWord -> longestWord result
         OutLengths -> allLengths lengths
-        OutWords -> allWords result
+        OutWords -> allWords unfilteredResults lengthmod
         OutLengthAt x -> lengthAt x lengths
         OutWordAt x -> wordAt x result

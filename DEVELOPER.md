@@ -82,16 +82,16 @@ This will run all the quickCheck properties as well as unit tests.
 
 ## Benchmarking
 
-To run a benchmark you need to put the files you want to benchmark into the benchmarking-files folder. Then run:
+To run a benchmark you need to put the files you want to benchmark into the benchmarking-files folder. In either the Dna or Text subfolder depending on the type of the file. Then run:
 
 ```
-cabal bench
+cabal bench benchmark
 ```
 
 If you have problems with this try either:
 
 ```
-cabal bench --enable-benchmarking
+cabal bench benchmark --enable-benchmarking
 ```
 
 or
@@ -99,6 +99,9 @@ or
 ```
 cabal build --enable-benchmarking
 ```
+
+Results of benchmarks are written into benchmark-report.html which Criterion generates to give you a complete overview.
+For validating that changes did not significantly slow down the program there is a file called "benchmark-reference.html" which contains previous results of the benchmarks. Results can vary significantly per run but should not be off by more than a factor 10.
 
 ## Running functions in terminal
 

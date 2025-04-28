@@ -109,6 +109,8 @@ benchmark benchmark
   build-depends:
     , base         >=4.17 && <5
     , criterion    >=1.6  && <1.7
-    , directory
+    , deepseq      >=1.5  && <1.6
+    , directory    >=1.3  && <1.4
+    , filepath     >=1.5  && <1.6
     , palindromes  >=0.5  && <0.6
     , strict

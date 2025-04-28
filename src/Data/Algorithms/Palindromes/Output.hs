@@ -69,9 +69,9 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex = snd (fst lastWord)
 
 -- | Takes a start and end index (exclusive) and returns the substring with those indices
-indicesToText :: (Int, Int) -> String -> String
+indicesToText :: (Int, Int) -> V.Vector Char -> String
 indicesToText (start, end) input
-    | end - start > 0 = take (end - start) $ drop start input
+    | end - start > 0 = V.toList $ V.slice start (end - start) input
     | otherwise = ""
 
 -- | Returns the length of the longest palindrome as a string

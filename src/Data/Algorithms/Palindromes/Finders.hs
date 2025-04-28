@@ -184,7 +184,7 @@ findPalindromes variant complexity lengthmod input = map lengthToPalindrome leng
         Palindrome
             { palCenterIndex = index
             , palLength = len
-            , palText = indicesToText (indicesInOriginal (index, len)) input
+            , palText = indicesToText (indicesInOriginal (index, len)) (V.fromList input)
             , palRange = indicesInOriginal (index, len)
             }
 

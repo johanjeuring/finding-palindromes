@@ -112,33 +112,27 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
     errorCostAtPosition (row, column) = if (input V.! row) =:= (input V.! column) then 0 else 1
 
 sparsify :: Row -> Row
-sparsify denseRow = sparseRow
+sparsify row = go [] row Nothing
   where
-    positives = filter (\(Cell _ budget) -> budget >= 0) denseRow
-
-    sparseRow :: Row
-    sparseRow =
-        case positives of
-            [] -> []
-            ((Cell (row, _) _) : _) -> snd $ foldr addMinusOnes ((row, length denseRow), []) positives
-
-    addMinusOnes :: Cell -> (Position, Row) -> (Position, Row)
-    addMinusOnes cell@(Cell (row, col) budget) (prevPos@(prevRow, prevCol), acc)
-        -- if positive cells are next to each other, do nothing
-        | abs (col - prevCol) == 1 = (cellPosition cell, cell : acc)
-        -- if one position between positive cells, add one cell with -1 budget
-        | abs (col - prevCol) == 2 = (cellPosition cell, cell : Cell (row, col + 1) (-1) : acc)
-        -- if more than one position between positive cells, add cells with -1 budget on edges of the gap between them
-        | otherwise =
-            ( cellPosition cell
-            , cell : Cell (row, col + 1) (-1) : Cell (prevRow, prevCol - 1) (-1) : acc
-            )
-
--- -- assume first element is positive
--- keepPositive :: Row -> Row
--- keepPositive [] = []
--- kepPositive row = let (positives, tail) = span (>= 0) row in positives ++ ((-1) : dropNegative newRow)
-
--- dropNegative :: Row -> Row
--- dropNegative [] = []
--- dropNegative row = let newRow = dropWhile (< 0) row in keepPositive newRow
+    go
+        :: Row --  Accumulator. Contains the sparsified row thus far in reverse order.
+        -> Row -- The rest of the dense row which must still be sparsified.
+        -> Maybe Cell -- The last found cell with a non-negative budget.
+        -> Row -- The final sparsified row.
+        -- row has been completed, return the accumulator, which is now in reverse
+    go acc [] _ = reverse acc
+    -- while no cell with positive budget is found, start main loop if you find one, else go to next cell
+    go acc (cell@(Cell pos val) : rest) Nothing
+        | val >= 0 = go (cell : acc) rest (Just cell)
+        | otherwise = go acc rest Nothing
+    -- the main loop, keep filling accumulator and ignoring the strings of cells with negative budgets
+    go acc (cell@(Cell (r, c) val) : rest) (Just prevCell@(Cell (prevR, prevC) _))
+        | val >= 0 =
+            case c - prevC of
+                -- just add the cell to accumulator
+                1 -> go (cell : acc) rest (Just cell)
+                -- Add one cell with a (-1) budget in the gap
+                2 -> go (cell : Cell (r, c - 1) (-1) : acc) rest (Just cell)
+                -- Add two cells with (-1) budget at the edges of the gap
+                _ -> go (cell : Cell (r, c - 1) (-1) : Cell (prevR, prevC + 1) (-1) : acc) rest (Just cell)
+        | otherwise = go acc rest (Just prevCell)

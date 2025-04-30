@@ -121,7 +121,7 @@ testITQuadratic3 =
             ComQuadratic{gapSize = 4, maxError = 4}
             (1, Just 6)
             "AGTC"
-        ~?= "[0,2,4,2,0]"
+        ~?= "[-1,2,4,2,-1]"
 
 -- String: Contains a gapped even palindrome
 testITQuadratic4 =
@@ -132,7 +132,7 @@ testITQuadratic4 =
             ComQuadratic{gapSize = 2, maxError = 0}
             (2, Nothing)
             "ACCT"
-        ~?= "[0,2,4,2,0]"
+        ~?= "[-1,2,4,2,-1]"
 
 -- String: Contains an odd-gapped dna palindrome
 testITQuadratic5 =
@@ -154,7 +154,7 @@ testITQuadratic6 =
             ComQuadratic{gapSize = 0, maxError = 0}
             (3, Just 4)
             "ATAT"
-        ~?= "[0,0,4,0,0]"
+        ~?= "[-1,-1,4,-1,-1]"
 
 -- String: Contains an even gapped palindrome with punctuation
 testITQuadratic7 =
@@ -209,7 +209,7 @@ testITQuadratic11 =
             ComQuadratic{gapSize = 0, maxError = 1}
             (6, Just 6)
             "Ac.G-CgA "
-        ~?= "[0,0,0,6,0,0,0]"
+        ~?= "[-1,-1,-1,6,-1,-1,-1]"
 
 -- String: Contains an even palindrome
 testITQuadratic12 =
@@ -220,7 +220,7 @@ testITQuadratic12 =
             ComQuadratic{gapSize = 0, maxError = 0}
             (6, Nothing)
             "ACGCGA"
-        ~?= "0"
+        ~?= "-1"
 
 -- String: Contains an approximate palindrome
 testITQuadratic13 =
@@ -242,7 +242,7 @@ testITQuadratic14 =
             ComQuadratic{gapSize = 6, maxError = 6}
             (1, Just 2)
             "abcdef"
-        ~?= "[0,1,2,0,0,0,0,0,0,0,2,1,0]"
+        ~?= "[-1,1,2,-1,-1,-1,-1,-1,-1,-1,2,1,-1]"
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic15 =
@@ -275,7 +275,7 @@ testITQuadratic17 =
             ComQuadratic{gapSize = 0, maxError = 0}
             (3, Just 6)
             "l.e.p’e;l"
-        ~?= "[0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]"
 
 -- String: Contains an odd palindrome
 testITQuadratic18 =
@@ -319,7 +319,7 @@ testITQuadratic21 =
             ComQuadratic{gapSize = 10, maxError = 10}
             (2, Nothing)
             "zat.,s&tat"
-        ~?= "[0,0,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,0,0]"
+        ~?= "[-1,-1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,-1,-1]"
 
 -- String: Contains an odd approximate palindrome
 testITQuadratic22 =
@@ -330,7 +330,7 @@ testITQuadratic22 =
             ComQuadratic{gapSize = 2, maxError = 0}
             (2, Just 5)
             "zatstat"
-        ~?= "[0,0,2,0,2,0,2,5,2,0,2,3,2,0,0]"
+        ~?= "[-1,-1,2,-1,2,-1,2,5,2,-1,2,3,2,-1,-1]"
 
 -- String: Contains an even gapped palindrome, with punctuation
 testITQuadratic23 =
@@ -352,7 +352,7 @@ testITQuadratic24 =
             ComQuadratic{gapSize = 0, maxError = 0}
             (1, Just 4)
             "blaABcdBAbli"
-        ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]"
+        ~?= "[-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1]"
 
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic25 =
@@ -385,7 +385,7 @@ testITQuadratic27 =
             ComQuadratic{gapSize = 2, maxError = 0}
             (3, Just 6)
             "\"blaAPPab’li "
-        ~?= "0"
+        ~?= "-1"
 
 -- String: Contains an even palindrome
 testITQuadratic28 =
@@ -462,7 +462,7 @@ testITQuadratic34 =
             ComQuadratic{gapSize = 0, maxError = 1}
             (3, Just 3)
             "bla(APA)bli"
-        ~?= "[0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0]"
+        ~?= "[-1,-1,-1,3,-1,-1,-1,-1,-1,3,-1,-1,-1,-1,-1,3,-1,-1,-1]"
 
 -- String: Contains an odd punctuation palindrome
 testITQuadratic35 =
@@ -484,7 +484,7 @@ testITQuadratic36 =
             ComQuadratic{gapSize = 0, maxError = 0}
             (2, Just 3)
             "AB/cde/BA"
-        ~?= "0"
+        ~?= "-1"
 
 -- String: Contains an approximate, even palindrome with punctuation
 testITQuadratic37 =
@@ -517,7 +517,7 @@ testITQuadratic39 =
             ComQuadratic{gapSize = 2, maxError = 0}
             (2, Nothing)
             "Abc'd/.ef"
-        ~?= "[0,0,2,0,2,0,2,0,2,0,2,0,0]"
+        ~?= "[-1,-1,2,-1,2,-1,2,-1,2,-1,2,-1,-1]"
 
 -- String: Contains no palindrome
 testITQuadratic40 =
@@ -605,7 +605,7 @@ testITQuadratic47 =
             ComQuadratic{gapSize = 0, maxError = 0}
             (1, Just 6)
             "zat.,s&tat"
-        ~?= "[0,1,0,1,0,1,0,5,0,1,0,3,0,1,0]"
+        ~?= "[-1,1,-1,1,-1,1,-1,5,-1,1,-1,3,-1,1,-1]"
 
 -- String: Contains an approximate odd palindrome
 testITQuadratic48 =
@@ -649,7 +649,7 @@ testITQuadratic51 =
             ComQuadratic{gapSize = 0, maxError = 8}
             (6, Nothing)
             "A-B*cde)BA"
-        ~?= "[0,0,0,0,0,0,6,7,6,0,0,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,-1,6,7,6,-1,-1,-1,-1,-1,-1]"
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic52 =
@@ -660,7 +660,7 @@ testITQuadratic52 =
             ComQuadratic{gapSize = 3, maxError = 0}
             (2, Just 5)
             "ABcdeBA"
-        ~?= "[0,0,2,3,2,3,2,0,2,3,2,3,2,0,0]"
+        ~?= "[-1,-1,2,3,2,3,2,-1,2,3,2,3,2,-1,-1]"
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic53 =
@@ -748,7 +748,7 @@ testITQuadratic60 =
             (ComQuadratic 1 2)
             (6, Nothing)
             "hello hi hi hello"
-        ~?= "0"
+        ~?= "-1"
 
 -- String: Contains an odd palindrome, contains multiple spaces
 testITQuadratic61 =
@@ -814,7 +814,7 @@ testITQuadratic66 =
             (ComQuadratic 9 9)
             (4, Nothing)
             "nope fout goed niet midden oeps goed nee ook"
-        ~?= "[0,0,0,0,4,5,6,7,8,9,8,7,6,5,4,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,4,5,6,7,8,9,8,7,6,5,4,-1,-1,-1,-1]"
 
 -- String: Contains a gapped even palindrome with punctuation
 testITQuadratic67 =
@@ -825,7 +825,7 @@ testITQuadratic67 =
             (ComQuadratic 2 0)
             (2, Just 3)
             "Doei&& hi ik b(e)n ??? een mens hi doei"
-        ~?= "[0,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,0]"
+        ~?= "[-1,-1,2,-1,2,-1,2,-1,2,-1,2,-1,2,-1,2,-1,-1]"
 
 -- String: Contains a gapped even palindrome
 testITQuadratic68 =

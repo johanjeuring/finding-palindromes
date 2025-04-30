@@ -42,20 +42,20 @@ testFilterMin =
     TestCase $
         assertEqual
             "testFilterMin"
-            [0, 2, 3, 0, 5]
+            [-1, 2, 3, -1, 5]
             (Post.filterMin 2 [1, 2, 3, 0, 5])
 
 testFilterExact =
     TestCase $
         assertEqual
             "testFilterExact"
-            [0, 2, 0, 0, 0]
+            [-1, 2, -1, -1, -1]
             (Post.filterExact 2 [1, 2, 3, 0, 5])
 testFilterMax =
     TestCase $
         assertEqual
             "testFilterMax"
-            [1, 2, 0, 0, 0]
+            [1, 2, -1, 0, -1]
             (Post.filterMax (Just 2) [1, 2, 3, 0, 5])
 testFilterPunctuationOnlySpace =
     TestCase $

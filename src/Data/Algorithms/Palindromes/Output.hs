@@ -25,8 +25,7 @@ module Data.Algorithms.Palindromes.Output
     , wordAt
     ) where
 
-import Data.List (intercalate)
-import Data.Maybe (fromMaybe)
+import Data.List (find, intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
@@ -81,6 +80,7 @@ longestLength = show . maximum
 
 -- | Converts the longest palindrome to text
 longestWord :: [Palindrome] -> String
+longestWord [] = ""
 longestWord input = palText longest
   where
     longest :: Palindrome
@@ -93,18 +93,8 @@ allLengths = show
 {- | All maximal palindromes as a list of strings. Same as show $ map palText input except
 this doesn't apply show to the palindrome strings as that will turn \n into \\n.
 -}
-allWords :: [Palindrome] -> (Int, Maybe Int) -> String
-allWords input (minlen, maxlen) = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") filteredInput) ++ "]"
-  where
-    filteredInput :: [Palindrome]
-    filteredInput =
-        filter
-            ( \pal ->
-                palLength pal /= 0
-                    && palLength pal <= fromMaybe (length input) maxlen
-                    && palLength pal >= minlen
-            )
-            input
+allWords :: [Palindrome] -> String
+allWords input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
 
 -- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String
@@ -112,4 +102,7 @@ lengthAt n lengths = show $ lengths !! n
 
 -- | Get the maximal palindrome string at the specified center index.
 wordAt :: Int -> [Palindrome] -> String
-wordAt n pals = palText $ pals !! n
+wordAt n pals = maybe "" palText pal
+  where
+    pal :: Maybe Palindrome
+    pal = find (\x -> palCenterIndex x == n) pals

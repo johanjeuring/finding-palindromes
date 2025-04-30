@@ -107,7 +107,7 @@ testITLinear3 =
             ComLinear
             (7, Just 7)
             "Word, word, word, palindrome. Word. Word, word."
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"Word, word, word, palindrome. Word. Word, word\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"Word, word, word, palindrome. Word. Word, word\"]"
 
 -- String: No palindromes
 testITLinear4 =
@@ -129,7 +129,7 @@ testITLinear5 =
             ComLinear
             (6, Just 6)
             "Has? ...A palindrome; palindrome a has."
-        ~?= "[0,0,0,0,0,0,6,0,0,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,-1,6,-1,-1,-1,-1,-1,-1]"
 
 -- String: Even, has punctuation
 testITLinear6 =
@@ -140,7 +140,7 @@ testITLinear6 =
             ComLinear
             (3, Just 4)
             "~ehhe~"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[]"
 
 -- String: Not a palindrome. Contains no punctuation
 testITLinear7 =
@@ -151,7 +151,7 @@ testITLinear7 =
             ComLinear
             (10, Nothing)
             "abcdefghij"
-        ~?= "0"
+        ~?= "-1"
 
 -- String: Contains an even punctuation palindrome
 testITLinear8 =
@@ -173,7 +173,7 @@ testITLinear9 =
             ComLinear
             (0, Just 3)
             "damittimad"
-        ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]"
+        ~?= "[0,1,0,1,0,1,0,1,0,1,-1,1,0,1,0,1,0,1,0,1,0]"
 
 -- String: Contains an even, nested palindrome
 testITLinear10 =
@@ -195,7 +195,7 @@ testITLinear11 =
             ComLinear
             (0, Nothing)
             "dam'itt!  \\ I'm ?ad."
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"dam'itt!  \\ I'm ?ad\",\"\",\"\",\"I\",\"\",\"m\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"dam'itt!  \\ I'm ?ad\",\"I\",\"m\"]"
 
 -- String: Contains a nested odd palindrome.
 testITLinear12 =
@@ -217,7 +217,7 @@ testITLinear13 =
             ComLinear
             (3, Nothing)
             "abcdcba-"
-        ~?= "[0,0,0,0,0,0,0,7,0,0,0,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,-1,-1,7,-1,-1,-1,-1,-1,-1,-1]"
 
 -- String: Contains an even palindrome
 testITLinear14 =
@@ -228,7 +228,7 @@ testITLinear14 =
             ComLinear
             (0, Just 2)
             "word palindrome palindrome word"
-        ~?= "[\"\",\"word\",\"\",\"palindrome\",\"\",\"palindrome\",\"\",\"word\",\"\"]"
+        ~?= "[\"word\",\"palindrome\",\"palindrome\",\"word\"]"
 
 -- String: Contains an odd punctuation palindrome
 testITLinear15 =
@@ -250,7 +250,7 @@ testITLinear16 =
             ComLinear
             (0, Just 8)
             "a#b, ,c^D efg[h"
-        ~?= "[\"\",\"a\",\"\",\"b\",\"\",\"c\",\"\",\"D\",\"\",\"e\",\"\",\"f\",\"\",\"g\",\"\",\"h\",\"\"]"
+        ~?= "[\"a\",\"b\",\"c\",\"D\",\"e\",\"f\",\"g\",\"h\"]"
 
 -- String: Contains no palindrome
 testITLinear17 =
@@ -261,7 +261,7 @@ testITLinear17 =
             ComLinear
             (3, Nothing)
             "nopalindromes"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[]"
 
 -- String: Contains an odd palindrome with punctuation
 testITLinear18 =
@@ -305,7 +305,7 @@ testITLinear21 =
             ComLinear
             (10, Just 0)
             "That that, that that that -that that that refers to-"
-        ~?= "0"
+        ~?= "-1"
 
 -- String: Contains an odd palindrome
 testITLinear22 =
@@ -327,7 +327,7 @@ testITLinear23 =
             ComLinear
             (2, Nothing)
             "ATTCGGCGCAAT"
-        ~?= "[0,2,0,0,2,0,2,4,2,0,0,2,0]"
+        ~?= "[-1,2,-1,-1,2,-1,2,4,2,-1,-1,2,-1]"
 
 -- String: Contains an even palindrom with punctuation
 testITLinear24 =
@@ -349,7 +349,7 @@ testITLinear25 =
             ComLinear
             (0, Just 0)
             "ennestedetsenne"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[]"
 
 -- String: Contains an odd palindrome with punctuation
 testITLinear26 =
@@ -437,7 +437,7 @@ testITLinear33 =
             ComLinear
             (0, Just 0)
             "abbaccabba"
-        ~?= "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+        ~?= "[0,-1,0,-1,-1,-1,0,-1,0,-1,-1,-1,0,-1,0,-1,-1,-1,0,-1,0]"
 
 -- String: Contains an even palindrome with punctuation
 testITLinear34 =
@@ -448,7 +448,7 @@ testITLinear34 =
             ComLinear
             (14, Nothing)
             "TATG\nCGATC  GCA.TA"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"TATG\nCGATC  GCA.TA\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"TATG\nCGATC  GCA.TA\"]"
 
 -- String: Contains no palindrome, contains punctuation
 testITLinear35 =
@@ -470,7 +470,7 @@ testITLinear36 =
             ComLinear
             (3, Nothing)
             "A simple palindrome. Simple, a (ye)?"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"A simple palindrome. Simple, a\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"A simple palindrome. Simple, a\"]"
 
 -- String: Contains an even nested palindrome
 testITLinear37 =
@@ -481,7 +481,7 @@ testITLinear37 =
             ComLinear
             (0, Just 8)
             "d*eif:ied a-+bba deifie;d!"
-        ~?= "[\"\",\"d\",\"\",\"\",\"\",\"\",\"\",\"d*eif:ied\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"a\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"deifie;d\",\"\",\"\",\"\",\"\",\"\",\"d\",\"\"]"
+        ~?= "[\"d\",\"d*eif:ied\",\"a\",\"deifie;d\",\"d\"]"
 
 -- String: Contains no palindrome, contains punctuation
 testITLinear38 =
@@ -492,7 +492,7 @@ testITLinear38 =
             ComLinear
             (21, Nothing)
             "Thi,s is not a p-alindro'me."
-        ~?= "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]"
 
 -- String: Contains an even palindrome
 testITLinear39 =
@@ -514,7 +514,7 @@ testITLinear40 =
             ComLinear
             (2, Just 5)
             "AN\nTC\tAGTC"
-        ~?= "[0,0,0,0,0,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,-1,-1,-1,-1]"
 
 -- String: Contains no palindrome
 testITLinear41 =
@@ -547,7 +547,7 @@ testITLinear43 =
             ComLinear
             (1, Just 4)
             "releveler"
-        ~?= "[\"\",\"r\",\"\",\"e\",\"\",\"ele\",\"\",\"e\",\"\",\"\",\"\",\"e\",\"\",\"ele\",\"\",\"e\",\"\",\"r\",\"\"]"
+        ~?= "[\"r\",\"e\",\"ele\",\"e\",\"e\",\"ele\",\"e\",\"r\"]"
 
 -- String: Contains an odd nested palindrome
 testITLinear44 =
@@ -569,7 +569,7 @@ testITLinear45 =
             ComLinear
             (3, Just 3)
             "Oi! You there! You! Stop!"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"You there! You\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"You there! You\"]"
 
 -- String: Contains an odd nested palindrome
 testITLinear46 =
@@ -591,7 +591,7 @@ testITLinear47 =
             ComLinear
             (0, Just 8)
             "Revile.... Deliver!"
-        ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0]"
+        ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,-1,0,1,0,1,0,1,0,1,0,1,0,1,0]"
 
 -- String: Contains an even nested palindrome with punctuation
 testITLinear48 =
@@ -602,7 +602,7 @@ testITLinear48 =
             ComLinear
             (0, Just 4)
             "It's high noon..."
-        ~?= "[\"\",\"I\",\"\",\"t\",\"\",\"'\",\"\",\"s\",\"\",\" \",\"\",\"h\",\"\",\"i\",\"\",\"g\",\"\",\"h\",\"\",\" \",\"\",\"n\",\"\",\"o\",\"noon\",\"o\",\"\",\"n\",\"\",\".\",\"..\",\"...\",\"..\",\".\",\"\"]"
+        ~?= "[\"I\",\"t\",\"'\",\"s\",\" \",\"h\",\"i\",\"g\",\"h\",\" \",\"n\",\"o\",\"noon\",\"o\",\"n\",\".\",\"..\",\"...\",\"..\",\".\"]"
 
 -- String: Contains an odd palindrome with punctuation
 testITLinear49 =
@@ -635,7 +635,7 @@ testITLinear51 =
             ComLinear
             (2, Just 5)
             "madamoiselle"
-        ~?= "[0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,-1,5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,4,-1,-1,-1,-1]"
 
 -- String: Contains an even palindrome with punctuation
 testITLinear52 =
@@ -646,7 +646,7 @@ testITLinear52 =
             ComLinear
             (4, Just 4)
             "Hello? my.... my .. hello!"
-        ~?= "[0,0,0,0,4,0,0,0,0]"
+        ~?= "[-1,-1,-1,-1,4,-1,-1,-1,-1]"
 
 -- String: Contains an even punctuation palindrome
 testITLinear53 =
@@ -723,7 +723,7 @@ testITLinear59 =
             ComLinear
             (9, Just 9)
             "Releveler"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"Releveler\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"Releveler\"]"
 
 -- String: Contains an odd punctuation palindrome
 testITLinear60 =
@@ -734,4 +734,4 @@ testITLinear60 =
             ComLinear
             (5, Just 0)
             "\nOdd do!"
-        ~?= "0"
+        ~?= "-1"

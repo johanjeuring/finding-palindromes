@@ -30,6 +30,7 @@ testListLinearAlgorithm =
     , testFinalPalindromesSCutOff
     , testFinalPalindromesNrOfCentersZero
     , testFinalPalindromesSDNA
+    , testFinalPalindromesSDNACutOff
     ]
 
 {-
@@ -342,6 +343,21 @@ testFinalPalindromesSDNA =
                 True
                 4
                 [0, 4, 0, 0]
+                [4, 0, 4, 0, 0]
+            )
+
+{- Test a DNA case, where some palindrome needs to be truncated to a non-zero value.
+This test is based on input string "TGCATGC" -}
+testFinalPalindromesSDNACutOff =
+    TestCase $
+        assertEqual
+            "testFinalPalindromesSDNACutOff"
+            [0, 2, 0, 6, 0, 4, 0, 0]
+            ( P.finalPalindromesS
+                True
+                6
+                [0, 4, 0, 0]
+                [6, 0, 4, 0, 0]
             )
 
 {-

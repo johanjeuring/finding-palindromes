@@ -97,7 +97,9 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
 
     -- if elements are palindrome equal at position then no error cost, otherwise error cost of 1 for substitution
     errorCostAtPosition :: Position -> Int
-    errorCostAtPosition (row, column) = if (input V.! row) =:= (input V.! column) then 0 else 1
+    errorCostAtPosition (row, column)
+        | (input V.! row) =:= (input V.! column) = 0
+        | otherwise = 1
 
 {- Calculates the position of the maximal palindromes in the row below the current row.
 It does for the previous since you need the current row to know if the budget is exceeded when the palindrome is extended.

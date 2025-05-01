@@ -327,9 +327,9 @@ testFinalPalindromesNrOfCentersZero =
             [0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.finalPalindromesS
                 False
-                1
-                [0, 1, 0, 1, 0, 1, 0]
+                0
                 [1, 0, 1, 0, 1, 0, 1, 0]
+                [0, 1, 0, 1, 0, 1, 0, 1, 0]
             )
 
 {- Test a DNA case with a palindrome in the palindrome which initiates finalPalindromeS.

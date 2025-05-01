@@ -262,11 +262,12 @@ testFinalPalindromesSSimple =
     TestCase $
         assertEqual
             "testFinalPalindromesSSimple"
-            [0, 1, 0, 1, 2, 1, 0]
+            [0, 1, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 1, 0]
             ( P.finalPalindromesS
                 False
                 7
                 [0, 1, 2, 1, 0, 1, 0]
+                [7, 0, 1, 2, 1, 0, 1, 0]
             )
 
 {- Test a case where some palindromes need to be truncated. This test is based on input
@@ -288,11 +289,32 @@ testFinalPalindromesSCutOff =
             , 2
             , 1
             , 0
+            , 13
+            , 0
+            , 1
+            , 2
+            , 3
+            , 4
+            , 5
+            , 6
+            , 7
+            , 8
+            , 9
+            , 8
+            , 7
+            , 6
+            , 5
+            , 4
+            , 3
+            , 2
+            , 1
+            , 0
             ]
             ( P.finalPalindromesS
                 False
                 13
                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+                [13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
             )
 
 {- Test a case where the palindrome initiating finalPalindromesS does not contain another
@@ -301,10 +323,11 @@ testFinalPalindromesNrOfCentersZero =
     TestCase $
         assertEqual
             "testFinalPalindromesNrOfCentersZero"
-            []
+            [0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.finalPalindromesS
                 False
-                0
+                1
+                [0, 1, 0, 1, 0, 1, 0]
                 [1, 0, 1, 0, 1, 0, 1, 0]
             )
 
@@ -313,8 +336,8 @@ This test is based on input string "TGCATG" -}
 testFinalPalindromesSDNA =
     TestCase $
         assertEqual
-            "testFinalPalindromesNrOfCentersZero"
-            [0, 0]
+            "testFinalPalindromesSDNA"
+            [0, 0, 4, 0, 4, 0, 0]
             ( P.finalPalindromesS
                 True
                 4

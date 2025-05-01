@@ -4,7 +4,6 @@
 module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm where
 
 import Data.Bifunctor (second)
-import Debug.Trace (trace)
 
 import Data.Algorithms.Palindromes.PalEq (PalEq, (=:=))
 
@@ -45,7 +44,7 @@ insertionDeletionAlgorithm input maxError = concat maxPalindromes
             (insertionDeletionIteration input maxError)
             ([], [Cell (V.length input - 1, V.length input - 1) maxError])
             [0 .. V.length input - 2]
-    finalRow = trace (show $ snd loopResult) snd loopResult
+    finalRow = snd loopResult
     maxPalindromesFinalRow = extractMaximalPalindromesFinalRow finalRow
     maxPalindromes = maxPalindromesFinalRow : fst loopResult
 
@@ -152,24 +151,29 @@ sparsify row = go [] row Nothing
         -> Row -- The final sparsified row.
         -- row has been completed, return the accumulator, which is now in reverse
     go acc [] _ = reverse acc
-    go acc [cell@(Cell _ budget)] (Just (Cell (prevR, prevC) _))
-        | budget < 0 = reverse (Cell (prevR, prevC + 1) (-1) : acc)
-        | otherwise = reverse (cell : acc)
     -- while no cell with positive budget is found, start main loop if you find one, else go to next cell
     go acc (cell@(Cell pos budget) : rest) Nothing
         | budget >= 0 = go (cell : acc) rest (Just cell)
         | otherwise = go acc rest Nothing
     -- the main loop, keep filling accumulator and ignoring the strings of cells with negative budgets
-    go acc (cell@(Cell (r, c) budget) : rest) (Just prevCell@(Cell (prevR, prevC) _))
-        | budget >= 0 =
-            case c - prevC of
-                -- just add the cell to accumulator
-                1 -> go (cell : acc) rest (Just cell)
-                -- Add one cell with a (-1) budget in the gap
-                2 -> go (cell : Cell (r, c - 1) (-1) : acc) rest (Just cell)
-                -- Add two cells with (-1) budget at the edges of the gap
-                _ -> go (cell : Cell (r, c - 1) (-1) : Cell (prevR, prevC + 1) (-1) : acc) rest (Just cell)
-        | otherwise = go acc rest (Just prevCell)
+    go acc (cell@(Cell (r, c) budget) : rest) (Just prevCell@(Cell (prevR, prevC) _)) =
+        case rest of
+            [] ->
+                if budget < 0
+                    then reverse (Cell (prevR, prevC + 1) (-1) : temp)
+                    else reverse temp
+            _ -> if budget < 0 then go temp rest (Just prevCell) else go temp rest (Just cell)
+      where
+        temp
+            | budget >= 0 =
+                case c - prevC of
+                    -- just add the cell to accumulator
+                    1 -> cell : acc
+                    -- Add one cell with a (-1) budget in the gap
+                    2 -> cell : Cell (r, c - 1) (-1) : acc
+                    -- Add two cells with (-1) budget at the edges of the gap
+                    _ -> cell : Cell (r, c - 1) (-1) : Cell (prevR, prevC + 1) (-1) : acc
+            | otherwise = acc
 
 {- For the final row, so without a row above it, a cell represents a maximal palindrome
 if the cell has a positive budget and the cell to the right of it has a negative budget.

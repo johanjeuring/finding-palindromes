@@ -28,7 +28,7 @@ import qualified Data.Vector as V
 extendPalindromeS
     :: (PalEq a)
     => Bool
-    -- ^ Indicates whether the input datatype is anti-reflexive
+    -- ^ indicates whether the input datatype is anti-reflexive
     -> V.Vector a
     -- ^ input, with only the elements we want to find palindromes in
     -> Int
@@ -46,7 +46,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
             antiReflexive
             currentPalindrome
             maximalPalindromesIn
-            ++ (currentPalindrome : maximalPalindromesIn)
+            (currentPalindrome : maximalPalindromesIn)
     | rightmost - currentPalindrome == first
         || not ((input V.! rightmost) =:= (input V.! (rightmost - currentPalindrome - 1))) =
         -- the current palindrome extends to the start of the array, or it cannot be
@@ -74,7 +74,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
 moveCenterS
     :: (PalEq a)
     => Bool
-    -- ^ Indicates whether the input datatype is anti-reflexive
+    -- ^ indicates whether the input datatype is anti-reflexive
     -> V.Vector a
     -- ^ input, with only the elements we want to find palindromes in
     -> Int
@@ -147,30 +147,49 @@ moveCenterS
       where
         {- If type is anti-reflexive, we can skip centers on elements, so take steps of
         size 2. -}
-        centerfactor = if antiReflexive then 2 else 1
+        centerfactor
+            | antiReflexive = 2
+            | otherwise = 1
 
 {- | After the current palindrome reached the end of the input vector, this function will
-find and return the final palindromes using the pal in pal property
+find and return the final palindromes using the pal in pal property.
 -}
 finalPalindromesS
     :: Bool
-    -- ^ Indicates whether the input datatype is anti-reflexive
+    -- ^ indicates whether the input datatype is anti-reflexive.
     -> Int
-    -- ^ amount of centers that haven't been extended before finalizing extendPalindromeS
+    -- ^ number of centers that haven't been extended yet.
     -> [Int]
-    -- ^ the lengths of the palindromes that are found, excluding the current palindrome
+    {- ^ list of found palindrome lengths, where the head corresponds to the value which
+    must be copied next.
+    -}
     -> [Int]
-    -- ^ the final sequence of found palindromes for each remaining center in reverse order
-finalPalindromesS antiReflexive nrOfCenters maximalPalindromesIn =
-    -- Truncate the mirrored candidates when needed.
-    zipWith min candidatesRev [0, centerfactor ..]
+    {- ^ the lengths of all the palindromes that are found, including palindromes found by
+    this function. This is used as an accumulator.
+    -}
+    -> [Int]
+    -- ^ the lengths of all found maximal palindromes in reverse order.
+finalPalindromesS antiReflexive nrOfCenters maximalPalindromesIn acc
+    | nrOfCenters == 0 =
+        acc
+    | nrOfCenters > 0 =
+        case maximalPalindromesIn of
+            (p : ps) ->
+                {- for a center, add the (truncated) copied palindrome to the accumulator
+                and recurse over nrOfCenters. -}
+                finalPalindromesS
+                    antiReflexive
+                    (nrOfCenters - centerfactor)
+                    ps
+                    {- the palindrome cannot be bigger than the remaining number of
+                    centers minus the centerfactor. Truncate the palindrome if necessary.
+                    -}
+                    (min p (nrOfCenters - centerfactor) : acc)
+            [] -> error "finalPalindromesS: empty sequence"
+    | otherwise = error "finalPalindromesS: input < 0"
   where
-    {- Candidates is the list of previously found palindromes we need to copy and possibly
-    truncate -}
-    candidates = take (nrOfCenters `div` centerfactor) maximalPalindromesIn
-    {- We need to 'mirror' the candidates to get the remaining palindromes length in the
-    right order.-}
-    candidatesRev = reverse candidates
     {- If type is anti-reflexive, we can skip centers on elements, so take steps of
     size 2. -}
-    centerfactor = if antiReflexive then 2 else 1
+    centerfactor
+        | antiReflexive = 2
+        | otherwise = 1

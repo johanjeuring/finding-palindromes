@@ -28,7 +28,7 @@ import qualified Data.Vector as V
 extendPalindromeS
     :: (PalEq a)
     => Bool
-    -- ^ Indicates whether the input datatype is anti-reflexive
+    -- ^ indicates whether the input datatype is anti-reflexive
     -> V.Vector a
     -- ^ input, with only the elements we want to find palindromes in
     -> Int
@@ -74,7 +74,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
 moveCenterS
     :: (PalEq a)
     => Bool
-    -- ^ Indicates whether the input datatype is anti-reflexive
+    -- ^ indicates whether the input datatype is anti-reflexive
     -> V.Vector a
     -- ^ input, with only the elements we want to find palindromes in
     -> Int
@@ -147,7 +147,9 @@ moveCenterS
       where
         {- If type is anti-reflexive, we can skip centers on elements, so take steps of
         size 2. -}
-        centerfactor = if antiReflexive then 2 else 1
+        centerfactor
+            | antiReflexive = 2
+            | otherwise = 1
 
 {- | After the current palindrome reached the end of the input vector, this function will
 find and return the final palindromes using the pal in pal property.
@@ -188,4 +190,6 @@ finalPalindromesS antiReflexive nrOfCenters maximalPalindromesIn acc
   where
     {- If type is anti-reflexive, we can skip centers on elements, so take steps of
     size 2. -}
-    centerfactor = if antiReflexive then 2 else 1
+    centerfactor
+        | antiReflexive = 2
+        | otherwise = 1

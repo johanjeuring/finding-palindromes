@@ -31,13 +31,13 @@ type Matrix2 = ((Int, Int), (Int, Int))
 
 insertionDeletionAlgorithm
     :: (PalEq a)
-    => V.Vector a
-    -- ^ Input vector
-    -> Int
+    => Int
     -- ^ Maximum number of errors
+    -> V.Vector a
+    -- ^ Input vector
     -> [Position]
     -- ^ Positions of maximal palindromes
-insertionDeletionAlgorithm input maxError = concat maxPalindromes
+insertionDeletionAlgorithm maxError input = concat maxPalindromes
   where
     loopResult =
         foldr

@@ -30,7 +30,8 @@ module Data.Algorithms.Palindromes.Finders
 import Data.Maybe (fromJust, isNothing)
 
 import Data.Algorithms.Palindromes.Algorithms
-    ( linearAlgorithm
+    ( insertionDeletionAlgorithm
+    , linearAlgorithm
     , quadraticAlgorithm
     )
 import Data.Algorithms.Palindromes.DNA (DNA)
@@ -105,6 +106,7 @@ functionality for including gaps and errors, therefore this is given as an extra
 data Complexity
     = ComLinear
     | ComQuadratic {gapSize :: Int, maxError :: Int}
+    | ComInsertionDeletion {maxIDError :: Int}
     deriving (Show)
 
 -- | The minimum and maximum length of the palindromes you want to find.
@@ -118,12 +120,12 @@ around each center.
 findPalindromeLengths
     :: Variant -> Complexity -> LengthMod -> String -> [Int]
 findPalindromeLengths variant complexity (minlength, maxlength') input =
-    (post . preAlg) input
+    (post . algPre) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
     vector of PalEq items. -}
-    preAlg :: String -> [Int]
-    preAlg = case variant of
+    algPre :: String -> [Int]
+    algPre = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
         VarDNA -> alg . tryParse
@@ -182,10 +184,9 @@ findPalindromes variant complexity lengthmod input = map lengthToPalindrome leng
     lengthToPalindrome :: (Int, Int) -> Palindrome
     lengthToPalindrome (index, len) =
         Palindrome
-            { palCenterIndex = index
-            , palLength = len
+            { palRange = indexedLengthToRange (index, len)
             , palText = indicesToText (indicesInOriginal (index, len)) (V.fromList input)
-            , palRange = indicesInOriginal (index, len)
+            , palRangeInText = indicesInOriginal (index, len)
             }
 
     {- A list of tuples containing the center index and the length of the maximal

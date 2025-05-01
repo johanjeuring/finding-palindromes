@@ -17,19 +17,17 @@ module Data.Algorithms.Palindromes.Palindrome where
 -- | Data type to represent a single found palindrome
 data Palindrome
     = Palindrome
-    { palCenterIndex :: Int
-    {- ^ The index of the center of this found palindrome from the pre-processed input
-    vector.
+    { palRange :: (Int, Int)
+    {- ^ The start (inclusive) and end (exclusive) index of the palindrome in the
+    pre-pocessed input vector.
     -}
-    , palLength :: Int
-    -- ^ The length of the found palindrome in the pre-processed input vector.
     , palText :: String
     {- ^ The text representing the found palindrome. Note that this must be a string,
     not some abstract datatype. This string must be a subarray of the original
     (not pre-processed) input string, meaning that e.g. present punctuation is in this
     string.
     -}
-    , palRange :: (Int, Int)
+    , palRangeInText :: (Int, Int)
     {- ^ The start (inclusive) and end (exclusive) index of the palindrome in the original
     string.
     -}

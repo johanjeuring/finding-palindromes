@@ -82,16 +82,16 @@ This will run all the quickCheck properties as well as unit tests.
 
 ## Benchmarking
 
-To run a benchmark you need to put the files you want to benchmark into the benchmarking-files folder. Then run:
+To run a benchmark you need to put the files you want to benchmark into the benchmarking-files folder. In either the Dna or Text subfolder depending on the type of the file. Then run:
 
 ```
-cabal bench
+cabal bench benchmark
 ```
 
 If you have problems with this try either:
 
 ```
-cabal bench --enable-benchmarking
+cabal bench benchmark --enable-benchmarking
 ```
 
 or
@@ -99,6 +99,51 @@ or
 ```
 cabal build --enable-benchmarking
 ```
+
+Results of benchmarks are written into benchmark-report.html which Criterion generates to give you a complete overview.
+For validating that changes did not significantly slow down the program there is a file called "benchmark-reference.html" which contains previous results of the benchmarks. Results can vary significantly per run but should not be off by more than a factor 10.
+
+## Profiling
+
+For profiling there is a build target in profiling/Main.hs. This main contains an example that force evaluates both a quadratic and linear call of findingPalindromes. To profile your own functions/settings you can replace these examples with your own. Additionally you can use the SCC annoations to add cost centres for your profiling.
+
+The most basic way to run the profiling is to run the following command:
+
+```
+cabal bench profiling --enable-profiling --benchmark-options=" +RTS -p -RTS"
+```
+
+This calls the profiling executable in which you put the functions to be profiled and then creates a report in profiling.prof.
+You can replace the `-p` flag with `-pj` to generate a JSON formatted report. Converting to JSON allows you to use https://www.speedscope.app/ to easily view the profiling result.
+
+This will not give much in depth information on the workings of the package itself however.
+The best way to get more details on the package is to create a cabal.project.local file with the following content:
+
+```
+package palindromes
+  profiling: True
+  ghc-options: -fprof-auto
+```
+
+Afterwards you can run the same command as before but you no longer have to use the flag `--enable-benchmarks`.
+
+### Heap Profiling
+
+To check what is allocating memory to the heap you can pass different flags like `-hc` or `hT` to the benchmarking-option. These will generate a `.hp` report that you can use for heap profling. For information on all the flags go to: https://downloads.haskell.org/ghc/latest/docs/users_guide/profiling.html#rts-options-for-heap-profiling
+
+One of the easiest ways to view this report is by using hp2pretty. You can install this using
+
+```
+cabal install h2pretty
+```
+
+Then afterwards you can run
+
+```
+hp2pretty profiling.hp
+```
+
+This will generate a file called profiling.svg that you can click on to view the generated graph.
 
 ## Running functions in terminal
 

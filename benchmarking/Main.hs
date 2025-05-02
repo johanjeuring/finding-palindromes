@@ -1,42 +1,135 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE StandaloneDeriving #-}
+
+import Control.DeepSeq (NFData)
 import Criterion.Main
-import Data.Algorithms.Palindromes.Finders
+import Criterion.Types (Config (..))
 import Data.List (isSuffixOf)
+import GHC.Generics (Generic)
 import System.Directory (getDirectoryContents)
+import System.FilePath (takeFileName)
+
+import Data.Algorithms.Palindromes.Finders
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified System.IO as Sys
 import qualified System.IO.Strict as Strict
 
+deriving instance Generic Palindrome
+deriving instance NFData Palindrome
+
 -- | Benchmarks every file in the benchmarking-files folder
 main =
     do
-        files <- getFiles
-        let benchmarks = map benchFile files
-        defaultMain benchmarks
+        textFiles <- getTextFiles
+        let complexityBenchmarks = bgroup "complexity" $ map (`benchFile` benchComplexity) textFiles
+        let textVariantBenchmarks = bgroup "text-variants" $ map (`benchFile` benchTextVariants) textFiles
+        let outputBenchmarks = bgroup "output" $ map (`benchFile` benchOutputOptions) textFiles
 
-{- | Creates a group benchmarks on the contents of the specified file name
-| Evaluates the result to normal form to ensure that you actually preform the required calculations
--}
-benchFile :: String -> Benchmark
-benchFile fileName =
-    env (getFileContentLatin1 ("benchmarking/benchmarking-files/" ++ fileName)) $
+        dnaFiles <- getDnaFiles
+        let dnaBenchmarks = bgroup "dna" $ map (`benchFile` benchDna) dnaFiles
+
+        defaultMainWith
+            config
+            [complexityBenchmarks, textVariantBenchmarks, outputBenchmarks, dnaBenchmarks]
+
+config :: Config
+config = defaultConfig{reportFile = Just "benchmark-report.html"}
+
+benchFile :: String -> (String -> [Benchmark]) -> Benchmark
+benchFile filePath benchmarks =
+    env (getFileContentLatin1 filePath) $
         \content ->
-            bgroup
-                fileName
-                [ bench "Quadratic" $
-                    nf
-                        (findPalindromeLengths VarText (ComQuadratic 0 0) (0, Nothing))
-                        content
-                , bench "Linear" $
-                    nf
-                        (findPalindromeLengths VarText ComLinear (0, Nothing))
-                        content
-                ]
+            bgroup (takeFileName filePath) (benchmarks content)
 
--- | Get the file names of every file in the benchmarking-files directory
-getFiles :: IO [String]
-getFiles = do
-    files <- getDirectoryContents "benchmarking/benchmarking-files"
+-- | Takes a string and creates a benchmark for every complexity option of findPalindromes on that string.
+benchComplexity :: String -> [Benchmark]
+benchComplexity content =
+    [ bench "quadratic" $
+        nf
+            (findPalindromes VarText (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "linear" $
+        nf
+            (findPalindromes VarText ComLinear (0, Nothing))
+            content
+    ]
+
+-- | Takes a string and creates a benchmark for every text based palindrome variant of findPalindromes on that string.
+benchTextVariants :: String -> [Benchmark]
+benchTextVariants content =
+    [ bench "plain" $
+        nf
+            (findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "text" $
+        nf
+            (findPalindromes VarText (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "punctuation" $
+        nf
+            (findPalindromes VarPunctuation (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "word" $
+        nf
+            (findPalindromes VarWord (ComQuadratic 0 0) (0, Nothing))
+            content
+    ]
+
+-- | Takes a string and creates a benchmark for every output option for findPalindromesFormatted on that string.
+benchOutputOptions :: String -> [Benchmark]
+benchOutputOptions content =
+    [ bench "length" $
+        nf
+            (findPalindromesFormatted VarText OutLength (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "lengths" $
+        nf
+            (findPalindromesFormatted VarText OutLengths (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "word" $
+        nf
+            (findPalindromesFormatted VarText OutWord (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "words" $
+        nf
+            (findPalindromesFormatted VarText OutWords (ComQuadratic 0 0) (0, Nothing))
+            content
+    ]
+
+-- | Takes a string and creates a benchmark for every output option for findPalindromesFormatted on that string.
+benchDna :: String -> [Benchmark]
+benchDna content =
+    [ bench "plain" $
+        nf
+            (findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "dna" $
+        nf
+            (findPalindromes VarDNA (ComQuadratic 0 0) (0, Nothing))
+            content
+    , bench "odd gapped dna" $
+        nf
+            (findPalindromes VarDNA (ComQuadratic 1 0) (0, Nothing))
+            content
+    ]
+
+getTextFiles :: IO [String]
+getTextFiles = do
+    files <- getDirectoryContentsWithPath "benchmarking/benchmarking-files/text-files"
     return $ filter (isSuffixOf ".txt") files
+
+getDnaFiles :: IO [String]
+getDnaFiles = do
+    files <- getDirectoryContentsWithPath "benchmarking/benchmarking-files/dna-files"
+    return $ filter (isSuffixOf ".txt") files
+
+-- | Gets the file names of every file in the given directory and then prepends the directory to the filepath
+getDirectoryContentsWithPath :: String -> IO [String]
+getDirectoryContentsWithPath dir = do
+    files <- getDirectoryContents dir
+    return (map ((dir ++ "/") ++) files)
 
 -- | Reads the content of a file in latin1 encoding
 getFileContentLatin1 :: String -> IO String

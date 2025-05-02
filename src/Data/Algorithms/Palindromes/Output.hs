@@ -25,7 +25,7 @@ module Data.Algorithms.Palindromes.Output
     , wordAt
     ) where
 
-import Data.List (intercalate)
+import Data.List (find, intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
@@ -69,9 +69,9 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex = snd (fst lastWord)
 
 -- | Takes a start and end index (exclusive) and returns the substring with those indices
-indicesToText :: (Int, Int) -> String -> String
+indicesToText :: (Int, Int) -> V.Vector Char -> String
 indicesToText (start, end) input
-    | end - start > 0 = take (end - start) $ drop start input
+    | end - start > 0 = V.toList $ V.slice start (end - start) input
     | otherwise = ""
 
 -- | Returns the length of the longest palindrome as a string
@@ -80,6 +80,7 @@ longestLength = show . maximum
 
 -- | Converts the longest palindrome to text
 longestWord :: [Palindrome] -> String
+longestWord [] = ""
 longestWord input = palText longest
   where
     longest :: Palindrome
@@ -101,4 +102,7 @@ lengthAt n lengths = show $ lengths !! n
 
 -- | Get the maximal palindrome string at the specified center index.
 wordAt :: Int -> [Palindrome] -> String
-wordAt n pals = palText $ pals !! n
+wordAt n pals = maybe "" palText pal
+  where
+    pal :: Maybe Palindrome
+    pal = find (\x -> palCenterIndex x == n) pals

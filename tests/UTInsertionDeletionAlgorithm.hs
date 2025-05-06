@@ -1,4 +1,4 @@
-module UTLinearAlgorithm (testListInsertionDeletionAlgorithm) where
+module UTInsertionDeletionAlgorithm (testListInsertionDeletionAlgorithm) where
 
 import InsertionDeletionAlgorithm (Cell, sparsify)
 import Test.HUnit (Test (..), assertEqual)

@@ -10,7 +10,7 @@ import Data.Algorithms.Palindromes.Finders
     , findPalindromes
     )
 import Data.Algorithms.Palindromes.Palindrome
-    ( Palindrome (Palindrome, palCenterIndex, palLength, palRange, palText)
+    ( Palindrome (Palindrome, palRange, palRangeInText, palText)
     )
 
 instance Arbitrary DNA where
@@ -26,24 +26,21 @@ testListFinders =
 testFinderPlain =
     "testFinderPlain"
         ~: [ ( Palindrome
-                { palCenterIndex = 1
-                , palLength = 1
+                { palRange = (0, 1)
                 , palText = "a"
-                , palRange = (0, 1)
+                , palRangeInText = (0, 1)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 3
-                , palLength = 3
+                { palRange = (0, 3)
                 , palText = "aba"
-                , palRange = (0, 3)
+                , palRangeInText = (0, 3)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 5
-                , palLength = 1
+                { palRange = (0, 3)
                 , palText = "a"
-                , palRange = (2, 3)
+                , palRangeInText = (2, 3)
                 }
              )
            ]
@@ -52,24 +49,21 @@ testFinderPlain =
 testFinderText =
     "testFinderText"
         ~: [ ( Palindrome
-                { palCenterIndex = 1
-                , palLength = 1
+                { palRange = (0, 1)
                 , palText = "a"
-                , palRange = (0, 1)
+                , palRangeInText = (0, 1)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 3
-                , palLength = 3
+                { palRange = (0, 3)
                 , palText = "ab'A"
-                , palRange = (0, 4)
+                , palRangeInText = (0, 4)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 5
-                , palLength = 1
+                { palRange = (2, 3)
                 , palText = "A"
-                , palRange = (3, 4)
+                , palRangeInText = (3, 4)
                 }
              )
            ]
@@ -78,24 +72,21 @@ testFinderText =
 testFinderWord =
     "testFinderWord"
         ~: [ ( Palindrome
-                { palCenterIndex = 1
-                , palLength = 1
+                { palRange = (0, 1)
                 , palText = "aba"
-                , palRange = (0, 3)
+                , palRangeInText = (0, 3)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 3
-                , palLength = 3
+                { palRange = (0, 3)
                 , palText = "aba' bbb\n aba"
-                , palRange = (0, 13)
+                , palRangeInText = (0, 13)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 5
-                , palLength = 1
+                { palRange = (2, 3)
                 , palText = "aba"
-                , palRange = (10, 13)
+                , palRangeInText = (10, 13)
                 }
              )
            ]
@@ -104,17 +95,15 @@ testFinderWord =
 testFinderDNA =
     "testFinderDNA"
         ~: [ ( Palindrome
-                { palCenterIndex = 1
-                , palLength = 2
+                { palRange = (0, 2)
                 , palText = "AT"
-                , palRange = (0, 2)
+                , palRangeInText = (0, 2)
                 }
              )
            , ( Palindrome
-                { palCenterIndex = 2
-                , palLength = 2
+                { palRange = (1, 3)
                 , palText = "TA"
-                , palRange = (1, 3)
+                , palRangeInText = (1, 3)
                 }
              )
            ]

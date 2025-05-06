@@ -23,6 +23,7 @@ import Data.Algorithms.Palindromes.Finders
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToLength)
 import Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     )
@@ -71,8 +72,8 @@ propValidPalindromeRangeAndText settings = label (show settings) $ forAll (strin
 property is equal to the palText property
 -}
 checkPalRangeAndText :: Palindrome -> String -> Bool
-checkPalRangeAndText (Palindrome _ _ "" (x, y)) _ = x == y
-checkPalRangeAndText (Palindrome _ _ palText (start, end)) originalString = palText == substringFromRange
+checkPalRangeAndText (Palindrome _ "" (x, y)) _ = x == y
+checkPalRangeAndText (Palindrome _ palText (start, end)) originalString = palText == substringFromRange
   where
     substringFromRange = take (end - start) (drop start originalString)
 
@@ -145,10 +146,10 @@ propValidPalLength settings = label (show settings) $ forAll (stringGenerator se
 -- | Checks for every palindrome variant if the palLength corresponds to the length of palText
 validPalLength :: Settings -> Palindrome -> Bool
 validPalLength settings pal = case variant settings of
-    VarWord -> length (words (cleanOriginalString (palText pal))) == palLength pal
-    VarPlain -> length (palText pal) == palLength pal
-    VarDNA -> length (palText pal) == palLength pal
-    _ -> length (cleanOriginalString $ palText pal) == palLength pal
+    VarWord -> length (words (cleanOriginalString (palText pal))) == rangeToLength (palRange pal)
+    VarPlain -> length (palText pal) == rangeToLength (palRange pal)
+    VarDNA -> length (palText pal) == rangeToLength (palRange pal)
+    _ -> length (cleanOriginalString $ palText pal) == rangeToLength (palRange pal)
 
 -- Property 4 ---------------------------------------------------------
 
@@ -167,11 +168,14 @@ propValidBoundaries settings = label (show settings) $ forAll (stringGenerator s
 -- | Tests if the palindrome range of a palindrome corresponds to the palindrome length
 checkValidBoundaries :: Settings -> String -> Palindrome -> Bool
 checkValidBoundaries settings inputString pal = case variant settings of
-    VarWord -> countWordsInRange (palRange pal) inputString == palLength pal
+    VarWord -> countWordsInRange (palRange pal) inputString == rangeToLength (palRange pal)
     VarText ->
-        let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
-    VarPunctuation -> let (s, e) = palRange pal in e - s - amountOfNonAlpha 0 (palText pal) == palLength pal
-    _ -> let (s, e) = palRange pal in e - s == palLength pal
+        let (s, e) = palRange pal
+        in  e - s - amountOfNonAlpha 0 (palText pal) == rangeToLength (palRange pal)
+    VarPunctuation ->
+        let (s, e) = palRange pal
+        in  e - s - amountOfNonAlpha 0 (palText pal) == rangeToLength (palRange pal)
+    _ -> let (s, e) = palRange pal in e - s == rangeToLength (palRange pal)
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range
 countWordsInRange :: (Int, Int) -> String -> Int
@@ -215,5 +219,7 @@ propAllowedPalLength settings = label (show settings) $ forAll (stringGenerator 
 -- | Checks if the length of a palindrome is between the minimum and maximum length
 isAllowedPalLength :: Settings -> Palindrome -> Bool
 isAllowedPalLength settings pal = case lengthMod settings of
-    (l, Just u) -> palLength pal >= l && palLength pal <= u || palText pal == ""
-    (l, Nothing) -> palLength pal >= l || palText pal == ""
+    (l, Just u) ->
+        rangeToLength (palRange pal) >= l && rangeToLength (palRange pal) <= u
+            || palText pal == ""
+    (l, Nothing) -> rangeToLength (palRange pal) >= l || palText pal == ""

@@ -30,6 +30,7 @@ import Data.List (find, intercalate)
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     )
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter, rangeToLength)
 
 import qualified Data.Vector as V
 
@@ -84,7 +85,10 @@ longestWord [] = ""
 longestWord input = palText longest
   where
     longest :: Palindrome
-    longest = foldr1 (\a b -> if palLength a < palLength b then b else a) input
+    longest =
+        foldr1
+            (\a b -> if rangeToLength (palRange a) < rangeToLength (palRange b) then b else a)
+            input
 
 -- | All maximal palindrome lengths
 allLengths :: [Int] -> String
@@ -105,4 +109,4 @@ wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = maybe "" palText pal
   where
     pal :: Maybe Palindrome
-    pal = find (\x -> palCenterIndex x == n) pals
+    pal = find (\x -> rangeToCenter (palRange x) == n) pals

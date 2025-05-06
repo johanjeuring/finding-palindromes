@@ -17,6 +17,7 @@ module Data.Algorithms.Palindromes.RangeFunctions
     , indexedLengthToRange
     , rangesToLengths
     , rangeToLength
+    , rangeToCenter
     ) where
 
 -- | Converts a list of palindrome center lengths to a list of (start, end) pairs.
@@ -46,3 +47,6 @@ rangeToLength :: (Int, Int) -> Int
 rangeToLength (start, end)
     | end - start < 0 = 0
     | otherwise = end - start
+
+rangeToCenter :: (Int, Int) -> Int
+rangeToCenter (start, end) = start + end

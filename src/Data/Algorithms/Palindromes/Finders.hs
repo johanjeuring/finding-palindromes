@@ -60,7 +60,11 @@ import Data.Algorithms.Palindromes.PreProcessing
     , textToWords
     , textToWordsWithIndices
     )
-import Data.Algorithms.Palindromes.RangeFunctions (indexedLengthToRange)
+import Data.Algorithms.Palindromes.RangeFunctions
+    ( indexedLengthToRange
+    , rangeToCenter
+    , rangeToLength
+    )
 
 import qualified Data.Vector as V
 
@@ -145,6 +149,8 @@ findPalindromeLengths variant complexity input =
     alg :: (PalEq b) => V.Vector b -> [Int]
     alg = case complexity of
         ComLinear -> linearAlgorithm isAntiReflexive
+        ComInsertionDeletion _ ->
+            error "Invalid route: Insertion deletion alg cannot find findPalindromelengths per center"
         _ ->
             quadraticAlgorithm
                 (isAntiReflexive && even (gapSize complexity))
@@ -172,7 +178,10 @@ phase. The final phase parses the [Int] to a [Palindrome]. The function returns 
 the data type Palindrome with a palindrome at each center index.
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
-findPalindromes variant complexity (minlen, maxlen) input = mapMaybe lengthToPalindrome lengths
+findPalindromes variant complexity (minlen, maxlen) input =
+    case complexity of
+        ComInsertionDeletion errors -> mapMaybe rangeToPalindrome (ranges errors)
+        _ -> mapMaybe lengthToPalindrome lengths
   where
     lengthToPalindrome :: (Int, Int) -> Maybe Palindrome
     lengthToPalindrome (_, 0) = Nothing
@@ -180,17 +189,49 @@ findPalindromes variant complexity (minlen, maxlen) input = mapMaybe lengthToPal
         | (isNothing maxlen || len <= fromJust maxlen) && len >= minlen =
             Just
                 Palindrome
-                    { palCenterIndex = index
-                    , palLength = len
+                    { palRange = indexedLengthToRange (index, len)
                     , palText = indicesToText (indicesInOriginal (index, len)) (V.fromList input)
-                    , palRange = indicesInOriginal (index, len)
+                    , palRangeInText = indicesInOriginal (index, len)
                     }
         | otherwise = Nothing
+
+    rangeToPalindrome :: (Int, Int) -> Maybe Palindrome
+    rangeToPalindrome r@(start, end)
+        | start == end = Nothing
+        | (isNothing maxlen || len <= fromJust maxlen) && len >= minlen =
+            Just
+                Palindrome
+                    { palRange = r
+                    , palText = indicesToText (indicesInOriginal (index, len)) (V.fromList input)
+                    , palRangeInText = indicesInOriginal (index, len)
+                    }
+        | otherwise = Nothing
+      where
+        len = rangeToLength r
+        index = rangeToCenter r
 
     {- A list of tuples containing the center index and the length of the maximal
     palindrome. -}
     lengths :: [(Int, Int)]
     lengths = zip [0 ..] $ findPalindromeLengths variant complexity input
+
+    {- In case of insertion deletion algorithm, we have a list of ranges of the palindromes in the text. -}
+    ranges :: Int -> [(Int, Int)]
+    ranges errors =
+        case variant of
+            VarText -> insertionDeletionAlgorithm errors (filterLetters input)
+            VarPunctuation -> insertionDeletionAlgorithm errors (filterLetters input)
+            VarDNA -> insertionDeletionAlgorithm errors (tryParse input)
+            VarWord -> insertionDeletionAlgorithm errors (textToWords input)
+            _ -> insertionDeletionAlgorithm errors (V.fromList input)
+
+    -- If trying to parse the string to DNA would fail, throw a more readable error
+    tryParse :: String -> V.Vector DNA
+    tryParse x
+        | (isNothing . parseDna) x = error "Invalid DNA string"
+        | otherwise = (fromJust . parseDna) x
+    parseDna :: String -> Maybe (V.Vector DNA)
+    parseDna = textToDNA . V.toList . filterLetters
 
     {- A function that converts a (center index, length) pair to a (start index, end
     index) pair. -}
@@ -221,7 +262,10 @@ findPalindromesFormatted variant outputFormat complexity lengthmod@(minlen, maxl
     result :: [Palindrome]
     result = findPalindromes variant complexity lengthmod input
     lengths :: [Int]
-    lengths = (filterMin minlen . filterMax maxlen) (findPalindromeLengths variant complexity input)
+    lengths =
+        case complexity of
+            ComInsertionDeletion _ -> map (rangeToLength . palRange) result
+            _ -> (filterMin minlen . filterMax maxlen) (findPalindromeLengths variant complexity input)
     text :: String
     text = case outputFormat of
         OutLength -> longestLength lengths

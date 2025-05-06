@@ -1,10 +1,14 @@
 module UTInsertionDeletionAlgorithm (testListInsertionDeletionAlgorithm) where
 
 import Data.List (sort)
-import InsertionDeletionAlgorithm (Cell, insertionDeletionAlgorithm, sparsify)
 import Test.HUnit (Test (..), assertEqual)
 
 import Data.Algorithms.Palindromes.DNA (DNA (..))
+import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
+    ( Cell (..)
+    , insertionDeletionAlgorithm
+    , sparsify
+    )
 
 import qualified Data.Vector as V
 

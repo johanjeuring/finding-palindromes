@@ -41,7 +41,6 @@ tests =
         testListLinearAlgorithm
             ++ testListQuadraticAlgorithm
             ++ testListInsertionDeletionAlgorithm
-            ++ testList
             ++ testListText ComLinear
             ++ testListText ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListText ComInsertionDeletion{maxIDError = 0}
@@ -49,14 +48,14 @@ tests =
             ++ testListGetLeftRight
             ++ testListDNA ComLinear
             ++ testListDNA ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListDNA InsertionDeletionAlgorithm{maxIDError = 0}
+            ++ testListDNA ComInsertionDeletion{maxIDError = 0}
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListProcessing
             ++ testListPalEq
             ++ testListWordPalindromes ComLinear
             ++ testListWordPalindromes ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListWordPalindromes InsertionDeletionAlgorithm{maxIDError = 0}
+            ++ testListWordPalindromes ComInsertionDeletion{maxIDError = 0}
             ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic

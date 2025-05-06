@@ -17,7 +17,7 @@ data Cell = Cell
     { cellPosition :: Position
     , cellBudget :: Int
     }
-    deriving (Show)
+    deriving (Show, Eq)
 
 -- | Represents a row in the matrix.
 type Row = [Cell]

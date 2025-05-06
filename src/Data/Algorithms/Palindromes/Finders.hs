@@ -27,7 +27,7 @@ module Data.Algorithms.Palindromes.Finders
     , LengthMod
     ) where
 
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe (fromJust, isNothing, mapMaybe)
 
 import Data.Algorithms.Palindromes.Algorithms
     ( insertionDeletionAlgorithm
@@ -118,8 +118,8 @@ returns a list of integers, which corresponds to the lengths of the maximal pali
 around each center.
 -}
 findPalindromeLengths
-    :: Variant -> Complexity -> LengthMod -> String -> [Int]
-findPalindromeLengths variant complexity (minlength, maxlength') input =
+    :: Variant -> Complexity -> String -> [Int]
+findPalindromeLengths variant complexity input =
     (post . algPre) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
@@ -163,15 +163,8 @@ findPalindromeLengths variant complexity (minlength, maxlength') input =
     punctuation, applying a minimum length and applying a maximum length. -}
     post :: [Int] -> [Int]
     post = case variant of
-        VarPunctuation ->
-            filterMin minlength
-                . filterMax maxlength
-                . filterPunctuation input
-        _ -> filterMin minlength . filterMax maxlength
-    maxlength :: Int
-    maxlength
-        | isNothing maxlength' = length input
-        | otherwise = fromJust maxlength'
+        VarPunctuation -> filterPunctuation input
+        _ -> id
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing phase, the algorithm phase, the post-processing phase and the parsing
@@ -179,20 +172,25 @@ phase. The final phase parses the [Int] to a [Palindrome]. The function returns 
 the data type Palindrome with a palindrome at each center index.
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
-findPalindromes variant complexity lengthmod input = map lengthToPalindrome lengths
+findPalindromes variant complexity (minlen, maxlen) input = mapMaybe lengthToPalindrome lengths
   where
-    lengthToPalindrome :: (Int, Int) -> Palindrome
-    lengthToPalindrome (index, len) =
-        Palindrome
-            { palRange = indexedLengthToRange (index, len)
-            , palText = indicesToText (indicesInOriginal (index, len)) (V.fromList input)
-            , palRangeInText = indicesInOriginal (index, len)
-            }
+    lengthToPalindrome :: (Int, Int) -> Maybe Palindrome
+    lengthToPalindrome (_, 0) = Nothing
+    lengthToPalindrome (index, len)
+        | (isNothing maxlen || len <= fromJust maxlen) && len >= minlen =
+            Just
+                Palindrome
+                    { palCenterIndex = index
+                    , palLength = len
+                    , palText = indicesToText (indicesInOriginal (index, len)) (V.fromList input)
+                    , palRange = indicesInOriginal (index, len)
+                    }
+        | otherwise = Nothing
 
     {- A list of tuples containing the center index and the length of the maximal
     palindrome. -}
     lengths :: [(Int, Int)]
-    lengths = zip [0 ..] $ findPalindromeLengths variant complexity lengthmod input
+    lengths = zip [0 ..] $ findPalindromeLengths variant complexity input
 
     {- A function that converts a (center index, length) pair to a (start index, end
     index) pair. -}
@@ -218,12 +216,12 @@ to the given outputFormat.
 -}
 findPalindromesFormatted
     :: Variant -> OutputFormat -> Complexity -> LengthMod -> String -> String
-findPalindromesFormatted variant outputFormat complexity lengthmod input = text
+findPalindromesFormatted variant outputFormat complexity lengthmod@(minlen, maxlen) input = text
   where
     result :: [Palindrome]
     result = findPalindromes variant complexity lengthmod input
     lengths :: [Int]
-    lengths = findPalindromeLengths variant complexity lengthmod input
+    lengths = (filterMin minlen . filterMax maxlen) (findPalindromeLengths variant complexity input)
     text :: String
     text = case outputFormat of
         OutLength -> longestLength lengths

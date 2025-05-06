@@ -33,11 +33,13 @@ import qualified Data.Vector as V
 
 -- Length modifier filtering
 filterMin :: Int -> [Int] -> [Int]
-filterMin min_ = map (\x -> if x < min_ then 0 else x)
-filterMax :: Int -> [Int] -> [Int]
-filterMax max_ = map (\x -> if x > max_ then 0 else x)
+filterMin 0 = id
+filterMin min_ = map (\x -> if x < min_ then -1 else x)
+filterMax :: Maybe Int -> [Int] -> [Int]
+filterMax Nothing = id
+filterMax (Just max_) = map (\x -> if x > max_ then -1 else x)
 filterExact :: Int -> [Int] -> [Int]
-filterExact n = map (\x -> if x == n then x else 0)
+filterExact n = map (\x -> if x == n then x else -1)
 
 {- | This function changes a list of text palindrome lengths to a list of punctuation
 palindrome lengths by making the lengths shorter where needed.

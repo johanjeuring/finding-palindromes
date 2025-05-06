@@ -162,6 +162,7 @@ sparsify row = go [] row Nothing
         case rest of
             [] ->
                 if budget < 0
+                    -- temp will throw the negative, while at the end we need it, so add it again
                     then reverse (Cell (prevR, prevC + 1) (-1) : temp)
                     else reverse temp
             _ -> if budget < 0 then go temp rest (Just prevCell) else go temp rest (Just cell)

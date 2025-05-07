@@ -1,4 +1,4 @@
-module UTFinders where
+module UTFinders (testListFinders) where
 
 import Test.HUnit (Test (..), (~:), (~?=))
 import Test.QuickCheck (Arbitrary, Gen, Property, arbitrary, elements, forAll)

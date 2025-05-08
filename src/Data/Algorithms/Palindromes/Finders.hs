@@ -56,9 +56,9 @@ import Data.Algorithms.Palindromes.PostProcessing
 import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
     , filterLetters'
-    , textToDNA
     , textToWords
     , textToWordsWithIndices
+    , tryParseDNA
     )
 import Data.Algorithms.Palindromes.RangeFunctions
     ( indexedLengthToRange
@@ -84,7 +84,7 @@ data Variant
       VarPlain
     | -- | Compare words instead of individual characters to look for palindromes.
       VarWord
-    deriving (Show)
+    deriving (Show, Eq)
 
 {- | Used to describe different possible output formats of palindromes. Used as a setting
 in finding functions.
@@ -116,6 +116,13 @@ data Complexity
 -- | The minimum and maximum length of the palindromes you want to find.
 type LengthMod = (Int, Maybe Int)
 
+{- We distinguish this case since for anti reflexive palindrome equalities (only DNA currently)
+    we only need to run on even indices saving time and space. -}
+isAntiReflexive :: Variant -> Bool
+isAntiReflexive variant = case variant of
+    VarDNA -> True
+    _ -> False
+
 {- | This function combines three phases based on the settings and input given: The
 pre-processing phase, the algorithm phase and the post-processing phase. It finds and
 returns a list of integers, which corresponds to the lengths of the maximal palindromes
@@ -132,37 +139,22 @@ findPalindromeLengths variant complexity input =
     algPre = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
-        VarDNA -> alg . tryParse
+        VarDNA -> alg . tryParseDNA
         VarWord -> alg . textToWords
         _ -> alg . V.fromList
-
-    -- If trying to parse the string to DNA would fail, throw a more readable error
-    tryParse :: String -> V.Vector DNA
-    tryParse x
-        | (isNothing . parseDna) x = error "Invalid DNA string"
-        | otherwise = (fromJust . parseDna) x
-    parseDna :: String -> Maybe (V.Vector DNA)
-    parseDna = textToDNA . V.toList . filterLetters
 
     {- The algorithm phase runs one of the algorithms that finds the maximal palindromes
     around all centers. -}
     alg :: (PalEq b) => V.Vector b -> [Int]
     alg = case complexity of
-        ComLinear -> linearAlgorithm isAntiReflexive
+        ComLinear -> linearAlgorithm (isAntiReflexive variant)
         ComInsertionDeletion _ ->
             error "Invalid route: Insertion deletion alg cannot find findPalindromelengths per center"
         _ ->
             quadraticAlgorithm
-                (isAntiReflexive && even (gapSize complexity))
+                (isAntiReflexive variant && even (gapSize complexity))
                 (gapSize complexity)
                 (maxError complexity)
-
-    {- We distinguish this case since for anti reflexive coupleables (only DNA currently)
-    we only need to run on even indices saving time and space. -}
-    isAntiReflexive :: Bool
-    isAntiReflexive = case variant of
-        VarDNA -> True
-        _ -> False
 
     {- The post-processing phase changes the list of centers so that all lengths fit the
     requirements, such as shrinking the sizes so that the palindrome is surrounded by
@@ -213,7 +205,12 @@ findPalindromes variant complexity (minlen, maxlen) input =
     {- A list of tuples containing the center index and the length of the maximal
     palindrome. -}
     lengths :: [(Int, Int)]
-    lengths = zip [0 ..] $ findPalindromeLengths variant complexity input
+    lengths = zip indexList $ findPalindromeLengths variant complexity input
+      where
+        indexList
+            | isAntiReflexive variant =
+                [0, 2 ..]
+            | otherwise = [0 ..]
 
     {- In case of insertion deletion algorithm, we have a list of ranges of the palindromes in the text. -}
     ranges :: Int -> [(Int, Int)]
@@ -221,17 +218,9 @@ findPalindromes variant complexity (minlen, maxlen) input =
         case variant of
             VarText -> insertionDeletionAlgorithm errors (filterLetters input)
             VarPunctuation -> insertionDeletionAlgorithm errors (filterLetters input)
-            VarDNA -> insertionDeletionAlgorithm errors (tryParse input)
+            VarDNA -> insertionDeletionAlgorithm errors (tryParseDNA input)
             VarWord -> insertionDeletionAlgorithm errors (textToWords input)
             _ -> insertionDeletionAlgorithm errors (V.fromList input)
-
-    -- If trying to parse the string to DNA would fail, throw a more readable error
-    tryParse :: String -> V.Vector DNA
-    tryParse x
-        | (isNothing . parseDna) x = error "Invalid DNA string"
-        | otherwise = (fromJust . parseDna) x
-    parseDna :: String -> Maybe (V.Vector DNA)
-    parseDna = textToDNA . V.toList . filterLetters
 
     {- A function that converts a (center index, length) pair to a (start index, end
     index) pair. -}

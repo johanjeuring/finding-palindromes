@@ -116,8 +116,8 @@ data Complexity
 -- | The minimum and maximum length of the palindromes you want to find.
 type LengthMod = (Int, Maybe Int)
 
-{- We distinguish this case since for anti reflexive palindrome equalities (only DNA currently)
-    we only need to run on even indices saving time and space. -}
+{- This method returns whether uneven palindromes are impossible to exist based on the
+query settings. -}
 onlyEvenPals :: Variant -> Complexity -> Bool
 onlyEvenPals VarDNA (ComQuadratic gap _)
     | even gap = True
@@ -225,21 +225,18 @@ findPalindromes variant complexity (minlen, maxlen) input =
             VarWord -> insertionDeletionAlgorithm errors (textToWords input)
             _ -> insertionDeletionAlgorithm errors (V.fromList input)
 
-    {- A function that converts a (center index, length) pair to a (start index, end
-    index) pair. -}
+    {- A function that converts a (center index, length) pair to a (start character index, end character
+    index) pair. These character indeces are in the original (not pre-processed) text. -}
     indicesInOriginal :: (Int, Int) -> (Int, Int)
     indicesInOriginal il@(i, l) = case variant of
         VarText -> indicesInOutputText range input (filterLetters' input)
         VarPunctuation -> indicesInOutputText range input (filterLetters' input)
-        VarDNA -> indicesInOutputText (dnaRange complexity) input (filterLetters' input)
+        VarDNA -> indicesInOutputText range input (filterLetters' input)
         VarPlain -> range
         VarWord -> indicesInOutputWord range input (textToWordsWithIndices input)
       where
         range :: (Int, Int)
         range = indexedLengthToRange il
-        dnaRange :: Complexity -> (Int, Int)
-        dnaRange (ComQuadratic gap _) = if even gap then dnaRange ComLinear else range
-        dnaRange _ = (i `div` 2 - (l `div` 2), i `div` 2 + (l `div` 2))
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

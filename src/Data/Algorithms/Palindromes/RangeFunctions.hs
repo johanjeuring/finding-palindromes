@@ -27,8 +27,8 @@ lengthsToRanges lengths = map indexedLengthToRange indexedLengths
     indexedLengths :: [(Int, Int)]
     indexedLengths = zip [0 :: Int ..] lengths
 
-{- | Converts a tuple with index and length to a tuple with the starting index and the
-  end index.
+{- | Converts a tuple with center index and length to a tuple with the starting character
+  index and the end character index.
 -}
 indexedLengthToRange :: (Int, Int) -> (Int, Int)
 indexedLengthToRange (index, len) = (startIndex, endIndex)

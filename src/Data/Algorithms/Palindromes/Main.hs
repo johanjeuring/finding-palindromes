@@ -34,8 +34,8 @@ handleFilesWith f xs =
                 [] -> putStr ""
                 (fn : fns) -> do
                     fn' <- Sys.openFile fn Sys.ReadMode
-                    Sys.hSetEncoding fn' Sys.latin1
-                    Sys.hSetEncoding Sys.stdout Sys.latin1
+                    Sys.hSetEncoding fn' Sys.utf8
+                    Sys.hSetEncoding Sys.stdout Sys.utf8
                     input <- Sys.hGetContents fn'
                     putStrLn (f input)
                     Sys.hClose fn'

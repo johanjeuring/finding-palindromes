@@ -39,7 +39,7 @@ config = defaultConfig{reportFile = Just "benchmark-report.html"}
 
 benchFile :: String -> (String -> [Benchmark]) -> Benchmark
 benchFile filePath benchmarks =
-    env (getFileContentLatin1 filePath) $
+    env (getFileContentUtf8 filePath) $
         \content ->
             bgroup (takeFileName filePath) (benchmarks content)
 
@@ -132,10 +132,10 @@ getDirectoryContentsWithPath dir = do
     return (map ((dir ++ "/") ++) files)
 
 -- | Reads the content of a file in latin1 encoding
-getFileContentLatin1 :: String -> IO String
-getFileContentLatin1 fileName = do
+getFileContentUtf8 :: String -> IO String
+getFileContentUtf8 fileName = do
     handle <- Sys.openFile fileName Sys.ReadMode
-    Sys.hSetEncoding handle Sys.latin1
+    Sys.hSetEncoding handle Sys.utf8
     content <- Strict.hGetContents handle
     Sys.hClose handle
     return content

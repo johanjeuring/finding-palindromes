@@ -37,7 +37,9 @@ insertionDeletionAlgorithm
     -- ^ Input vector
     -> [Position]
     -- ^ Positions of maximal palindromes
-insertionDeletionAlgorithm maxError input = concat maxPalindromes
+insertionDeletionAlgorithm maxError input =
+    -- Do (+ 1) on the end index to go from inclusive to exclusive
+    map (second (+ 1)) $ concat maxPalindromes
   where
     loopResult =
         foldr
@@ -57,7 +59,7 @@ insertionDeletionIteration
     -> Int
     -- ^ Index of current row
     -> ([[Position]], Row)
-    -- ^ List of positions of maximal palindromes per row, and the row of the previous iteration.
+    -- ^ List of positions of maximal palindromes per row, and the row of the previous iteration
     -> ([[Position]], Row)
 insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMaxPals, newRow)
   where

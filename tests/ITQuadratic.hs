@@ -2,7 +2,7 @@
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
 
-module ITQuadratic where
+module ITQuadratic (testListITQuadratic) where
 
 import Test.HUnit (Test (..), (~:), (~?=))
 

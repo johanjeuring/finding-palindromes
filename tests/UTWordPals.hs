@@ -2,7 +2,7 @@
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
 
-module UTWordPals where
+module UTWordPals (testListWordPalindromes) where
 
 import Test.HUnit (Test (..), (~:), (~?=))
 

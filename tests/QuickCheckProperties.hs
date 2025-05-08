@@ -1,4 +1,4 @@
-module QuickCheckProperties where
+module QuickCheckProperties (propertyList) where
 
 import Data.Char (isAlphaNum, isSpace, readLitChar, toLower)
 import Data.Maybe (fromJust)

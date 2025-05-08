@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE MonoLocalBinds #-}
 
-module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm, Cell (..)) where
+module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm, Cell (..), sparsify) where
 
 import Data.Bifunctor (second)
 
@@ -18,6 +18,12 @@ data Cell = Cell
     , cellBudget :: Int
     }
     deriving (Show, Eq)
+
+getColumn :: Cell -> Int
+getColumn = snd . cellPosition
+
+getRow :: Cell -> Int
+getRow = fst . cellPosition
 
 -- | Represents a row in the matrix.
 type Row = [Cell]
@@ -167,3 +173,32 @@ extractMaximalPalindromesFinalRow row = go row []
     go (c0 : c1 : cs) acc
         | cellBudget c0 >= 0 && cellBudget c1 < 0 = go cs (cellPosition c0 : acc)
         | otherwise = go (c1 : cs) acc
+
+sparsify :: Row -> Row
+sparsify [] = []
+sparsify row = reverse (addFinalCell reversedSparseRow)
+  where
+    c : cs = filter ((>= 0) . cellBudget) row
+    (reversedSparseRow, finalColumn) =
+        foldl
+            ( \(sparseRow, prevColumn) cell -> case getColumn cell - prevColumn of
+                -- just add the cell to accumulator
+                1 -> (cell : sparseRow, getColumn cell)
+                -- Add one cell with a (-1) budget in the gap
+                2 -> (cell : Cell (getRow cell, getColumn cell - 1) (-1) : sparseRow, getColumn cell)
+                -- Add two cells with (-1) budget at the edges of the gap
+                _ ->
+                    ( cell
+                        : Cell (getRow cell, getColumn cell - 1) (-1)
+                        : Cell (getRow cell, prevColumn + 1) (-1)
+                        : sparseRow
+                    , getColumn cell
+                    )
+            )
+            ([c], getColumn c)
+            cs
+    -- addfinalcell only adds the cell if the column is not out of bounds of the input row
+    addFinalCell r
+        | finalColumn < length row - 1 =
+            Cell (getRow (head reversedSparseRow), finalColumn + 1) (-1) : r
+        | otherwise = r

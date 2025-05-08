@@ -7,6 +7,7 @@ import Data.Algorithms.Palindromes.DNA (DNA (..))
 import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
     ( Cell (..)
     , insertionDeletionAlgorithm
+    , sparsify
     )
 
 import qualified Data.Vector as V
@@ -19,6 +20,9 @@ testListInsertionDeletionAlgorithm =
     , testMississippiTwoErrors
     , testMississippiThreeErrors
     , testMississippiFourErrors
+    , testSparsifySimple
+    , testSparsifyEdgeCase
+    , testSparsifyComplex
     ]
 
 {- | This tests the input string "tees" with zero errors. Output order does not matter, so
@@ -106,3 +110,67 @@ testMississippiFourErrors =
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
             (insertionDeletionAlgorithm 4 (V.fromList "mississippi"))
+
+testSparsifySimple :: Test
+testSparsifySimple =
+    TestCase $
+        assertEqual
+            "testSparsifySimple"
+            [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 5) (-1), Cell (0, 6) 0]
+            ( sparsify
+                [ Cell (0, 0) 1
+                , Cell (0, 1) 0
+                , Cell (0, 2) (-1)
+                , Cell (0, 3) (-1)
+                , Cell (0, 4) (-1)
+                , Cell (0, 5) (-1)
+                , Cell (0, 6) 0
+                ]
+            )
+
+testSparsifyEdgeCase :: Test
+testSparsifyEdgeCase =
+    TestCase $
+        assertEqual
+            "testSparsifyEdgeCase"
+            [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0]
+            (sparsify [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0])
+
+testSparsifyComplex :: Test
+testSparsifyComplex =
+    TestCase $
+        assertEqual
+            "testSparsifyComplex"
+            [ Cell (0, 0) 1
+            , Cell (0, 1) 0
+            , Cell (0, 2) (-1)
+            , Cell (0, 5) (-1)
+            , Cell (0, 6) 0
+            , Cell (0, 7) 1
+            , Cell (0, 8) 0
+            , Cell (0, 9) (-1)
+            , Cell (0, 10) 0
+            , Cell (0, 11) 0
+            , Cell (0, 12) 0
+            , Cell (0, 13) (-1)
+            ]
+            ( sparsify
+                [ Cell (0, 0) 1
+                , Cell (0, 1) 0
+                , Cell (0, 2) (-1)
+                , Cell (0, 3) (-1)
+                , Cell (0, 4) (-1)
+                , Cell (0, 5) (-1)
+                , Cell (0, 6) 0
+                , Cell (0, 7) 1
+                , Cell (0, 8) 0
+                , Cell (0, 9) (-1)
+                , Cell (0, 10) 0
+                , Cell (0, 11) 0
+                , Cell (0, 12) 0
+                , Cell (0, 13) (-1)
+                , Cell (0, 14) (-2)
+                , Cell (0, 15) (-3)
+                , Cell (0, 16) (-4)
+                ]
+            )

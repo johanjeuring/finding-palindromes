@@ -118,10 +118,12 @@ type LengthMod = (Int, Maybe Int)
 
 {- We distinguish this case since for anti reflexive palindrome equalities (only DNA currently)
     we only need to run on even indices saving time and space. -}
-isAntiReflexive :: Variant -> Bool
-isAntiReflexive variant = case variant of
-    VarDNA -> True
-    _ -> False
+onlyEvenPals :: Variant -> Complexity -> Bool
+onlyEvenPals VarDNA (ComQuadratic gap _)
+    | even gap = True
+    | otherwise = False
+onlyEvenPals VarDNA _ = True
+onlyEvenPals _ _ = False
 
 {- | This function combines three phases based on the settings and input given: The
 pre-processing phase, the algorithm phase and the post-processing phase. It finds and
@@ -147,12 +149,12 @@ findPalindromeLengths variant complexity input =
     around all centers. -}
     alg :: (PalEq b) => V.Vector b -> [Int]
     alg = case complexity of
-        ComLinear -> linearAlgorithm (isAntiReflexive variant)
+        ComLinear -> linearAlgorithm (onlyEvenPals variant complexity)
         ComInsertionDeletion _ ->
             error "Invalid route: Insertion deletion alg cannot find findPalindromelengths per center"
         _ ->
             quadraticAlgorithm
-                (isAntiReflexive variant && even (gapSize complexity))
+                (onlyEvenPals variant complexity)
                 (gapSize complexity)
                 (maxError complexity)
 
@@ -207,8 +209,9 @@ findPalindromes variant complexity (minlen, maxlen) input =
     lengths :: [(Int, Int)]
     lengths = zip indexList $ findPalindromeLengths variant complexity input
       where
+        -- We have to adjust indices due to indexLengthToRange assuming indices between letters
         indexList
-            | isAntiReflexive variant =
+            | onlyEvenPals variant complexity =
                 [0, 2 ..]
             | otherwise = [0 ..]
 
@@ -235,8 +238,8 @@ findPalindromes variant complexity (minlen, maxlen) input =
         range :: (Int, Int)
         range = indexedLengthToRange il
         dnaRange :: Complexity -> (Int, Int)
-        dnaRange ComLinear = (i - (l `div` 2), i + (l `div` 2))
         dnaRange (ComQuadratic gap _) = if even gap then dnaRange ComLinear else range
+        dnaRange _ = (i `div` 2 - (l `div` 2), i `div` 2 + (l `div` 2))
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

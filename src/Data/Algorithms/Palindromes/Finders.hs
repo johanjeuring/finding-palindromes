@@ -34,7 +34,6 @@ import Data.Algorithms.Palindromes.Algorithms
     , linearAlgorithm
     , quadraticAlgorithm
     )
-import Data.Algorithms.Palindromes.DNA (DNA)
 import Data.Algorithms.Palindromes.Output
     ( allLengths
     , allWords
@@ -228,7 +227,7 @@ findPalindromes variant complexity (minlen, maxlen) input =
     {- A function that converts a (center index, length) pair to a (start character index, end character
     index) pair. These character indeces are in the original (not pre-processed) text. -}
     indicesInOriginal :: (Int, Int) -> (Int, Int)
-    indicesInOriginal il@(i, l) = case variant of
+    indicesInOriginal indexLength = case variant of
         VarText -> indicesInOutputText range input (filterLetters' input)
         VarPunctuation -> indicesInOutputText range input (filterLetters' input)
         VarDNA -> indicesInOutputText range input (filterLetters' input)
@@ -236,7 +235,7 @@ findPalindromes variant complexity (minlen, maxlen) input =
         VarWord -> indicesInOutputWord range input (textToWordsWithIndices input)
       where
         range :: (Int, Int)
-        range = indexedLengthToRange il
+        range = indexedLengthToRange indexLength
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

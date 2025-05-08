@@ -165,7 +165,7 @@ testSparsifyComplex :: Test
 testSparsifyComplex =
     TestCase $
         assertEqual
-            "testSparsifySimple"
+            "testSparsifyComplex"
             [ Cell (0, 0) 1
             , Cell (0, 1) 0
             , Cell (0, 2) (-1)
@@ -177,6 +177,7 @@ testSparsifyComplex =
             , Cell (0, 10) 0
             , Cell (0, 11) 0
             , Cell (0, 12) 0
+            , Cell (0, 13) (-1)
             ]
             ( sparsify
                 [ Cell (0, 0) 1

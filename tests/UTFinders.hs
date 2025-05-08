@@ -34,7 +34,7 @@ testFinderPlain =
                     }
               )
             , ( Palindrome
-                    { palRange = (0, 3)
+                    { palRange = (2, 3)
                     , palText = "a"
                     , palRangeInText = (2, 3)
                     }

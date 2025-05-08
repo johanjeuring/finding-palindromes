@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE MonoLocalBinds #-}
 
-module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm, sparsify, Cell (..)) where
+module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm, Cell (..)) where
 
 import Data.Bifunctor (second)
 
@@ -67,8 +67,7 @@ insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMax
     newMaxPals = extractMaximalPalindromes denseRow : maxPals
     newRow = map fst denseRow
 
-{- Fills a row in the matrix from left to right.
--}
+-- | Fills a row in the matrix from left to right.
 fillRow
     :: (PalEq a)
     => V.Vector a
@@ -85,6 +84,8 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
   where
     -- The leftmost cell of the row to fill. It always has full budget.
     leftMostCell = Cell (rowIndex, rowIndex) maxErrors
+    {- Given previous cell, the budget of the cell below that and the cell below,
+    calculate the budget for a new cell. -}
     getNextBudget :: (Cell, Int) -> Cell -> (Cell, Int)
     getNextBudget (Cell prevPosition valLeft, valDiagonal) (Cell _ valBelow) =
         (Cell currentPosition bestBudget, valBelow)
@@ -92,6 +93,8 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
         -- taking left or below budget has error cost of 1 for an insertion
         budgetFromLeft = valLeft - 1
         budgetFromBelow = valBelow - 1
+        {- taking diagonal budget has error cost of 1 or 0, depending on whether the
+        elements match at the current position -}
         budgetFromDiagonal = valDiagonal - errorCostAtPosition currentPosition
         -- prevPosition is one column to the left of the current position
         currentPosition = second (+ 1) prevPosition
@@ -114,71 +117,39 @@ extractMaximalPalindromes
     -- ^ The positions representing maximal palindromes found
 extractMaximalPalindromes =
     map fst
-        {- Filters positions that do not exceed budget but full triangle to the top right does,
-        using the position and budgets from scanr.
-        These are maximal since they cannot be extended without exceeding the budget.
+        {- Filters positions that do not exceed budget but full triangle to the top right
+        does, using the position and budgets from scanr. These are maximal since they
+        cannot be extended without exceeding the budget.
         -}
         . filter (\(_, matrix2) -> isMaximal matrix2)
-        {- Fills list of same size as the current row with tuple
-        (position, (budget above, budget at position), (budget diag, budget right))
-        Starts accumulator out of bounds with negative budgets since only able to extend out of bounds makes maximal.
+        {- Fills list of same size as the current row with tuple (position, (budget above,
+        budget at position), (budget diag, budget right)). Starts accumulator out of
+        bounds with negative budgets since only able to extend out of bounds makes a
+        position maximal.
         -}
         . scanr nextMatrix (undefined, ((-1, -1), (-1, -1)))
   where
+    -- Gets the 2x2 matrix one position to the left of the current position.
     nextMatrix
         :: (Cell, Int)
-        -- \^ Cell is at the position above the one we want the matrix from, the int is the budget at the position
+        -- The cell is at the position above the one we want the matrix for, the int is the
+        --        budget at the position.
         -> (Position, Matrix2)
         -> (Position, Matrix2)
-    {- Since the scanr is done over current row we add 1 to row since we want position at previous row. -}
-    nextMatrix (Cell (row, col) budgetAbove, budget) (_, (fstCol, _)) = ((row + 1, col), ((budgetAbove, budget), fstCol))
+    {- Since the scanr is done over current row we add 1 to row since we want position at
+    previous row. -}
+    nextMatrix (Cell (row, col) budgetAbove, budget) (_, (fstCol, _)) =
+        ((row + 1, col), ((budgetAbove, budget), fstCol))
 
 {- Matrix:
-    a b
-    c d
+a b
+c d
 
-We want to check whether c is the position of a maximal palindrome.
+We want to check whether c is the position of a maximal palindrome. This is only the case
+if c is non-negative and the rest of the matrix is negative.
 -}
 isMaximal :: Matrix2 -> Bool
 isMaximal ((a, c), (b, d)) = c >= 0 && a < 0 && b < 0 && d < 0
-
-{- Clears all ranges of negative budgets from a row, except on the borders.
-For example row with budgets 0,-1,-1,-1,-1,0 becomes 0,-1,-1,0.
--}
-sparsify :: Row -> Row
-sparsify row = go [] row Nothing
-  where
-    go
-        :: Row --  Accumulator. Contains the sparsified row thus far in reverse order.
-        -> Row -- The rest of the dense row which must still be sparsified.
-        -> Maybe Cell -- The last found cell with a non-negative budget.
-        -> Row -- The final sparsified row.
-        -- row has been completed, return the accumulator, which is now in reverse
-    go acc [] _ = reverse acc
-    -- while no cell with positive budget is found, start main loop if you find one, else go to next cell
-    go acc (cell@(Cell pos budget) : rest) Nothing
-        | budget >= 0 = go (cell : acc) rest (Just cell)
-        | otherwise = go acc rest Nothing
-    -- the main loop, keep filling accumulator and ignoring the strings of cells with negative budgets
-    go acc (cell@(Cell (r, c) budget) : rest) (Just prevCell@(Cell (prevR, prevC) _)) =
-        case rest of
-            [] ->
-                if budget < 0
-                    -- temp will throw the negative, while at the end we need it, so add it again
-                    then reverse (Cell (prevR, prevC + 1) (-1) : temp)
-                    else reverse temp
-            _ -> if budget < 0 then go temp rest (Just prevCell) else go temp rest (Just cell)
-      where
-        temp
-            | budget >= 0 =
-                case c - prevC of
-                    -- just add the cell to accumulator
-                    1 -> cell : acc
-                    -- Add one cell with a (-1) budget in the gap
-                    2 -> cell : Cell (r, c - 1) (-1) : acc
-                    -- Add two cells with (-1) budget at the edges of the gap
-                    _ -> cell : Cell (r, c - 1) (-1) : Cell (prevR, prevC + 1) (-1) : acc
-            | otherwise = acc
 
 {- For the final row, so without a row above it, a cell represents a maximal palindrome
 if the cell has a positive budget and the cell to the right of it has a negative budget.
@@ -189,6 +160,7 @@ extractMaximalPalindromesFinalRow row = go row []
   where
     go :: Row -> [Position] -> [Position]
     go [] acc = acc
+    -- The final cell is maximal only if budget is non-negative.
     go [c] acc
         | cellBudget c >= 0 = cellPosition c : acc
         | otherwise = acc

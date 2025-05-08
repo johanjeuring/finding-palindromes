@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE MonoLocalBinds #-}
 
-module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm where
+module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm, sparsify, Cell (..)) where
 
 import Data.Bifunctor (second)
 
@@ -65,7 +65,7 @@ insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMax
   where
     denseRow = fillRow input maxErrors rowIndex prevRow
     newMaxPals = extractMaximalPalindromes denseRow : maxPals
-    newRow = sparsify (map fst denseRow)
+    newRow = map fst denseRow
 
 {- Fills a row in the matrix from left to right.
 -}

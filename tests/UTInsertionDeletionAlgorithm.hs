@@ -118,6 +118,7 @@ testSparsifySimple =
             "testSparsifySimple"
             [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 5) (-1), Cell (0, 6) 0]
             ( sparsify
+                7
                 [ Cell (0, 0) 1
                 , Cell (0, 1) 0
                 , Cell (0, 2) (-1)
@@ -134,7 +135,7 @@ testSparsifyEdgeCase =
         assertEqual
             "testSparsifyEdgeCase"
             [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0]
-            (sparsify [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0])
+            (sparsify 4 [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0])
 
 testSparsifyComplex :: Test
 testSparsifyComplex =
@@ -155,6 +156,7 @@ testSparsifyComplex =
             , Cell (0, 13) (-1)
             ]
             ( sparsify
+                17
                 [ Cell (0, 0) 1
                 , Cell (0, 1) 0
                 , Cell (0, 2) (-1)

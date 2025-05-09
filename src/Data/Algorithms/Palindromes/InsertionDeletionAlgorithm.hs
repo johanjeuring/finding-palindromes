@@ -71,7 +71,7 @@ insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMax
   where
     denseRow = fillRow input maxErrors rowIndex prevRow
     newMaxPals = extractMaximalPalindromes denseRow : maxPals
-    newRow = map fst denseRow
+    newRow = sparsify (length input) $ map fst denseRow
 
 -- | Fills a row in the matrix from left to right.
 fillRow
@@ -174,31 +174,20 @@ extractMaximalPalindromesFinalRow row = go row []
         | cellBudget c0 >= 0 && cellBudget c1 < 0 = go cs (cellPosition c0 : acc)
         | otherwise = go (c1 : cs) acc
 
-sparsify :: Row -> Row
-sparsify [] = []
-sparsify row = reverse (addFinalCell reversedSparseRow)
+sparsify :: Int -> Row -> Row
+sparsify inputLength row = snd result ++ extraCell
   where
-    c : cs = filter ((>= 0) . cellBudget) row
-    (reversedSparseRow, finalColumn) =
-        foldl
-            ( \(sparseRow, prevColumn) cell -> case getColumn cell - prevColumn of
-                -- just add the cell to accumulator
-                1 -> (cell : sparseRow, getColumn cell)
-                -- Add one cell with a (-1) budget in the gap
-                2 -> (cell : Cell (getRow cell, getColumn cell - 1) (-1) : sparseRow, getColumn cell)
-                -- Add two cells with (-1) budget at the edges of the gap
-                _ ->
-                    ( cell
-                        : Cell (getRow cell, getColumn cell - 1) (-1)
-                        : Cell (getRow cell, prevColumn + 1) (-1)
-                        : sparseRow
-                    , getColumn cell
-                    )
-            )
-            ([c], getColumn c)
-            cs
-    -- addfinalcell only adds the cell if the column is not out of bounds of the input row
-    addFinalCell r
-        | finalColumn < length row - 1 =
-            Cell (getRow (head reversedSparseRow), finalColumn + 1) (-1) : r
-        | otherwise = r
+    filteredRow = filter ((>= 0) . cellBudget) row
+    lastCell = last filteredRow
+    result = foldr f (Cell (getRow lastCell, getColumn lastCell + 1) (-1), []) filteredRow
+    f :: Cell -> (Cell, Row) -> (Cell, Row)
+    f newCell@(Cell (r, c) _) (prevCell@(Cell (prevR, prevC) _), acc)
+        | prevC - c > 2 =
+            (newCell, newCell : Cell (r, c + 1) (-1) : Cell (r, prevC - 1) (-1) : acc)
+        | prevC - c == 2 = (newCell, newCell : Cell (r, c + 1) (-1) : acc)
+        | otherwise = (newCell, newCell : acc)
+
+    extraCell
+        | getColumn lastCell < inputLength - 1 =
+            [Cell (getRow lastCell, getColumn lastCell + 1) (-1)]
+        | otherwise = []

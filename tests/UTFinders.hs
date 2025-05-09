@@ -16,6 +16,7 @@ testListFinders =
     , testFinderText
     , testFinderWord
     , testFinderDNA
+    , testFinderDNA
     ]
 
 testFinderPlain =

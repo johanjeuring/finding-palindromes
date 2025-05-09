@@ -174,20 +174,22 @@ extractMaximalPalindromesFinalRow row = go row []
         | cellBudget c0 >= 0 && cellBudget c1 < 0 = go cs (cellPosition c0 : acc)
         | otherwise = go (c1 : cs) acc
 
+{- | For (large) substrings of cell with negative budgets, put one cell with (-1) budget
+at each end of it. This saves unnecessary memory use.
+-}
 sparsify :: Int -> Row -> Row
-sparsify inputLength row = snd result ++ extraCell
+sparsify inputLength row = reverse $ extraCell ++ sparsifiedReversed
   where
     filteredRow = filter ((>= 0) . cellBudget) row
-    lastCell = last filteredRow
-    result = foldr f (Cell (getRow lastCell, getColumn lastCell + 1) (-1), []) filteredRow
-    f :: Cell -> (Cell, Row) -> (Cell, Row)
-    f newCell@(Cell (r, c) _) (prevCell@(Cell (prevR, prevC) _), acc)
-        | prevC - c > 2 =
-            (newCell, newCell : Cell (r, c + 1) (-1) : Cell (r, prevC - 1) (-1) : acc)
-        | prevC - c == 2 = (newCell, newCell : Cell (r, c + 1) (-1) : acc)
-        | otherwise = (newCell, newCell : acc)
+    (lastCell, sparsifiedReversed) = foldl f (Nothing, []) filteredRow
+    f :: (Maybe Cell, Row) -> Cell -> (Maybe Cell, Row)
+    f (Nothing, acc) cell = (Just cell, [cell])
+    f (Just prevCell@(Cell (prevR, prevC) _), acc) newCell@(Cell (r, c) _)
+        | c - prevC > 2 =
+            (Just newCell, newCell : Cell (r, c - 1) (-1) : Cell (r, prevC + 1) (-1) : acc)
+        | c - prevC == 2 = (Just newCell, newCell : Cell (r, prevC + 1) (-1) : acc)
+        | otherwise = (Just newCell, newCell : acc)
 
-    extraCell
-        | getColumn lastCell < inputLength - 1 =
-            [Cell (getRow lastCell, getColumn lastCell + 1) (-1)]
-        | otherwise = []
+    extraCell = case lastCell of
+        Nothing -> []
+        Just cell@(Cell (lastR, lastC) _) -> ([Cell (lastR, lastC + 1) (-1) | getColumn cell < inputLength - 1])

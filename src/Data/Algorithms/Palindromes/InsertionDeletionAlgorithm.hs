@@ -174,16 +174,24 @@ at each end of it. This saves unnecessary memory use.
 sparsify :: Int -> Row -> Row
 sparsify inputLength row = reverse $ extraCell ++ sparsifiedReversed
   where
+    -- remove negative budgets
     filteredRow = filter ((>= 0) . cellBudget) row
-    (lastCell, sparsifiedReversed) = foldl f (Nothing, []) filteredRow
-    f :: (Maybe Cell, Row) -> Cell -> (Maybe Cell, Row)
-    f (Nothing, _) cell = (Just cell, [cell])
-    f (Just (Cell (_, prevC) _), acc) newCell@(Cell (r, c) _)
+
+    -- At the start and end of removed sequence of negatives in the filtered row inserts negative cells.
+    (lastCell, sparsifiedReversed) = foldl insertNegatives (Nothing, []) filteredRow
+
+    {- Before a cell is added to the sparsifyReversed list inserts a negative cell on both sides of a gap
+    when there is one. Based on the position of last positive budget cell and the current cell.
+    -}
+    insertNegatives :: (Maybe Cell, Row) -> Cell -> (Maybe Cell, Row)
+    insertNegatives (Nothing, _) cell = (Just cell, [cell])
+    insertNegatives (Just (Cell (_, prevC) _), acc) newCell@(Cell (r, c) _)
         | c - prevC > 2 =
             (Just newCell, newCell : Cell (r, c - 1) (-1) : Cell (r, prevC + 1) (-1) : acc)
         | c - prevC == 2 = (Just newCell, newCell : Cell (r, prevC + 1) (-1) : acc)
         | otherwise = (Just newCell, newCell : acc)
 
+    -- We need a negative cell at the end of the row, unless this is out of bounds of the input.
     extraCell = case lastCell of
         Nothing -> []
         Just (Cell (lastR, lastC) _) -> ([Cell (lastR, lastC + 1) (-1) | lastC < inputLength - 1])

@@ -86,13 +86,7 @@ To see all the options run one of these:
     cabal run palindromes -- --help
 ```
 
-If you want to see unicode characters in the output in a powershell terminal on Windows, try to use the following commands in the terminal:
-```
-    chcp 65001
-```
-
-or
-
+If you want to see unicode characters in the output in a PowerShell terminal on Windows, try to use the following commands in the terminal:
 ```
     $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
 ```

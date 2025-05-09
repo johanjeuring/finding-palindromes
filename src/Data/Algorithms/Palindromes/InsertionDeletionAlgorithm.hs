@@ -44,7 +44,13 @@ insertionDeletionAlgorithm maxError input =
     loopResult =
         foldr
             (insertionDeletionIteration input maxError)
-            ([], [Cell (V.length input - 1, V.length input - 1) maxError])
+            ( []
+            ,
+                [ Cell
+                    (V.length input - 1, V.length input - 1)
+                    (maxError - errorCostAtPosition input (V.length input - 1, V.length input - 1))
+                ]
+            )
             [0 .. V.length input - 2]
     finalRow = snd loopResult
     maxPalindromesFinalRow = extractMaximalPalindromesFinalRow finalRow
@@ -65,7 +71,7 @@ insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMax
   where
     denseRow = fillRow input maxErrors rowIndex prevRow
     newMaxPals = extractMaximalPalindromes denseRow : maxPals
-    newRow = sparsify (length input) $ map fst denseRow
+    newRow = sparsify (length input) (map fst denseRow)
 
 -- | Fills a row in the matrix from left to right.
 fillRow
@@ -82,8 +88,9 @@ fillRow
     -- ^ Current row that has the budget of previous row (the budgets in the cells below)
 fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
   where
-    -- The leftmost cell of the row to fill. It always has full budget.
-    leftMostCell = Cell (rowIndex, rowIndex) maxErrors
+    {- The leftmost cell of the row to fill. It has full budget.
+    The error cost at position is removed because not every datatype has garantueed single character palindromes. -}
+    leftMostCell = Cell (rowIndex, rowIndex) (maxErrors - errorCostAtPosition input (rowIndex, rowIndex))
     {- Given previous cell, the budget of the cell below that and the cell below,
     calculate the budget for a new cell. -}
     getNextBudget :: (Cell, Int) -> Cell -> (Cell, Int)
@@ -95,16 +102,16 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
         budgetFromBelow = valBelow - 1
         {- taking diagonal budget has error cost of 1 or 0, depending on whether the
         elements match at the current position -}
-        budgetFromDiagonal = valDiagonal - errorCostAtPosition currentPosition
+        budgetFromDiagonal = valDiagonal - errorCostAtPosition input currentPosition
         -- prevPosition is one column to the left of the current position
         currentPosition = second (+ 1) prevPosition
         bestBudget = maximum [budgetFromLeft, budgetFromBelow, budgetFromDiagonal]
 
-    -- if elements are palindrome equal at position then no error cost, otherwise error cost of 1 for substitution
-    errorCostAtPosition :: Position -> Int
-    errorCostAtPosition (row, column)
-        | (input V.! row) =:= (input V.! column) = 0
-        | otherwise = 1
+-- if elements are palindrome equal at position then no error cost, otherwise error cost of 1 for substitution
+errorCostAtPosition :: (PalEq a) => V.Vector a -> Position -> Int
+errorCostAtPosition input (row, column)
+    | (input V.! row) =:= (input V.! column) = 0
+    | otherwise = 1
 
 {- Calculates the position of the maximal palindromes in the row below the current row.
 It does for the previous since you need the current row to know if the budget is exceeded when the palindrome is extended.
@@ -172,10 +179,11 @@ extractMaximalPalindromesFinalRow row = go row []
 at each end of it. This saves unnecessary memory use.
 -}
 sparsify :: Int -> Row -> Row
-sparsify inputLength row = reverse $ extraCell ++ sparsifiedReversed
+sparsify _ [] = []
+sparsify inputLength row@(firstCell : tail) = reverse (extraCell ++ sparsifiedReversed)
   where
-    -- remove negative budgets
-    filteredRow = filter ((>= 0) . cellBudget) row
+    -- remove negative budgets from the tail
+    filteredRow = firstCell : filter ((>= 0) . cellBudget) tail
 
     -- At the start and end of removed sequence of negatives in the filtered row inserts negative cells.
     (lastCell, sparsifiedReversed) = foldl insertNegatives (Nothing, []) filteredRow

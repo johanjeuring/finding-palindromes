@@ -19,12 +19,6 @@ data Cell = Cell
     }
     deriving (Show, Eq)
 
-getColumn :: Cell -> Int
-getColumn = snd . cellPosition
-
-getRow :: Cell -> Int
-getRow = fst . cellPosition
-
 -- | Represents a row in the matrix.
 type Row = [Cell]
 
@@ -183,8 +177,8 @@ sparsify inputLength row = reverse $ extraCell ++ sparsifiedReversed
     filteredRow = filter ((>= 0) . cellBudget) row
     (lastCell, sparsifiedReversed) = foldl f (Nothing, []) filteredRow
     f :: (Maybe Cell, Row) -> Cell -> (Maybe Cell, Row)
-    f (Nothing, acc) cell = (Just cell, [cell])
-    f (Just prevCell@(Cell (prevR, prevC) _), acc) newCell@(Cell (r, c) _)
+    f (Nothing, _) cell = (Just cell, [cell])
+    f (Just (Cell (_, prevC) _), acc) newCell@(Cell (r, c) _)
         | c - prevC > 2 =
             (Just newCell, newCell : Cell (r, c - 1) (-1) : Cell (r, prevC + 1) (-1) : acc)
         | c - prevC == 2 = (Just newCell, newCell : Cell (r, prevC + 1) (-1) : acc)
@@ -192,4 +186,4 @@ sparsify inputLength row = reverse $ extraCell ++ sparsifiedReversed
 
     extraCell = case lastCell of
         Nothing -> []
-        Just cell@(Cell (lastR, lastC) _) -> ([Cell (lastR, lastC + 1) (-1) | getColumn cell < inputLength - 1])
+        Just (Cell (lastR, lastC) _) -> ([Cell (lastR, lastC + 1) (-1) | lastC < inputLength - 1])

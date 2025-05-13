@@ -83,7 +83,7 @@ data Variant
       VarPlain
     | -- | Compare words instead of individual characters to look for palindromes.
       VarWord
-    deriving (Show, Eq)
+    deriving (Show)
 
 {- | Used to describe different possible output formats of palindromes. Used as a setting
 in finding functions.
@@ -130,12 +130,12 @@ around each center.
 findPalindromeLengths
     :: Variant -> Complexity -> String -> [Int]
 findPalindromeLengths variant complexity input =
-    (post . algPre) input
+    (post . preAlg) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
     vector of PalEq items. -}
-    algPre :: String -> [Int]
-    algPre = case variant of
+    preAlg :: String -> [Int]
+    preAlg = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
         VarDNA -> alg . tryParseDNA

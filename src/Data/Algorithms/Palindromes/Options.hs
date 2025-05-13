@@ -20,7 +20,7 @@ Also contains the functions that are used to convert these flags to their corres
 -}
 module Data.Algorithms.Palindromes.Options where
 
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe (fromJust, fromMaybe, isNothing)
 import System.Console.GetOpt
     ( ArgDescr (..)
     , OptDescr (..)
@@ -186,10 +186,10 @@ parseQuadratic str
 error is thrown.
 -}
 parseInsertionDeletion :: Maybe String -> Flag
-parseInsertionDeletion str
-    | isNothing str = Complexity ComInsertionDeletion{maxIDError = 0}
-    | otherwise =
-        Complexity ComInsertionDeletion{maxIDError = read (fromJust str)}
+parseInsertionDeletion =
+    maybe
+        (Complexity ComInsertionDeletion{maxIDError = 0})
+        (\s -> Complexity ComInsertionDeletion{maxIDError = read s})
 
 {- | From all input flags, gets the complexity setting. If more than one complexity flag
 is given, it throws an error, as this is not suppported by our program. If none are give it

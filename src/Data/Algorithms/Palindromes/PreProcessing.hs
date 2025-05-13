@@ -23,7 +23,7 @@ module Data.Algorithms.Palindromes.PreProcessing
     ) where
 
 import Data.Char (isAlphaNum, isSpace, toLower)
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe (fromJust, fromMaybe, isNothing)
 
 import Data.Algorithms.Palindromes.DNA
     ( DNA
@@ -90,8 +90,9 @@ textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexe
 
 -- If trying to parse the string to DNA would fail, throw a more readable error
 tryParseDNA :: String -> V.Vector DNA
-tryParseDNA input
-    | (isNothing . parseDna) input = error "Invalid DNA string"
-    | otherwise = (fromJust . parseDna) input
+-- tryParseDNA input
+--     | (isNothing . parseDna) input = error "Invalid DNA string"
+--     | otherwise = (fromJust . parseDna) input
+tryParseDNA input = fromMaybe (error "Invalid DNA string") (parseDna input)
 parseDna :: String -> Maybe (V.Vector DNA)
 parseDna = textToDNA . V.toList . filterLetters

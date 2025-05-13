@@ -15,10 +15,13 @@ type Position = (Int, Int)
 -- | Represents a palindrome. Format is: (inclusive start, exclusive end)
 type PalRange = (Int, Int)
 
+-- | Represents the budget in a cell
+type Budget = Int
+
 -- | Represents a cell in the matrix. The format is: ((row, column), budget)
 data Cell = Cell
     { cellPosition :: Position
-    , cellBudget :: Int
+    , cellBudget :: Budget
     }
     deriving (Show, Eq)
 
@@ -30,7 +33,7 @@ type Row = [Cell]
 a b
 c d
 -}
-type Matrix2 = ((Int, Int), (Int, Int))
+type Matrix2 = ((Budget, Budget), (Budget, Budget))
 
 insertionDeletionAlgorithm
     :: (PalEq a)
@@ -87,7 +90,7 @@ fillRow
     -- ^ Index of current row
     -> Row
     -- ^ Previous row
-    -> [(Cell, Int)]
+    -> [(Cell, Budget)]
     -- ^ Current row that has the budget of previous row (the budgets in the cells below)
 fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
   where
@@ -100,7 +103,7 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
             }
     {- Given previous cell, the budget of the cell below that and the cell below,
     calculate the budget for a new cell. -}
-    getNextBudget :: (Cell, Int) -> Cell -> (Cell, Int)
+    getNextBudget :: (Cell, Budget) -> Cell -> (Cell, Budget)
     getNextBudget (Cell{cellPosition = prevPosition, cellBudget = valLeft}, valDiagonal) (Cell{cellPosition = _, cellBudget = valBelow}) =
         (Cell{cellPosition = currentPosition, cellBudget = bestBudget}, valBelow)
       where
@@ -125,7 +128,7 @@ It does for the previous since you need the current row to know if the budget is
 If it is not the palindrome is obviously not maximal.
 -}
 extractMaximalPalindromes
-    :: [(Cell, Int)]
+    :: [(Cell, Budget)]
     -- ^ Current row that has the budget of previous row
     -> [PalRange]
     -- ^ The positions representing maximal palindromes found
@@ -146,9 +149,8 @@ extractMaximalPalindromes =
   where
     -- Gets the 2x2 matrix one position to the left of the current position.
     nextMatrix
-        :: (Cell, Int)
-        -- The cell is at the position above the one we want the matrix for, the int is the
-        --        budget at the position.
+        :: (Cell, Budget)
+        -- The cell is at the position above the one we want the matrix for, the budget is at the position we consider.
         -> (Position, Matrix2)
         -> (Position, Matrix2)
     {- Since the scanr is done over current row we add 1 to row since we want position at

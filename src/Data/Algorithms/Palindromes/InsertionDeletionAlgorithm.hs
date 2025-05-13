@@ -12,6 +12,9 @@ import qualified Data.Vector as V
 -- | Represents cell location in the matrix. Format is: (row, colunm)
 type Position = (Int, Int)
 
+-- | Represents a palindrome. Format is: (inclusive start, exclusive end)
+type PalRange = (Int, Int)
+
 -- | Represents a cell in the matrix. The format is: ((row, column), budget)
 data Cell = Cell
     { cellPosition :: Position
@@ -35,11 +38,11 @@ insertionDeletionAlgorithm
     -- ^ Maximum number of errors
     -> V.Vector a
     -- ^ Input vector
-    -> [Position]
-    -- ^ Positions of maximal palindromes
+    -> [PalRange]
+    -- ^ Ranges of the maximal palindromes
 insertionDeletionAlgorithm maxError input =
     -- Do (+ 1) on the end index to go from inclusive to exclusive
-    map (second (+ 1)) $ concat maxPalindromes
+    concat maxPalindromes
   where
     (maxPalsWithoutFinalRow, finalRow) =
         foldr
@@ -64,9 +67,9 @@ insertionDeletionIteration
     -- ^ Maximum number of errors
     -> Int
     -- ^ Index of current row
-    -> ([[Position]], Row)
+    -> ([[PalRange]], Row)
     -- ^ List of positions of maximal palindromes per row, and the row of the previous iteration
-    -> ([[Position]], Row)
+    -> ([[PalRange]], Row)
 insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMaxPals, newRow)
   where
     denseRow = fillRow input maxErrors rowIndex prevRow
@@ -124,10 +127,11 @@ If it is not the palindrome is obviously not maximal.
 extractMaximalPalindromes
     :: [(Cell, Int)]
     -- ^ Current row that has the budget of previous row
-    -> [Position]
+    -> [PalRange]
     -- ^ The positions representing maximal palindromes found
 extractMaximalPalindromes =
-    map fst
+    -- get position and one to column to get (inclusive, exclusive) palrange
+    map (second (+ 1) . fst)
         {- Filters positions that do not exceed budget but full triangle to the top right
         does, using the position and budgets from scanr. These are maximal since they
         cannot be extended without exceeding the budget.
@@ -166,8 +170,8 @@ isMaximal ((a, c), (b, d)) = c >= 0 && a < 0 && b < 0 && d < 0
 if the cell has a positive budget and the cell to the right of it has a negative budget.
 This function uses this property to find the maximal palindromes in the final row.
 -}
-extractMaximalPalindromesFinalRow :: Row -> [Position]
-extractMaximalPalindromesFinalRow row = go row []
+extractMaximalPalindromesFinalRow :: Row -> [PalRange]
+extractMaximalPalindromesFinalRow row = map (second (+ 1)) (go row [])
   where
     go :: Row -> [Position] -> [Position]
     go [] acc = acc

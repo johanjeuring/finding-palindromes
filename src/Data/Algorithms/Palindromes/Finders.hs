@@ -124,8 +124,7 @@ onlyEvenPals _ _ = False
 
 {- | This function combines three phases based on the settings and input given: The
 pre-processing phase, the algorithm phase and the post-processing phase. It finds and
-returns a list of integers, which corresponds to the lengths of the maximal palindromes
-around each center.
+returns a list of (Int, Int), which represents the range of every found palindrome in the input.
 -}
 findPalindromeRanges
     :: Variant -> Complexity -> String -> [(Int, Int)]
@@ -142,8 +141,8 @@ findPalindromeRanges variant complexity input =
         VarWord -> alg . textToWords
         _ -> alg . V.fromList
 
-    {- The algorithm phase runs one of the algorithms that finds the maximal palindromes
-    around all centers. -}
+    {- The algorithm phase runs one of the algorithms that finds the ranges, since the linear and quadratic
+    find indexLists we must convert these to ranges. -}
     alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
@@ -164,9 +163,8 @@ findPalindromeRanges variant complexity input =
                 [0, 2 ..]
             | otherwise = [0 ..]
 
-    {- The post-processing phase changes the list of centers so that all lengths fit the
-    requirements, such as shrinking the sizes so that the palindrome is surrounded by
-    punctuation, applying a minimum length and applying a maximum length. -}
+    {- The post-processing phase changes the list of ranges so that they fit the
+    requirements in the case of punctuation palindromes -}
     post :: [(Int, Int)] -> [(Int, Int)]
     post = case variant of
         VarPunctuation -> filterPunctuation input

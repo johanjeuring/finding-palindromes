@@ -71,7 +71,7 @@ insertionDeletionIteration
     -> Int
     -- ^ Index of current row
     -> ([[PalRange]], Row)
-    -- ^ List of positions of maximal palindromes per row, and the row of the previous iteration
+    -- ^ Ranges representing where the maximal palindromes found in each row are in the input and the row of the previous iteration
     -> ([[PalRange]], Row)
 insertionDeletionIteration input maxErrors rowIndex (maxPals, prevRow) = (newMaxPals, newRow)
   where
@@ -162,8 +162,9 @@ extractMaximalPalindromes =
 a b
 c d
 
-We want to check whether c is the position of a maximal palindrome. This is only the case
-if c is non-negative and the rest of the matrix is negative.
+We want to check whether c is the position of a maximal palindrome. Position c is maximal if we
+cannot do an insertion deletion or substitution without exceeding the budget. This is only the
+case if c is non-negative and the rest of the matrix is negative.
 -}
 isMaximal :: Matrix2 -> Bool
 isMaximal ((a, c), (b, d)) = c >= 0 && a < 0 && b < 0 && d < 0

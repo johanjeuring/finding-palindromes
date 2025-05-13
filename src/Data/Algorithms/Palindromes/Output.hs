@@ -29,6 +29,7 @@ import Data.List (find, intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
+    , getLength
     )
 import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter, rangeToLength)
 
@@ -86,7 +87,7 @@ longestWord input = palText $ foldr1 longest input
   where
     longest :: Palindrome -> Palindrome -> Palindrome
     longest p1 p2
-        | rangeToLength (palRange p1) < rangeToLength (palRange p2) = p2
+        | getLength p1 < getLength p2 = p2
         | otherwise = p1
 
 -- | All maximal palindrome lengths

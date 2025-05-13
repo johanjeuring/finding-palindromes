@@ -12,7 +12,9 @@ University within the Software Project course.
 
 Describes the palindrome datatype.
 -}
-module Data.Algorithms.Palindromes.Palindrome where
+module Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength) where
+
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToLength)
 
 -- | Data type to represent a single found palindrome
 data Palindrome
@@ -40,3 +42,6 @@ pre-processed text palindrome is "aba", so the length is 3, and after adding bac
 punctuation, the start character index is 1 (the first 'a') and the end character index
 is 6 (the 'c' after the second 'a'). The string representing this text palindrome is
 "ab..a". -}
+
+getLength :: Palindrome -> Int
+getLength = rangeToLength . palRange

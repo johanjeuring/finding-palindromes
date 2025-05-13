@@ -196,27 +196,25 @@ sparsify inputLength (firstCell : cells) = reverse (extraCell ++ sparsifiedRever
     filteredRow = firstCell : filter ((>= 0) . cellBudget) cells
 
     -- At the start and end of removed sequence of negatives in the filtered row inserts negative cells.
-    (lastCell, sparsifiedReversed) = foldl insertNegatives (Nothing, []) filteredRow
+    (lastCell, sparsifiedReversed) = foldl insertNegatives (firstCell, []) filteredRow
 
     {- Before a cell is added to the sparsifyReversed list inserts a negative cell on both sides of a gap
     when there is one. Based on the position of last positive budget cell and the current cell.
     -}
-    insertNegatives :: (Maybe Cell, Row) -> Cell -> (Maybe Cell, Row)
-    insertNegatives (Nothing, _) cell = (Just cell, [cell])
-    insertNegatives (Just Cell{cellPosition = (_, prevC), cellBudget = _}, acc) newCell@(Cell{cellPosition = (r, c), cellBudget = _})
+    insertNegatives :: (Cell, Row) -> Cell -> (Cell, Row)
+    insertNegatives (Cell{cellPosition = (_, prevC), cellBudget = _}, acc) newCell@(Cell{cellPosition = (r, c), cellBudget = _})
         | c - prevC > 2 =
-            ( Just newCell
+            ( newCell
             , newCell
                 : Cell{cellPosition = (r, c - 1), cellBudget = -1}
                 : Cell{cellPosition = (r, prevC + 1), cellBudget = -1}
                 : acc
             )
         | c - prevC == 2 =
-            (Just newCell, newCell : Cell{cellPosition = (r, prevC + 1), cellBudget = -1} : acc)
-        | otherwise = (Just newCell, newCell : acc)
+            (newCell, newCell : Cell{cellPosition = (r, prevC + 1), cellBudget = -1} : acc)
+        | otherwise = (newCell, newCell : acc)
 
     -- We need a negative cell at the end of the row, unless this is out of bounds of the input.
-    extraCell = case lastCell of
-        Nothing -> []
-        Just (Cell{cellPosition = (lastR, lastC), cellBudget = _}) ->
-            ([Cell{cellPosition = (lastR, lastC + 1), cellBudget = -1} | lastC < inputLength - 1])
+    extraCell = [Cell{cellPosition = (lastR, lastC + 1), cellBudget = -1} | lastC < inputLength - 1]
+      where
+        (Cell{cellPosition = (lastR, lastC), cellBudget = _}) = lastCell

@@ -16,7 +16,7 @@ algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
 module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
-    , indicesToText
+    , rangeToText
     , longestLength
     , longestWord
     , allLengths
@@ -70,9 +70,9 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex :: Int
     endIndex = snd (fst lastWord)
 
--- | Takes a start and end index (exclusive) and returns the substring with those indices
-indicesToText :: (Int, Int) -> V.Vector Char -> String
-indicesToText (start, end) input
+-- | Takes a start and end index (exclusive) and returns the substring in the text with that range
+rangeToText :: (Int, Int) -> V.Vector Char -> String
+rangeToText (start, end) input
     | end - start > 0 = V.toList $ V.slice start (end - start) input
     | otherwise = ""
 

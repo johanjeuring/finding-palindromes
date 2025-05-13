@@ -82,13 +82,12 @@ longestLength = show . maximum
 -- | Converts the longest palindrome to text
 longestWord :: [Palindrome] -> String
 longestWord [] = ""
-longestWord input = palText longest
+longestWord input = palText $ foldr1 longest input
   where
-    longest :: Palindrome
-    longest =
-        foldr1
-            (\a b -> if rangeToLength (palRange a) < rangeToLength (palRange b) then b else a)
-            input
+    longest :: Palindrome -> Palindrome -> Palindrome
+    longest p1 p2
+        | rangeToLength (palRange p1) < rangeToLength (palRange p2) = p2
+        | otherwise = p1
 
 -- | All maximal palindrome lengths
 allLengths :: [Int] -> String
@@ -109,4 +108,4 @@ wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = maybe "" palText pal
   where
     pal :: Maybe Palindrome
-    pal = find (\x -> rangeToCenter (palRange x) == n) pals
+    pal = find ((== n) . rangeToCenter . palRange) pals

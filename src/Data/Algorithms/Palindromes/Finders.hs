@@ -118,9 +118,7 @@ type LengthMod = (Int, Maybe Int)
 {- This method returns whether uneven palindromes are impossible to exist based on the
 query settings. -}
 onlyEvenPals :: Variant -> Complexity -> Bool
-onlyEvenPals VarDNA (ComQuadratic gap _)
-    | even gap = True
-    | otherwise = False
+onlyEvenPals VarDNA (ComQuadratic gap _) = even gap
 onlyEvenPals VarDNA _ = True
 onlyEvenPals _ _ = False
 
@@ -150,7 +148,8 @@ findPalindromeLengths variant complexity input =
     alg = case complexity of
         ComLinear -> linearAlgorithm (onlyEvenPals variant complexity)
         ComInsertionDeletion _ ->
-            error "Invalid route: Insertion deletion alg cannot find findPalindromelengths per center"
+            error
+                "Invalid route: Insertion deletion algorithm cannot find findPalindromelengths per center"
         _ ->
             quadraticAlgorithm
                 (onlyEvenPals variant complexity)

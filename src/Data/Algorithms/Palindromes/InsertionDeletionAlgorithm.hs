@@ -41,20 +41,20 @@ insertionDeletionAlgorithm maxError input =
     -- Do (+ 1) on the end index to go from inclusive to exclusive
     map (second (+ 1)) $ concat maxPalindromes
   where
-    loopResult =
+    (maxPalsWithoutFinalRow, finalRow) =
         foldr
             (insertionDeletionIteration input maxError)
             ( []
             ,
                 [ Cell
-                    (V.length input - 1, V.length input - 1)
-                    (maxError - errorCostAtPosition input (V.length input - 1, V.length input - 1))
+                    { cellPosition = (V.length input - 1, V.length input - 1)
+                    , cellBudget = maxError - errorCostAtPosition input (V.length input - 1, V.length input - 1)
+                    }
                 ]
             )
             [0 .. V.length input - 2]
-    finalRow = snd loopResult
     maxPalindromesFinalRow = extractMaximalPalindromesFinalRow finalRow
-    maxPalindromes = maxPalindromesFinalRow : fst loopResult
+    maxPalindromes = maxPalindromesFinalRow : maxPalsWithoutFinalRow
 
 insertionDeletionIteration
     :: (PalEq a)
@@ -90,12 +90,16 @@ fillRow input maxErrors rowIndex = scanl getNextBudget (leftMostCell, maxErrors)
   where
     {- The leftmost cell of the row to fill. It has full budget.
     The error cost at position is removed because not every datatype has garantueed single character palindromes. -}
-    leftMostCell = Cell (rowIndex, rowIndex) (maxErrors - errorCostAtPosition input (rowIndex, rowIndex))
+    leftMostCell =
+        Cell
+            { cellPosition = (rowIndex, rowIndex)
+            , cellBudget = maxErrors - errorCostAtPosition input (rowIndex, rowIndex)
+            }
     {- Given previous cell, the budget of the cell below that and the cell below,
     calculate the budget for a new cell. -}
     getNextBudget :: (Cell, Int) -> Cell -> (Cell, Int)
-    getNextBudget (Cell prevPosition valLeft, valDiagonal) (Cell _ valBelow) =
-        (Cell currentPosition bestBudget, valBelow)
+    getNextBudget (Cell{cellPosition = prevPosition, cellBudget = valLeft}, valDiagonal) (Cell{cellPosition = _, cellBudget = valBelow}) =
+        (Cell{cellPosition = currentPosition, cellBudget = bestBudget}, valBelow)
       where
         -- taking left or below budget has error cost of 1 for an insertion
         budgetFromLeft = valLeft - 1
@@ -128,7 +132,7 @@ extractMaximalPalindromes =
         does, using the position and budgets from scanr. These are maximal since they
         cannot be extended without exceeding the budget.
         -}
-        . filter (\(_, matrix2) -> isMaximal matrix2)
+        . filter (isMaximal . snd)
         {- Fills list of same size as the current row with tuple (position, (budget above,
         budget at position), (budget diag, budget right)). Starts accumulator out of
         bounds with negative budgets since only able to extend out of bounds makes a
@@ -145,7 +149,7 @@ extractMaximalPalindromes =
         -> (Position, Matrix2)
     {- Since the scanr is done over current row we add 1 to row since we want position at
     previous row. -}
-    nextMatrix (Cell (row, col) budgetAbove, budget) (_, (fstCol, _)) =
+    nextMatrix (Cell{cellPosition = (row, col), cellBudget = budgetAbove}, budget) (_, (fstCol, _)) =
         ((row + 1, col), ((budgetAbove, budget), fstCol))
 
 {- Matrix:
@@ -180,10 +184,10 @@ at each end of it. This saves unnecessary memory use.
 -}
 sparsify :: Int -> Row -> Row
 sparsify _ [] = []
-sparsify inputLength row@(firstCell : tail) = reverse (extraCell ++ sparsifiedReversed)
+sparsify inputLength (firstCell : cells) = reverse (extraCell ++ sparsifiedReversed)
   where
     -- remove negative budgets from the tail
-    filteredRow = firstCell : filter ((>= 0) . cellBudget) tail
+    filteredRow = firstCell : filter ((>= 0) . cellBudget) cells
 
     -- At the start and end of removed sequence of negatives in the filtered row inserts negative cells.
     (lastCell, sparsifiedReversed) = foldl insertNegatives (Nothing, []) filteredRow
@@ -193,13 +197,20 @@ sparsify inputLength row@(firstCell : tail) = reverse (extraCell ++ sparsifiedRe
     -}
     insertNegatives :: (Maybe Cell, Row) -> Cell -> (Maybe Cell, Row)
     insertNegatives (Nothing, _) cell = (Just cell, [cell])
-    insertNegatives (Just (Cell (_, prevC) _), acc) newCell@(Cell (r, c) _)
+    insertNegatives (Just Cell{cellPosition = (_, prevC), cellBudget = _}, acc) newCell@(Cell{cellPosition = (r, c), cellBudget = _})
         | c - prevC > 2 =
-            (Just newCell, newCell : Cell (r, c - 1) (-1) : Cell (r, prevC + 1) (-1) : acc)
-        | c - prevC == 2 = (Just newCell, newCell : Cell (r, prevC + 1) (-1) : acc)
+            ( Just newCell
+            , newCell
+                : Cell{cellPosition = (r, c - 1), cellBudget = -1}
+                : Cell{cellPosition = (r, prevC + 1), cellBudget = -1}
+                : acc
+            )
+        | c - prevC == 2 =
+            (Just newCell, newCell : Cell{cellPosition = (r, prevC + 1), cellBudget = -1} : acc)
         | otherwise = (Just newCell, newCell : acc)
 
     -- We need a negative cell at the end of the row, unless this is out of bounds of the input.
     extraCell = case lastCell of
         Nothing -> []
-        Just (Cell (lastR, lastC) _) -> ([Cell (lastR, lastC + 1) (-1) | lastC < inputLength - 1])
+        Just (Cell{cellPosition = (lastR, lastC), cellBudget = _}) ->
+            ([Cell{cellPosition = (lastR, lastC + 1), cellBudget = -1} | lastC < inputLength - 1])

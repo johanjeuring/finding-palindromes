@@ -45,6 +45,7 @@ library
     Data.Algorithms.Palindromes.QuadraticAlgorithm
     Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
+    Data.Algorithms.Palindromes.Transducers
 
   build-depends:
     , base    >=4.17     && <5
@@ -69,6 +70,7 @@ executable palindromes
     Data.Algorithms.Palindromes.QuadraticAlgorithm
     Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
+    Data.Algorithms.Palindromes.Transducers
 
   build-depends:
     , base    >=4.17     && <5

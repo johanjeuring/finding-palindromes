@@ -218,11 +218,11 @@ findPalindromes variant complexity (minlen, maxlen) input =
     ranges :: Int -> [(Int, Int)]
     ranges errors =
         case variant of
-            VarText -> insertionDeletionAlgorithm errors (filterLetters input)
-            VarPunctuation -> insertionDeletionAlgorithm errors (filterLetters input)
-            VarDNA -> insertionDeletionAlgorithm errors (tryParseDNA input)
-            VarWord -> insertionDeletionAlgorithm errors (textToWords input)
-            _ -> insertionDeletionAlgorithm errors (V.fromList input)
+            VarText -> insertionDeletionAlgorithm 0 errors (filterLetters input)
+            VarPunctuation -> insertionDeletionAlgorithm 0 errors (filterLetters input)
+            VarDNA -> insertionDeletionAlgorithm 0 errors (tryParseDNA input)
+            VarWord -> insertionDeletionAlgorithm 0 errors (textToWords input)
+            _ -> insertionDeletionAlgorithm 0 errors (V.fromList input)
 
     {- A function that converts a (center index, length) pair to a (start character index, end character
     index) pair. These character indeces are in the original (not pre-processed) text. -}

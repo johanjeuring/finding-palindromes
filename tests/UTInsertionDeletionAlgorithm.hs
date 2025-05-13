@@ -20,11 +20,11 @@ testListInsertionDeletionAlgorithm =
     , testMississippiTwoErrors
     , testMississippiThreeErrors
     , testMississippiFourErrors
-    -- , testSparsifySimple
-    -- , testSparsifyEdgeCase
-    -- , testSparsifyComplex
-    -- , testDNAZeroErrors
-    -- , testDNAOneError
+    , -- , testSparsifySimple
+      -- , testSparsifyEdgeCase
+      -- , testSparsifyComplex
+      testDNAZeroErrors
+    , testDNAOneError
     ]
 
 {- | This tests the input string "tees" with zero errors. Output order does not matter, so
@@ -179,25 +179,25 @@ testMississippiFourErrors =
 --                 ]
 --             )
 
--- {- | Test a small DNA sequence with zero errors. Note that for an empty maximal
--- approximate palindrome, the start character index is the same as the end character index.
--- Both are the index of the character directly following the empty string in question.
--- -}
--- testDNAZeroErrors :: Test
--- testDNAZeroErrors =
---     TestCase $
---         assertEqual
---             "testDNAZeroErrors"
---             [(0, 2), (2, 2), (3, 3)]
---             (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, T, G, G]))
+{- | Test a small DNA sequence with zero errors. Note that for an empty maximal
+approximate palindrome, the start character index is the same as the end character index.
+Both are the index of the character directly following the empty string in question.
+-}
+testDNAZeroErrors :: Test
+testDNAZeroErrors =
+    TestCase $
+        assertEqual
+            "testDNAZeroErrors"
+            [(0, 2), (2, 2), (3, 3)]
+            (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, T, G, G]))
 
--- {- | Test the small DNA sequence with one error. The output represents strings [A, T, G]
--- and [G, G].
--- -}
--- testDNAOneError :: Test
--- testDNAOneError =
---     TestCase $
---         assertEqual
---             "testDNAOneError"
---             [(0, 3), (2, 4)]
---             (sort $ insertionDeletionAlgorithm 0 1 (V.fromList [A, T, G, G]))
+{- | Test the small DNA sequence with one error. The output represents strings [A, T, G]
+and [G, G].
+-}
+testDNAOneError :: Test
+testDNAOneError =
+    TestCase $
+        assertEqual
+            "testDNAOneError"
+            [(0, 3), (2, 4)]
+            (sort $ insertionDeletionAlgorithm 0 1 (V.fromList [A, T, G, G]))

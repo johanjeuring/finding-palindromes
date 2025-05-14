@@ -40,6 +40,7 @@ handleFileWith f file = do
     input <- Sys.hGetContents file'
     putStrLn (f input)
     Sys.hClose file'
+    print "--------------------------------------------------------------"
 
 {- |
     Read all files in a directory. Ignore nested folders

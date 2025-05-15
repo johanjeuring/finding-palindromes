@@ -146,13 +146,13 @@ findPalindromeRanges variant complexity input =
     alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
-        ComInsertionDeletion errors -> insertionDeletionAlgorithm errors
-        _ ->
+        ComQuadratic gapSize error ->
             indexListToRanges
                 . quadraticAlgorithm
                     (onlyEvenPals variant complexity)
-                    (gapSize complexity)
-                    (maxError complexity)
+                    gapSize
+                    error
+        ComInsertionDeletion errors -> insertionDeletionAlgorithm errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]
     indexListToRanges = zipWith (curry indexedLengthToRange) indexList
@@ -176,7 +176,8 @@ phase. The final phase parses the [Int] to a [Palindrome]. The function returns 
 the data type Palindrome with a palindrome at each center index.
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
-findPalindromes variant complexity (minlen, maxlen) input = mapMaybe rangeToPalindrome $ findPalindromeRanges variant complexity input
+findPalindromes variant complexity (minlen, maxlen) input =
+    mapMaybe rangeToPalindrome $ findPalindromeRanges variant complexity input
   where
     rangeToPalindrome :: (Int, Int) -> Maybe Palindrome
     rangeToPalindrome r@(start, end)

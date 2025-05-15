@@ -174,17 +174,17 @@ if the cell has a positive budget and the cell to the right of it has a negative
 This function uses this property to find the maximal palindromes in the final row.
 -}
 extractMaximalPalindromesFinalRow :: Row -> [PalRange]
-extractMaximalPalindromesFinalRow row = map (second (+ 1)) (go row [])
+extractMaximalPalindromesFinalRow row = reverse $ map (second (+ 1)) (extract row [])
   where
-    go :: Row -> [Position] -> [Position]
-    go [] acc = acc
+    extract :: Row -> [Position] -> [Position]
+    extract [] acc = acc
     -- The final cell is maximal only if budget is non-negative.
-    go [c] acc
+    extract [c] acc
         | cellBudget c >= 0 = cellPosition c : acc
         | otherwise = acc
-    go (c0 : c1 : cs) acc
-        | cellBudget c0 >= 0 && cellBudget c1 < 0 = go cs (cellPosition c0 : acc)
-        | otherwise = go (c1 : cs) acc
+    extract (c0 : c1 : cs) acc
+        | cellBudget c0 >= 0 && cellBudget c1 < 0 = extract cs (cellPosition c0 : acc)
+        | otherwise = extract (c1 : cs) acc
 
 {- | For (large) substrings of cell with negative budgets, put one cell with (-1) budget
 at each end of it. This saves unnecessary memory use.

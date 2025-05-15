@@ -79,6 +79,7 @@ test-suite tests-palindromes
   hs-source-dirs: tests
   main-is:        Main.hs
   other-modules:
+    ITInsertionDeletion
     ITLinear
     ITQuadratic
     PalindromeMethods

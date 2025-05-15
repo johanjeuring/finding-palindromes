@@ -36,7 +36,7 @@ testTeesZeroErrors =
         assertEqual
             "testTeesZeroErrors"
             [(0, 1), (1, 3), (3, 4)]
-            (sort $ insertionDeletionAlgorithm 0 (V.fromList "tees"))
+            (insertionDeletionAlgorithm 0 (V.fromList "tees"))
 
 {- | This tests the input string "tees" with one error. The entire string is then one
 maximal approximate palindrome.
@@ -47,7 +47,7 @@ testTeesOneError =
         assertEqual
             "testTeesOneError"
             [(0, 4)]
-            (sort $ insertionDeletionAlgorithm 1 (V.fromList "tees"))
+            (insertionDeletionAlgorithm 1 (V.fromList "tees"))
 
 -- | Test the string "mississippi" with zero errors.
 testMississippiZeroErrors :: Test
@@ -64,7 +64,7 @@ testMississippiZeroErrors =
             , (7, 11) -- "ippi"
             , (10, 11) -- "i"
             ]
-            (sort $ insertionDeletionAlgorithm 0 (V.fromList "mississippi"))
+            (insertionDeletionAlgorithm 0 (V.fromList "mississippi"))
 
 -- | Test the string "mississippi" with one error.
 testMississippiOneError :: Test
@@ -79,7 +79,7 @@ testMississippiOneError =
             , (6, 9) -- "sip"
             , (6, 11) -- "sippi"
             ]
-            (sort $ insertionDeletionAlgorithm 1 (V.fromList "mississippi"))
+            (insertionDeletionAlgorithm 1 (V.fromList "mississippi"))
 
 -- | Test the string "mississippi" with two errors.
 testMississippiTwoErrors :: Test
@@ -91,7 +91,7 @@ testMississippiTwoErrors =
             , (1, 11) -- "ississippi"
             , (4, 11) -- "issippi"
             ]
-            (sort $ insertionDeletionAlgorithm 2 (V.fromList "mississippi"))
+            (insertionDeletionAlgorithm 2 (V.fromList "mississippi"))
 
 -- | Test the string "mississippi" with three errors.
 testMississippiThreeErrors :: Test
@@ -189,7 +189,7 @@ testDNAZeroErrors =
         assertEqual
             "testDNAZeroErrors"
             [(0, 2), (2, 2), (3, 3)]
-            (sort $ insertionDeletionAlgorithm 0 (V.fromList [A, T, G, G]))
+            (insertionDeletionAlgorithm 0 (V.fromList [A, T, G, G]))
 
 {- | Test the small DNA sequence with one error. The output represents strings [A, T, G]
 and [G, G].
@@ -200,4 +200,4 @@ testDNAOneError =
         assertEqual
             "testDNAOneError"
             [(0, 3), (2, 4)]
-            (sort $ insertionDeletionAlgorithm 1 (V.fromList [A, T, G, G]))
+            (insertionDeletionAlgorithm 1 (V.fromList [A, T, G, G]))

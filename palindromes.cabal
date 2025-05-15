@@ -34,6 +34,7 @@ library
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
+    Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
@@ -58,6 +59,7 @@ executable palindromes
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
+    Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
@@ -79,6 +81,7 @@ test-suite tests-palindromes
   hs-source-dirs: tests
   main-is:        Main.hs
   other-modules:
+    ITInsertionDeletion
     ITLinear
     ITQuadratic
     PalindromeMethods
@@ -89,6 +92,7 @@ test-suite tests-palindromes
     UTExtendPals
     UTFinders
     UTGetLeftRight
+    UTInsertionDeletionAlgorithm
     UTLinearAlgorithm
     UTPalEq
     UTProcessing

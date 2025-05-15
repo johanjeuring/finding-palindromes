@@ -39,11 +39,11 @@ extendPalindromeS
     -- ^ the length of the palindrome currently being expanded
     -> [Int]
     -- ^ the final list of maximal palindrome lengths
-extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPalindrome
+extendPalindromeS onlyEvenPals input rightmost maximalPalindromesIn currentPalindrome
     | rightmost > lastPos =
         -- reached the end of the array
         finalPalindromesS
-            antiReflexive
+            onlyEvenPals
             currentPalindrome
             maximalPalindromesIn
             (currentPalindrome : maximalPalindromesIn)
@@ -52,7 +52,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
         -- the current palindrome extends to the start of the array, or it cannot be
         -- extended
         moveCenterS
-            antiReflexive
+            onlyEvenPals
             input
             rightmost
             (currentPalindrome : maximalPalindromesIn)
@@ -61,7 +61,7 @@ extendPalindromeS antiReflexive input rightmost maximalPalindromesIn currentPali
     | otherwise =
         -- the current palindrome can be extended
         extendPalindromeS
-            antiReflexive
+            onlyEvenPals
             input
             (rightmost + 1)
             maximalPalindromesIn

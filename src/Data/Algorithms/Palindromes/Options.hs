@@ -20,7 +20,7 @@ Also contains the functions that are used to convert these flags to their corres
 -}
 module Data.Algorithms.Palindromes.Options where
 
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe (fromJust, fromMaybe, isNothing)
 import System.Console.GetOpt
     ( ArgDescr (..)
     , OptDescr (..)
@@ -79,6 +79,11 @@ options =
         []
         (OptArg parseQuadratic "[gapSize] [errors]")
         "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <errors> (default for both is 0)"
+    , Option
+        "s"
+        []
+        (OptArg parseInsertionDeletion "[errors]")
+        "Use Insertion Deletion algorithm, with optional argument for amount of errors (default is 0)"
     , Option
         "p"
         []
@@ -176,6 +181,15 @@ parseQuadratic str
   where
     (x, y) = break (== '+') $ fromJust str
     nums = (x, drop 1 y)
+
+{- | Parses the optional error input to a Flag. If invalid inputs are given, an
+error is thrown.
+-}
+parseInsertionDeletion :: Maybe String -> Flag
+parseInsertionDeletion =
+    maybe
+        (Complexity ComInsertionDeletion{maxIDError = 0})
+        (\s -> Complexity ComInsertionDeletion{maxIDError = read s})
 
 {- | From all input flags, gets the complexity setting. If more than one complexity flag
 is given, it throws an error, as this is not suppported by our program. If none are give it

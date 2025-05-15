@@ -41,18 +41,16 @@ filterMax (Just max_) = map (\x -> if x > max_ then -1 else x)
 filterExact :: Int -> [Int] -> [Int]
 filterExact n = map (\x -> if x == n then x else -1)
 
-{- | This function changes a list of text palindrome lengths to a list of punctuation
-palindrome lengths by making the lengths shorter where needed.
--}
-filterPunctuation :: String -> [Int] -> [Int]
-filterPunctuation input lengths = map (rangeToLength . shrinkRange) $ lengthsToRanges lengths
+-- | This function changes the a list of ranges for punctuation palindromes by shrinking to punctuation.
+filterPunctuation :: String -> [(Int, Int)] -> [(Int, Int)]
+filterPunctuation input = map shrinkRange
   where
     {- Shrinks a range on both sides until the resulting range is surrounded by
     punctuation in the original input. -}
     shrinkRange :: (Int, Int) -> (Int, Int)
     shrinkRange (startIndex, endIndex)
         | startIndex == endIndex = (startIndex, endIndex)
-        | startIndex > endIndex = (startIndex, endIndex)
+        | startIndex > endIndex = (endIndex, endIndex)
         | punctuationAt (originalStart - 1) && punctuationAt (originalEnd + 1) =
             (startIndex, endIndex)
         | otherwise = shrinkRange (startIndex + 1, endIndex - 1)

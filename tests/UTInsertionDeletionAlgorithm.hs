@@ -25,6 +25,8 @@ testListInsertionDeletionAlgorithm =
       -- , testSparsifyComplex
       testDNAZeroErrors
     , testDNAOneError
+    , testDNAAsZeroErrors
+    , testDNAAsOneError
     ]
 
 {- | This tests the input string "tees" with zero errors. Output order does not matter, so
@@ -201,3 +203,19 @@ testDNAOneError =
             "testDNAOneError"
             [(0, 3), (2, 4)]
             (sort $ insertionDeletionAlgorithm 0 1 (V.fromList [A, T, G, G]))
+{- | test AAAAAAAAA with no errors-}
+testDNAAsZeroErrors :: Test
+testDNAAsZeroErrors =
+    TestCase $
+        assertEqual
+            "testDNAAsZeroErrors"
+            [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)]
+            (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A,A,A,A,A,A,A,A,A]))
+{- | test AAAAAAAAA with one errors-}
+testDNAAsOneError :: Test
+testDNAAsOneError =
+    TestCase $
+        assertEqual
+            "testDNAAsOneError"
+            [(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,8),(8,9)]
+            (sort $ insertionDeletionAlgorithm 1 0 (V.fromList [A,A,A,A,A,A,A,A,A]))

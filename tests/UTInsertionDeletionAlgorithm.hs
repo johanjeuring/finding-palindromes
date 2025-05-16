@@ -23,10 +23,26 @@ testListInsertionDeletionAlgorithm =
     , -- , testSparsifySimple
       -- , testSparsifyEdgeCase
       -- , testSparsifyComplex
-      testDNAZeroErrors
-    , testDNAOneError
+      testSmallDNAZeroErrors
+    , testSmallDNAOneError
     , testDNAAsZeroErrors
     , testDNAAsOneError
+    , testBigDNAZeroErrors
+    , testBigDNAOneError
+    , testBigDNATwoErrors
+    , testBigDNAThreeErrors
+    , testBigDNAFourErrors
+    , testBigDNAFiveErrors
+    , testDNAGapSizeOneZeroErrors
+    , testDNAGapSizeOneOneError
+    , testDNAGapSizeOneTwoErrors
+    , testDNAGapSizeOneThreeErrors
+    , testDNAGapSizeTwoZeroErrors
+    , testDNAGapSizeTwoOneError
+    , testDNAGapSizeTwoTwoErrors
+    , testDNAGapSizeThreeZeroErrors
+    , testDNAGapSizeThreeOneError
+    , testDNAGapSizeThreeFourErrors
     ]
 
 {- | This tests the input string "tees" with zero errors. Output order does not matter, so
@@ -185,37 +201,218 @@ testMississippiFourErrors =
 approximate palindrome, the start character index is the same as the end character index.
 Both are the index of the character directly following the empty string in question.
 -}
-testDNAZeroErrors :: Test
-testDNAZeroErrors =
+testSmallDNAZeroErrors :: Test
+testSmallDNAZeroErrors =
     TestCase $
         assertEqual
-            "testDNAZeroErrors"
+            "testSmallDNAZeroErrors"
             [(0, 2), (2, 2), (3, 3)]
             (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, T, G, G]))
 
 {- | Test the small DNA sequence with one error. The output represents strings [A, T, G]
 and [G, G].
 -}
-testDNAOneError :: Test
-testDNAOneError =
+testSmallDNAOneError :: Test
+testSmallDNAOneError =
     TestCase $
         assertEqual
-            "testDNAOneError"
+            "testSmallDNAOneError"
             [(0, 3), (2, 4)]
             (sort $ insertionDeletionAlgorithm 0 1 (V.fromList [A, T, G, G]))
-{- | test AAAAAAAAA with no errors-}
+
+-- | test AAAAAAAAA with no errors
 testDNAAsZeroErrors :: Test
 testDNAAsZeroErrors =
     TestCase $
         assertEqual
             "testDNAAsZeroErrors"
-            [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)]
-            (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A,A,A,A,A,A,A,A,A]))
-{- | test AAAAAAAAA with one errors-}
+            [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8)]
+            (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, A, A, A, A, A, A, A, A]))
+
+-- | test AAAAAAAAA with one errors
 testDNAAsOneError :: Test
 testDNAAsOneError =
     TestCase $
         assertEqual
             "testDNAAsOneError"
-            [(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,8),(8,9)]
-            (sort $ insertionDeletionAlgorithm 1 0 (V.fromList [A,A,A,A,A,A,A,A,A]))
+            [(1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7), (7, 8), (8, 9)]
+            (sort $ insertionDeletionAlgorithm 1 0 (V.fromList [A, A, A, A, A, A, A, A, A]))
+
+{- | Test a big (at least bigger than the small DNA sequence) DNA sequence with zero
+errors.
+-}
+testBigDNAZeroErrors :: Test
+testBigDNAZeroErrors =
+    TestCase $
+        assertEqual
+            "testBigDNAZeroErrors"
+            [(1, 1), (1, 3), (3, 3), (4, 4), (5, 5), (6, 6), (6, 8), (8, 8), (9, 9)]
+            (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
+
+{- | Test a big (at least bigger than the small DNA sequence) DNA sequence with one
+error.
+-}
+testBigDNAOneError :: Test
+testBigDNAOneError =
+    TestCase $
+        assertEqual
+            "testBigDNAOneError"
+            [(0, 4), (2, 6), (3, 7), (5, 10), (8, 10)]
+            (sort $ insertionDeletionAlgorithm 0 1 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
+
+{- | Test a big (at least bigger than the small DNA sequence) DNA sequence with two
+errors.
+-}
+testBigDNATwoErrors :: Test
+testBigDNATwoErrors =
+    TestCase $
+        assertEqual
+            "testBigDNATwoErrors"
+            [(0, 5), (0, 7), (2, 8), (4, 10)]
+            (sort $ insertionDeletionAlgorithm 0 2 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
+
+{- | Test a big (at least bigger than the small DNA sequence) DNA sequence with three
+errors.
+-}
+testBigDNAThreeErrors :: Test
+testBigDNAThreeErrors =
+    TestCase $
+        assertEqual
+            "testBigDNAThreeErrors"
+            [(0, 8), (1, 10), (3, 10)]
+            (sort $ insertionDeletionAlgorithm 0 3 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
+
+{- | Test a big (at least bigger than the small DNA sequence) DNA sequence with four
+errors. The whole string is then an approximate palindrome.
+-}
+testBigDNAFourErrors :: Test
+testBigDNAFourErrors =
+    TestCase $
+        assertEqual
+            "testBigDNAFourErrors"
+            [(0, 10)]
+            (sort $ insertionDeletionAlgorithm 0 4 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
+
+{- | Test a big (at least bigger than the small DNA sequence) DNA sequence with five
+errors. The whole string is then an approximate palindrome. This is tested in addition to
+testing with four errors to assert that maximal approximate palindromes with strictly
+fewer errors than the maximum are also found.
+-}
+testBigDNAFiveErrors :: Test
+testBigDNAFiveErrors =
+    TestCase $
+        assertEqual
+            "testBigDNAFiveErrors"
+            [(0, 10)]
+            (sort $ insertionDeletionAlgorithm 0 5 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
+
+{- | Test some DNA string input with a gap size of 1 and 0 errors. This is the first
+test for a non-zero gap size.
+-}
+testDNAGapSizeOneZeroErrors :: Test
+testDNAGapSizeOneZeroErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeOneZeroErrors"
+            [(0, 1), (0, 3), (1, 4), (3, 6), (5, 6), (6, 7)]
+            (sort $ insertionDeletionAlgorithm 1 0 (V.fromList [A, C, T, G, C, C, T]))
+
+{- | Test some DNA string input with a gap size of 1 and 1 error. This tests the
+combination of gap and errors.
+-}
+testDNAGapSizeOneOneError :: Test
+testDNAGapSizeOneOneError =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeOneOneError"
+            [(0, 5), (2, 7)]
+            (sort $ insertionDeletionAlgorithm 1 1 (V.fromList [A, C, T, G, C, C, T]))
+
+{- | Test some DNA string input with a gap size of 1 and 2 errors. The output should be
+the indices for the whole string.
+-}
+testDNAGapSizeOneTwoErrors :: Test
+testDNAGapSizeOneTwoErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeOneTwoErrors"
+            [(0, 7)]
+            (sort $ insertionDeletionAlgorithm 1 2 (V.fromList [A, C, T, G, C, C, T]))
+
+{- | Test some DNA string input with a gap size of 1 and 3 errors. The output should be
+the indices for the whole string. This tests whether gapped approximate strings with less errors
+than the maximum are found correctly.
+-}
+testDNAGapSizeOneThreeErrors :: Test
+testDNAGapSizeOneThreeErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeOneThreeErrors"
+            [(0, 7)]
+            (sort $ insertionDeletionAlgorithm 1 3 (V.fromList [A, C, T, G, C, C, T]))
+
+{- | Test some DNA string input with a gap size of 2 and 0 errors. This tests the
+algorithm using an even gap.
+-}
+testDNAGapSizeTwoZeroErrors :: Test
+testDNAGapSizeTwoZeroErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeTwoZeroErrors"
+            [(0, 2), (0, 4), (1, 6), (4, 7), (6, 8)]
+            (sort $ insertionDeletionAlgorithm 2 0 (V.fromList [A, G, G, T, C, C, G, T]))
+
+-- | Test some DNA string input with a gap size of 2 and 1 error. Tests even gap with an error.
+testDNAGapSizeTwoOneError :: Test
+testDNAGapSizeTwoOneError =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeTwoZeroErrors"
+            [(0, 8), (3, 8)]
+            (sort $ insertionDeletionAlgorithm 2 1 (V.fromList [A, G, G, T, C, C, G, T]))
+
+{- | Test some DNA string input with a gap size of 2 and 2 errors. Tests even gap with an
+error and tests whether the algorithm makes a jump from having two errors to having one
+error again by adding a single character.
+-}
+testDNAGapSizeTwoTwoErrors :: Test
+testDNAGapSizeTwoTwoErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeTwoTwoErrors"
+            [(0, 8)]
+            (sort $ insertionDeletionAlgorithm 2 2 (V.fromList [A, G, G, T, C, C, G, T]))
+
+{- | Test some DNA string input with a gap size of 3 and 0 errors. Tests an odd gap which
+is bigger than 1.
+-}
+testDNAGapSizeThreeZeroErrors :: Test
+testDNAGapSizeThreeZeroErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeThreeZeroErrors"
+            [(0, 3), (1, 4), (1, 6), (1, 8), (5, 8)]
+            (sort $ insertionDeletionAlgorithm 3 0 (V.fromList [C, C, T, T, A, G, A, G]))
+
+{- | Test some DNA string input with a gap size of 3 and 1 error. Tests an odd gap which
+is bigger than 1 in combination with an error.
+-}
+testDNAGapSizeThreeOneError :: Test
+testDNAGapSizeThreeOneError =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeThreeOneError"
+            [(0, 8)]
+            (sort $ insertionDeletionAlgorithm 3 1 (V.fromList [C, C, T, T, A, G, A, G]))
+
+{- | Test some DNA string input with a gap size of 3 and 4 errors. Tests an odd gap which
+is bigger than 1 in combination with an error and tests whether the algorithm finds that
+the whole string is an approximate palindrome with less than 4 errors.
+-}
+testDNAGapSizeThreeFourErrors :: Test
+testDNAGapSizeThreeFourErrors =
+    TestCase $
+        assertEqual
+            "testDNAGapSizeThreeFourErrors"
+            [(0, 8)]
+            (sort $ insertionDeletionAlgorithm 3 4 (V.fromList [C, C, T, T, A, G, A, G]))

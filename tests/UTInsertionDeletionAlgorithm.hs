@@ -235,8 +235,8 @@ testDNAAsOneError =
     TestCase $
         assertEqual
             "testDNAAsOneError"
-            [(1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7), (7, 8), (8, 9)]
-            (sort $ insertionDeletionAlgorithm 1 0 (V.fromList [A, A, A, A, A, A, A, A, A]))
+            [(0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 8), (7, 9)]
+            (sort $ insertionDeletionAlgorithm 0 1 (V.fromList [A, A, A, A, A, A, A, A, A]))
 
 {- | Test a big (at least bigger than the small DNA sequence) DNA sequence with zero
 errors.

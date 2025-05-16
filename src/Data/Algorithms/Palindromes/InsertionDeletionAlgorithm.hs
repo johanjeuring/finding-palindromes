@@ -11,6 +11,7 @@ import Data.Algorithms.Palindromes.Transducers
     )
 
 import qualified Data.Vector as V
+import qualified Data.Algorithms.Palindromes.PalEq as row
 
 -- | Represents cell location in the matrix. Format is: (row, colunm)
 type Position = (Int, Int)
@@ -76,7 +77,9 @@ fillRow
 fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowIndex - 1)
   where
     sparsecells = sparsify (Cell initialColumn initialBudget : row)
-    -- start with the leftmost cell in the row, which is shifted by gapSize
+    {- start with the leftmost cell in the row, which is shifted by gapSize.
+       A new cell needs to be added at the start of the row because we don't add one in the evaluatepositon part.
+       every row is extended one to the left when you go up by one (along the diagonal)-}
     initialColumn = rowIndex + gapSize
     initialBudget :: Budget
     initialBudget
@@ -90,6 +93,8 @@ fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowI
             (TransExtract get2nd (const []))
             (TransExtract get3rd (const []))
             ((maxErrors, maxErrors), [], [])
+            {- the row starts with 2 (virtual so they do not appear in the rows) cells initialized to maxbudget
+            one as initializer for current row and one for the previous row -}
             sparsecells
 
 {- | Define a new cell (the cell above the input cell) with the correct budget and add

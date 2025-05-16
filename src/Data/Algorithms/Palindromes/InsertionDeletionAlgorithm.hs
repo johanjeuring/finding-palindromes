@@ -82,6 +82,7 @@ fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowI
     initialColumn = rowIndex + gapSize
     initialBudget :: Budget
     initialBudget
+        | rowIndex == -1 && initialColumn >= 0 = maxErrors
         | rowIndex < 0 = -1
         | initialColumn >= V.length input = -1
         | otherwise =

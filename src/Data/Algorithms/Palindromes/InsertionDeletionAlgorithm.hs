@@ -11,7 +11,6 @@ import Data.Algorithms.Palindromes.Transducers
     )
 
 import qualified Data.Vector as V
-import qualified Data.Algorithms.Palindromes.PalEq as row
 
 -- | Represents cell location in the matrix. Format is: (row, colunm)
 type Position = (Int, Int)

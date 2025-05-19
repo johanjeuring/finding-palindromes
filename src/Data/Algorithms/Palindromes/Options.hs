@@ -83,7 +83,7 @@ options =
         "s"
         []
         (OptArg parseInsertionDeletion "[errors]")
-        "Use Insertion Deletion algorithm, with optional argument for amount of errors (default is 0)"
+        "Use Insertion Deletion algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
         "p"
         []
@@ -164,6 +164,27 @@ isStandardInput _ = False
 {- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
 error is thrown.
 -}
+parseInsertionDeletion :: Maybe String -> Flag
+parseInsertionDeletion str
+    | isNothing str = Complexity ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+    | null y =
+        error
+            ( "Invalid arguments for gapsize and errors. (gapsize, errors) = ("
+                ++ fst nums
+                ++ ", "
+                ++ snd nums
+                ++ "). s must be the last flag in a series of flags."
+                ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
+            )
+    | otherwise =
+        Complexity ComInsertionDeletion{gapsID = read (fst nums), maxIDError = read (snd nums)}
+  where
+    (x, y) = break (== '+') $ fromJust str
+    nums = (x, drop 1 y)
+
+{- | Parses the optional error input to a Flag. If invalid inputs are given, an
+error is thrown.
+-}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
     | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
@@ -181,15 +202,6 @@ parseQuadratic str
   where
     (x, y) = break (== '+') $ fromJust str
     nums = (x, drop 1 y)
-
-{- | Parses the optional error input to a Flag. If invalid inputs are given, an
-error is thrown.
--}
-parseInsertionDeletion :: Maybe String -> Flag
-parseInsertionDeletion =
-    maybe
-        (Complexity ComInsertionDeletion{maxIDError = 0})
-        (\s -> Complexity ComInsertionDeletion{maxIDError = read s})
 
 {- | From all input flags, gets the complexity setting. If more than one complexity flag
 is given, it throws an error, as this is not suppported by our program. If none are give it

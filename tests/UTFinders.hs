@@ -21,7 +21,7 @@ testListFinders =
 
 testFinderPlain =
     "testFinderPlain"
-        ~: findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing) "aba"
+        ~: findPalindromes VarPlain (ComQuadratic 0 0) (1, Nothing) "aba"
         ~?= [ ( Palindrome
                     { palRange = (0, 1)
                     , palText = "a"
@@ -44,7 +44,7 @@ testFinderPlain =
 
 testFinderText =
     "testFinderText"
-        ~: findPalindromes VarText (ComQuadratic 0 0) (0, Nothing) "ab'A"
+        ~: findPalindromes VarText (ComQuadratic 0 0) (1, Nothing) "ab'A"
         ~?= [ ( Palindrome
                     { palRange = (0, 1)
                     , palText = "a"
@@ -67,7 +67,7 @@ testFinderText =
 
 testFinderWord =
     "testFinderWord"
-        ~: findPalindromes VarWord (ComQuadratic 0 0) (0, Nothing) "aba' bbb\n aba"
+        ~: findPalindromes VarWord (ComQuadratic 0 0) (1, Nothing) "aba' bbb\n aba"
         ~?= [ ( Palindrome
                     { palRange = (0, 1)
                     , palText = "aba"
@@ -90,7 +90,7 @@ testFinderWord =
 
 testFinderDNA =
     "testFinderDNA"
-        ~: findPalindromes VarDNA (ComQuadratic 0 0) (0, Nothing) "ATA"
+        ~: findPalindromes VarDNA (ComQuadratic 0 0) (1, Nothing) "ATA"
         ~?= [ ( Palindrome
                     { palRange = (0, 2)
                     , palText = "AT"

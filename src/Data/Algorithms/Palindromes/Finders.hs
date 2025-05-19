@@ -21,13 +21,14 @@ module Data.Algorithms.Palindromes.Finders
     ( findPalindromes
     , findPalindromeRanges
     , findPalindromesFormatted
+    , formatPalindromes
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
     , LengthMod
     ) where
 
-import Data.Maybe (fromJust, isNothing, mapMaybe)
+import Data.Maybe (fromJust, isNothing)
 
 import Data.Algorithms.Palindromes.Algorithms
     ( insertionDeletionAlgorithm
@@ -47,11 +48,7 @@ import Data.Algorithms.Palindromes.Output
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
-import Data.Algorithms.Palindromes.PostProcessing
-    ( filterMax
-    , filterMin
-    , filterPunctuation
-    )
+import Data.Algorithms.Palindromes.PostProcessing (filterPunctuation)
 import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
     , filterLetters'
@@ -61,7 +58,6 @@ import Data.Algorithms.Palindromes.PreProcessing
     )
 import Data.Algorithms.Palindromes.RangeFunctions
     ( indexedLengthToRange
-    , rangeToCenter
     , rangeToLength
     )
 
@@ -146,12 +142,12 @@ findPalindromeRanges variant complexity input =
     alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
-        ComQuadratic gapSize error ->
+        ComQuadratic gap errors ->
             indexListToRanges
                 . quadraticAlgorithm
                     (onlyEvenPals variant complexity)
-                    gapSize
-                    error
+                    gap
+                    errors
         ComInsertionDeletion errors -> insertionDeletionAlgorithm errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]
@@ -170,28 +166,29 @@ findPalindromeRanges variant complexity input =
         VarPunctuation -> filterPunctuation input
         _ -> id
 
-{- | This function combines four phases based on the settings and input given: The
-pre-processing phase, the algorithm phase, the post-processing phase and the parsing
-phase. The final phase parses the [Int] to a [Palindrome]. The function returns a list of
-the data type Palindrome with a palindrome at each center index.
+{- | This function combines all the phases required to find palindromes.
+It first finds all the palindrome ranges based on the settings,
+then filters them by length and finally converts the found ranges to the Palindrome datatype
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
 findPalindromes variant complexity (minlen, maxlen) input =
-    mapMaybe rangeToPalindrome $ findPalindromeRanges variant complexity input
+    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity input
   where
-    rangeToPalindrome :: (Int, Int) -> Maybe Palindrome
-    rangeToPalindrome r@(start, end)
-        | len <= 0 = Nothing
-        | (isNothing maxlen || len <= fromJust maxlen) && len >= minlen =
-            Just
-                Palindrome
-                    { palRange = r
-                    , palText = rangeToText (indicesInOriginal r) (V.fromList input)
-                    , palRangeInText = indicesInOriginal r
-                    }
-        | otherwise = Nothing
-      where
-        len = rangeToLength r
+    rangeToPalindrome :: (Int, Int) -> Palindrome
+    rangeToPalindrome r =
+        Palindrome
+            { palRange = r
+            , palText = rangeToText (indicesInOriginal r) (V.fromList input)
+            , palRangeInText = indicesInOriginal r
+            }
+
+    filterRanges :: [(Int, Int)] -> [(Int, Int)]
+    filterRanges =
+        filter
+            ( \range ->
+                (isNothing maxlen || rangeToLength range <= fromJust maxlen)
+                    && rangeToLength range >= minlen
+            )
 
     -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
     indicesInOriginal :: (Int, Int) -> (Int, Int)
@@ -210,21 +207,17 @@ to the given outputFormat.
 -}
 findPalindromesFormatted
     :: Variant -> OutputFormat -> Complexity -> LengthMod -> String -> String
-findPalindromesFormatted variant outputFormat complexity lengthmod@(minlen, maxlen) input = text
-  where
-    result :: [Palindrome]
-    result = findPalindromes variant complexity lengthmod input
+findPalindromesFormatted variant outputFormat complexity lengthmod input =
+    formatPalindromes outputFormat $ findPalindromes variant complexity lengthmod input
 
-    lengths :: [Int]
-    lengths =
-        filterMin minlen . filterMax maxlen $
-            map rangeToLength $
-                findPalindromeRanges variant complexity input
-    text :: String
-    text = case outputFormat of
-        OutLength -> longestLength lengths
-        OutWord -> longestWord result
-        OutLengths -> allLengths lengths
-        OutWords -> allWords result
-        OutLengthAt x -> lengthAt x lengths
-        OutWordAt x -> wordAt x result
+formatPalindromes :: OutputFormat -> [Palindrome] -> String
+formatPalindromes _ [] = "No palindromes found"
+formatPalindromes outputFormat pals = case outputFormat of
+    OutLength -> longestLength lengths
+    OutWord -> longestWord pals
+    OutLengths -> allLengths lengths
+    OutWords -> allWords pals
+    OutLengthAt x -> lengthAt x lengths
+    OutWordAt x -> wordAt x pals
+  where
+    lengths = map getLength pals

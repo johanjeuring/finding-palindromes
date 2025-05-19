@@ -23,7 +23,7 @@ module Data.Algorithms.Palindromes.PreProcessing
     ) where
 
 import Data.Char (isAlphaNum, isSpace, toLower)
-import Data.Maybe (fromJust, fromMaybe, isNothing)
+import Data.Maybe (fromMaybe)
 
 import Data.Algorithms.Palindromes.DNA
     ( DNA

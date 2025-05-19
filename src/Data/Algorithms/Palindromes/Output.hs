@@ -31,7 +31,7 @@ import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     , getLength
     )
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter, rangeToLength)
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
 
 import qualified Data.Vector as V
 
@@ -82,7 +82,6 @@ longestLength = show . maximum
 
 -- | Converts the longest palindrome to text
 longestWord :: [Palindrome] -> String
-longestWord [] = ""
 longestWord input = palText $ foldr1 longest input
   where
     longest :: Palindrome -> Palindrome -> Palindrome

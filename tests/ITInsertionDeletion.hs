@@ -97,7 +97,7 @@ testITInsertionDeletion6 =
             ComInsertionDeletion{maxIDError = 0}
             (3, Just 4)
             "ATAT"
-        ~?= "[-1,4,-1]"
+        ~?= "[4]"
 
 -- String: Contains a palindrome with punctuation
 testITInsertionDeletion11 =
@@ -119,7 +119,7 @@ testITInsertionDeletion12 =
             ComInsertionDeletion{maxIDError = 0}
             (6, Nothing)
             "ACGCGA"
-        ~?= "-1"
+        ~?= "No palindromes found"
 
 -- String: Contains an approximate palindrome
 testITInsertionDeletion13 =
@@ -141,7 +141,7 @@ testITInsertionDeletion14 =
             ComInsertionDeletion{maxIDError = 6}
             (1, Just 2)
             "abcdef"
-        ~?= "[-1]"
+        ~?= "No palindromes found"
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion15 =
@@ -152,7 +152,7 @@ testITInsertionDeletion15 =
             ComInsertionDeletion{maxIDError = 2}
             (3, Just 3)
             "a’b/ba"
-        ~?= "-1"
+        ~?= "No palindromes found"
 
 -- String: Contains an even palindrome
 testITInsertionDeletion16 =
@@ -174,7 +174,7 @@ testITInsertionDeletion17 =
             ComInsertionDeletion{maxIDError = 0}
             (3, Just 6)
             "l.e.p’e;l"
-        ~?= "[-1,-1,3,-1,-1,-1,-1,-1,-1]"
+        ~?= "[3]"
 
 -- String: Contains an approximate palindrome with punctuation
 testITInsertionDeletion19 =
@@ -196,7 +196,7 @@ testITInsertionDeletion20 =
             ComInsertionDeletion{maxIDError = 0}
             (0, Just 0)
             "Abc'd/.ef"
-        ~?= ""
+        ~?= "No palindromes found"
 
 -- String: Contains an odd approximate palindrome, with punctuation
 testITInsertionDeletion21 =
@@ -218,7 +218,7 @@ testITInsertionDeletion22 =
             ComInsertionDeletion{maxIDError = 0}
             (2, Just 5)
             "zatstat"
-        ~?= "[-1,-1,4,-1,-1,3,-1]" -- should be "[-1,-1,-1,5,-1,3,-1]"
+        ~?= "[4,3]" -- should be "[5,3]"
 
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITInsertionDeletion27 :: Test
@@ -230,7 +230,7 @@ testITInsertionDeletion27 =
             ComInsertionDeletion{maxIDError = 0}
             (3, Just 6)
             "\"blaAPPab’li "
-        ~?= "-1"
+        ~?= "No palindromes found"
 
 -- String: Contains an even palindrome
 testITInsertionDeletion28 =
@@ -296,7 +296,7 @@ testITInsertionDeletion34 =
             ComInsertionDeletion{maxIDError = 1}
             (3, Just 3)
             "bla(APA)bli"
-        ~?= "[3,-1,3,-1,3]"
+        ~?= "[3,3,3]"
 
 -- String: Contains an odd punctuation palindrome
 testITInsertionDeletion35 =
@@ -340,7 +340,7 @@ testITInsertionDeletion39 =
             ComInsertionDeletion{maxIDError = 0}
             (2, Nothing)
             "Abc'd/.ef"
-        ~?= "[-1,-1,-1,-1,-1,-1]"
+        ~?= "No palindromes found"
 
 -- String: Contains no palindrome
 testITInsertionDeletion40 =
@@ -351,7 +351,7 @@ testITInsertionDeletion40 =
             ComInsertionDeletion{maxIDError = 3}
             (5, Just 5)
             "abcdef"
-        ~?= "-1"
+        ~?= "No palindromes found"
 
 -- String: Contains an even palindrome, contains punctuation and special characters
 testITInsertionDeletion41 =
@@ -461,7 +461,7 @@ testITInsertionDeletion55 =
             ComInsertionDeletion{maxIDError = 9}
             (4, Just 7)
             "blaAPAbli"
-        ~?= "-1"
+        ~?= "No palindromes found"
 
 -- String: Contains no palindromes, has punctuation
 testITInsertionDeletion57 =
@@ -505,7 +505,7 @@ testITInsertionDeletion60 =
             ComInsertionDeletion{maxIDError = 2}
             (6, Nothing)
             "hello hi hi hello"
-        ~?= "-1"
+        ~?= "No palindromes found"
 
 -- String: Contains an odd palindrome, contains multiple spaces
 testITInsertionDeletion61 =
@@ -560,7 +560,7 @@ testITInsertionDeletion65 =
             ComInsertionDeletion{maxIDError = 0}
             (2, Just 3)
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
-        ~?= ""
+        ~?= "No palindromes found"
 
 -- String: Contains odd approximate palindrome
 testITInsertionDeletion66 =

@@ -11,6 +11,7 @@ import Test.QuickCheck
     , counterexample
     , elements
     , forAll
+    , ioProperty
     , label
     , listOf
     , suchThat
@@ -20,6 +21,7 @@ import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComLinear, ComQuadratic)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
+    , findPalindromeRanges
     , findPalindromes
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq (..))
@@ -28,6 +30,7 @@ import Data.Algorithms.Palindromes.RangeFunctions (rangeToLength)
 import Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     )
+import Data.Algorithms.Palindromes.Streaming (findPalindromesVisualised)
 import QuickCheckGenerators (generatePalindromes)
 import QuickCheckSettings (settingsList)
 
@@ -46,6 +49,8 @@ propertyList =
         ++ map propValidPalRange settingsList
         -- Property 6
         ++ map propAllowedPalLength settingsList
+        -- Property 7
+        ++ map propStreamSameResult settingsList
 
 -- | Makes a Gen String based on the variant that is being used
 stringGenerator :: Settings -> Gen String
@@ -225,3 +230,26 @@ isAllowedPalLength settings pal = case lengthMod settings of
         getLength pal >= l && getLength pal <= u
             || palText pal == ""
     (l, Nothing) -> getLength pal >= l || palText pal == ""
+
+-- Property 7 ---------------------------------------------------------
+
+{- | Check that finding palindromes with intermediate visualisation
+returns the same as the normal findPalindromes
+-}
+propStreamSameResult :: Settings -> Property
+propStreamSameResult settings = counterexample (show settings ++ " property 7") $ forAll (stringGenerator settings) $ \originalString ->
+    ioProperty $ do
+        let pure =
+                findPalindromes
+                    (variant settings)
+                    (complexity settings)
+                    (lengthMod settings)
+                    originalString
+        streamed <-
+            findPalindromesVisualised
+                (variant settings)
+                (complexity settings)
+                (lengthMod settings)
+                originalString
+                (const $ return ()) -- Don't do anything in the visualisation step
+        return (pure == streamed)

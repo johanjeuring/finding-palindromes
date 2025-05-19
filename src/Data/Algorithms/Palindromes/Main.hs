@@ -31,21 +31,22 @@ import qualified System.IO as Sys
 {- |
     Read a single file
 -}
-handleFileWith :: (String -> String) -> String -> IO ()
+handleFileWith :: (String -> IO String) -> String -> IO ()
 handleFileWith f file = do
-    print $ "Reading file: " ++ file
+    putStrLn $ "Reading file: " ++ file
     file' <- Sys.openFile file Sys.ReadMode
     Sys.hSetEncoding file' Sys.utf8
     Sys.hSetEncoding Sys.stdout Sys.utf8
     input <- Sys.hGetContents file'
-    putStrLn (f input)
+    res <- f input
+    putStrLn $ "\r" ++ res ++ replicate 40 ' '
     Sys.hClose file'
-    print "--------------------------------------------------------------"
+    putStrLn "--------------------------------------------------------------"
 
 {- |
     Read all files in a directory. Ignore nested folders
 -}
-handleDirectoryWith :: (String -> String) -> String -> IO ()
+handleDirectoryWith :: (String -> IO String) -> String -> IO ()
 handleDirectoryWith f dir = do
     print $ "Reading directory: " ++ dir
     content <- Dir.listDirectory dir
@@ -56,26 +57,32 @@ handleDirectoryWith f dir = do
 {- |
     Read multiple paths, regardless of whether it's a file or directory
 -}
-handlePathsWith :: (String -> String) -> [String] -> IO ()
-handlePathsWith f [] = putStrLn $ f ""
-handlePathsWith f (x : xs) = do
-    handlePathWith f x
-    handlePathsWith f xs
+handlePathsWith :: (String -> IO String) -> [String] -> IO ()
+handlePathsWith f [] = do
+    res <- f ""
+    putStrLn $ "\r" ++ res ++ replicate 40 ' '
+handlePathsWith f paths = handlePathsWith' f paths
+  where
+    -- Helper exists to not run algorithm on empty string after processing all other files
+    handlePathsWith' _ [] = return ()
+    handlePathsWith' f' (x : xs) = do
+        handlePathWith f' x
+        handlePathsWith' f' xs
 
 {- |
     Read a path, regardless of whether it's a file or directory
 -}
-handlePathWith :: (String -> String) -> String -> IO ()
+handlePathWith :: (String -> IO String) -> String -> IO ()
 handlePathWith f path = do
     isFile <- Dir.doesFileExist path
     if isFile then handleFileWith f path else handleDirectoryWith f path
 
-handleStandardInputWith :: (String -> String) -> IO ()
+handleStandardInputWith :: (String -> IO String) -> IO ()
 handleStandardInputWith function =
     do
         input <- getLine
-        putStrLn (function input)
-
+        res <- function input
+        putStrLn $ res ++ replicate 40 ' '
 main :: IO ()
 main = do
     args <- getArgs

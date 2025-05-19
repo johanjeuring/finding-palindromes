@@ -31,7 +31,7 @@ import Data.Algorithms.Palindromes.Finders
     , LengthMod
     , OutputFormat (..)
     , Variant (..)
-    , findPalindromesFormatted
+    , formatPalindromes
     )
 import Data.Algorithms.Palindromes.Options
     ( Flag
@@ -48,6 +48,7 @@ import Data.Algorithms.Palindromes.Options
     , isStandardInput
     , options
     )
+import Data.Algorithms.Palindromes.Streaming (findPalindromesWithProgressBar)
 
 -- | Data type with all the settings required for running algorithm.
 data Settings = Settings
@@ -87,10 +88,11 @@ getSettings flags =
         , lengthMod = getLengthMod flags
         }
 
--- | should be the same as findPalindromesFormatted, but using the settings datatype.
-getOutput :: Settings -> (String -> String)
-getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) =
-    findPalindromesFormatted v o c l
+-- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
+getOutput :: Settings -> (String -> IO String)
+getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) s = do
+    pals <- findPalindromesWithProgressBar v c l s
+    return (formatPalindromes o pals)
 
 {- | Based on input flags, gets a tuple with a function that directly encapsulates
 everything from the input string to the output string. Also encodes whether input string
@@ -98,12 +100,12 @@ is from a file or standard input.
 -}
 handleFlags
     :: [Flag]
-    -> ( String -> String -- function from input to output
+    -> ( String -> IO String -- function from input to output
        , Bool -- if input is standard input
        )
 handleFlags flags =
     ( if any isHelp flags || null flags
-        then (\_ -> usageInfo headerHelpMessage options)
+        then (\_ -> return (usageInfo headerHelpMessage options))
         else getOutput (getSettings flags)
     , any isStandardInput flags
     )

@@ -208,21 +208,17 @@ to the given outputFormat.
 -}
 findPalindromesFormatted
     :: Variant -> OutputFormat -> Complexity -> LengthMod -> String -> String
-findPalindromesFormatted variant outputFormat complexity lengthmod@(minlen, maxlen) input = text
-  where
-    result :: [Palindrome]
-    result = findPalindromes variant complexity lengthmod input
+findPalindromesFormatted variant outputFormat complexity lengthmod input =
+    formatPalindromes outputFormat $ findPalindromes variant complexity lengthmod input
 
-    lengths :: [Int]
-    lengths =
-        filterMin minlen . filterMax maxlen $
-            map rangeToLength $
-                findPalindromeRanges variant complexity input
-    text :: String
-    text = case outputFormat of
-        OutLength -> longestLength lengths
-        OutWord -> longestWord result
-        OutLengths -> allLengths lengths
-        OutWords -> allWords result
-        OutLengthAt x -> lengthAt x lengths
-        OutWordAt x -> wordAt x result
+formatPalindromes :: OutputFormat -> [Palindrome] -> String
+formatPalindromes _ [] = "No palindromes found"
+formatPalindromes outputFormat pals = case outputFormat of
+    OutLength -> longestLength lengths
+    OutWord -> longestWord pals
+    OutLengths -> allLengths lengths
+    OutWords -> allWords pals
+    OutLengthAt x -> lengthAt x lengths
+    OutWordAt x -> wordAt x pals
+  where
+    lengths = map getLength pals

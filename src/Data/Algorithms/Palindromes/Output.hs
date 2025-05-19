@@ -78,11 +78,10 @@ rangeToText (start, end) input
 
 -- | Returns the length of the longest palindrome as a string
 longestLength :: [Int] -> String
-longestLength = show . maximum
+longestLength lengths = show $ maximum lengths
 
 -- | Converts the longest palindrome to text
 longestWord :: [Palindrome] -> String
-longestWord [] = ""
 longestWord input = palText $ foldr1 longest input
   where
     longest :: Palindrome -> Palindrome -> Palindrome

@@ -47,7 +47,7 @@ findPalindromesVisualised variant complexity (minLength, maybeMaxLength) input v
                 C..| C.filter -- Filter to actual given filter size
                     ( \pal ->
                         minLength <= getLength pal
-                            && maybe True (\maxLen -> getLength pal < maxLen) maybeMaxLength
+                            && maybe True (\maxLen -> getLength pal <= maxLen) maybeMaxLength
                     )
                 C..| C.sinkList
 

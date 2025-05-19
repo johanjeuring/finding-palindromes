@@ -133,7 +133,7 @@ options =
         "b"
         []
         (ReqArg (MinLength . (read :: String -> Int)) "arg")
-        "Maximal palindromes of length at least [arg]"
+        "Maximal palindromes of length at least [arg]. A value larger than 1 is strongly recommended to avoid trivial palindromes."
     , Option
         "c"
         []
@@ -186,10 +186,10 @@ parseQuadratic str
 error is thrown.
 -}
 parseInsertionDeletion :: Maybe String -> Flag
-parseInsertionDeletion str
-    | isNothing str = Complexity ComInsertionDeletion{maxIDError = 0}
-    | otherwise =
-        Complexity ComInsertionDeletion{maxIDError = read (fromJust str)}
+parseInsertionDeletion =
+    maybe
+        (Complexity ComInsertionDeletion{maxIDError = 0})
+        (\s -> Complexity ComInsertionDeletion{maxIDError = read s})
 
 {- | From all input flags, gets the complexity setting. If more than one complexity flag
 is given, it throws an error, as this is not suppported by our program. If none are give it
@@ -256,7 +256,7 @@ getLengthMod xs = (minLength, maxLength)
     maxs = filter isMaxLength xs
     minLength :: Int
     minLength
-        | null mins = 0
+        | null mins = 2
         | [MinLength minL] <- mins = minL
         | otherwise = error "Multiple minimum lengths found."
     maxLength :: Maybe Int

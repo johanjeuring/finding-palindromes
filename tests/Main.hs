@@ -19,6 +19,7 @@ import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 
 import Data.Algorithms.Palindromes.Finders (Complexity (..))
+import ITInsertionDeletion (testListITInsertionDeletion)
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
 import QuickCheckProperties (propertyList)
@@ -39,6 +40,7 @@ tests :: Test
 tests =
     TestList $
         testListLinearAlgorithm
+            ++ testListITInsertionDeletion
             ++ testListQuadraticAlgorithm
             ++ testListInsertionDeletionAlgorithm
             ++ testListText ComLinear

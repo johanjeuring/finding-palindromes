@@ -2,8 +2,10 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
+module Main (main) where
+
 import Control.DeepSeq (NFData)
-import Criterion.Main
+import Criterion.Main (Benchmark, bench, bgroup, defaultConfig, defaultMainWith, env, nf)
 import Criterion.Types (Config (..))
 import Data.List (isSuffixOf)
 import GHC.Generics (Generic)
@@ -11,11 +13,19 @@ import System.Directory (getDirectoryContents)
 import System.FilePath (takeFileName)
 
 import Data.Algorithms.Palindromes.Finders
+    ( Complexity (..)
+    , OutputFormat (..)
+    , Variant (..)
+    , findPalindromes
+    , findPalindromesFormatted
+    )
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified System.IO as Sys
 import qualified System.IO.Strict as Strict
 
+{- Next two lines allow for force evaluation of the Palindrome datatype to Normal Form
+(NF) -}
 deriving instance Generic Palindrome
 deriving instance NFData Palindrome
 
@@ -23,9 +33,12 @@ deriving instance NFData Palindrome
 main =
     do
         textFiles <- getTextFiles
-        let complexityBenchmarks = bgroup "complexity" $ map (`benchFile` benchComplexity) textFiles
-        let textVariantBenchmarks = bgroup "text-variants" $ map (`benchFile` benchTextVariants) textFiles
-        let outputBenchmarks = bgroup "output" $ map (`benchFile` benchOutputOptions) textFiles
+        let complexityBenchmarks =
+                bgroup "complexity" $ map (`benchFile` benchComplexity) textFiles
+        let textVariantBenchmarks =
+                bgroup "text-variants" $ map (`benchFile` benchTextVariants) textFiles
+        let outputBenchmarks =
+                bgroup "output" $ map (`benchFile` benchOutputOptions) textFiles
 
         dnaFiles <- getDnaFiles
         let dnaBenchmarks = bgroup "dna" $ map (`benchFile` benchDna) dnaFiles
@@ -34,16 +47,22 @@ main =
             config
             [complexityBenchmarks, textVariantBenchmarks, outputBenchmarks, dnaBenchmarks]
 
+-- | Contains the location where we want the report file to be located
 config :: Config
 config = defaultConfig{reportFile = Just "benchmark-report.html"}
 
+{- | Benchmark a single file with a function that does multiple benchmarks on that
+file
+-}
 benchFile :: String -> (String -> [Benchmark]) -> Benchmark
 benchFile filePath benchmarks =
     env (getFileContentUtf8 filePath) $
         \content ->
             bgroup (takeFileName filePath) (benchmarks content)
 
--- | Takes a string and creates a benchmark for every complexity option of findPalindromes on that string.
+{- | Takes a string and creates a benchmark for every complexity option of findPalindromes
+on that string.
+-}
 benchComplexity :: String -> [Benchmark]
 benchComplexity content =
     [ bench "quadratic" $
@@ -56,7 +75,9 @@ benchComplexity content =
             content
     ]
 
--- | Takes a string and creates a benchmark for every text based palindrome variant of findPalindromes on that string.
+{- | Takes a string and creates a benchmark for every text based palindrome variant of
+findPalindromes on that string.
+-}
 benchTextVariants :: String -> [Benchmark]
 benchTextVariants content =
     [ bench "plain" $
@@ -77,7 +98,9 @@ benchTextVariants content =
             content
     ]
 
--- | Takes a string and creates a benchmark for every output option for findPalindromesFormatted on that string.
+{- | Takes a string and creates a benchmark for every output option for
+findPalindromesFormatted on that string.
+-}
 benchOutputOptions :: String -> [Benchmark]
 benchOutputOptions content =
     [ bench "length" $
@@ -98,7 +121,9 @@ benchOutputOptions content =
             content
     ]
 
--- | Takes a string and creates a benchmark for every output option for findPalindromesFormatted on that string.
+{- | Takes a string and creates a benchmark for every output option for
+findPalindromesFormatted on that string.
+-}
 benchDna :: String -> [Benchmark]
 benchDna content =
     [ bench "plain" $
@@ -125,17 +150,20 @@ getDnaFiles = do
     files <- getDirectoryContentsWithPath "benchmarking/benchmarking-files/dna-files"
     return $ filter (isSuffixOf ".txt") files
 
--- | Gets the file names of every file in the given directory and then prepends the directory to the filepath
+{- | Gets the file names of every file in the given directory and then prepends the
+directory to the filepath
+-}
 getDirectoryContentsWithPath :: String -> IO [String]
 getDirectoryContentsWithPath dir = do
     files <- getDirectoryContents dir
     return (map ((dir ++ "/") ++) files)
 
--- | Reads the content of a file in latin1 encoding
+-- | Reads the content of a file in UTF-8 encoding, also sets UTF-8 as output encoding
 getFileContentUtf8 :: String -> IO String
 getFileContentUtf8 fileName = do
     handle <- Sys.openFile fileName Sys.ReadMode
     Sys.hSetEncoding handle Sys.utf8
+    Sys.hSetEncoding Sys.stdout Sys.utf8
     content <- Strict.hGetContents handle
     Sys.hClose handle
     return content

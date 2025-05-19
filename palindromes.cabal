@@ -45,11 +45,14 @@ library
     Data.Algorithms.Palindromes.QuadraticAlgorithm
     Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
+    Data.Algorithms.Palindromes.Streaming
     Data.Algorithms.Palindromes.Transducers
 
   build-depends:
-    , base    >=4.17     && <5
-    , vector  >=0.13.1.0 && <0.14
+    , base       >=4.17     && <5
+    , conduit    >=1.3      && <1.4
+    , directory  >=1.3      && <1.4
+    , vector     >=0.13.1.0 && <0.14
 
 executable palindromes
   main-is:        Data/Algorithms/Palindromes/Main.hs
@@ -70,17 +73,21 @@ executable palindromes
     Data.Algorithms.Palindromes.QuadraticAlgorithm
     Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
+    Data.Algorithms.Palindromes.Streaming
     Data.Algorithms.Palindromes.Transducers
 
   build-depends:
-    , base    >=4.17     && <5
-    , vector  >=0.13.1.0 && <0.14
+    , base       >=4.17     && <5
+    , conduit
+    , directory  >=1.3      && <1.4
+    , vector     >=0.13.1.0 && <0.14
 
 test-suite tests-palindromes
   type:           exitcode-stdio-1.0
   hs-source-dirs: tests
   main-is:        Main.hs
   other-modules:
+    ITInsertionDeletion
     ITLinear
     ITQuadratic
     PalindromeMethods
@@ -130,6 +137,5 @@ benchmark profiling
     , deepseq      >=1.5  && <1.6
     , directory    >=1.3  && <1.4
     , filepath     >=1.5  && <1.6
-    , palindromes
-    , parallel
+    , palindromes  >=0.5  && <0.6
     , strict

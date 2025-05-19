@@ -16,7 +16,7 @@ algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
 module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
-    , indicesToText
+    , rangeToText
     , longestLength
     , longestWord
     , allLengths
@@ -29,8 +29,9 @@ import Data.List (find, intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
+    , getLength
     )
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter, rangeToLength)
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
 
 import qualified Data.Vector as V
 
@@ -69,9 +70,9 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex :: Int
     endIndex = snd (fst lastWord)
 
--- | Takes a start and end index (exclusive) and returns the substring with those indices
-indicesToText :: (Int, Int) -> V.Vector Char -> String
-indicesToText (start, end) input
+-- | Takes a start and end index (exclusive) and returns the substring in the text with that range
+rangeToText :: (Int, Int) -> V.Vector Char -> String
+rangeToText (start, end) input
     | end - start > 0 = V.toList $ V.slice start (end - start) input
     | otherwise = ""
 
@@ -81,14 +82,12 @@ longestLength = show . maximum
 
 -- | Converts the longest palindrome to text
 longestWord :: [Palindrome] -> String
-longestWord [] = ""
-longestWord input = palText longest
+longestWord input = palText $ foldr1 longest input
   where
-    longest :: Palindrome
-    longest =
-        foldr1
-            (\a b -> if rangeToLength (palRange a) < rangeToLength (palRange b) then b else a)
-            input
+    longest :: Palindrome -> Palindrome -> Palindrome
+    longest p1 p2
+        | getLength p1 < getLength p2 = p2
+        | otherwise = p1
 
 -- | All maximal palindrome lengths
 allLengths :: [Int] -> String
@@ -109,4 +108,4 @@ wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = maybe "" palText pal
   where
     pal :: Maybe Palindrome
-    pal = find (\x -> rangeToCenter (palRange x) == n) pals
+    pal = find ((== n) . rangeToCenter . palRange) pals

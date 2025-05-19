@@ -11,6 +11,7 @@ import Test.QuickCheck
     , counterexample
     , elements
     , forAll
+    , ioProperty
     , label
     , listOf
     , suchThat
@@ -20,14 +21,16 @@ import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (ComLinear, ComQuadratic)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
+    , findPalindromeRanges
     , findPalindromes
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq (..))
-import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
 import Data.Algorithms.Palindromes.RangeFunctions (rangeToLength)
 import Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     )
+import Data.Algorithms.Palindromes.Streaming (findPalindromesVisualised)
 import QuickCheckGenerators (generatePalindromes)
 import QuickCheckSettings (settingsList)
 
@@ -46,6 +49,8 @@ propertyList =
         ++ map propValidPalRange settingsList
         -- Property 6
         ++ map propAllowedPalLength settingsList
+        -- Property 7
+        ++ map propStreamSameResult settingsList
 
 -- | Makes a Gen String based on the variant that is being used
 stringGenerator :: Settings -> Gen String
@@ -148,10 +153,10 @@ propValidPalLength settings = counterexample (show settings ++ " property 3") $ 
 validPalLength :: Settings -> Palindrome -> Bool
 validPalLength settings pal = case variant settings of
     VarWord ->
-        length (words (cleanOriginalString (palText pal))) == rangeToLength (palRange pal)
-    VarPlain -> length (palText pal) == rangeToLength (palRange pal)
-    VarDNA -> length (palText pal) == rangeToLength (palRange pal)
-    _ -> length (cleanOriginalString $ palText pal) == rangeToLength (palRange pal)
+        length (words (cleanOriginalString (palText pal))) == getLength pal
+    VarPlain -> length (palText pal) == getLength pal
+    VarDNA -> length (palText pal) == getLength pal
+    _ -> length (cleanOriginalString $ palText pal) == getLength pal
 
 -- Property 4 ---------------------------------------------------------
 
@@ -170,14 +175,14 @@ propValidBoundaries settings = counterexample (show settings ++ " property 4") $
 -- | Tests if the palindrome range of a palindrome corresponds to the palindrome length
 checkValidBoundaries :: Settings -> String -> Palindrome -> Bool
 checkValidBoundaries settings inputString pal = case variant settings of
-    VarWord -> countWordsInRange (palRangeInText pal) inputString == rangeToLength (palRange pal)
+    VarWord -> countWordsInRange (palRangeInText pal) inputString == getLength pal
     VarText ->
         let (s, e) = palRangeInText pal
-        in  e - s - amountOfNonAlpha 0 (palText pal) == rangeToLength (palRange pal)
+        in  e - s - amountOfNonAlpha 0 (palText pal) == getLength pal
     VarPunctuation ->
         let (s, e) = palRangeInText pal
-        in  e - s - amountOfNonAlpha 0 (palText pal) == rangeToLength (palRange pal)
-    _ -> let (s, e) = palRangeInText pal in e - s == rangeToLength (palRange pal)
+        in  e - s - amountOfNonAlpha 0 (palText pal) == getLength pal
+    _ -> let (s, e) = palRangeInText pal in e - s == getLength pal
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range
 countWordsInRange :: (Int, Int) -> String -> Int
@@ -222,6 +227,29 @@ propAllowedPalLength settings = counterexample (show settings ++ " property 6") 
 isAllowedPalLength :: Settings -> Palindrome -> Bool
 isAllowedPalLength settings pal = case lengthMod settings of
     (l, Just u) ->
-        rangeToLength (palRange pal) >= l && rangeToLength (palRange pal) <= u
+        getLength pal >= l && getLength pal <= u
             || palText pal == ""
-    (l, Nothing) -> rangeToLength (palRange pal) >= l || palText pal == ""
+    (l, Nothing) -> getLength pal >= l || palText pal == ""
+
+-- Property 7 ---------------------------------------------------------
+
+{- | Check that finding palindromes with intermediate visualisation
+returns the same as the normal findPalindromes
+-}
+propStreamSameResult :: Settings -> Property
+propStreamSameResult settings = counterexample (show settings ++ " property 7") $ forAll (stringGenerator settings) $ \originalString ->
+    ioProperty $ do
+        let pure =
+                findPalindromes
+                    (variant settings)
+                    (complexity settings)
+                    (lengthMod settings)
+                    originalString
+        streamed <-
+            findPalindromesVisualised
+                (variant settings)
+                (complexity settings)
+                (lengthMod settings)
+                originalString
+                (const $ return ()) -- Don't do anything in the visualisation step
+        return (pure == streamed)

@@ -44,9 +44,7 @@ rangesToLengths = map rangeToLength
 
 -- | Converts a (start, end) tuple to a palindrome length.
 rangeToLength :: (Int, Int) -> Int
-rangeToLength (start, end)
-    | end - start < 0 = 0
-    | otherwise = end - start
+rangeToLength (start, end) = max 0 (end - start)
 
 rangeToCenter :: (Int, Int) -> Int
-rangeToCenter (start, end) = start + end
+rangeToCenter = uncurry (+)

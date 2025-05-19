@@ -166,10 +166,9 @@ findPalindromeRanges variant complexity input =
         VarPunctuation -> filterPunctuation input
         _ -> id
 
-{- | This function combines four phases based on the settings and input given: The
-pre-processing phase, the algorithm phase, the post-processing phase and the parsing
-phase. The final phase parses the [Int] to a [Palindrome]. The function returns a list of
-the data type Palindrome with a palindrome at each center index.
+{- | This function combines all the phases required to find palindromes.
+It first finds all the palindrome ranges based on the settings,
+then filters them by length and finally converts the found ranges to the Palindrome datatype
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
 findPalindromes variant complexity (minlen, maxlen) input =

@@ -105,7 +105,7 @@ handleFlags
        )
 handleFlags flags =
     ( if any isHelp flags || null flags
-        then (\_ -> return (usageInfo headerHelpMessage options))
+        then const $ return (usageInfo headerHelpMessage options)
         else getOutput (getSettings flags)
     , any isStandardInput flags
     )

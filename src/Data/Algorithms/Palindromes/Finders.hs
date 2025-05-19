@@ -105,7 +105,7 @@ functionality for including gaps and errors, therefore this is given as an extra
 data Complexity
     = ComLinear
     | ComQuadratic {gapSize :: Int, maxError :: Int}
-    | ComInsertionDeletion {maxIDError :: Int}
+    | ComInsertionDeletion {gapsID :: Int, maxIDError :: Int}
     deriving (Show)
 
 -- | The minimum and maximum length of the palindromes you want to find.
@@ -148,7 +148,7 @@ findPalindromeRanges variant complexity input =
                     (onlyEvenPals variant complexity)
                     gap
                     errors
-        ComInsertionDeletion errors -> insertionDeletionAlgorithm errors
+        ComInsertionDeletion gaps errors -> insertionDeletionAlgorithm gaps errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]
     indexListToRanges = zipWith (curry indexedLengthToRange) indexList

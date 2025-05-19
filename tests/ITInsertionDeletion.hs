@@ -72,7 +72,7 @@ testITInsertionDeletion2 =
         ~: findPalindromesFormatted
             VarDNA
             OutWord
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (4, Just 4)
             "A&T-AT"
         ~?= "A&T-AT"
@@ -83,7 +83,7 @@ testITInsertionDeletion3 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{maxIDError = 4}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 4}
             (1, Just 6)
             "AGTC"
         ~?= "[4]"
@@ -94,7 +94,7 @@ testITInsertionDeletion6 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (3, Just 4)
             "ATAT"
         ~?= "[4]"
@@ -105,7 +105,7 @@ testITInsertionDeletion11 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (6, Just 6)
             "Ac.G-CgA "
         ~?= "[6]"
@@ -116,7 +116,7 @@ testITInsertionDeletion12 =
         ~: findPalindromesFormatted
             VarDNA
             OutLength
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (6, Nothing)
             "ACGCGA"
         ~?= "No palindromes found"
@@ -127,7 +127,7 @@ testITInsertionDeletion13 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (4, Nothing)
             "kabral"
         ~?= "abra"
@@ -138,7 +138,7 @@ testITInsertionDeletion14 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{maxIDError = 6}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 6}
             (1, Just 2)
             "abcdef"
         ~?= "No palindromes found"
@@ -149,7 +149,7 @@ testITInsertionDeletion15 =
         ~: findPalindromesFormatted
             VarPlain
             OutLength
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (3, Just 3)
             "a’b/ba"
         ~?= "No palindromes found"
@@ -160,7 +160,7 @@ testITInsertionDeletion16 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (0, Nothing)
             "abba"
         ~?= "abba"
@@ -171,7 +171,7 @@ testITInsertionDeletion17 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (3, Just 6)
             "l.e.p’e;l"
         ~?= "[3]"
@@ -182,7 +182,7 @@ testITInsertionDeletion19 =
         ~: findPalindromesFormatted
             VarPlain
             OutLength
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (0, Nothing)
             "kab^ra.L"
         ~?= "5"
@@ -193,7 +193,7 @@ testITInsertionDeletion20 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (0, Just 0)
             "Abc'd/.ef"
         ~?= "No palindromes found"
@@ -204,7 +204,7 @@ testITInsertionDeletion21 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{maxIDError = 10}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 10}
             (2, Nothing)
             "zat.,s&tat"
         ~?= "[10]"
@@ -215,10 +215,10 @@ testITInsertionDeletion22 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (2, Just 5)
             "zatstat"
-        ~?= "[4,3]" -- should be "[5,3]"
+        ~?= "[3,5]"
 
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITInsertionDeletion27 :: Test
@@ -227,7 +227,7 @@ testITInsertionDeletion27 =
         ~: findPalindromesFormatted
             VarPlain
             OutLength
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (3, Just 6)
             "\"blaAPPab’li "
         ~?= "No palindromes found"
@@ -238,7 +238,7 @@ testITInsertionDeletion28 =
         ~: findPalindromesFormatted
             VarPlain
             OutWords
-            ComInsertionDeletion{maxIDError = 9}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
             (0, Nothing)
             "blaAPPAbl"
         ~?= "[\"blaAPPAbl\"]"
@@ -249,10 +249,10 @@ testITInsertionDeletion29 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (0, Nothing)
             "blaAPAbli"
-        ~?= "[1,1,1,1,3,1,1,1,1]"
+        ~?= "[1,1,1,1,1,3,1,1,1]"
 
 -- String: Contains an odd palindrome with punctuation
 testITInsertionDeletion30 =
@@ -260,10 +260,10 @@ testITInsertionDeletion30 =
         ~: findPalindromesFormatted
             VarPlain
             OutWords
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (4, Just 7)
             "/blaAPa.bl.i"
-        ~?= "[\"aAPa\",\".bl.\"]"
+        ~?= "[\".bl.\",\"aAPa\"]"
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion31 =
@@ -271,7 +271,7 @@ testITInsertionDeletion31 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutWord
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (2, Just 5)
             "/abba/"
         ~?= "abba"
@@ -282,7 +282,7 @@ testITInsertionDeletion33 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutWords
-            ComInsertionDeletion{maxIDError = 5}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 5}
             (0, Nothing)
             "bla\\AP.PA.bli"
         ~?= "[\"bla\\AP.PA.bli\"]"
@@ -293,7 +293,7 @@ testITInsertionDeletion34 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLengths
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (3, Just 3)
             "bla(APA)bli"
         ~?= "[3,3,3]"
@@ -304,7 +304,7 @@ testITInsertionDeletion35 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLength
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (2, Nothing)
             "lepel”"
         ~?= "5"
@@ -315,7 +315,7 @@ testITInsertionDeletion37 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLength
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (0, Nothing)
             "(ka(b)ral)"
         ~?= "3"
@@ -326,7 +326,7 @@ testITInsertionDeletion38 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutWord
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (3, Just 3)
             "za.*ts&tat/”"
         ~?= "tat"
@@ -337,7 +337,7 @@ testITInsertionDeletion39 =
         ~: findPalindromesFormatted
             VarText
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (2, Nothing)
             "Abc'd/.ef"
         ~?= "No palindromes found"
@@ -348,7 +348,7 @@ testITInsertionDeletion40 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{maxIDError = 3}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 3}
             (5, Just 5)
             "abcdef"
         ~?= "No palindromes found"
@@ -359,7 +359,7 @@ testITInsertionDeletion41 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (1, Nothing)
             "a’b/ba"
         ~?= "a’b/ba"
@@ -370,7 +370,7 @@ testITInsertionDeletion42 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (2, Just 8)
             "abba"
         ~?= "[\"abba\"]"
@@ -381,7 +381,7 @@ testITInsertionDeletion43 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (2, Nothing)
             "l.e.p’e;l"
         ~?= "l.e.p’e;l"
@@ -392,7 +392,7 @@ testITInsertionDeletion44 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (3, Just 6)
             "lepel"
         ~?= "[\"lepel\"]"
@@ -403,7 +403,7 @@ testITInsertionDeletion45 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (6, Just 6)
             "kab^ra.L"
         ~?= "6"
@@ -414,10 +414,10 @@ testITInsertionDeletion47 =
         ~: findPalindromesFormatted
             VarText
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (1, Just 6)
             "zat.,s&tat"
-        ~?= "[1,1,4,1,1,3,1]" -- should be "[1,1,1,5,1,1,1]"
+        ~?= "[1,1,3,1,1,5,1]"
 
 -- String: Contains an approximate odd palindrome
 testITInsertionDeletion48 =
@@ -425,7 +425,7 @@ testITInsertionDeletion48 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{maxIDError = 7}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 7}
             (2, Nothing)
             "zatstat"
         ~?= "zatstat"
@@ -436,10 +436,10 @@ testITInsertionDeletion53 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (3, Nothing)
             "\"blaAPPab'li"
-        ~?= "[\"blaAPP\",\"blaAPPab'li\",\"Pab'li\"]"
+        ~?= "[\"Pab'li\",\"blaAPP\",\"blaAPPab'li\"]"
 
 -- String: Contains an even palindrome
 testITInsertionDeletion54 =
@@ -447,10 +447,10 @@ testITInsertionDeletion54 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (1, Just 3)
             "blaAPPAbl"
-        ~?= "[\"b\",\"l\",\"aA\",\"A\",\"b\",\"l\"]"
+        ~?= "[\"l\",\"b\",\"A\",\"aA\",\"l\",\"b\"]"
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion55 =
@@ -458,7 +458,7 @@ testITInsertionDeletion55 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{maxIDError = 9}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
             (4, Just 7)
             "blaAPAbli"
         ~?= "No palindromes found"
@@ -469,7 +469,7 @@ testITInsertionDeletion57 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (0, Nothing)
             "aba gdc."
         ~?= "2"
@@ -480,7 +480,7 @@ testITInsertionDeletion58 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (0, Nothing)
             "aba gdc"
         ~?= "[1,1]"
@@ -491,7 +491,7 @@ testITInsertionDeletion59 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (2, Just 5)
             "Hello. hi hi “hello”"
         ~?= "[\"Hello. hi hi “hello\"]"
@@ -502,7 +502,7 @@ testITInsertionDeletion60 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (6, Nothing)
             "hello hi hi hello"
         ~?= "No palindromes found"
@@ -513,7 +513,7 @@ testITInsertionDeletion61 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{maxIDError = 3}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 3}
             (2, Nothing)
             "bye so    bye?"
         ~?= "[\"bye so    bye\"]"
@@ -524,7 +524,7 @@ testITInsertionDeletion62 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{maxIDError = 9}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
             (3, Just 6)
             "bye so bye"
         ~?= "bye so bye"
@@ -535,7 +535,7 @@ testITInsertionDeletion63 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (2, Just 7)
             "Fout. Weer. Hi. Hi. Niet. Goed."
         ~?= "Fout. Weer. Hi. Hi. Niet. Goed"
@@ -546,7 +546,7 @@ testITInsertionDeletion64 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (0, Nothing)
             "fout weer hi hi niet goed"
         ~?= "4"
@@ -557,7 +557,7 @@ testITInsertionDeletion65 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (2, Just 3)
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
         ~?= "No palindromes found"
@@ -568,7 +568,7 @@ testITInsertionDeletion66 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{maxIDError = 9}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
             (4, Nothing)
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[9]"
@@ -579,7 +579,7 @@ testITInsertionDeletion71 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{maxIDError = 6}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 6}
             (0, Nothing)
             ",onzin, .dit pal\n pal dit/ gek"
         ~?= "[\"onzin, .dit pal\n pal dit/ gek\"]"
@@ -590,10 +590,10 @@ testITInsertionDeletion72 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{maxIDError = 0}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (0, Nothing)
             "onzin dit pal pal dit gek"
-        ~?= "[1,1,4,1,1]"
+        ~?= "[1,1,1,4,1]"
 
 -- String: Contains an odd palindrome with punctuation
 testITInsertionDeletion73 =
@@ -601,7 +601,7 @@ testITInsertionDeletion73 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{maxIDError = 1}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
             (2, Just 5)
             "Onzin. pAl is. Pal gek"
         ~?= "[\"Onzin. pAl is. Pal gek\"]"
@@ -612,7 +612,7 @@ testITInsertionDeletion74 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{maxIDError = 2}
+            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
             (3, Nothing)
             "onzin pal is pal gek"
         ~?= "onzin pal is pal gek"

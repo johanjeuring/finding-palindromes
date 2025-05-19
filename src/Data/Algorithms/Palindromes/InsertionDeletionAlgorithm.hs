@@ -45,8 +45,9 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
     startState =
         (
             [ Cell
-                startColumn
-                startBudget
+                { cellColumn = startColumn
+                , cellBudget = startBudget
+                }
             ] -- start at the bottom right of the matrix
         , [] -- no maximal palindromes found yet
         , maxRow - 1 -- row number
@@ -75,7 +76,7 @@ fillRow
     -- ^ New state of the transducer
 fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowIndex - 1)
   where
-    sparsecells = sparsify (Cell initialColumn initialBudget : row)
+    sparsecells = sparsify (Cell{cellColumn = initialColumn, cellBudget = initialBudget} : row)
     {- start with the leftmost cell in the row, which is shifted by gapSize.
        A new cell needs to be added at the start of the row because we don't add one in the evaluatepositon part.
        every row is extended one to the left when you go up by one (along the diagonal)-}
@@ -120,7 +121,7 @@ evaluatePosition
     -- ^ Input cell
     -> ((Budget, Budget), Row, [PalRange])
     -- ^ New state for the transducer
-evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell column bottomRight) =
+evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell{cellColumn = column, cellBudget = bottomRight}) =
     ((topRight, bottomRight), [Cell column topRight], maxpals)
   where
     topRight
@@ -140,23 +141,30 @@ evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell column botto
 
 sparsify :: Row -> Row
 sparsify [] = []
-sparsify row@(Cell firstColumnIndex _ : _) =
+sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) =
     transducel1
         insertNegatives
         (TransExtract snd endf)
         (firstColumnIndex, [])
         (filter ((>= 0) . cellBudget) row)
   where
-    -- Always add two (-1)'s to the end of the sparsified row
-    endf (lastPositiveColumnIndex, _) =
-        [Cell (lastPositiveColumnIndex + 1) (-1), Cell (lastPositiveColumnIndex + 2) (-1)]
-
     insertNegatives :: (Int, Row) -> Cell -> (Int, Row)
     insertNegatives (lastind, _) newCell@Cell{cellColumn = newIndex}
         | newIndex - lastind > 2 =
-            (newIndex, [Cell (lastind + 1) (-1), Cell (newIndex - 1) (-1), newCell])
-        | newIndex - lastind == 2 = (newIndex, [Cell (lastind + 1) (-1), newCell])
+            ( newIndex
+            ,
+                [ Cell{cellColumn = lastind + 1, cellBudget = -1}
+                , Cell{cellColumn = newIndex - 1, cellBudget = -1}
+                , newCell
+                ]
+            )
+        | newIndex - lastind == 2 =
+            (newIndex, [Cell{cellColumn = lastind + 1, cellBudget = -1}, newCell])
         | otherwise = (newIndex, [newCell])
+
+    -- Always add one -1 to the end of the sparsified row
+    endf (lastPositiveColumnIndex, _) =
+        [Cell{cellColumn = lastPositiveColumnIndex + 1, cellBudget = -1}]
 
 -- | Returns first n elements of iterate f on start.
 iterateTimes :: Int -> (a -> a) -> a -> [a]

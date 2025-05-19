@@ -31,7 +31,7 @@ import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     , getLength
     )
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter, rangeToLength)
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
 
 import qualified Data.Vector as V
 

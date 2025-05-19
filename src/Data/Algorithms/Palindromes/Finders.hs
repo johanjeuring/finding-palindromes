@@ -146,12 +146,12 @@ findPalindromeRanges variant complexity input =
     alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
-        ComQuadratic gapSize error ->
+        ComQuadratic gap errors ->
             indexListToRanges
                 . quadraticAlgorithm
                     (onlyEvenPals variant complexity)
-                    gapSize
-                    error
+                    gap
+                    errors
         ComInsertionDeletion errors -> insertionDeletionAlgorithm errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]

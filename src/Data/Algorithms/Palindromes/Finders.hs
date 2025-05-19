@@ -21,13 +21,14 @@ module Data.Algorithms.Palindromes.Finders
     ( findPalindromes
     , findPalindromeRanges
     , findPalindromesFormatted
+    , formatPalindromes
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
     , LengthMod
     ) where
 
-import Data.Maybe (fromJust, isNothing, mapMaybe)
+import Data.Maybe (fromJust, isNothing)
 
 import Data.Algorithms.Palindromes.Algorithms
     ( insertionDeletionAlgorithm
@@ -47,11 +48,7 @@ import Data.Algorithms.Palindromes.Output
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
-import Data.Algorithms.Palindromes.PostProcessing
-    ( filterMax
-    , filterMin
-    , filterPunctuation
-    )
+import Data.Algorithms.Palindromes.PostProcessing (filterPunctuation)
 import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
     , filterLetters'
@@ -61,7 +58,6 @@ import Data.Algorithms.Palindromes.PreProcessing
     )
 import Data.Algorithms.Palindromes.RangeFunctions
     ( indexedLengthToRange
-    , rangeToCenter
     , rangeToLength
     )
 
@@ -177,21 +173,23 @@ the data type Palindrome with a palindrome at each center index.
 -}
 findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
 findPalindromes variant complexity (minlen, maxlen) input =
-    mapMaybe rangeToPalindrome $ findPalindromeRanges variant complexity input
+    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity input
   where
-    rangeToPalindrome :: (Int, Int) -> Maybe Palindrome
-    rangeToPalindrome r@(start, end)
-        | len <= 0 = Nothing
-        | (isNothing maxlen || len <= fromJust maxlen) && len >= minlen =
-            Just
-                Palindrome
-                    { palRange = r
-                    , palText = rangeToText (indicesInOriginal r) (V.fromList input)
-                    , palRangeInText = indicesInOriginal r
-                    }
-        | otherwise = Nothing
-      where
-        len = rangeToLength r
+    rangeToPalindrome :: (Int, Int) -> Palindrome
+    rangeToPalindrome r =
+        Palindrome
+            { palRange = r
+            , palText = rangeToText (indicesInOriginal r) (V.fromList input)
+            , palRangeInText = indicesInOriginal r
+            }
+
+    filterRanges :: [(Int, Int)] -> [(Int, Int)]
+    filterRanges =
+        filter
+            ( \range ->
+                (isNothing maxlen || rangeToLength range <= fromJust maxlen)
+                    && rangeToLength range >= minlen
+            )
 
     -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
     indicesInOriginal :: (Int, Int) -> (Int, Int)

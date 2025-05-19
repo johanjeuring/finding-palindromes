@@ -133,7 +133,7 @@ options =
         "b"
         []
         (ReqArg (MinLength . (read :: String -> Int)) "arg")
-        "Maximal palindromes of length at least [arg]"
+        "Maximal palindromes of length at least [arg]. A value larger than 1 is strongly recommended to avoid trivial palindromes."
     , Option
         "c"
         []
@@ -256,7 +256,7 @@ getLengthMod xs = (minLength, maxLength)
     maxs = filter isMaxLength xs
     minLength :: Int
     minLength
-        | null mins = 0
+        | null mins = 2
         | [MinLength minL] <- mins = minL
         | otherwise = error "Multiple minimum lengths found."
     maxLength :: Maybe Int

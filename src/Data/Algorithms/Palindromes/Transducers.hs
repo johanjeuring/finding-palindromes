@@ -20,9 +20,10 @@ data TransduceExtractor state output = TransExtract
 {- | Create list of states by applying the stateFunction repeatedly to the initial state
 using the input list
 -}
-transduceMap :: (input -> state -> state) -> state -> [input] -> [state]
+transduceMap :: (state -> input -> state) -> state -> [input] -> [state]
 transduceMap stateFunction initialState inputs =
-    stail $ scanl' (flip stateFunction) initialState inputs
+    -- scanl' puts the initial state in the list, which we do not want.
+    drop 1 $ scanl' stateFunction initialState inputs
 
 {- Use the functions from the TransduceExtractor on the list of states to generate the
 output list -}
@@ -37,7 +38,7 @@ transduceExtract transExtract (s : x : t) =
 
 -- | Get the output from a transducer with 1 output.
 transducel1
-    :: (input -> state -> state)
+    :: (state -> input -> state)
     -> TransduceExtractor state output
     -> state
     -> [input]
@@ -47,17 +48,12 @@ transducel1 stateFunction transExtractor initialState input =
 
 -- | Get the output from a transducer with 2 outputs.
 transducel2
-    :: (inp -> state -> state)
+    :: (state -> input -> state)
     -> TransduceExtractor state output0
     -> TransduceExtractor state output1
     -> state
-    -> [inp]
+    -> [input]
     -> ([output0], [output1])
 transducel2 statef tre0 tre1 ini inp = (transduceExtract tre0 states, transduceExtract tre1 states)
   where
     states = transduceMap statef ini inp
-
--- | safe tail functions which returns empty list if the input is the empty list
-stail :: [a] -> [a]
-stail (_ : t) = t
-stail [] = []

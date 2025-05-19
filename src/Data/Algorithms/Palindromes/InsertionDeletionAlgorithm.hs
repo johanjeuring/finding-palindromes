@@ -13,7 +13,7 @@ import Data.Algorithms.Palindromes.Transducers
 import qualified Data.Vector as V
 
 -- | Represents cell location in the matrix. Format is: (row, colunm)
-type Position = (Int, Int)
+type PalRange = (Int, Int)
 
 -- | Represents a cell in the matrix. The format is: (column, budget)
 data Cell = Cell
@@ -35,9 +35,9 @@ insertionDeletionAlgorithm
     -- ^ The maximum number of errors
     -> V.Vector a
     -- ^ The input vector
-    -> [Position]
+    -> [PalRange]
 --
-insertionDeletionAlgorithm gapSize maxErrors input = concatMap get2nd states
+insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y) states
   where
     states = iterateTimes nrOfIterations (fillRow input gapSize maxErrors) startState
     -- Required number of iterations is (+ 2) to also be able to spot maximal palindromes in two upper rows
@@ -45,7 +45,7 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap get2nd states
     startState =
         (
             [ Cell
-                (maxRow + gapSize)
+                startColumn
                 startBudget
             ] -- start at the bottom right of the matrix
         , [] -- no maximal palindromes found yet
@@ -69,9 +69,9 @@ fillRow
     -- ^ Maximum size of the gap
     -> Int
     -- ^ Maximum number of errors
-    -> (Row, [Position], Int)
+    -> (Row, [PalRange], Int)
     -- ^ Old state of the transducer
-    -> (Row, [Position], Int)
+    -> (Row, [PalRange], Int)
     -- ^ New state of the transducer
 fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowIndex - 1)
   where
@@ -90,8 +90,8 @@ fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowI
     (newRow, foundMaxPals) =
         transducel2
             (evaluatePosition input rowIndex)
-            (TransExtract get2nd (const []))
-            (TransExtract get3rd (const []))
+            (TransExtract (\(_, y, _) -> y) (const []))
+            (TransExtract (\(_, _, z) -> z) (const []))
             ((maxErrors, maxErrors), [], [])
             {- the row starts with 2 (virtual so they do not appear in the rows) cells initialized to maxbudget
             one as initializer for current row and one for the previous row -}
@@ -114,13 +114,13 @@ evaluatePosition
     -- ^ Input vector
     -> Int
     -- ^ row index
+    -> ((Budget, Budget), Row, [PalRange])
+    -- ^ Old state for the transducer
     -> Cell
     -- ^ Input cell
-    -> ((Budget, Budget), Row, [Position])
-    -- ^ Old state for the transducer
-    -> ((Budget, Budget), Row, [Position])
+    -> ((Budget, Budget), Row, [PalRange])
     -- ^ New state for the transducer
-evaluatePosition input rowIndex (Cell column bottomRight) ((topLeft, bottomLeft), _, _) =
+evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell column bottomRight) =
     ((topRight, bottomRight), [Cell column topRight], maxpals)
   where
     topRight
@@ -151,7 +151,8 @@ sparsify row@(Cell firstColumnIndex _ : _) =
     endf (lastPositiveColumnIndex, _) =
         [Cell (lastPositiveColumnIndex + 1) (-1), Cell (lastPositiveColumnIndex + 2) (-1)]
 
-    insertNegatives newCell@Cell{cellColumn = newIndex} (lastind, _)
+    insertNegatives :: (Int, Row) -> Cell -> (Int, Row)
+    insertNegatives (lastind, _) newCell@Cell{cellColumn = newIndex}
         | newIndex - lastind > 2 =
             (newIndex, [Cell (lastind + 1) (-1), Cell (newIndex - 1) (-1), newCell])
         | newIndex - lastind == 2 = (newIndex, [Cell (lastind + 1) (-1), newCell])
@@ -162,13 +163,7 @@ iterateTimes :: Int -> (a -> a) -> a -> [a]
 iterateTimes n f start = take n $ iterate f start
 
 -- if elements are palindrome equal at position then no error cost, otherwise error cost of 1 for substitution
-errorCostAtPosition :: (PalEq a) => V.Vector a -> Position -> Int
+errorCostAtPosition :: (PalEq a) => V.Vector a -> (Int, Int) -> Int
 errorCostAtPosition input (row, column)
     | (input V.! row) =:= (input V.! column) = 0
     | otherwise = 1
-
-get2nd :: (a, b, c) -> b
-get2nd (_, x, _) = x
-
-get3rd :: (a, b, c) -> c
-get3rd (_, _, x) = x

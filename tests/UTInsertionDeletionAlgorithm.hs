@@ -13,17 +13,18 @@ import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
 import qualified Data.Vector as V
 
 testListInsertionDeletionAlgorithm =
-    [ testTeesZeroErrors
+    [ testSparsifySimple
+    , testSparsifyNegativeSingleton
+    , testSparsifyComplex
+    , testSparsifyLeadingNegative
+    , testTeesZeroErrors
     , testTeesOneError
     , testMississippiZeroErrors
     , testMississippiOneError
     , testMississippiTwoErrors
     , testMississippiThreeErrors
     , testMississippiFourErrors
-    , -- , testSparsifySimple
-      -- , testSparsifyEdgeCase
-      -- , testSparsifyComplex
-      testSmallDNAZeroErrors
+    , testSmallDNAZeroErrors
     , testSmallDNAOneError
     , testDNAAsZeroErrors
     , testDNAAsOneError
@@ -44,6 +45,100 @@ testListInsertionDeletionAlgorithm =
     , testDNAGapSizeThreeOneError
     , testDNAGapSizeThreeFourErrors
     ]
+
+{- | Test sparsify using a simple example with a single sequence of cells with negative
+budgets.
+-}
+testSparsifySimple :: Test
+testSparsifySimple =
+    TestCase $
+        assertEqual
+            "testSparsifySimple"
+            [ Cell 0 1
+            , Cell 1 0
+            , Cell 2 (-1)
+            , Cell 5 (-1)
+            , Cell 6 0
+            , -- sparsify always adds one cell with (-1) budget to the end of the row.
+              Cell 7 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 1
+                , Cell 1 0
+                , Cell 2 (-1)
+                , Cell 3 (-1)
+                , Cell 4 (-1)
+                , Cell 5 (-1)
+                , Cell 6 0
+                ]
+            )
+
+-- | Test sparsify with a sequence of cells with negative budgets of length 1.
+testSparsifyNegativeSingleton :: Test
+testSparsifyNegativeSingleton =
+    TestCase $
+        assertEqual
+            "testSparsifyNegativeSingleton"
+            [Cell 0 1, Cell 1 0, Cell 2 (-1), Cell 3 0, Cell 4 (-1)]
+            (sparsify [Cell 0 1, Cell 1 0, Cell 2 (-1), Cell 3 0, Cell 4 (-1)])
+
+-- | Test sparsify with a larger input and different sequences of cells with negative budgets.
+testSparsifyComplex :: Test
+testSparsifyComplex =
+    TestCase $
+        assertEqual
+            "testSparsifyComplex"
+            [ Cell 0 1
+            , Cell 1 0
+            , Cell 2 (-1)
+            , Cell 5 (-1)
+            , Cell 6 0
+            , Cell 7 1
+            , Cell 8 0
+            , Cell 9 (-1)
+            , Cell 10 0
+            , Cell 11 0
+            , Cell 12 0
+            , Cell 13 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 1
+                , Cell 1 0
+                , Cell 2 (-1)
+                , Cell 3 (-1)
+                , Cell 4 (-1)
+                , Cell 5 (-1)
+                , Cell 6 0
+                , Cell 7 1
+                , Cell 8 0
+                , Cell 9 (-1)
+                , Cell 10 0
+                , Cell 11 0
+                , Cell 12 0
+                , Cell 13 (-1)
+                , Cell 14 (-2)
+                , Cell 15 (-3)
+                , Cell 16 (-4)
+                ]
+            )
+
+-- | Test whether sparsify deletes the first cell if it is negative.
+testSparsifyLeadingNegative :: Test
+testSparsifyLeadingNegative =
+    TestCase $
+        assertEqual
+            "testSparsifyLeadingNegative"
+            [ Cell 1 0
+            , Cell 2 0
+            , Cell 3 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 (-1)
+                , Cell 1 0
+                , Cell 2 0
+                , Cell 3 (-1)
+                ]
+            )
 
 {- | This tests the input string "tees" with zero errors. Output order does not matter, so
 it is sorted to check for equality. Output represents the strings "t", "ee" and "s".
@@ -130,72 +225,6 @@ testMississippiFourErrors =
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
             (insertionDeletionAlgorithm 0 4 (V.fromList "mississippi"))
-
--- testSparsifySimple :: Test
--- testSparsifySimple =
---     TestCase $
---         assertEqual
---             "testSparsifySimple"
---             [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 5) (-1), Cell (0, 6) 0]
---             ( sparsify
---                 7
---                 [ Cell (0, 0) 1
---                 , Cell (0, 1) 0
---                 , Cell (0, 2) (-1)
---                 , Cell (0, 3) (-1)
---                 , Cell (0, 4) (-1)
---                 , Cell (0, 5) (-1)
---                 , Cell (0, 6) 0
---                 ]
---             )
-
--- testSparsifyEdgeCase :: Test
--- testSparsifyEdgeCase =
---     TestCase $
---         assertEqual
---             "testSparsifyEdgeCase"
---             [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0]
---             (sparsify 4 [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0])
-
--- testSparsifyComplex :: Test
--- testSparsifyComplex =
---     TestCase $
---         assertEqual
---             "testSparsifyComplex"
---             [ Cell (0, 0) 1
---             , Cell (0, 1) 0
---             , Cell (0, 2) (-1)
---             , Cell (0, 5) (-1)
---             , Cell (0, 6) 0
---             , Cell (0, 7) 1
---             , Cell (0, 8) 0
---             , Cell (0, 9) (-1)
---             , Cell (0, 10) 0
---             , Cell (0, 11) 0
---             , Cell (0, 12) 0
---             , Cell (0, 13) (-1)
---             ]
---             ( sparsify
---                 17
---                 [ Cell (0, 0) 1
---                 , Cell (0, 1) 0
---                 , Cell (0, 2) (-1)
---                 , Cell (0, 3) (-1)
---                 , Cell (0, 4) (-1)
---                 , Cell (0, 5) (-1)
---                 , Cell (0, 6) 0
---                 , Cell (0, 7) 1
---                 , Cell (0, 8) 0
---                 , Cell (0, 9) (-1)
---                 , Cell (0, 10) 0
---                 , Cell (0, 11) 0
---                 , Cell (0, 12) 0
---                 , Cell (0, 13) (-1)
---                 , Cell (0, 14) (-2)
---                 , Cell (0, 15) (-3)
---                 , Cell (0, 16) (-4)
---                 ]
---             )
 
 {- | Test a small DNA sequence with zero errors. Note that for an empty maximal
 approximate palindrome, the start character index is the same as the end character index.

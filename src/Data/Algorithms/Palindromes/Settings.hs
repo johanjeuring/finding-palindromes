@@ -28,7 +28,6 @@ import System.Console.GetOpt (usageInfo)
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
-    , LengthMod
     , OutputFormat (..)
     , Variant (..)
     , formatPalindromes
@@ -36,11 +35,11 @@ import Data.Algorithms.Palindromes.Finders
 import Data.Algorithms.Palindromes.Options
     ( Flag
     , defaultComplexity
-    , defaultLengthMod
+    , defaultMinLength
     , defaultOutputFormat
     , defaultVariant
     , getComplexity
-    , getLengthMod
+    , getMinLength
     , getOutputFormat
     , getVariant
     , headerHelpMessage
@@ -55,7 +54,7 @@ data Settings = Settings
     { complexity :: Complexity
     , variant :: Variant
     , outputFormat :: OutputFormat
-    , lengthMod :: LengthMod
+    , minLength :: Int
     }
 
 instance Show Settings where
@@ -65,7 +64,7 @@ instance Show Settings where
             [ show (complexity settings)
             , show (variant settings)
             , show (outputFormat settings)
-            , show (lengthMod settings)
+            , show (minLength settings)
             ]
 
 -- | If no flags are given to modify settings default settings are used
@@ -75,7 +74,7 @@ defaultSettings =
         { complexity = defaultComplexity
         , variant = defaultVariant
         , outputFormat = defaultOutputFormat
-        , lengthMod = defaultLengthMod
+        , minLength = defaultMinLength
         }
 
 -- | Gets settings from the list of input flags. Uses default if no flags are given.
@@ -85,12 +84,12 @@ getSettings flags =
         { complexity = getComplexity flags
         , variant = getVariant flags
         , outputFormat = getOutputFormat flags
-        , lengthMod = getLengthMod flags
+        , minLength = getMinLength flags
         }
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
 getOutput :: Settings -> (String -> IO String)
-getOutput (Settings{complexity = c, variant = v, outputFormat = o, lengthMod = l}) s = do
+getOutput (Settings{complexity = c, variant = v, outputFormat = o, minLength = l}) s = do
     pals <- findPalindromesWithProgressBar v c l s
     return (formatPalindromes o pals)
 

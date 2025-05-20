@@ -28,7 +28,6 @@ import System.Console.GetOpt
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
-    , LengthMod
     , OutputFormat (..)
     , Variant (..)
     )
@@ -39,9 +38,7 @@ data Flag
     | Complexity Complexity
     | Variant Variant
     | OutputFormat OutputFormat
-    | LengthMod LengthMod
     | MinLength Int
-    | MaxLength Int
 
 defaultComplexity :: Complexity
 defaultComplexity = ComQuadratic{gapSize = 0, maxError = 0}
@@ -52,8 +49,8 @@ defaultVariant = VarText
 defaultOutputFormat :: OutputFormat
 defaultOutputFormat = OutWord
 
-defaultLengthMod :: LengthMod
-defaultLengthMod = (0, Nothing)
+defaultMinLength :: Int
+defaultMinLength = 0
 
 -----------------------------------------------------------------------------
 -- Options
@@ -134,11 +131,6 @@ options =
         []
         (ReqArg (MinLength . (read :: String -> Int)) "arg")
         "Maximal palindromes of length at least [arg]. A value larger than 1 is strongly recommended to avoid trivial palindromes."
-    , Option
-        "c"
-        []
-        (ReqArg (MaxLength . (read :: String -> Int)) "arg")
-        "Maximal palindromes (possibly cut off) of length at most [arg]"
     , Option
         "i"
         []
@@ -243,27 +235,18 @@ getOutputFormat xs
 modifier flag is given, it throws an error, as this is not suppported by our program. If
 none are give it uses the default option.
 -}
-getLengthMod :: [Flag] -> LengthMod
-getLengthMod xs = (minLength, maxLength)
+getMinLength :: [Flag] -> Int
+getMinLength xs = minLength
   where
     isMinLength (MinLength _) = True
     isMinLength _ = False
-    isMaxLength (MaxLength _) = True
-    isMaxLength _ = False
     mins :: [Flag]
     mins = filter isMinLength xs
-    maxs :: [Flag]
-    maxs = filter isMaxLength xs
     minLength :: Int
     minLength
         | null mins = 2
         | [MinLength minL] <- mins = minL
         | otherwise = error "Multiple minimum lengths found."
-    maxLength :: Maybe Int
-    maxLength
-        | null maxs = Nothing
-        | [MaxLength maxL] <- maxs = Just maxL
-        | otherwise = error "Multiple maximum lengths found."
 
 -- | The header of the help message.
 headerHelpMessage :: String

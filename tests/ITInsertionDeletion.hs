@@ -196,7 +196,7 @@ testITInsertionDeletion20 =
             ComInsertionDeletion{maxIDError = 0}
             0
             "Abc'd/.ef"
-        ~?= "A"
+        ~?= "[\"A\",\"b\",\"c\",\"'\",\"d\",\"/\",\".\",\"e\",\"f\"]"
 
 -- String: Contains an odd approximate palindrome, with punctuation
 testITInsertionDeletion21 =

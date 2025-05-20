@@ -113,7 +113,7 @@ options =
         "l"
         []
         (NoArg (OutputFormat OutWord))
-        "Longest palindrome (default)"
+        "All longest palindromes of same size (default)"
     , Option
         "e"
         []

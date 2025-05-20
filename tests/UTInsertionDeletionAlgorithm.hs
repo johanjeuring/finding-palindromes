@@ -17,6 +17,8 @@ testListInsertionDeletionAlgorithm =
     , testSparsifyNegativeSingleton
     , testSparsifyComplex
     , testSparsifyLeadingNegative
+    , testSparsifyOnSparsifiedRow
+    , testSparsifyOnPartiallySparsifiedRow
     , testTeesZeroErrors
     , testTeesOneError
     , testMississippiZeroErrors
@@ -137,6 +139,55 @@ testSparsifyLeadingNegative =
                 , Cell 1 0
                 , Cell 2 0
                 , Cell 3 (-1)
+                ]
+            )
+
+-- | Test whether sparsify does not change an already fully sparsified row.
+testSparsifyOnSparsifiedRow :: Test
+testSparsifyOnSparsifiedRow =
+    TestCase $
+        assertEqual
+            "testSparsifyOnSparsifiedRow"
+            [ Cell 0 0
+            , Cell 1 (-1)
+            , Cell 10 (-1)
+            , Cell 11 0
+            , Cell 12 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 0
+                , Cell 1 (-1)
+                , Cell 10 (-1)
+                , Cell 11 0
+                , Cell 12 (-1)
+                ]
+            )
+
+-- | Test sparsify on a row which has previously already been partially sparsified.
+testSparsifyOnPartiallySparsifiedRow :: Test
+testSparsifyOnPartiallySparsifiedRow =
+    TestCase $
+        assertEqual
+            "testSparsifyOnPartiallySparsifiedRow"
+            [ Cell 0 0
+            , Cell 1 (-1)
+            , Cell 5 (-1)
+            , Cell 6 0
+            , Cell 7 (-1)
+            , Cell 9 (-1)
+            , Cell 10 0
+            , Cell 11 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 0
+                , Cell 1 (-1)
+                , Cell 5 (-1)
+                , Cell 6 0
+                , Cell 7 (-1)
+                , Cell 8 (-1)
+                , Cell 9 (-1)
+                , Cell 10 0
+                , Cell 11 (-1)
                 ]
             )
 

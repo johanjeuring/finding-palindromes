@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE MonoLocalBinds #-}
 
-module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm where
+module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (Cell (..), insertionDeletionAlgorithm, sparsify) where
 
 import Data.Algorithms.Palindromes.PalEq (PalEq, (=:=))
 import Data.Algorithms.Palindromes.Transducers
@@ -12,10 +12,15 @@ import Data.Algorithms.Palindromes.Transducers
 
 import qualified Data.Vector as V
 
--- | Represents cell location in the matrix. Format is: (row, colunm)
+{- | Represents the range of the substring of the input string containing a palindrome.
+Format: ([start index (inclusive)], [end index (exclusive)]).
+-}
 type PalRange = (Int, Int)
 
--- | Represents a cell in the matrix. The format is: (column, budget)
+{- | Represents a cell in the matrix. Each cell corresponds to some substring of the input
+string. The row is the index of the first character (inclusive) and the column is the
+index of the last character (inclusive) of the substring.
+-}
 data Cell = Cell
     { cellColumn :: Int
     , cellBudget :: Budget
@@ -25,22 +30,30 @@ data Cell = Cell
 -- | Represents a row in the matrix.
 type Row = [Cell]
 
+{- | The budget of a cell is the number of errors that can be added to the substring the
+cell corresponds to without exceeding the maximum number of errors.
+-}
 type Budget = Int
 
+{- | Find all maximal gapped approximate palindromes with a certain gap and a certain
+maximum number of errors.
+-}
 insertionDeletionAlgorithm
     :: (PalEq a)
     => Int
-    -- ^ The maximum size of the gap
+    -- ^ The size of the gap
     -> Int
     -- ^ The maximum number of errors
     -> V.Vector a
     -- ^ The input vector
     -> [PalRange]
---
+    -- ^ The list of found maximal gapped approximate palindromes
 insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y) states
   where
+    -- Use iterateTimes to get the states for efficiency.
     states = iterateTimes nrOfIterations (fillRow input gapSize maxErrors) startState
-    -- Required number of iterations is (+ 2) to also be able to spot maximal palindromes in two upper rows
+    {- Required number of iterations is (+ 2) to also be able to spot maximal palindromes
+    in the two upper rows. -}
     nrOfIterations = maxRow + 2
     startState =
         (
@@ -48,17 +61,17 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
                 { cellColumn = startColumn
                 , cellBudget = startBudget
                 }
-            ] -- start at the bottom right of the matrix
-        , [] -- no maximal palindromes found yet
-        , maxRow - 1 -- row number
+            ] -- This defines the entire bottom row of the matrix.
+        , [] -- no maximal palindromes found yet.
+        , maxRow - 1 -- row number of the row above the bottom row of the matrix.
         )
-    -- The index of the last row
+    -- The index of the last row.
     maxRow = V.length input - 1
-    -- The rightmost column we use
+    -- The column of the leftmost cell we use on the bottom row.
     startColumn = maxRow + gapSize
-    -- The budget for the rightmost cell of the matrix
+    -- The budget for the leftmost cell we use on the bottom row.
     startBudget
-        | gapSize > 0 = -1
+        | startColumn >= V.length input = -1
         | otherwise = maxErrors - errorCostAtPosition input (maxRow, startColumn)
 
 -- | Fills the next row and finds maximal palindromes in the previous row
@@ -76,26 +89,47 @@ fillRow
     -- ^ New state of the transducer
 fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowIndex - 1)
   where
-    sparsecells = sparsify (Cell{cellColumn = initialColumn, cellBudget = initialBudget} : row)
-    {- start with the leftmost cell in the row, which is shifted by gapSize.
-       A new cell needs to be added at the start of the row because we don't add one in the evaluatepositon part.
-       every row is extended one to the left when you go up by one (along the diagonal)-}
+    {- The first cell of the row below the current row. A new cell needs to be added at
+    the start of the previous row because we don't add one in the evaluatePosition part
+    and every row is extended one to the left when you go up one row. -}
+    firstCellPrevRow = Cell{cellColumn = initialColumn, cellBudget = initialBudget}
+
+    {- The initial column is directly below the diagonal on the previous row, so the
+    current rowIndex shifted by the gapSize. -}
     initialColumn = rowIndex + gapSize
+
+    -- The budget of the first cell of the previous row
     initialBudget :: Budget
     initialBudget
+        {- For the top row, the first cell has maxErrors, but only if the column is in
+        the bounds. -}
         | rowIndex == -1 && initialColumn >= 0 = maxErrors
-        | rowIndex < 0 = -1
-        | initialColumn >= V.length input = -1
+        {- For rows or columns out of bounds, the first cell of the previous row has no
+        budget left, because it represents an invalid substring. -}
+        | rowIndex < 0 || initialColumn >= V.length input = -1
+        {- In general, the first cell of the previous row has a budget of maxErrors,
+        because it represent an empty substring, which has no errors. -}
         | otherwise =
             maxErrors
+
+    -- Sparsify the previous row.
+    sparsecells =
+        sparsify (firstCellPrevRow : row)
+
+    {- Do a transducel2 using the previous, sparsified row. EvaluatePosition generates
+    tuples with the cell at a position as the second element and the cell to the
+    bottomleft of the evaluated position as a found gapped approximate maximal palindrome
+    if it is one. The TransduceExtractors thus only need to extract the second and third
+    elements of the tuples generated by evaluatePostion for each position. -}
     (newRow, foundMaxPals) =
         transducel2
             (evaluatePosition input rowIndex)
             (TransExtract (\(_, y, _) -> y) (const []))
             (TransExtract (\(_, _, z) -> z) (const []))
+            {- The row starts with 2 (virtual so they do not appear in the rows) cells
+            initialized to maxbudget. One to the left of the current row and one to the
+            left of the previous row. -}
             ((maxErrors, maxErrors), [], [])
-            {- the row starts with 2 (virtual so they do not appear in the rows) cells initialized to maxbudget
-            one as initializer for current row and one for the previous row -}
             sparsecells
 
 {- | Define a new cell (the cell above the input cell) with the correct budget and add
@@ -139,6 +173,9 @@ evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell{cellColumn =
         | bottomLeft >= 0 && topLeft < 0 && topRight < 0 && bottomRight < 0
         ]
 
+{- | Replace long sequences of cells with (-1) budgets with two cells with (-1) budgets,
+one on either end of the sequence.
+-}
 sparsify :: Row -> Row
 sparsify [] = []
 sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) =
@@ -150,6 +187,7 @@ sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) =
   where
     insertNegatives :: (Int, Row) -> Cell -> (Int, Row)
     insertNegatives (lastind, _) newCell@Cell{cellColumn = newIndex}
+        -- Place two cells on either side of the sequence of negative budgets.
         | newIndex - lastind > 2 =
             ( newIndex
             ,
@@ -158,19 +196,22 @@ sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) =
                 , newCell
                 ]
             )
+        -- Add one cell with (-1) budget back after it has apparently been filtered out before.
         | newIndex - lastind == 2 =
             (newIndex, [Cell{cellColumn = lastind + 1, cellBudget = -1}, newCell])
+        -- Do nothing.
         | otherwise = (newIndex, [newCell])
 
     -- Always add one -1 to the end of the sparsified row
     endf (lastPositiveColumnIndex, _) =
         [Cell{cellColumn = lastPositiveColumnIndex + 1, cellBudget = -1}]
 
--- | Returns first n elements of iterate f on start.
+-- | Returns first n elements of iterate f on start. This function is quite efficient.
 iterateTimes :: Int -> (a -> a) -> a -> [a]
 iterateTimes n f start = take n $ iterate f start
 
--- if elements are palindrome equal at position then no error cost, otherwise error cost of 1 for substitution
+{- If elements are palindrome equal at position then no error cost, otherwise error cost
+of 1 for a substitution error. -}
 errorCostAtPosition :: (PalEq a) => V.Vector a -> (Int, Int) -> Int
 errorCostAtPosition input (row, column)
     | (input V.! row) =:= (input V.! column) = 0

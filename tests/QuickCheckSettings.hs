@@ -3,7 +3,7 @@ module QuickCheckSettings
     ) where
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (ComLinear, ComQuadratic)
+    ( Complexity (ComInsertionDeletion, ComLinear, ComQuadratic)
     , OutputFormat (OutLength, OutLengths, OutWord, OutWords)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
     )
@@ -33,6 +33,22 @@ settingsList =
     , setting19
     , setting20
     , setting21
+    , setting22
+    , setting23
+    , setting24
+    , setting25
+    , setting26
+    , setting27
+    , setting28
+    , setting29
+    , setting30
+    , setting31
+    , setting32
+    , setting33
+    , setting34
+    , setting35
+    , setting36
+    , setting37
     ]
 
 setting1 :: Settings
@@ -182,3 +198,114 @@ setting21 =
         VarText
         OutLength
         (10, Nothing)
+setting22 =
+    Settings
+        (ComInsertionDeletion 10 5)
+        VarPunctuation
+        OutLength
+        (3, Nothing)
+setting23 :: Settings
+setting23 =
+    Settings
+        (ComInsertionDeletion 3 1)
+        VarPlain
+        OutLength
+        (0, Just 5)
+setting24 :: Settings
+setting24 =
+    Settings
+        (ComInsertionDeletion 3 5)
+        VarText
+        OutLength
+        (10, Just 100)
+setting25 :: Settings
+setting25 =
+    Settings
+        (ComInsertionDeletion 10 0)
+        VarPlain
+        OutLength
+        (0, Nothing)
+setting26 :: Settings
+setting26 =
+    Settings
+        (ComInsertionDeletion 0 1)
+        VarWord
+        OutLength
+        (3, Just 5)
+setting27 :: Settings
+setting27 =
+    Settings
+        (ComInsertionDeletion 10 5)
+        VarWord
+        OutLength
+        (0, Just 100)
+setting28 :: Settings
+setting28 =
+    Settings
+        (ComInsertionDeletion 10 0)
+        VarText
+        OutLength
+        (3, Just 5)
+setting29 :: Settings
+setting29 =
+    Settings
+        (ComInsertionDeletion 3 0)
+        VarWord
+        OutLength
+        (3, Nothing)
+setting30 :: Settings
+setting30 =
+    Settings
+        (ComInsertionDeletion 0 1)
+        VarPunctuation
+        OutLength
+        (0, Just 100)
+setting31 :: Settings
+setting31 =
+    Settings
+        (ComInsertionDeletion 0 5)
+        VarPlain
+        OutLength
+        (3, Just 100)
+setting32 :: Settings
+setting32 =
+    Settings
+        (ComInsertionDeletion 10 1)
+        VarDNA
+        OutLength
+        (10, Nothing)
+setting33 :: Settings
+setting33 =
+    Settings
+        (ComInsertionDeletion 3 0)
+        VarDNA
+        OutLength
+        (3, Just 100)
+setting34 :: Settings
+setting34 =
+    Settings
+        (ComInsertionDeletion 0 5)
+        VarDNA
+        OutLength
+        (0, Nothing)
+setting35 :: Settings
+setting35 =
+    Settings
+        (ComInsertionDeletion 3 1)
+        VarPunctuation
+        OutLength
+        (10, Nothing)
+setting36 :: Settings
+setting36 =
+    Settings
+        (ComInsertionDeletion 0 1)
+        VarText
+        OutLength
+        (0, Nothing)
+setting37 :: Settings
+setting37 =
+    Settings
+        (ComInsertionDeletion 0 5)
+        VarPlain
+        OutLength
+        (3, Just 5)

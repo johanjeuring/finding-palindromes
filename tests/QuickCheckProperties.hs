@@ -1,6 +1,7 @@
 module QuickCheckProperties (propertyList) where
 
 import Data.Char (isAlphaNum, isSpace, readLitChar, toLower)
+import Data.Foldable.Levenshtein (levenshtein', levenshteinDistance')
 import Data.Maybe (fromJust)
 import Test.QuickCheck
     ( Arbitrary
@@ -19,7 +20,7 @@ import Test.QuickCheck
 
 import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (ComLinear, ComQuadratic)
+    ( Complexity (..)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
     , findPalindromeRanges
     , findPalindromes
@@ -98,20 +99,53 @@ propValidPalindromeReverse settings = counterexample (show settings ++ " propert
         )
 
 extractPalEq :: Settings -> Palindrome -> Bool
-extractPalEq settings pal = case variant settings of
-    VarWord ->
-        checkMismatches errors $
-            removeGap gapLength (words (cleanOriginalString (palText pal)))
-    VarPlain -> checkMismatches errors $ removeGap gapLength (palText pal)
-    VarDNA ->
-        checkMismatches errors $
-            removeGap gapLength (map (fromJust . charToDNA) (palText pal))
-    _ ->
-        checkMismatches errors $ removeGap gapLength (cleanOriginalString (palText pal))
+extractPalEq settings pal = case complexity settings of
+    ComInsertionDeletion _ _ -> case variant settings of
+        VarWord -> isApproximatePalindrome (words (cleanOriginalString (palText pal)))
+        VarPlain -> isApproximatePalindrome (palText pal)
+        VarDNA -> isApproximatePalindrome (map (fromJust . charToDNA) (palText pal))
+        _ -> isApproximatePalindrome (cleanOriginalString (palText pal))
+    _ -> case variant settings of
+        VarWord -> isPalindrome (words (cleanOriginalString (palText pal)))
+        VarPlain -> isPalindrome (palText pal)
+        VarDNA -> isPalindrome (map (fromJust . charToDNA) (palText pal))
+        _ -> isPalindrome (cleanOriginalString (palText pal))
   where
     (gapLength, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
+        ComInsertionDeletion gap err -> (gap, err)
         ComLinear -> (0, 0)
+
+    isApproximatePalindrome :: (PalEq a) => [a] -> Bool
+    isApproximatePalindrome input =
+        []
+            /= filter
+                (\x -> x <= 2 * errors)
+                ( zipWith
+                    (levenshteinDistance' (=:=))
+                    (allPossibleGapless gapLength errors input)
+                    (reverse (allPossibleGapless gapLength errors input))
+                )
+    isPalindrome :: (PalEq a) => [a] -> Bool
+    isPalindrome input = checkMismatches errors $ removeGap gapLength input
+
+allPossibleGapless :: (PalEq a) => Int -> Int -> [a] -> [[a]]
+allPossibleGapless _ 0 palindrome = [palindrome]
+allPossibleGapless gapLength errors palindrome =
+    map
+        ( \error ->
+            gapLess
+                ( (length palindrome - toRemove - error) `div` 2
+                , length palindrome - toRemove - error `div` 2 + toRemove
+                )
+        )
+        [-errors .. errors]
+  where
+    gapLess (start, end) = take start palindrome ++ drop end palindrome
+    toRemove =
+        if even (length palindrome) == even gapLength || gapLength == 0
+            then gapLength
+            else gapLength - 1
 
 -- | Checks if the character string is a palindrome, taking gaps and errors into account
 checkMismatches :: (PalEq a) => Int -> [a] -> Bool

@@ -50,8 +50,11 @@ insertionDeletionAlgorithm
     -- ^ The list of found maximal gapped approximate palindromes
 insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y) states
   where
+    -- Bound the used gapSize to not be more than the length of the input.
+    gapSize' = min gapSize (V.length input)
+
     -- Use iterateTimes to get the states for efficiency.
-    states = iterateTimes nrOfIterations (fillRow input gapSize maxErrors) startState
+    states = iterateTimes nrOfIterations (fillRow input gapSize' maxErrors) startState
     {- Required number of iterations is (+ 2) to also be able to spot maximal palindromes
     in the two upper rows. -}
     nrOfIterations = maxRow + 2
@@ -68,7 +71,7 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
     -- The index of the last row.
     maxRow = V.length input - 1
     -- The column of the leftmost cell we use on the bottom row.
-    startColumn = maxRow + gapSize
+    startColumn = maxRow + gapSize'
     -- The budget for the leftmost cell we use on the bottom row.
     startBudget
         | startColumn >= V.length input = -1

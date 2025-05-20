@@ -52,7 +52,6 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
   where
     -- Bound the used gapSize to not be more than the length of the input.
     gapSize' = min gapSize (V.length input)
-
     -- Use iterateTimes to get the states for efficiency.
     states = iterateTimes nrOfIterations (fillRow input gapSize' maxErrors) startState
     {- Required number of iterations is (+ 2) to also be able to spot maximal palindromes
@@ -61,21 +60,20 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
     startState =
         (
             [ Cell
-                { cellColumn = startColumn
-                , cellBudget = startBudget
+                { {- We start the matrix on the bottom right, so at the last index of the
+                  input. -}
+                  cellColumn = lastIndex
+                , -- This cell corresponds to an empty substring, so it has no errors.
+                  cellBudget = maxErrors
                 }
             ] -- This defines the entire bottom row of the matrix.
         , [] -- no maximal palindromes found yet.
         , maxRow - 1 -- row number of the row above the bottom row of the matrix.
         )
-    -- The index of the last row.
-    maxRow = V.length input - 1
-    -- The column of the leftmost cell we use on the bottom row.
-    startColumn = maxRow + gapSize'
-    -- The budget for the leftmost cell we use on the bottom row.
-    startBudget
-        | startColumn >= V.length input = -1
-        | otherwise = maxErrors - errorCostAtPosition input (maxRow, startColumn)
+    -- The index of the last element of the input vector.
+    lastIndex = V.length input - 1
+    -- The index of the last row, adjusted with the gap size to ignore errors in the gap.
+    maxRow = lastIndex - gapSize' + 1
 
 -- | Fills the next row and finds maximal palindromes in the previous row
 fillRow
@@ -90,23 +88,23 @@ fillRow
     -- ^ Old state of the transducer
     -> (Row, [PalRange], Int)
     -- ^ New state of the transducer
-fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowIndex - 1)
+fillRow input gapSize maxErrors (row, _, rowIndex) =
+    (firstCell ++ newRow, foundMaxPals, rowIndex - 1)
   where
-    {- The first cell of the row below the current row. A new cell needs to be added at
-    the start of the previous row because we don't add one in the evaluatePosition part
-    and every row is extended one to the left when you go up one row. -}
-    firstCellPrevRow = Cell{cellColumn = initialColumn, cellBudget = initialBudget}
+    {- The first cell of the current row. A new cell needs to be added at
+    the start of this row because we don't add one in the evaluatePosition part
+    and every row has one more cell to the left than the previous row. -}
+    firstCell =
+        [ Cell{cellColumn = initialColumn, cellBudget = initialBudget}
+        | initialColumn >= 0
+        ]
 
-    {- The initial column is directly below the diagonal on the previous row, so the
-    current rowIndex shifted by the gapSize. -}
-    initialColumn = rowIndex + gapSize
+    -- The initial column is directly to the left of the diagonal on this row.
+    initialColumn = rowIndex + gapSize - 1
 
-    -- The budget of the first cell of the previous row
+    -- The budget of the first cell of this row
     initialBudget :: Budget
     initialBudget
-        {- For the top row, the first cell has maxErrors, but only if the column is in
-        the bounds. -}
-        | rowIndex == -1 && initialColumn >= 0 = maxErrors
         {- For rows or columns out of bounds, the first cell of the previous row has no
         budget left, because it represents an invalid substring. -}
         | rowIndex < 0 || initialColumn >= V.length input = -1
@@ -116,8 +114,8 @@ fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowI
             maxErrors
 
     -- Sparsify the previous row.
-    sparsecells =
-        sparsify (firstCellPrevRow : row)
+    sparsePrevRow =
+        sparsify row
 
     {- Do a transducel2 using the previous, sparsified row. EvaluatePosition generates
     tuples with the cell at a position as the second element and the cell to the
@@ -133,7 +131,7 @@ fillRow input gapSize maxErrors (row, _, rowIndex) = (newRow, foundMaxPals, rowI
             initialized to maxbudget. One to the left of the current row and one to the
             left of the previous row. -}
             ((maxErrors, maxErrors), [], [])
-            sparsecells
+            sparsePrevRow
 
 {- | Define a new cell (the cell above the input cell) with the correct budget and add
 bottom left cell to maxPals if it is maximal.

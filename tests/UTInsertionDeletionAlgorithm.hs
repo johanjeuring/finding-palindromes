@@ -206,7 +206,7 @@ testSmallDNAZeroErrors =
     TestCase $
         assertEqual
             "testSmallDNAZeroErrors"
-            [(0, 2), (2, 2), (3, 3)]
+            [(0, 2), (2, 2), (3, 3), (4, 4)]
             (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, T, G, G]))
 
 {- | Test the small DNA sequence with one error. The output represents strings [A, T, G]
@@ -226,7 +226,7 @@ testDNAAsZeroErrors =
     TestCase $
         assertEqual
             "testDNAAsZeroErrors"
-            [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8)]
+            [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9)]
             (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, A, A, A, A, A, A, A, A]))
 
 -- | test AAAAAAAAA with one errors
@@ -246,7 +246,7 @@ testBigDNAZeroErrors =
     TestCase $
         assertEqual
             "testBigDNAZeroErrors"
-            [(1, 1), (1, 3), (3, 3), (4, 4), (5, 5), (6, 6), (6, 8), (8, 8), (9, 9)]
+            [(1, 1), (1, 3), (3, 3), (4, 4), (5, 5), (6, 6), (6, 8), (8, 8), (9, 9), (10, 10)]
             (sort $ insertionDeletionAlgorithm 0 0 (V.fromList [A, G, C, A, A, G, T, A, A, C]))
 
 {- | Test a big (at least bigger than the small DNA sequence) DNA sequence with one

@@ -15,10 +15,10 @@ testListDNA t =
 
 testDNAPalindrome1 t =
     TestCase $
-        assertEqual "palindrome1" "gcgcgcatatatatgcgcgc" $
+        assertEqual "palindrome1" "[\"gcgcgcatatatatgcgcgc\"]" $
             longestDNAPalindrome t "gcgcgcatatatatgcgcgc"
 
 testDNAPalindrome2 t =
     TestCase $
-        assertEqual "palindrome1" "tatata" $
+        assertEqual "palindrome1" "[\"tatata\"]" $
             longestDNAPalindrome t "tatata"

@@ -22,28 +22,28 @@ testListPunctuation =
 testPunctuationPalindrome1 =
     "testPunctuationPalindrome1"
         ~: longestPunctuationPalindrome "what is non si, not?"
-        ~?= "is non si"
+        ~?= "[\"is non si\"]"
 testPunctuationPalindrome2 =
     "testPunctuationPalindrome2"
         ~: longestPunctuationPalindrome "what is non si"
-        ~?= "is non si"
+        ~?= "[\"is non si\"]"
 testPunctuationPalindrome3 =
     "testPunctuationPalindrome3"
         ~: longestPunctuationPalindrome "is non si, not?"
-        ~?= "is non si"
+        ~?= "[\"is non si\"]"
 testPunctuationPalindrome4 =
     "testPunctuationPalindrome4"
         ~: longestPunctuationPalindrome "aaaaba"
-        ~?= ""
+        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
 testPunctuationPalindrome5 =
     "testPunctuationPalindrome5"
         ~: longestPunctuationPalindrome "aaaab a"
-        ~?= "a"
+        ~?= "[\"a\"]"
 testPunctuationPalindrome6 =
     "testPunctuationPalindrome6"
         ~: longestPunctuationPalindrome "w waaw wo waw"
-        ~?= "waaw"
+        ~?= "[\"waaw\"]"
 testPunctuationPalindrome7 =
-    "tesPunctuationPalindrome7"
+    "testPunctuationPalindrome7"
         ~: longestPunctuationPalindrome "vwaawvxy v waaw v"
-        ~?= "v waaw v"
+        ~?= "[\"v waaw v\"]"

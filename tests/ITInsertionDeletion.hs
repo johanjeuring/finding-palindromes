@@ -75,7 +75,7 @@ testITInsertionDeletion2 =
             ComInsertionDeletion{maxIDError = 0}
             (4, Just 4)
             "A&T-AT"
-        ~?= "A&T-AT"
+        ~?= "[\"A&T-AT\"]"
 
 -- String: Does not contain a palindrome
 testITInsertionDeletion3 =
@@ -130,7 +130,7 @@ testITInsertionDeletion13 =
             ComInsertionDeletion{maxIDError = 1}
             (4, Nothing)
             "kabral"
-        ~?= "abra"
+        ~?= "[\"abra\"]"
 
 -- String: Contains no palindrome
 testITInsertionDeletion14 =
@@ -163,7 +163,7 @@ testITInsertionDeletion16 =
             ComInsertionDeletion{maxIDError = 0}
             (0, Nothing)
             "abba"
-        ~?= "abba"
+        ~?= "[\"abba\"]"
 
 -- String: Contains an odd palindrome with punctuation. Contains a special character.
 testITInsertionDeletion17 =
@@ -274,7 +274,7 @@ testITInsertionDeletion31 =
             ComInsertionDeletion{maxIDError = 2}
             (2, Just 5)
             "/abba/"
-        ~?= "abba"
+        ~?= "[\"abba\"]"
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion33 =
@@ -329,7 +329,7 @@ testITInsertionDeletion38 =
             ComInsertionDeletion{maxIDError = 0}
             (3, Just 3)
             "za.*ts&tat/”"
-        ~?= "tat"
+        ~?= "[\"tat\"]"
 
 -- String: Contains no palindrome, with punctuation
 testITInsertionDeletion39 =
@@ -362,7 +362,7 @@ testITInsertionDeletion41 =
             ComInsertionDeletion{maxIDError = 1}
             (1, Nothing)
             "a’b/ba"
-        ~?= "a’b/ba"
+        ~?= "[\"a’b/ba\"]"
 
 -- String: Contains an even palindrome
 testITInsertionDeletion42 =
@@ -384,7 +384,7 @@ testITInsertionDeletion43 =
             ComInsertionDeletion{maxIDError = 1}
             (2, Nothing)
             "l.e.p’e;l"
-        ~?= "l.e.p’e;l"
+        ~?= "[\"l.e.p’e;l\"]"
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion44 =
@@ -428,7 +428,7 @@ testITInsertionDeletion48 =
             ComInsertionDeletion{maxIDError = 7}
             (2, Nothing)
             "zatstat"
-        ~?= "zatstat"
+        ~?= "[\"zatstat\"]"
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion53 =
@@ -527,7 +527,7 @@ testITInsertionDeletion62 =
             ComInsertionDeletion{maxIDError = 9}
             (3, Just 6)
             "bye so bye"
-        ~?= "bye so bye"
+        ~?= "[\"bye so bye\"]"
 
 -- String: Contains an approximate even palindrome with punctuation
 testITInsertionDeletion63 =
@@ -538,7 +538,7 @@ testITInsertionDeletion63 =
             ComInsertionDeletion{maxIDError = 2}
             (2, Just 7)
             "Fout. Weer. Hi. Hi. Niet. Goed."
-        ~?= "Fout. Weer. Hi. Hi. Niet. Goed"
+        ~?= "[\"Fout. Weer. Hi. Hi. Niet. Goed\"]"
 
 -- String: Contains an approximate even palindrome
 testITInsertionDeletion64 =
@@ -615,4 +615,4 @@ testITInsertionDeletion74 =
             ComInsertionDeletion{maxIDError = 2}
             (3, Nothing)
             "onzin pal is pal gek"
-        ~?= "onzin pal is pal gek"
+        ~?= "[\"onzin pal is pal gek\"]"

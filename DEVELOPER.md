@@ -134,7 +134,7 @@ To check what is allocating memory to the heap you can pass different flags like
 One of the easiest ways to view this report is by using hp2pretty. You can install this using
 
 ```
-cabal install h2pretty
+cabal install hp2pretty
 ```
 
 Then afterwards you can run

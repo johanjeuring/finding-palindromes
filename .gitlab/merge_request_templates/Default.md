@@ -49,7 +49,9 @@ to validate the longest palindrome is not found correctly
 ## MR acceptance checklist
 
 - [ ] The code in the merge request completes all the elements in the ticket it is linked to.
-- [ ] The code is sufficiently tested.
+- [ ] The code is sufficiently tested, use HPC to check this!
 - [ ] All tests pass.
 - [ ] There are no new HLint warnings.
 - [ ] The code adheres to the style guide and is properly formatted.
+- [ ] The code structure makes sense and can not be easily improved.
+- [ ] No unused/commented out code and no TODO comments.

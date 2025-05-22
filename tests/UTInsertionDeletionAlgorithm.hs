@@ -26,6 +26,14 @@ testListInsertionDeletionAlgorithm =
     , testMississippiTwoErrors
     , testMississippiThreeErrors
     , testMississippiFourErrors
+    , testTextEvenGapZeroErrors
+    , testTextEvenGapOneError
+    , testTextEvenGapTwoErrors
+    , testTextEvenGapTwoErrorsBiggerInput
+    , testTextEvenGapThreeErrorsBiggerInput
+    , testTextOddGapZeroErrors
+    , testTextOddGapOneError
+    , testTextOddGapTwoErrors
     , testSmallDNAZeroErrors
     , testSmallDNAOneError
     , testDNAAsZeroErrors
@@ -276,6 +284,90 @@ testMississippiFourErrors =
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
             (insertionDeletionAlgorithm 0 4 (V.fromList "mississippi"))
+
+-- | Test text input with a non-zero even gap and no errors.
+testTextEvenGapZeroErrors :: Test
+testTextEvenGapZeroErrors =
+    TestCase $
+        assertEqual
+            "testTextEvenGapZeroErrors"
+            [(0, 2), (0, 6), (1, 3), (3, 5), (3, 7), (5, 7)]
+            (sort $ insertionDeletionAlgorithm 2 0 (V.fromList "dabcadc"))
+
+-- | Test text input with a non-zero even gap and one error.
+testTextEvenGapOneError :: Test
+testTextEvenGapOneError =
+    TestCase $
+        assertEqual
+            "testTextEvenGapOneError"
+            [(0, 7), (2, 7)]
+            (sort $ insertionDeletionAlgorithm 2 1 (V.fromList "dabcadc"))
+
+{- | Test text input with a non-zero even gap and two errors. The whole string is an
+approximate palindrome with one error and there are no substrings which are gapped
+maximal palindromes with 2 errors, so this should return the whole string.
+-}
+testTextEvenGapTwoErrors :: Test
+testTextEvenGapTwoErrors =
+    TestCase $
+        assertEqual
+            "testTextEvenGapTwoErrors"
+            [(0, 7)]
+            (sort $ insertionDeletionAlgorithm 2 2 (V.fromList "dabcadc"))
+
+{- | Test again with an even gap, but with bigger input with more interesting output when
+searching with a maximum of 2 errors.
+-}
+testTextEvenGapTwoErrorsBiggerInput :: Test
+testTextEvenGapTwoErrorsBiggerInput =
+    TestCase $
+        assertEqual
+            "testTextEvenGapTwoErrorsBiggerInput"
+            [(0, 9), (2, 10)]
+            (sort $ insertionDeletionAlgorithm 2 2 (V.fromList "cbadcabede"))
+
+{- | Use the same gap and input as "testTextEvenGapTwoErrorsBiggerInput", but search for
+maximum three errors. Should return the whole string.
+-}
+testTextEvenGapThreeErrorsBiggerInput :: Test
+testTextEvenGapThreeErrorsBiggerInput =
+    TestCase $
+        assertEqual
+            "testTextEvenGapThreeErrorsBiggerInput"
+            [(0, 10)]
+            (sort $ insertionDeletionAlgorithm 2 3 (V.fromList "cbadcabede"))
+
+{- | Test with an odd gap and zero errors. The gapSize is 3 and not 1, because 1 character
+is always a palindrome because of reflexitivity, so a gap of size 1 does not change the
+results.
+-}
+testTextOddGapZeroErrors :: Test
+testTextOddGapZeroErrors =
+    TestCase $
+        assertEqual
+            "testTextOddGapZeroErrors"
+            [(0, 3), (1, 5), (1, 7), (3, 8), (5, 8), (6, 9), (7, 10)]
+            (sort $ insertionDeletionAlgorithm 3 0 (V.fromList "cbdabdbacc"))
+
+-- | Test with an odd gap and one error.
+testTextOddGapOneError :: Test
+testTextOddGapOneError =
+    TestCase $
+        assertEqual
+            "testTextOddGapOneError"
+            [(0, 9), (2, 9), (5, 10)]
+            (sort $ insertionDeletionAlgorithm 3 1 (V.fromList "cbdabdbacc"))
+
+{- | Test with an odd gap and two errors. The only maximal gapped approximate palindrome
+satisfying these constraints is the whole string.
+-}
+testTextOddGapTwoErrors :: Test
+testTextOddGapTwoErrors =
+    TestCase $
+        assertEqual
+            "testTextOddGapTwoErrors"
+            [(0, 10)]
+            (sort $ insertionDeletionAlgorithm 3 2 (V.fromList "cbdabdbacc"))
 
 {- | Test a small DNA sequence with zero errors. Note that for an empty maximal
 approximate palindrome, the start character index is the same as the end character index.

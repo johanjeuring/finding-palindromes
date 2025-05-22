@@ -679,7 +679,7 @@ testITQuadratic54 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            (ComQuadratic 0 0)
+            ComQuadratic{gapSize = 0, maxError = 0}
             (1, Just 3)
             "blaAPPAbl"
         ~?= "[\"b\",\"l\",\"a\",\"aA\",\"A\",\"P\",\"P\",\"A\",\"b\",\"l\"]"
@@ -690,7 +690,7 @@ testITQuadratic55 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            (ComQuadratic 9 9)
+            ComQuadratic{gapSize = 9, maxError = 9}
             (4, Just 7)
             "blaAPAbli"
         ~?= "7"
@@ -701,7 +701,7 @@ testITQuadratic56 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            (ComQuadratic 3 2)
+            ComQuadratic{gapSize = 3, maxError = 2}
             (4, Just 7)
             "/blaAPa.bl.i.bl"
         ~?= "[\"blaAPa.b\",\"aAPa.bl.i\",\"APa.bl.i.b\",\"Pa.bl.i.bl\"]"
@@ -712,7 +712,7 @@ testITQuadratic57 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            (ComQuadratic 0 1)
+            ComQuadratic{gapSize = 0, maxError = 1}
             (0, Nothing)
             "aba gdc."
         ~?= "2"
@@ -723,7 +723,7 @@ testITQuadratic58 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            (ComQuadratic 0 0)
+            ComQuadratic{gapSize = 0, maxError = 0}
             (0, Nothing)
             "aba gdc"
         ~?= "[0,1,0,1,0]"
@@ -734,7 +734,7 @@ testITQuadratic59 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            (ComQuadratic 0 1)
+            ComQuadratic{gapSize = 0, maxError = 1}
             (2, Just 5)
             "Hello. hi hi “hello”"
         ~?= "[\"Hello. hi\",\"Hello. hi hi\",\"Hello. hi hi “hello\",\"hi hi “hello\",\"hi “hello\"]"
@@ -745,7 +745,7 @@ testITQuadratic60 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            (ComQuadratic 1 2)
+            ComQuadratic{gapSize = 1, maxError = 2}
             (6, Nothing)
             "hello hi hi hello"
         ~?= "No palindromes found"
@@ -756,7 +756,7 @@ testITQuadratic61 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            (ComQuadratic 3 3)
+            ComQuadratic{gapSize = 3, maxError = 3}
             (2, Nothing)
             "bye so    bye?"
         ~?= "[\"bye so\",\"bye so    bye\",\"so    bye\"]"
@@ -767,7 +767,7 @@ testITQuadratic62 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            (ComQuadratic 0 9)
+            ComQuadratic{gapSize = 0, maxError = 9}
             (3, Just 6)
             "bye so bye"
         ~?= "[\"bye so bye\"]"
@@ -778,7 +778,7 @@ testITQuadratic63 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            (ComQuadratic 0 2)
+            ComQuadratic{gapSize = 0, maxError = 2}
             (2, Just 7)
             "Fout. Weer. Hi. Hi. Niet. Goed."
         ~?= "[\"Fout. Weer. Hi. Hi. Niet. Goed\"]"
@@ -789,7 +789,7 @@ testITQuadratic64 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            (ComQuadratic 0 1)
+            ComQuadratic{gapSize = 0, maxError = 1}
             (0, Nothing)
             "fout weer hi hi niet goed"
         ~?= "4"
@@ -800,7 +800,7 @@ testITQuadratic65 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            (ComQuadratic 0 0)
+            ComQuadratic{gapSize = 0, maxError = 0}
             (2, Just 3)
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
         ~?= "No palindromes found"
@@ -811,7 +811,7 @@ testITQuadratic66 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            (ComQuadratic 9 9)
+            ComQuadratic{gapSize = 9, maxError = 9}
             (4, Nothing)
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[4,5,6,7,8,9,8,7,6,5,4]"
@@ -822,7 +822,7 @@ testITQuadratic67 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            (ComQuadratic 2 0)
+            ComQuadratic{gapSize = 2, maxError = 0}
             (2, Just 3)
             "Doei&& hi ik b(e)n ??? een mens hi doei"
         ~?= "[2,2,2,2,2,2,2]"
@@ -833,7 +833,7 @@ testITQuadratic68 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            (ComQuadratic 2 1)
+            ComQuadratic{gapSize = 2, maxError = 1}
             (3, Just 8)
             "doei hi ik ben een mens hi doei"
         ~?= "[\"doei hi ik\",\"doei hi ik ben\",\"hi ik ben\",\"hi ik ben een\",\"ik ben een\",\"doei hi ik ben een mens hi doei\",\"ben een mens\",\"ben een mens hi\",\"een mens hi\",\"een mens hi doei\",\"mens hi doei\"]"
@@ -844,7 +844,7 @@ testITQuadratic69 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            (ComQuadratic 3 1)
+            ComQuadratic{gapSize = 3, maxError = 1}
             (4, Just 9)
             "dag h?i dri/e gap size. ... hi dag"
         ~?= "[\"dag h?i dri/e gap size. ... hi dag\"]"
@@ -855,7 +855,7 @@ testITQuadratic70 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            (ComQuadratic 3 0)
+            ComQuadratic{gapSize = 3, maxError = 0}
             (2, Just 8)
             "dag hi drie gap size hi dag"
         ~?= "7"
@@ -866,7 +866,7 @@ testITQuadratic71 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            (ComQuadratic 6 6)
+            ComQuadratic{gapSize = 6, maxError = 6}
             (0, Nothing)
             ",onzin, .dit pal\n pal dit/ gek"
         ~?= "[\"\",\"onzin\",\"onzin, .dit\",\"onzin, .dit pal\",\"onzin, .dit pal\n pal\",\"onzin, .dit pal\n pal dit\",\"onzin, .dit pal\n pal dit/ gek\",\"dit pal\n pal dit/ gek\",\"pal\n pal dit/ gek\",\"pal dit/ gek\",\"dit/ gek\",\"gek\",\"\"]"
@@ -877,7 +877,7 @@ testITQuadratic72 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            (ComQuadratic 0 0)
+            ComQuadratic{gapSize = 0, maxError = 0}
             (0, Nothing)
             "onzin dit pal pal dit gek"
         ~?= "[0,1,0,1,0,1,4,1,0,1,0,1,0]"
@@ -888,7 +888,7 @@ testITQuadratic73 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            (ComQuadratic 0 1)
+            ComQuadratic{gapSize = 0, maxError = 1}
             (2, Just 5)
             "Onzin. pAl is. Pal gek"
         ~?= "[\"Onzin. pAl\",\"Onzin. pAl is\",\"pAl is\",\"Onzin. pAl is. Pal gek\",\"is. Pal\",\"is. Pal gek\",\"Pal gek\"]"
@@ -899,7 +899,7 @@ testITQuadratic74 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            (ComQuadratic 1 2)
+            ComQuadratic{gapSize = 1, maxError = 2}
             (3, Nothing)
             "onzin pal is pal gek"
         ~?= "[\"onzin pal is pal gek\"]"

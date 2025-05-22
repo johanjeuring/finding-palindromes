@@ -701,7 +701,7 @@ testITInsertionDeletion56 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            (ComInsertionDeletion 3 2)
+            ComInsertionDeletion{gapsID = 3, maxIDError = 2}
             (4, Nothing)
             "/blaAPa.bl.i.bl"
         ~?= "[\"Pa.bl.i.bl\",\"APa.bl.i.b\",\"blaAPa.bl.i.b\"]"
@@ -822,7 +822,7 @@ testITInsertionDeletion67 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            (ComInsertionDeletion 2 0)
+            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
             (2, Just 3)
             "Doei&& hi ik b(e)n ??? een mens hi doei"
         ~?= "[2,2,2,2,2,2,2]"
@@ -833,7 +833,7 @@ testITInsertionDeletion68 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            (ComInsertionDeletion 2 1)
+            ComInsertionDeletion{gapsID = 2, maxIDError = 1}
             (3, Just 8)
             "doei hi ik ben een mens hi doei"
         ~?= "[\"een mens hi doei\",\"ben een mens hi\",\"hi ik ben een\",\"doei hi ik ben\",\"doei hi ik ben een mens hi doei\"]"
@@ -844,7 +844,7 @@ testITInsertionDeletion69 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            (ComInsertionDeletion 3 1)
+            ComInsertionDeletion{gapsID = 3, maxIDError = 1}
             (4, Just 9)
             "dag h?i dri/e gap size. ... hi dag"
         ~?= "[\"dag h?i dri/e gap size. ... hi dag\"]"
@@ -855,7 +855,7 @@ testITInsertionDeletion70 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            (ComInsertionDeletion 3 0)
+            ComInsertionDeletion{gapsID = 3, maxIDError = 0}
             (2, Just 8)
             "dag hi drie gap size hi dag"
         ~?= "7"

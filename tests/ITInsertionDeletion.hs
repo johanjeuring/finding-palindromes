@@ -14,9 +14,16 @@ import Data.Algorithms.Palindromes.Finders
     )
 
 testListITInsertionDeletion =
-    [ testITInsertionDeletion2
+    [ testITInsertionDeletion1
+    , testITInsertionDeletion2
     , testITInsertionDeletion3
+    , testITInsertionDeletion4
+    , testITInsertionDeletion5
     , testITInsertionDeletion6
+    , testITInsertionDeletion7
+    , testITInsertionDeletion8
+    , testITInsertionDeletion9
+    , testITInsertionDeletion10
     , testITInsertionDeletion11
     , testITInsertionDeletion12
     , testITInsertionDeletion13
@@ -24,18 +31,25 @@ testListITInsertionDeletion =
     , testITInsertionDeletion15
     , testITInsertionDeletion16
     , testITInsertionDeletion17
+    , testITInsertionDeletion18
     , testITInsertionDeletion19
     , testITInsertionDeletion20
     , testITInsertionDeletion21
     , testITInsertionDeletion22
+    , testITInsertionDeletion23
+    , testITInsertionDeletion24
+    , testITInsertionDeletion25
+    , testITInsertionDeletion26
     , testITInsertionDeletion27
     , testITInsertionDeletion28
     , testITInsertionDeletion29
     , testITInsertionDeletion30
     , testITInsertionDeletion31
+    , testITInsertionDeletion32
     , testITInsertionDeletion33
     , testITInsertionDeletion34
     , testITInsertionDeletion35
+    , testITInsertionDeletion36
     , testITInsertionDeletion37
     , testITInsertionDeletion38
     , testITInsertionDeletion39
@@ -45,11 +59,17 @@ testListITInsertionDeletion =
     , testITInsertionDeletion43
     , testITInsertionDeletion44
     , testITInsertionDeletion45
+    , testITInsertionDeletion46
     , testITInsertionDeletion47
     , testITInsertionDeletion48
+    , testITInsertionDeletion49
+    , testITInsertionDeletion50
+    , testITInsertionDeletion51
+    , testITInsertionDeletion52
     , testITInsertionDeletion53
     , testITInsertionDeletion54
     , testITInsertionDeletion55
+    , testITInsertionDeletion56
     , testITInsertionDeletion57
     , testITInsertionDeletion58
     , testITInsertionDeletion59
@@ -60,11 +80,25 @@ testListITInsertionDeletion =
     , testITInsertionDeletion64
     , testITInsertionDeletion65
     , testITInsertionDeletion66
+    , testITInsertionDeletion67
+    , testITInsertionDeletion68
+    , testITInsertionDeletion69
+    , testITInsertionDeletion70
     , testITInsertionDeletion71
     , testITInsertionDeletion72
     , testITInsertionDeletion73
     , testITInsertionDeletion74
     ]
+
+testITInsertionDeletion1 =
+    "testITInsertionDeletion1"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutLength
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            (0, Nothing)
+            "AG\nTC"
+        ~?= "3"
 
 -- String: Contains a nested palindrome with punctuation
 testITInsertionDeletion2 =
@@ -88,6 +122,28 @@ testITInsertionDeletion3 =
             "AGTC"
         ~?= "[4]"
 
+-- String: Contains a gapped even palindrome
+testITInsertionDeletion4 =
+    "testITInsertionDeletion4"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutLengths
+            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            (2, Nothing)
+            "ACCT"
+        ~?= "[2,4,2]"
+
+-- String: Contains an odd-gapped dna palindrome
+testITInsertionDeletion5 =
+    "testITInsertionDeletion5"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutWords
+            ComInsertionDeletion{gapsID = 1, maxIDError = 2}
+            (3, Just 6)
+            "“AC\nTA..,TTCT”"
+        ~?= "No palindromes found" -- "[\"ACTATTCT\"]" after max removed
+
 -- String: Contains an even nested palindrome
 testITInsertionDeletion6 =
     "testITInsertionDeletion6"
@@ -98,6 +154,50 @@ testITInsertionDeletion6 =
             (3, Just 4)
             "ATAT"
         ~?= "[4]"
+
+-- String: Contains an even gapped palindrome with punctuation
+testITInsertionDeletion7 =
+    "testITInsertionDeletion7"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutWord
+            ComInsertionDeletion{gapsID = 4, maxIDError = 4}
+            (2, Just 3)
+            "Ac\nC,T”"
+        ~?= "No palindromes Found" -- "[\"Ac\nC,T”\"]" after max is removed
+
+-- String: Contains an odd gapped palindrome
+testITInsertionDeletion8 =
+    "testITInsertionDeletion8"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutWord
+            ComInsertionDeletion{gapsID = 1, maxIDError = 2}
+            (2, Just 3)
+            "ACTATTCT"
+        ~?= "No palindromes found" -- "[\"ACTATTCT\"]" after max is removed
+
+-- String: Contains an odd gapped palindrome
+testITInsertionDeletion9 =
+    "testITInsertionDeletion9"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutLength
+            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            (1, Just 6)
+            "AGGGT"
+        ~?= "2"
+
+-- String: Contains an odd gapped palindrome with punctuation
+testITInsertionDeletion10 =
+    "testITInsertionDeletion10"
+        ~: findPalindromesFormatted
+            VarDNA
+            OutWords
+            ComInsertionDeletion{gapsID = 5, maxIDError = 5}
+            (0, Nothing)
+            "A;G;G;G;T"
+        ~?= "[\"A;G;G;G;T\"]"
 
 -- String: Contains a palindrome with punctuation
 testITInsertionDeletion11 =
@@ -176,6 +276,17 @@ testITInsertionDeletion17 =
             "l.e.p’e;l"
         ~?= "[3]"
 
+-- String: Contains an odd palindrome
+testITInsertionDeletion18 =
+    "testITInsertionDeletion18"
+        ~: findPalindromesFormatted
+            VarPlain
+            OutWord
+            ComInsertionDeletion{gapsID = 5, maxIDError = 5}
+            (2, Nothing)
+            "lepel"
+        ~?= "[\"lepel\"]"
+
 -- String: Contains an approximate palindrome with punctuation
 testITInsertionDeletion19 =
     "testITInsertionDeletion19"
@@ -219,6 +330,50 @@ testITInsertionDeletion22 =
             (2, Just 5)
             "zatstat"
         ~?= "[3,5]"
+
+-- String: Contains an even gapped palindrome, with punctuation
+testITInsertionDeletion23 =
+    "testITInsertionDeletion23"
+        ~: findPalindromesFormatted
+            VarPlain
+            OutWords
+            ComInsertionDeletion{gapsID = 1, maxIDError = 2}
+            (5, Just 8)
+            "blaA\\Bc..dA;b.l#i"
+        ~?= "[\"b.l#i\",\";b.l#\",\"A;b.l\",\"..dA;\",\"..dA;b.\",\"Bc..dA\",\"\\Bc..\",\"A\\Bc.\",\"aA\\Bc\",\"laA\\B\",\"blaA\\\"]"
+
+-- String: Contains an even gapped palindrome
+testITInsertionDeletion24 =
+    "testITInsertionDeletion24"
+        ~: findPalindromesFormatted
+            VarPlain
+            OutLengths
+            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            (1, Nothing)
+            "blaABcdBAbli"
+        ~?= "[2,2,2,2,2,2,2,6,2,2,2]"
+
+-- String: Contains an odd gapped palindrome with punctuation
+testITInsertionDeletion25 =
+    "testITInsertionDeletion25"
+        ~: findPalindromesFormatted
+            VarPlain
+            OutWord
+            ComInsertionDeletion{gapsID = 10, maxIDError = 10}
+            (2, Nothing)
+            "A-B*cde)BA"
+        ~?= "[\"A-B*cde)BA\"]"
+
+-- String: Contains an odd gapped palindrome
+testITInsertionDeletion26 =
+    "testITInsertionDeletion26"
+        ~: findPalindromesFormatted
+            VarPlain
+            OutWord
+            ComInsertionDeletion{gapsID = 3, maxIDError = 2}
+            (4, Just 7)
+            "ABcdeBA"
+        ~?= "ABcdeBA"
 
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITInsertionDeletion27 :: Test
@@ -276,6 +431,17 @@ testITInsertionDeletion31 =
             "/abba/"
         ~?= "abba"
 
+-- String: Conains an even gapped palindrome
+testITInsertionDeletion32 =
+    "testITInsertionDeletion32"
+        ~: findPalindromesFormatted
+            VarPunctuation
+            OutLength
+            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            (1, Just 6)
+            ".,.ABcdBA,a"
+        ~?= "6"
+
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion33 =
     "testITInsertionDeletion33"
@@ -308,6 +474,17 @@ testITInsertionDeletion35 =
             (2, Nothing)
             "lepel”"
         ~?= "5"
+
+-- String: Contains an odd gapped palindrome with punctuation
+testITInsertionDeletion36 =
+    "testITInsertionDeletion36"
+        ~: findPalindromesFormatted
+            VarPunctuation
+            OutLength
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            (2, Just 3)
+            "AB/cde/BA"
+        ~?= "No palindromes found"
 
 -- String: Contains an approximate, even palindrome with punctuation
 testITInsertionDeletion37 =
@@ -408,6 +585,17 @@ testITInsertionDeletion45 =
             "kab^ra.L"
         ~?= "6"
 
+-- String: Contains an approximate even palindrome
+testITInsertionDeletion46 =
+    "testITInsertionDeletion46"
+        ~: findPalindromesFormatted
+            VarText
+            OutWord
+            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            (0, Nothing)
+            "kabral"
+        ~?= "abra"
+
 -- String: Contains an approximate odd palindrome
 testITInsertionDeletion47 =
     "testITInsertionDeletion47"
@@ -429,6 +617,50 @@ testITInsertionDeletion48 =
             (2, Nothing)
             "zatstat"
         ~?= "zatstat"
+
+-- String: Contains an even gapped palindrome with punctuation
+testITInsertionDeletion49 =
+    "testITInsertionDeletion49"
+        ~: findPalindromesFormatted
+            VarText
+            OutLength
+            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            (0, Nothing)
+            "blaA\\Bc..dA;b.l#i"
+        ~?= "5"
+
+-- String: Contains an even gapped palindrome
+testITInsertionDeletion50 =
+    "testITInsertionDeletion50"
+        ~: findPalindromesFormatted
+            VarText
+            OutWord
+            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            (2, Just 2)
+            "blaABcdBAbli"
+        ~?= "aA"
+
+-- String: Contains an odd gapped palindrome
+testITInsertionDeletion51 =
+    "testITInsertionDeletion51"
+        ~: findPalindromesFormatted
+            VarText
+            OutLengths
+            ComInsertionDeletion{gapsID = 0, maxIDError = 8}
+            (6, Nothing)
+            "A-B*cde)BA"
+        ~?= "[7]"
+
+-- String: Contains an odd gapped palindrome
+testITInsertionDeletion52 =
+    "testITInsertionDeletion52"
+        ~: findPalindromesFormatted
+            VarText
+            OutLengths
+            ComInsertionDeletion{gapsID = 3, maxIDError = 0}
+            (2, Nothing)
+            "ABcdeBA"
+        ~?= "[3,3,3,3,7]"
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion53 =
@@ -462,6 +694,17 @@ testITInsertionDeletion55 =
             (4, Just 7)
             "blaAPAbli"
         ~?= "No palindromes found"
+
+-- String: Contains an odd palindrome with punctuation
+testITInsertionDeletion56 =
+    "testITInsertionDeletion56"
+        ~: findPalindromesFormatted
+            VarText
+            OutWords
+            (ComInsertionDeletion 3 2)
+            (4, Just 7)
+            "/blaAPa.bl.i.bl"
+        ~?= "[\"blaAPa.bl.i.b\",\"APa.bl.i.b\",\"Pa.bl.i.bl\"]"
 
 -- String: Contains no palindromes, has punctuation
 testITInsertionDeletion57 =
@@ -572,6 +815,50 @@ testITInsertionDeletion66 =
             (4, Nothing)
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[9]"
+
+-- String: Contains a gapped even palindrome with punctuation
+testITInsertionDeletion67 =
+    "testITInsertionDeletion67"
+        ~: findPalindromesFormatted
+            VarWord
+            OutLengths
+            (ComInsertionDeletion 2 0)
+            (2, Just 3)
+            "Doei&& hi ik b(e)n ??? een mens hi doei"
+        ~?= "[2,2,2,2,2,2,2]"
+
+-- String: Contains a gapped even palindrome
+testITInsertionDeletion68 =
+    "testITInsertionDeletion68"
+        ~: findPalindromesFormatted
+            VarWord
+            OutWords
+            (ComInsertionDeletion 2 1)
+            (3, Just 8)
+            "doei hi ik ben een mens hi doei"
+        ~?= "[\"doei hi ik ben een mens hi doei\"]"
+
+-- String: Contains a gapped odd palindrome with punctuation
+testITInsertionDeletion69 =
+    "testITInsertionDeletion69"
+        ~: findPalindromesFormatted
+            VarWord
+            OutWord
+            (ComInsertionDeletion 3 1)
+            (4, Just 9)
+            "dag h?i dri/e gap size. ... hi dag"
+        ~?= "[\"dag h?i dri/e gap size. ... hi dag\"]"
+
+-- String: Contains a gapped odd palindrome
+testITInsertionDeletion70 =
+    "testITInsertionDeletion70"
+        ~: findPalindromesFormatted
+            VarWord
+            OutLength
+            (ComInsertionDeletion 3 0)
+            (2, Just 8)
+            "dag hi drie gap size hi dag"
+        ~?= "7"
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion71 =

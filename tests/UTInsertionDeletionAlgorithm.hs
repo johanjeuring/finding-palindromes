@@ -273,7 +273,7 @@ testMississippiThreeErrors =
             "testMississippiThreeErrors"
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
-            (insertionDeletionAlgorithm 0 3 (V.fromList "mississippi"))
+            (sort $ insertionDeletionAlgorithm 0 3 (V.fromList "mississippi"))
 
 -- | Test the string "mississippi" with four errors.
 testMississippiFourErrors :: Test
@@ -283,7 +283,7 @@ testMississippiFourErrors =
             "testMississippiFourErrors"
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
-            (insertionDeletionAlgorithm 0 4 (V.fromList "mississippi"))
+            (sort $ insertionDeletionAlgorithm 0 4 (V.fromList "mississippi"))
 
 -- | Test text input with a non-zero even gap and no errors.
 testTextEvenGapZeroErrors :: Test

@@ -42,7 +42,7 @@ import Data.Algorithms.Palindromes.Output
     , indicesInOutputWord
     , lengthAt
     , longestLength
-    , longestWord
+    , longestWords
     , rangeToText
     , wordAt
     )
@@ -87,7 +87,7 @@ in finding functions.
 data OutputFormat
     = -- | Output the length of the longest palindrome
       OutLength
-    | -- | Output longest palindrome as text
+    | -- | Output all longest palindromes of same size as text
       OutWord
     | -- | Output the lengths of all maximal palindromes around each center
       OutLengths
@@ -214,7 +214,7 @@ formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
 formatPalindromes outputFormat pals = case outputFormat of
     OutLength -> longestLength lengths
-    OutWord -> longestWord pals
+    OutWord -> longestWords pals
     OutLengths -> allLengths lengths
     OutWords -> allWords pals
     OutLengthAt x -> lengthAt x lengths

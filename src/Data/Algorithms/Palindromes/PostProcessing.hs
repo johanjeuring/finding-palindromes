@@ -15,10 +15,7 @@ modifier if one is set, and for the punctuation type to shorten palindromes to
 punctuation.
 -}
 module Data.Algorithms.Palindromes.PostProcessing
-    ( filterMin
-    , filterMax
-    , filterExact
-    , filterPunctuation
+    ( filterPunctuation
     ) where
 
 import Data.Char (isLetter)
@@ -26,16 +23,6 @@ import Data.Char (isLetter)
 import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
 
 import qualified Data.Vector as V
-
--- Length modifier filtering
-filterMin :: Int -> [Int] -> [Int]
-filterMin 0 = id
-filterMin min_ = map (\x -> if x < min_ then -1 else x)
-filterMax :: Maybe Int -> [Int] -> [Int]
-filterMax Nothing = id
-filterMax (Just max_) = map (\x -> if x > max_ then -1 else x)
-filterExact :: Int -> [Int] -> [Int]
-filterExact n = map (\x -> if x == n then x else -1)
 
 -- | This function changes the a list of ranges for punctuation palindromes by shrinking to punctuation.
 filterPunctuation :: String -> [(Int, Int)] -> [(Int, Int)]

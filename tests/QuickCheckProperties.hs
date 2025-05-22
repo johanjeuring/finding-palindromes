@@ -116,6 +116,9 @@ extractPalEq settings pal = case complexity settings of
         ComInsertionDeletion gap err -> (gap, err)
         ComLinear -> (0, 0)
 
+    {- if any of the possible removed gaps has levenshteinDistance with its reverse is
+    less than 2 * errors we have an a valid approximate palindromes. This is because
+    2 * errors is equivalent to the levenshteinDistance -}
     isApproximatePalindrome :: (PalEq a) => [a] -> Bool
     isApproximatePalindrome input =
         any
@@ -128,6 +131,7 @@ extractPalEq settings pal = case complexity settings of
     isPalindrome :: (PalEq a) => [a] -> Bool
     isPalindrome input = checkMismatches errors $ removeGap 0 gapLength input
 
+-- for approximate palindromes the gap can be shifted due to insertions, so we need all.
 allPossibleGapless :: (PalEq a) => Int -> Int -> [a] -> [[a]]
 allPossibleGapless 0 _ palindrome = [palindrome]
 allPossibleGapless gap 0 palindrome = [removeGap 0 gap palindrome]

@@ -49,6 +49,7 @@ settingsList =
     , setting35
     , setting36
     , setting37
+    , setting38
     ]
 
 setting1 :: Settings
@@ -309,3 +310,10 @@ setting37 =
         VarPlain
         OutLength
         (3, Just 5)
+setting38 :: Settings
+setting38 =
+    Settings
+        (ComInsertionDeletion 2 3)
+        VarDNA
+        OutLength
+        (0, Nothing)

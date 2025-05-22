@@ -118,34 +118,21 @@ extractPalEq settings pal = case complexity settings of
 
     isApproximatePalindrome :: (PalEq a) => [a] -> Bool
     isApproximatePalindrome input =
-        []
-            /= filter
-                (\x -> x <= 2 * errors)
-                ( zipWith
-                    (levenshteinDistance' (=:=))
-                    (allPossibleGapless gapLength errors input)
-                    (reverse (allPossibleGapless gapLength errors input))
-                )
+        any
+            (\x -> x <= 2 * errors)
+            ( zipWith
+                (levenshteinDistance' (=:=))
+                (allPossibleGapless gapLength errors input)
+                (map reverse (allPossibleGapless gapLength errors input))
+            )
     isPalindrome :: (PalEq a) => [a] -> Bool
-    isPalindrome input = checkMismatches errors $ removeGap gapLength input
+    isPalindrome input = checkMismatches errors $ removeGap 0 gapLength input
 
 allPossibleGapless :: (PalEq a) => Int -> Int -> [a] -> [[a]]
-allPossibleGapless _ 0 palindrome = [palindrome]
-allPossibleGapless gapLength errors palindrome =
-    map
-        ( \error ->
-            gapLess
-                ( (length palindrome - toRemove - error) `div` 2
-                , length palindrome - toRemove - error `div` 2 + toRemove
-                )
-        )
-        [-errors .. errors]
-  where
-    gapLess (start, end) = take start palindrome ++ drop end palindrome
-    toRemove =
-        if even (length palindrome) == even gapLength || gapLength == 0
-            then gapLength
-            else gapLength - 1
+allPossibleGapless 0 _ palindrome = [palindrome]
+allPossibleGapless gap 0 palindrome = [removeGap 0 gap palindrome]
+allPossibleGapless gap errors palindrome =
+    map (\e -> removeGap e gap palindrome) [-errors .. errors]
 
 -- | Checks if the character string is a palindrome, taking gaps and errors into account
 checkMismatches :: (PalEq a) => Int -> [a] -> Bool
@@ -159,15 +146,17 @@ checkMismatches errors pal' = mismatches <= errors
             ]
 
 -- | Removes gap from palindrome
-removeGap :: Int -> [a] -> [a]
-removeGap gapLength palindrome = take start palindrome ++ drop end palindrome
+removeGap :: Int -> Int -> [a] -> [a]
+removeGap ofset gapLength palindrome = take start palindrome ++ drop end palindrome
   where
-    start = (length palindrome - toRemove) `div` 2
-    end = start + toRemove
-    toRemove =
-        if even (length palindrome) == even gapLength || gapLength == 0
-            then gapLength
-            else gapLength - 1
+    start = (length palindrome - adjustedGap + ofset) `div` 2
+    end = start + adjustedGap
+    adjustGap = if even ofset then not adjustWhenOddOfset else adjustWhenOddOfset
+    adjustWhenOddOfset = even (length palindrome) == even gapLength || gapLength == 0
+    adjustedGap =
+        if adjustGap
+            then gapLength - 1
+            else gapLength
 
 -- Property 3 ---------------------------------------------------------
 

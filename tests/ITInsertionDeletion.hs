@@ -131,7 +131,7 @@ testITInsertionDeletion4 =
             ComInsertionDeletion{gapsID = 2, maxIDError = 0}
             (2, Nothing)
             "ACCT"
-        ~?= "[2,4,2]"
+        ~?= "[2,2,4]"
 
 -- String: Contains an odd-gapped dna palindrome
 testITInsertionDeletion5 =
@@ -164,7 +164,7 @@ testITInsertionDeletion7 =
             ComInsertionDeletion{gapsID = 4, maxIDError = 4}
             (2, Just 3)
             "Ac\nC,T”"
-        ~?= "No palindromes Found" -- "[\"Ac\nC,T”\"]" after max is removed
+        ~?= "No palindromes found" -- "[\"Ac\nC,T”\"]" after max is removed
 
 -- String: Contains an odd gapped palindrome
 testITInsertionDeletion8 =
@@ -373,7 +373,7 @@ testITInsertionDeletion26 =
             ComInsertionDeletion{gapsID = 3, maxIDError = 2}
             (4, Just 7)
             "ABcdeBA"
-        ~?= "ABcdeBA"
+        ~?= "[\"ABcdeBA\"]"
 
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITInsertionDeletion27 :: Test
@@ -594,7 +594,7 @@ testITInsertionDeletion46 =
             ComInsertionDeletion{gapsID = 2, maxIDError = 0}
             (0, Nothing)
             "kabral"
-        ~?= "abra"
+        ~?= "[\"abra\"]"
 
 -- String: Contains an approximate odd palindrome
 testITInsertionDeletion47 =
@@ -638,7 +638,7 @@ testITInsertionDeletion50 =
             ComInsertionDeletion{gapsID = 0, maxIDError = 0}
             (2, Just 2)
             "blaABcdBAbli"
-        ~?= "aA"
+        ~?= "[\"aA\"]"
 
 -- String: Contains an odd gapped palindrome
 testITInsertionDeletion51 =
@@ -702,9 +702,9 @@ testITInsertionDeletion56 =
             VarText
             OutWords
             (ComInsertionDeletion 3 2)
-            (4, Just 7)
+            (4, Nothing)
             "/blaAPa.bl.i.bl"
-        ~?= "[\"blaAPa.bl.i.b\",\"APa.bl.i.b\",\"Pa.bl.i.bl\"]"
+        ~?= "[\"Pa.bl.i.bl\",\"APa.bl.i.b\",\"blaAPa.bl.i.b\"]"
 
 -- String: Contains no palindromes, has punctuation
 testITInsertionDeletion57 =
@@ -836,7 +836,7 @@ testITInsertionDeletion68 =
             (ComInsertionDeletion 2 1)
             (3, Just 8)
             "doei hi ik ben een mens hi doei"
-        ~?= "[\"doei hi ik ben een mens hi doei\"]"
+        ~?= "[\"een mens hi doei\",\"ben een mens hi\",\"hi ik ben een\",\"doei hi ik ben\",\"doei hi ik ben een mens hi doei\"]"
 
 -- String: Contains a gapped odd palindrome with punctuation
 testITInsertionDeletion69 =

@@ -25,10 +25,7 @@ module Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
-    , LengthMod
     ) where
-
-import Data.Maybe (fromJust, isNothing)
 
 import Data.Algorithms.Palindromes.Algorithms
     ( insertionDeletionAlgorithm
@@ -108,9 +105,6 @@ data Complexity
     | ComInsertionDeletion {maxIDError :: Int}
     deriving (Show)
 
--- | The minimum and maximum length of the palindromes you want to find.
-type LengthMod = (Int, Maybe Int)
-
 {- This method returns whether uneven palindromes are impossible to exist based on the
 query settings. -}
 onlyEvenPals :: Variant -> Complexity -> Bool
@@ -170,8 +164,8 @@ findPalindromeRanges variant complexity input =
 It first finds all the palindrome ranges based on the settings,
 then filters them by length and finally converts the found ranges to the Palindrome datatype
 -}
-findPalindromes :: Variant -> Complexity -> LengthMod -> String -> [Palindrome]
-findPalindromes variant complexity (minlen, maxlen) input =
+findPalindromes :: Variant -> Complexity -> Int -> String -> [Palindrome]
+findPalindromes variant complexity minlen input =
     map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity input
   where
     rangeToPalindrome :: (Int, Int) -> Palindrome
@@ -183,12 +177,7 @@ findPalindromes variant complexity (minlen, maxlen) input =
             }
 
     filterRanges :: [(Int, Int)] -> [(Int, Int)]
-    filterRanges =
-        filter
-            ( \range ->
-                (isNothing maxlen || rangeToLength range <= fromJust maxlen)
-                    && rangeToLength range >= minlen
-            )
+    filterRanges = filter ((>= minlen) . rangeToLength)
 
     -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
     indicesInOriginal :: (Int, Int) -> (Int, Int)
@@ -206,9 +195,9 @@ String that can be printed. It return the palindrome found using the settings, f
 to the given outputFormat.
 -}
 findPalindromesFormatted
-    :: Variant -> OutputFormat -> Complexity -> LengthMod -> String -> String
-findPalindromesFormatted variant outputFormat complexity lengthmod input =
-    formatPalindromes outputFormat $ findPalindromes variant complexity lengthmod input
+    :: Variant -> OutputFormat -> Complexity -> Int -> String -> String
+findPalindromesFormatted variant outputFormat complexity minlen input =
+    formatPalindromes outputFormat $ findPalindromes variant complexity minlen input
 
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"

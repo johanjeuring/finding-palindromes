@@ -83,9 +83,9 @@ testITLinear1 =
             VarDNA
             OutWord
             ComLinear
-            (0, Just 0)
+            0
             "A\nTAT"
-        ~?= "[\"\",\"\"]"
+        ~?= "[\"A\nTAT\"]"
 
 -- String: Even palindrome
 testITLinear2 =
@@ -94,7 +94,7 @@ testITLinear2 =
             VarText
             OutLength
             ComLinear
-            (10, Nothing)
+            10
             "abcdeedcba"
         ~?= "10"
 
@@ -105,7 +105,7 @@ testITLinear3 =
             VarWord
             OutWords
             ComLinear
-            (7, Just 7)
+            7
             "Word, word, word, palindrome. Word. Word, word."
         ~?= "[\"Word, word, word, palindrome. Word. Word, word\"]"
 
@@ -116,7 +116,7 @@ testITLinear4 =
             VarText
             OutLengths
             ComLinear
-            (0, Just 3)
+            0
             "nopalindromes"
         ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]"
 
@@ -127,7 +127,7 @@ testITLinear5 =
             VarWord
             OutLengths
             ComLinear
-            (6, Just 6)
+            6
             "Has? ...A palindrome; palindrome a has."
         ~?= "[6]"
 
@@ -138,9 +138,9 @@ testITLinear6 =
             VarPlain
             OutWords
             ComLinear
-            (3, Just 4)
+            3
             "~ehhe~"
-        ~?= "No palindromes found"
+        ~?= "[\"~ehhe~\"]"
 
 -- String: Not a palindrome. Contains no punctuation
 testITLinear7 =
@@ -149,7 +149,7 @@ testITLinear7 =
             VarPlain
             OutLength
             ComLinear
-            (10, Nothing)
+            10
             "abcdefghij"
         ~?= "No palindromes found"
 
@@ -160,7 +160,7 @@ testITLinear8 =
             VarPunctuation
             OutLength
             ComLinear
-            (0, Nothing)
+            0
             "b abba, ...bc"
         ~?= "4"
 
@@ -171,9 +171,9 @@ testITLinear9 =
             VarPlain
             OutLengths
             ComLinear
-            (0, Just 3)
+            0
             "damittimad"
-        ~?= "[0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0]"
+        ~?= "[0,1,0,1,0,1,0,1,0,1,10,1,0,1,0,1,0,1,0,1,0]"
 
 -- String: Contains an even, nested palindrome
 testITLinear10 =
@@ -182,9 +182,9 @@ testITLinear10 =
             VarPlain
             OutWord
             ComLinear
-            (0, Just 7)
+            0
             "yabaddabadoo"
-        ~?= "[\"dabad\"]"
+        ~?= "[\"abaddaba\"]"
 
 -- String: Contains an even palindrome, contains punctuation
 testITLinear11 =
@@ -193,7 +193,7 @@ testITLinear11 =
             VarPunctuation
             OutWords
             ComLinear
-            (0, Nothing)
+            0
             "dam'itt!  \\ I'm ?ad."
         ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"dam'itt!  \\ I'm ?ad\",\"\",\"\",\"I\",\"\",\"m\",\"\",\"\",\"\",\"\",\"\"]"
 
@@ -204,7 +204,7 @@ testITLinear12 =
             VarPunctuation
             OutWord
             ComLinear
-            (23, Just 25)
+            23
             "level mad dog a goddam level"
         ~?= "[\"level mad dog a goddam level\"]"
 
@@ -215,7 +215,7 @@ testITLinear13 =
             VarPunctuation
             OutLengths
             ComLinear
-            (3, Nothing)
+            3
             "abcdcba-"
         ~?= "[7]"
 
@@ -226,9 +226,9 @@ testITLinear14 =
             VarWord
             OutWords
             ComLinear
-            (0, Just 2)
+            0
             "word palindrome palindrome word"
-        ~?= "[\"\",\"word\",\"\",\"palindrome\",\"palindrome\",\"\",\"word\",\"\"]"
+        ~?= "[\"\",\"word\",\"\",\"palindrome\",\"word palindrome palindrome word\",\"palindrome\",\"\",\"word\",\"\"]"
 
 -- String: Contains an odd punctuation palindrome
 testITLinear15 =
@@ -237,7 +237,7 @@ testITLinear15 =
             VarText
             OutWord
             ComLinear
-            (23, Just 28)
+            23
             "keybo{  ..  }ardmash, samdrao   byek'"
         ~?= "[\"keybo{  ..  }ardmash, samdrao   byek\"]"
 
@@ -248,7 +248,7 @@ testITLinear16 =
             VarText
             OutWords
             ComLinear
-            (1, Just 8)
+            1
             "a#b, ,c^D efg[h"
         ~?= "[\"a\",\"b\",\"c\",\"D\",\"e\",\"f\",\"g\",\"h\"]"
 
@@ -259,7 +259,7 @@ testITLinear17 =
             VarPlain
             OutWords
             ComLinear
-            (3, Nothing)
+            3
             "nopalindromes"
         ~?= "No palindromes found"
 
@@ -270,7 +270,7 @@ testITLinear18 =
             VarWord
             OutWord
             ComLinear
-            (2, Nothing)
+            2
             "Odd palindrome, odd- ly enough :)"
         ~?= "[\"Odd palindrome, odd\"]"
 
@@ -281,7 +281,7 @@ testITLinear19 =
             VarText
             OutLength
             ComLinear
-            (2, Just 5)
+            2
             ".ehhe~"
         ~?= "4"
 
@@ -292,9 +292,9 @@ testITLinear20 =
             VarDNA
             OutLength
             ComLinear
-            (4, Just 9)
+            4
             "ATATGCGCATAT"
-        ~?= "4"
+        ~?= "12"
 
 -- String: Contains an even nested palindrome
 testITLinear21 =
@@ -303,7 +303,7 @@ testITLinear21 =
             VarWord
             OutLength
             ComLinear
-            (10, Just 0)
+            10
             "That that, that that that -that that that refers to-"
         ~?= "No palindromes found"
 
@@ -314,7 +314,7 @@ testITLinear22 =
             VarWord
             OutLength
             ComLinear
-            (5, Just 8)
+            5
             "A simple palindrome. Simple, a (ye)?"
         ~?= "5"
 
@@ -325,7 +325,7 @@ testITLinear23 =
             VarDNA
             OutLengths
             ComLinear
-            (2, Nothing)
+            2
             "ATTCGGCGCAAT"
         ~?= "[2,2,2,4,2,2]"
 
@@ -336,7 +336,7 @@ testITLinear24 =
             VarText
             OutWord
             ComLinear
-            (6, Just 10)
+            6
             "ab:c|+cba..."
         ~?= "[\"ab:c|+cba\"]"
 
@@ -347,9 +347,9 @@ testITLinear25 =
             VarPlain
             OutWords
             ComLinear
-            (0, Just 0)
+            0
             "ennestedetsenne"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"\",\"e\",\"\",\"n\",\"enne\",\"n\",\"\",\"e\",\"\",\"s\",\"\",\"t\",\"\",\"e\",\"\",\"ennestedetsenne\",\"\",\"e\",\"\",\"t\",\"\",\"s\",\"\",\"e\",\"\",\"n\",\"enne\",\"n\",\"\",\"e\",\"\"]"
 
 -- String: Contains an odd palindrome with punctuation
 testITLinear26 =
@@ -358,7 +358,7 @@ testITLinear26 =
             VarPunctuation
             OutLength
             ComLinear
-            (7, Just 8)
+            7
             "*abc-dc ba#"
         ~?= "7"
 
@@ -369,7 +369,7 @@ testITLinear27 =
             VarWord
             OutLength
             ComLinear
-            (0, Nothing)
+            0
             "nested odd word odd palindrome odd word odd nested"
         ~?= "9"
 
@@ -380,7 +380,7 @@ testITLinear28 =
             VarDNA
             OutLength
             ComLinear
-            (0, Nothing)
+            0
             "TATG\nCGATC  GCA.TAGC"
         ~?= "14"
 
@@ -391,9 +391,9 @@ testITLinear29 =
             VarPunctuation
             OutWord
             ComLinear
-            (0, Just 8)
+            0
             "d*eif:ied a-+bba deifie;d!"
-        ~?= "[\"d*eif:ied\",\"deifie;d\"]"
+        ~?= "[\"d*eif:ied a-+bba deifie;d\"]"
 
 -- String: Contains an odd nested palindrome
 testITLinear30 =
@@ -402,7 +402,7 @@ testITLinear30 =
             VarText
             OutLengths
             ComLinear
-            (0, Nothing)
+            0
             "abcbababcba"
         ~?= "[0,1,0,1,0,5,0,1,0,3,0,11,0,3,0,1,0,5,0,1,0,1,0]"
 
@@ -413,7 +413,7 @@ testITLinear31 =
             VarDNA
             OutLength
             ComLinear
-            (4, Nothing)
+            4
             "AT\nATAT-A\tT"
         ~?= "8"
 
@@ -424,7 +424,7 @@ testITLinear32 =
             VarPunctuation
             OutWord
             ComLinear
-            (18, Just 18)
+            18
             "evil is a deed as I live"
         ~?= "[\"evil is a deed as I live\"]"
 
@@ -435,9 +435,9 @@ testITLinear33 =
             VarText
             OutLengths
             ComLinear
-            (0, Just 0)
+            0
             "abbaccabba"
-        ~?= "[0,0,0,0,0,0,0,0]"
+        ~?= "[0,1,0,1,4,1,0,1,0,1,10,1,0,1,0,1,4,1,0,1,0]"
 
 -- String: Contains an even palindrome with punctuation
 testITLinear34 =
@@ -446,7 +446,7 @@ testITLinear34 =
             VarDNA
             OutWords
             ComLinear
-            (14, Nothing)
+            14
             "TATG\nCGATC  GCA.TA"
         ~?= "[\"TATG\nCGATC  GCA.TA\"]"
 
@@ -457,7 +457,7 @@ testITLinear35 =
             VarWord
             OutWord
             ComLinear
-            (3, Nothing)
+            3
             "Thi,s is not a p-alindro'me."
         ~?= "No palindromes found"
 
@@ -468,7 +468,7 @@ testITLinear36 =
             VarWord
             OutWords
             ComLinear
-            (3, Nothing)
+            3
             "A simple palindrome. Simple, a (ye)?"
         ~?= "[\"A simple palindrome. Simple, a\"]"
 
@@ -479,9 +479,9 @@ testITLinear37 =
             VarPunctuation
             OutWords
             ComLinear
-            (1, Just 8)
+            1
             "d*eif:ied a-+bba deifie;d!"
-        ~?= "[\"d\",\"d*eif:ied\",\"a\",\"deifie;d\",\"d\"]"
+        ~?= "[\"d\",\"d*eif:ied\",\"a\",\"d*eif:ied a-+bba deifie;d\",\"deifie;d\",\"d\"]"
 
 -- String: Contains no palindrome, contains punctuation
 testITLinear38 =
@@ -490,7 +490,7 @@ testITLinear38 =
             VarPunctuation
             OutLengths
             ComLinear
-            (21, Nothing)
+            21
             "Thi,s is not a p-alindro'me."
         ~?= "No palindromes found"
 
@@ -501,9 +501,9 @@ testITLinear39 =
             VarDNA
             OutWord
             ComLinear
-            (0, Just 0)
+            0
             "ATGCGCATTA"
-        ~?= "[\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"ATGCGCAT\"]"
 
 -- String: Contains no palindrome, contains punctuation
 testITLinear40 =
@@ -512,7 +512,7 @@ testITLinear40 =
             VarDNA
             OutLengths
             ComLinear
-            (2, Just 5)
+            2
             "AN\nTC\tAGTC"
         ~?= "No palindromes found"
 
@@ -523,7 +523,7 @@ testITLinear41 =
             VarDNA
             OutWord
             ComLinear
-            (1, Just 5)
+            1
             "NNNNNNNNNN"
         ~?= "No palindromes found"
 
@@ -534,7 +534,7 @@ testITLinear42 =
             VarPlain
             OutLengths
             ComLinear
-            (0, Just 8)
+            0
             "\nodddo!"
         ~?= "[0,1,0,1,0,1,2,5,2,1,0,1,0,1,0]"
 
@@ -545,9 +545,9 @@ testITLinear43 =
             VarPlain
             OutWords
             ComLinear
-            (1, Just 4)
+            1
             "releveler"
-        ~?= "[\"r\",\"e\",\"ele\",\"e\",\"e\",\"ele\",\"e\",\"r\"]"
+        ~?= "[\"r\",\"e\",\"ele\",\"e\",\"releveler\",\"e\",\"ele\",\"e\",\"r\"]"
 
 -- String: Contains an odd nested palindrome
 testITLinear44 =
@@ -556,7 +556,7 @@ testITLinear44 =
             VarText
             OutWord
             ComLinear
-            (0, Just 12)
+            0
             "hi madam im adam bye"
         ~?= "[\"madam im adam\"]"
 
@@ -567,7 +567,7 @@ testITLinear45 =
             VarWord
             OutWords
             ComLinear
-            (3, Just 3)
+            3
             "Oi! You there! You! Stop!"
         ~?= "[\"You there! You\"]"
 
@@ -578,7 +578,7 @@ testITLinear46 =
             VarPunctuation
             OutWord
             ComLinear
-            (0, Just 14)
+            0
             "You! Rev Ile deliver, now!"
         ~?= "[\"Rev Ile deliver\"]"
 
@@ -589,9 +589,9 @@ testITLinear47 =
             VarText
             OutLengths
             ComLinear
-            (0, Just 8)
+            0
             "Revile.... Deliver!"
-        ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0]"
+        ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,13,0,1,0,1,0,1,0,1,0,1,0,1,0]"
 
 -- String: Contains an even nested palindrome with punctuation
 testITLinear48 =
@@ -600,7 +600,7 @@ testITLinear48 =
             VarPlain
             OutWords
             ComLinear
-            (0, Just 4)
+            0
             "It's high noon..."
         ~?= "[\"\",\"I\",\"\",\"t\",\"\",\"'\",\"\",\"s\",\"\",\" \",\"\",\"h\",\"\",\"i\",\"\",\"g\",\"\",\"h\",\"\",\" \",\"\",\"n\",\"\",\"o\",\"noon\",\"o\",\"\",\"n\",\"\",\".\",\"..\",\"...\",\"..\",\".\",\"\"]"
 
@@ -611,7 +611,7 @@ testITLinear49 =
             VarPlain
             OutWord
             ComLinear
-            (3, Just 16)
+            3
             "!dammit_timmad!"
         ~?= "[\"!dammit_timmad!\"]"
 
@@ -622,7 +622,7 @@ testITLinear50 =
             VarPunctuation
             OutLength
             ComLinear
-            (0, Just 5)
+            0
             "begone enoge"
         ~?= "0"
 
@@ -633,7 +633,7 @@ testITLinear51 =
             VarText
             OutLengths
             ComLinear
-            (2, Just 5)
+            2
             "madamoiselle"
         ~?= "[5,4]"
 
@@ -644,7 +644,7 @@ testITLinear52 =
             VarWord
             OutLengths
             ComLinear
-            (4, Just 4)
+            4
             "Hello? my.... my .. hello!"
         ~?= "[4]"
 
@@ -655,9 +655,9 @@ testITLinear53 =
             VarDNA
             OutLength
             ComLinear
-            (2, Just 4)
+            2
             "\nAT  CG /AT/"
-        ~?= "2"
+        ~?= "6"
 
 -- String: Contains an even palindrome
 testITLinear54 =
@@ -666,7 +666,7 @@ testITLinear54 =
             VarDNA
             OutWord
             ComLinear
-            (4, Just 5)
+            4
             "CGCG"
         ~?= "[\"CGCG\"]"
 
@@ -677,7 +677,7 @@ testITLinear55 =
             VarPlain
             OutLength
             ComLinear
-            (0, Just 16)
+            0
             "hi madam i madam bye"
         ~?= "15"
 
@@ -688,7 +688,7 @@ testITLinear56 =
             VarDNA
             OutLength
             ComLinear
-            (6, Just 12)
+            6
             "NNTATATATANN"
         ~?= "8"
 
@@ -699,7 +699,7 @@ testITLinear57 =
             VarPlain
             OutLength
             ComLinear
-            (5, Just 10)
+            5
             "!ma;dd;am!"
         ~?= "10"
 
@@ -710,7 +710,7 @@ testITLinear58 =
             VarWord
             OutWord
             ComLinear
-            (2, Just 4)
+            2
             "word1 word2 word3 word4"
         ~?= "No palindromes found"
 
@@ -721,7 +721,7 @@ testITLinear59 =
             VarText
             OutWords
             ComLinear
-            (9, Just 9)
+            9
             "Releveler"
         ~?= "[\"Releveler\"]"
 
@@ -732,6 +732,6 @@ testITLinear60 =
             VarPlain
             OutLength
             ComLinear
-            (5, Just 0)
+            5
             "\nOdd do!"
         ~?= "No palindromes found"

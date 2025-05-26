@@ -17,6 +17,7 @@ module Data.Algorithms.Palindromes.RangeFunctions
     , indexedLengthToRange
     , rangesToLengths
     , rangeToLength
+    , rangeToCenter
     ) where
 
 -- | Converts a list of palindrome center lengths to a list of (start, end) pairs.
@@ -26,8 +27,8 @@ lengthsToRanges lengths = map indexedLengthToRange indexedLengths
     indexedLengths :: [(Int, Int)]
     indexedLengths = zip [0 :: Int ..] lengths
 
-{- | Converts a tuple with index and length to a tuple with the starting index and the
-  end index.
+{- | Converts a tuple with center index and length to a tuple with the starting character
+  index and the end character index.
 -}
 indexedLengthToRange :: (Int, Int) -> (Int, Int)
 indexedLengthToRange (index, len) = (startIndex, endIndex)
@@ -43,6 +44,7 @@ rangesToLengths = map rangeToLength
 
 -- | Converts a (start, end) tuple to a palindrome length.
 rangeToLength :: (Int, Int) -> Int
-rangeToLength (start, end)
-    | end - start < 0 = 0
-    | otherwise = end - start
+rangeToLength (start, end) = max 0 (end - start)
+
+rangeToCenter :: (Int, Int) -> Int
+rangeToCenter = uncurry (+)

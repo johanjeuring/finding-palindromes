@@ -2,7 +2,7 @@
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
 
-module UTDNAPals where
+module UTDNAPals (testListDNA) where
 
 import Test.HUnit (Test (..), assertEqual)
 
@@ -15,10 +15,10 @@ testListDNA t =
 
 testDNAPalindrome1 t =
     TestCase $
-        assertEqual "palindrome1" "gcgcgcatatatatgcgcgc" $
+        assertEqual "palindrome1" "[\"gcgcgcatatatatgcgcgc\"]" $
             longestDNAPalindrome t "gcgcgcatatatatgcgcgc"
 
 testDNAPalindrome2 t =
     TestCase $
-        assertEqual "palindrome1" "tatata" $
+        assertEqual "palindrome1" "[\"tatata\"]" $
             longestDNAPalindrome t "tatata"

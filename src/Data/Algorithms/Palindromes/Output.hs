@@ -16,9 +16,9 @@ algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
 module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
-    , indicesToText
+    , rangeToText
     , longestLength
-    , longestWord
+    , longestWords
     , allLengths
     , allWords
     , lengthAt
@@ -29,7 +29,9 @@ import Data.List (find, intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
+    , getLength
     )
+import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
 
 import qualified Data.Vector as V
 
@@ -68,9 +70,9 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex :: Int
     endIndex = snd (fst lastWord)
 
--- | Takes a start and end index (exclusive) and returns the substring with those indices
-indicesToText :: (Int, Int) -> V.Vector Char -> String
-indicesToText (start, end) input
+-- | Takes a start and end index (exclusive) and returns the substring in the text with that range
+rangeToText :: (Int, Int) -> V.Vector Char -> String
+rangeToText (start, end) input
     | end - start > 0 = V.toList $ V.slice start (end - start) input
     | otherwise = ""
 
@@ -78,13 +80,16 @@ indicesToText (start, end) input
 longestLength :: [Int] -> String
 longestLength = show . maximum
 
--- | Converts the longest palindrome to text
-longestWord :: [Palindrome] -> String
-longestWord [] = ""
-longestWord input = palText longest
+-- | Returns all longests palindromes of the same size
+longestWords :: [Palindrome] -> String
+longestWords input = allWords $ foldr longest [] input
   where
-    longest :: Palindrome
-    longest = foldr1 (\a b -> if palLength a < palLength b then b else a) input
+    longest :: Palindrome -> [Palindrome] -> [Palindrome]
+    longest p [] = [p]
+    longest p2 pals@(p1 : _)
+        | getLength p1 == getLength p2 = p2 : pals
+        | getLength p1 < getLength p2 = [p2]
+        | otherwise = pals
 
 -- | All maximal palindrome lengths
 allLengths :: [Int] -> String
@@ -105,4 +110,4 @@ wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = maybe "" palText pal
   where
     pal :: Maybe Palindrome
-    pal = find (\x -> palCenterIndex x == n) pals
+    pal = find ((== n) . rangeToCenter . palRange) pals

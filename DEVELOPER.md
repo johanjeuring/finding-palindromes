@@ -134,7 +134,7 @@ To check what is allocating memory to the heap you can pass different flags like
 One of the easiest ways to view this report is by using hp2pretty. You can install this using
 
 ```
-cabal install h2pretty
+cabal install hp2pretty
 ```
 
 Then afterwards you can run
@@ -144,6 +144,19 @@ hp2pretty profiling.hp
 ```
 
 This will generate a file called profiling.svg that you can click on to view the generated graph.
+
+## Code coverage
+
+The easiest way to measure code coverage is to use hpc using cabal. To do so simply run:
+
+```
+cabal test --enable-coverage
+```
+
+This will generate a few .html files that you can use to see the code coverage in different modules.
+We generally aim for 80% coverage for alternatives and expressions. For top level coverage we aim for a similar amount but this can be lowered a lot more easily by having an unused deriving which you can probably safely ignore.
+
+It's good practice to generate a code coverage report before merging so you can ensure that your functions are being tested. If important parts of your code aren't covered at all you should write tests for them! If useful for debugging derivings of show and eq can be left uncovered.
 
 ## Running functions in terminal
 
@@ -160,5 +173,5 @@ For example:
 ```
 cabal repl
 import Data.Algorithms.Palindromes.Finders
-findPalindromeLengths VarDNA ComQuadratic {gapSize = 0, maxError = 0} (0, Nothing) "ATA"
+findPalindromeLengths VarDNA ComQuadratic {gapSize = 0, maxError = 0} 0 "ATA"
 ```

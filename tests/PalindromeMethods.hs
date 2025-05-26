@@ -1,7 +1,13 @@
 {- This program has been developed by students from the bachelor Computer Science at Utrecht
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
-module PalindromeMethods where
+module PalindromeMethods
+    ( longestTextPalindrome
+    , longestWordPalindrome
+    , longestPunctuationPalindrome
+    , longestDNAPalindrome
+    , extendTextPalindrome
+    ) where
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
@@ -19,7 +25,7 @@ import qualified Data.Algorithms.Palindromes.Finders as C
 to enable the usage of both algorithm types on the same unit tests -}
 longestTextPalindrome :: Complexity -> String -> String
 longestTextPalindrome complexity =
-    findPalindromesFormatted VarText OutWord complexity (0, Nothing)
+    findPalindromesFormatted VarText OutWord complexity 0
 
 longestWordPalindrome :: Complexity -> String -> String
 longestWordPalindrome t =
@@ -27,7 +33,7 @@ longestWordPalindrome t =
         VarWord
         OutWord
         t
-        (0, Nothing)
+        0
 
 longestPunctuationPalindrome :: String -> String
 longestPunctuationPalindrome =
@@ -35,7 +41,7 @@ longestPunctuationPalindrome =
         VarPunctuation
         OutWord
         ComLinear
-        (0, Nothing)
+        0
 
 longestDNAPalindrome :: Complexity -> String -> String
 longestDNAPalindrome complexity =
@@ -43,7 +49,7 @@ longestDNAPalindrome complexity =
         VarDNA
         OutWord
         complexity
-        (0, Nothing)
+        0
 
 extendTextPalindrome :: Complexity -> Int -> String -> String
 extendTextPalindrome complexity n =
@@ -51,4 +57,4 @@ extendTextPalindrome complexity n =
         VarText
         (OutWordAt n)
         complexity
-        (0, Nothing)
+        0

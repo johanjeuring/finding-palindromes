@@ -14,38 +14,75 @@ Handles commandline.
 -}
 module Main where
 
+import Control.Monad (filterM)
 import System.Console.GetOpt (ArgOrder (Permute), getOpt)
 import System.Environment (getArgs)
 
 import Data.Algorithms.Palindromes.Options (options)
 import Data.Algorithms.Palindromes.Settings (handleFlags)
 
+import qualified System.Directory as Dir
 import qualified System.IO as Sys
 
 -----------------------------------------------------------------------------
 -- main
 -----------------------------------------------------------------------------
 
-handleFilesWith :: (String -> String) -> [String] -> IO ()
-handleFilesWith f [] = putStr $ f ""
-handleFilesWith f xs =
-    let hFW filenames =
-            case filenames of
-                [] -> putStr ""
-                (fn : fns) -> do
-                    fn' <- Sys.openFile fn Sys.ReadMode
-                    Sys.hSetEncoding fn' Sys.latin1
-                    input <- Sys.hGetContents fn'
-                    putStrLn (f input)
-                    Sys.hClose fn'
-                    hFW fns
-    in  hFW xs
+{- |
+    Read a single file
+-}
+handleFileWith :: (String -> IO String) -> String -> IO ()
+handleFileWith f file = do
+    putStrLn $ "Reading file: " ++ file
+    file' <- Sys.openFile file Sys.ReadMode
+    Sys.hSetEncoding file' Sys.utf8
+    Sys.hSetEncoding Sys.stdout Sys.utf8
+    input <- Sys.hGetContents file'
+    res <- f input
+    putStrLn $ "\r" ++ res ++ replicate 40 ' '
+    Sys.hClose file'
+    putStrLn "--------------------------------------------------------------"
 
-handleStandardInputWith :: (String -> String) -> IO ()
+{- |
+    Read all files in a directory. Ignore nested folders
+-}
+handleDirectoryWith :: (String -> IO String) -> String -> IO ()
+handleDirectoryWith f dir = do
+    print $ "Reading directory: " ++ dir
+    content <- Dir.listDirectory dir
+    let paths = map (\file -> dir ++ '/' : file) content
+    files <- filterM Dir.doesFileExist paths
+    handlePathsWith f files
+
+{- |
+    Read multiple paths, regardless of whether it's a file or directory
+-}
+handlePathsWith :: (String -> IO String) -> [String] -> IO ()
+handlePathsWith f [] = do
+    res <- f ""
+    putStrLn $ "\r" ++ res ++ replicate 40 ' '
+handlePathsWith f paths = handlePathsWith' f paths
+  where
+    -- Helper exists to not run algorithm on empty string after processing all other files
+    handlePathsWith' _ [] = return ()
+    handlePathsWith' f' (x : xs) = do
+        handlePathWith f' x
+        handlePathsWith' f' xs
+
+{- |
+    Read a path, regardless of whether it's a file or directory
+-}
+handlePathWith :: (String -> IO String) -> String -> IO ()
+handlePathWith f path = do
+    isFile <- Dir.doesFileExist path
+    if isFile then handleFileWith f path else handleDirectoryWith f path
+
+handleStandardInputWith :: (String -> IO String) -> IO ()
 handleStandardInputWith function =
     do
         input <- getLine
-        putStrLn (function input)
+        res <- function input
+        putStrLn $ res ++ replicate 40 ' '
 main :: IO ()
 main = do
     args <- getArgs
@@ -56,4 +93,4 @@ main = do
             let (function, standardInput) = handleFlags optionArgs
             in  if standardInput
                     then handleStandardInputWith function
-                    else handleFilesWith function files
+                    else handlePathsWith function files

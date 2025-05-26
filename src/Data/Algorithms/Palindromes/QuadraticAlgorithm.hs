@@ -41,8 +41,8 @@ gappedApproximatePalindromesAroundCentres
     -> Int
     -> V.Vector a
     -> [Int]
-gappedApproximatePalindromesAroundCentres isAntiReflexive gapSize errorCount input =
-    if isAntiReflexive
+gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize errorCount input =
+    if onlyEvenPals
         then
             L.map
                 (lengthPalAtCenterAntiReflexive input gapSize errorCount)

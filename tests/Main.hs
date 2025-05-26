@@ -13,12 +13,13 @@
 {- This program has been developed by students from the bachelor Computer Science at Utrecht
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
-module Main where
+module Main (main) where
 
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 
 import Data.Algorithms.Palindromes.Finders (Complexity (..))
+import ITInsertionDeletion (testListITInsertionDeletion)
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
 import QuickCheckProperties (propertyList)
@@ -26,6 +27,8 @@ import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTFinders (testListFinders)
 import UTGetLeftRight (testListGetLeftRight)
+import UTInsertionDeletionAlgorithm (testListInsertionDeletionAlgorithm)
+import UTLinearAlgorithm (testListLinearAlgorithm)
 import UTPalEq (testListPalEq)
 import UTProcessing (testListProcessing)
 import UTPunctuationPals (testListPunctuation)
@@ -36,17 +39,22 @@ import UTWordPals (testListWordPalindromes)
 tests :: Test
 tests =
     TestList $
-        testListText ComLinear
+        testListLinearAlgorithm
+            ++ testListITInsertionDeletion
+            ++ testListQuadraticAlgorithm
+            ++ testListInsertionDeletionAlgorithm
+            ++ testListText ComLinear
             ++ testListText ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListPunctuation
             ++ testListGetLeftRight
+            ++ testListDNA ComLinear
             ++ testListDNA ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListQuadraticAlgorithm
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListProcessing
             ++ testListPalEq
             ++ testListWordPalindromes ComLinear
+            ++ testListWordPalindromes ComQuadratic{gapSize = 0, maxError = 0}
             ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic

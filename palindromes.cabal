@@ -34,6 +34,7 @@ library
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
+    Data.Algorithms.Palindromes.IncrementalStateGenerationWithOutputExtraction
     Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
@@ -46,7 +47,6 @@ library
     Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
     Data.Algorithms.Palindromes.Streaming
-    Data.Algorithms.Palindromes.Transducers
 
   build-depends:
     , base       >=4.17     && <5

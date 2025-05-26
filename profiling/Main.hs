@@ -29,10 +29,10 @@ main = do
 
     _ <-
         {-# SCC "linear" #-}
-        evaluate $ force $ findPalindromes VarText ComLinear (0, Nothing) as
+        evaluate $ force $ findPalindromes VarText ComLinear 0 as
     _ <-
         {-# SCC "quadratic" #-}
-        evaluate $ force $ findPalindromes VarText (ComQuadratic 0 0) (0, Nothing) as
+        evaluate $ force $ findPalindromes VarText (ComQuadratic 0 0) 0 as
     return ()
 
 -- | Strictly loads the content of a file from Latin1 encoding

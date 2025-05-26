@@ -97,7 +97,7 @@ testITQuadratic1 =
             VarDNA
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
-            (0, Nothing)
+            0
             "AG\nTC"
         ~?= "2"
 
@@ -108,7 +108,7 @@ testITQuadratic2 =
             VarDNA
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
-            (4, Just 4)
+            4
             "A&T-AT"
         ~?= "[\"A&T-AT\"]"
 
@@ -119,7 +119,7 @@ testITQuadratic3 =
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 4, maxError = 4}
-            (1, Just 6)
+            1
             "AGTC"
         ~?= "[2,4,2]"
 
@@ -130,7 +130,7 @@ testITQuadratic4 =
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 2, maxError = 0}
-            (2, Nothing)
+            2
             "ACCT"
         ~?= "[2,4,2]"
 
@@ -141,9 +141,9 @@ testITQuadratic5 =
             VarDNA
             OutWords
             ComQuadratic{gapSize = 1, maxError = 2}
-            (3, Just 6)
+            3
             "“AC\nTA..,TTCT”"
-        ~?= "[\"AC\nT\",\"AC\nTA\",\"AC\nTA..,T\",\"AC\nTA..,TT\",\"C\nTA..,TT\",\"A..,TTC\",\"A..,TTCT\",\"TTCT\",\"TCT\"]"
+        ~?= "[\"AC\nT\",\"AC\nTA\",\"AC\nTA..,T\",\"AC\nTA..,TT\",\"C\nTA..,TT\",\"AC\nTA..,TTCT\",\"C\nTA..,TTCT\",\"A..,TTC\",\"A..,TTCT\",\"TTCT\",\"TCT\"]"
 
 -- String: Contains an even nested palindrome
 testITQuadratic6 =
@@ -152,7 +152,7 @@ testITQuadratic6 =
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
-            (3, Just 4)
+            3
             "ATAT"
         ~?= "[4]"
 
@@ -163,9 +163,9 @@ testITQuadratic7 =
             VarDNA
             OutWord
             ComQuadratic{gapSize = 4, maxError = 4}
-            (2, Just 3)
+            2
             "Ac\nC,T”"
-        ~?= "[\"Ac\",\"C,T\"]"
+        ~?= "[\"Ac\nC,T\"]"
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic8 =
@@ -174,9 +174,9 @@ testITQuadratic8 =
             VarDNA
             OutWord
             ComQuadratic{gapSize = 1, maxError = 2}
-            (2, Just 3)
+            2
             "ACTATTCT"
-        ~?= "[\"ACT\",\"TCT\"]"
+        ~?= "[\"ACTATTCT\"]"
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic9 =
@@ -185,7 +185,7 @@ testITQuadratic9 =
             VarDNA
             OutLength
             ComQuadratic{gapSize = 2, maxError = 0}
-            (1, Just 6)
+            1
             "AGGGT"
         ~?= "2"
 
@@ -196,7 +196,7 @@ testITQuadratic10 =
             VarDNA
             OutWords
             ComQuadratic{gapSize = 5, maxError = 5}
-            (0, Nothing)
+            0
             "A;G;G;G;T"
         ~?= "[\"\",\"A\",\"A;G\",\"A;G;G\",\"A;G;G;G\",\"A;G;G;G;T\",\"G;G;G;T\",\"G;G;T\",\"G;T\",\"T\",\"\"]"
 
@@ -207,7 +207,7 @@ testITQuadratic11 =
             VarDNA
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 1}
-            (6, Just 6)
+            6
             "Ac.G-CgA "
         ~?= "[6]"
 
@@ -218,7 +218,7 @@ testITQuadratic12 =
             VarDNA
             OutLength
             ComQuadratic{gapSize = 0, maxError = 0}
-            (6, Nothing)
+            6
             "ACGCGA"
         ~?= "No palindromes found"
 
@@ -229,7 +229,7 @@ testITQuadratic13 =
             VarPlain
             OutWord
             ComQuadratic{gapSize = 0, maxError = 1}
-            (4, Nothing)
+            4
             "kabral"
         ~?= "[\"abra\"]"
 
@@ -240,9 +240,9 @@ testITQuadratic14 =
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 6, maxError = 6}
-            (1, Just 2)
+            1
             "abcdef"
-        ~?= "[1,2,2,1]"
+        ~?= "[1,2,3,4,5,6,5,4,3,2,1]"
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic15 =
@@ -251,9 +251,9 @@ testITQuadratic15 =
             VarPlain
             OutLength
             ComQuadratic{gapSize = 1, maxError = 2}
-            (3, Just 3)
+            3
             "a’b/ba"
-        ~?= "3"
+        ~?= "6"
 
 -- String: Contains an even palindrome
 testITQuadratic16 =
@@ -262,7 +262,7 @@ testITQuadratic16 =
             VarPlain
             OutWord
             ComQuadratic{gapSize = 2, maxError = 0}
-            (0, Nothing)
+            0
             "abba"
         ~?= "[\"abba\"]"
 
@@ -273,7 +273,7 @@ testITQuadratic17 =
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
-            (3, Just 6)
+            3
             "l.e.p’e;l"
         ~?= "[3]"
 
@@ -284,9 +284,9 @@ testITQuadratic18 =
             VarPlain
             OutWord
             ComQuadratic{gapSize = 5, maxError = 5}
-            (2, Just 3)
+            2
             "lepel"
-        ~?= "[\"lep\",\"pel\"]"
+        ~?= "[\"lepel\"]"
 
 -- String: Contains an approximate palindrome with punctuation
 testITQuadratic19 =
@@ -295,7 +295,7 @@ testITQuadratic19 =
             VarPlain
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
-            (0, Nothing)
+            0
             "kab^ra.L"
         ~?= "5"
 
@@ -306,9 +306,9 @@ testITQuadratic20 =
             VarPlain
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
-            (0, Just 0)
+            0
             "Abc'd/.ef"
-        ~?= "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+        ~?= "[\"A\",\"b\",\"c\",\"'\",\"d\",\"/\",\".\",\"e\",\"f\"]"
 
 -- String: Contains an odd approximate palindrome, with punctuation
 testITQuadratic21 =
@@ -317,7 +317,7 @@ testITQuadratic21 =
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 10, maxError = 10}
-            (2, Nothing)
+            2
             "zat.,s&tat"
         ~?= "[2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2]"
 
@@ -328,7 +328,7 @@ testITQuadratic22 =
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 2, maxError = 0}
-            (2, Just 5)
+            2
             "zatstat"
         ~?= "[2,2,2,5,2,2,3,2]"
 
@@ -339,7 +339,7 @@ testITQuadratic23 =
             VarPlain
             OutWords
             ComQuadratic{gapSize = 1, maxError = 2}
-            (5, Just 8)
+            5
             "blaA\\Bc..dA;b.l#i"
         ~?= "[\"blaA\\\",\"laA\\B\",\"aA\\Bc\",\"A\\Bc.\",\"\\Bc..\",\"Bc..d\",\"Bc..dA\",\"c..dA\",\"..dA;\",\"..dA;b.\",\".dA;b.\",\"dA;b.\",\"A;b.l\",\";b.l#\",\"b.l#i\"]"
 
@@ -350,7 +350,7 @@ testITQuadratic24 =
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
-            (1, Just 4)
+            1
             "blaABcdBAbli"
         ~?= "[1,1,1,1,1,1,1,1,1,1,1,1]"
 
@@ -361,9 +361,9 @@ testITQuadratic25 =
             VarPlain
             OutWord
             ComQuadratic{gapSize = 10, maxError = 10}
-            (2, Just 5)
+            2
             "A-B*cde)BA"
-        ~?= "[\"A-B*c\",\"de)BA\"]"
+        ~?= "[\"A-B*cde)BA\"]"
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic26 =
@@ -372,7 +372,7 @@ testITQuadratic26 =
             VarPlain
             OutWord
             ComQuadratic{gapSize = 3, maxError = 2}
-            (4, Just 7)
+            4
             "ABcdeBA"
         ~?= "[\"ABcdeBA\"]"
 
@@ -383,7 +383,7 @@ testITQuadratic27 =
             VarPlain
             OutLength
             ComQuadratic{gapSize = 2, maxError = 0}
-            (3, Just 6)
+            3
             "\"blaAPPab’li "
         ~?= "No palindromes found"
 
@@ -394,7 +394,7 @@ testITQuadratic28 =
             VarPlain
             OutWords
             ComQuadratic{gapSize = 9, maxError = 9}
-            (0, Nothing)
+            0
             "blaAPPAbl"
         ~?= "[\"\",\"b\",\"bl\",\"bla\",\"blaA\",\"blaAP\",\"blaAPP\",\"blaAPPA\",\"blaAPPAb\",\"blaAPPAbl\",\"laAPPAbl\",\"aAPPAbl\",\"APPAbl\",\"PPAbl\",\"PAbl\",\"Abl\",\"bl\",\"l\",\"\"]"
 
@@ -405,7 +405,7 @@ testITQuadratic29 =
             VarPlain
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
-            (0, Nothing)
+            0
             "blaAPAbli"
         ~?= "[0,1,0,1,0,1,0,1,0,3,0,1,0,1,0,1,0,1,0]"
 
@@ -416,7 +416,7 @@ testITQuadratic30 =
             VarPlain
             OutWords
             ComQuadratic{gapSize = 0, maxError = 1}
-            (4, Just 7)
+            4
             "/blaAPa.bl.i"
         ~?= "[\"aAPa\",\".bl.\"]"
 
@@ -427,7 +427,7 @@ testITQuadratic31 =
             VarPunctuation
             OutWord
             ComQuadratic{gapSize = 3, maxError = 2}
-            (2, Just 5)
+            2
             "/abba/"
         ~?= "[\"abba\"]"
 
@@ -438,7 +438,7 @@ testITQuadratic32 =
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 2, maxError = 0}
-            (1, Just 6)
+            1
             "ABcdBA"
         ~?= "6"
 
@@ -449,7 +449,7 @@ testITQuadratic33 =
             VarPunctuation
             OutWords
             ComQuadratic{gapSize = 10, maxError = 5}
-            (0, Nothing)
+            0
             "bla\\AP.PA.bli"
         ~?= "[\"\",\"\",\"\",\"bla\",\"\",\"bla\\AP\",\"\",\"bla\\AP.PA\",\"AP\",\"\",\"bla\\AP.PA.bli\",\"\",\"PA\",\"AP.PA.bli\",\"\",\"PA.bli\",\"\",\"bli\",\"\",\"\",\"\"]"
 
@@ -460,7 +460,7 @@ testITQuadratic34 =
             VarPunctuation
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 1}
-            (3, Just 3)
+            3
             "bla(APA)bli"
         ~?= "[3,3,3]"
 
@@ -471,7 +471,7 @@ testITQuadratic35 =
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 0, maxError = 0}
-            (2, Nothing)
+            2
             "lepel”"
         ~?= "5"
 
@@ -482,7 +482,7 @@ testITQuadratic36 =
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 0, maxError = 0}
-            (2, Just 3)
+            2
             "AB/cde/BA"
         ~?= "No palindromes found"
 
@@ -493,7 +493,7 @@ testITQuadratic37 =
             VarPunctuation
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
-            (0, Nothing)
+            0
             "(ka(b)ral)"
         ~?= "3"
 
@@ -504,7 +504,7 @@ testITQuadratic38 =
             VarPunctuation
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
-            (3, Just 3)
+            3
             "za.*ts&tat/”"
         ~?= "[\"tat\"]"
 
@@ -515,7 +515,7 @@ testITQuadratic39 =
             VarText
             OutLengths
             ComQuadratic{gapSize = 2, maxError = 0}
-            (2, Nothing)
+            2
             "Abc'd/.ef"
         ~?= "[2,2,2,2,2]"
 
@@ -526,9 +526,9 @@ testITQuadratic40 =
             VarText
             OutLength
             ComQuadratic{gapSize = 6, maxError = 3}
-            (5, Just 5)
+            5
             "abcdef"
-        ~?= "5"
+        ~?= "6"
 
 -- String: Contains an even palindrome, contains punctuation and special characters
 testITQuadratic41 =
@@ -537,9 +537,9 @@ testITQuadratic41 =
             VarText
             OutWord
             ComQuadratic{gapSize = 0, maxError = 1}
-            (1, Just 2)
+            1
             "a’b/ba"
-        ~?= "[\"a’b\",\"ba\"]"
+        ~?= "[\"a\8217b/ba\"]"
 
 -- String: Contains an even palindrome
 testITQuadratic42 =
@@ -548,7 +548,7 @@ testITQuadratic42 =
             VarText
             OutWords
             ComQuadratic{gapSize = 0, maxError = 0}
-            (2, Just 8)
+            2
             "abba"
         ~?= "[\"abba\"]"
 
@@ -559,7 +559,7 @@ testITQuadratic43 =
             VarText
             OutWord
             ComQuadratic{gapSize = 0, maxError = 1}
-            (2, Nothing)
+            2
             "l.e.p’e;l"
         ~?= "[\"l.e.p’e;l\"]"
 
@@ -570,7 +570,7 @@ testITQuadratic44 =
             VarText
             OutWords
             ComQuadratic{gapSize = 5, maxError = 2}
-            (3, Just 6)
+            3
             "lepel"
         ~?= "[\"lep\",\"lepe\",\"lepel\",\"epel\",\"pel\"]"
 
@@ -581,9 +581,9 @@ testITQuadratic45 =
             VarText
             OutLength
             ComQuadratic{gapSize = 1, maxError = 2}
-            (5, Just 5)
+            5
             "kab^ra.L"
-        ~?= "5"
+        ~?= "6"
 
 -- String: Contains an approximate even palindrome
 testITQuadratic46 =
@@ -592,7 +592,7 @@ testITQuadratic46 =
             VarText
             OutWord
             ComQuadratic{gapSize = 2, maxError = 0}
-            (0, Nothing)
+            0
             "kabral"
         ~?= "[\"abra\"]"
 
@@ -603,7 +603,7 @@ testITQuadratic47 =
             VarText
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 0}
-            (1, Just 6)
+            1
             "zat.,s&tat"
         ~?= "[1,1,1,5,1,3,1]"
 
@@ -614,9 +614,9 @@ testITQuadratic48 =
             VarText
             OutWord
             ComQuadratic{gapSize = 7, maxError = 7}
-            (2, Just 5)
+            2
             "zatstat"
-        ~?= "[\"zatst\",\"tstat\"]"
+        ~?= "[\"zatstat\"]"
 
 -- String: Contains an even gapped palindrome with punctuation
 testITQuadratic49 =
@@ -625,7 +625,7 @@ testITQuadratic49 =
             VarText
             OutLength
             ComQuadratic{gapSize = 0, maxError = 1}
-            (0, Nothing)
+            0
             "blaA\\Bc..dA;b.l#i"
         ~?= "5"
 
@@ -636,9 +636,9 @@ testITQuadratic50 =
             VarText
             OutWord
             ComQuadratic{gapSize = 0, maxError = 0}
-            (2, Just 2)
+            2
             "blaABcdBAbli"
-        ~?= "[\"aA\"]"
+        ~?= "[\"BAb\"]"
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic51 =
@@ -647,7 +647,7 @@ testITQuadratic51 =
             VarText
             OutLengths
             ComQuadratic{gapSize = 0, maxError = 8}
-            (6, Nothing)
+            6
             "A-B*cde)BA"
         ~?= "[6,7,6]"
 
@@ -658,9 +658,9 @@ testITQuadratic52 =
             VarText
             OutLengths
             ComQuadratic{gapSize = 3, maxError = 0}
-            (2, Just 5)
+            2
             "ABcdeBA"
-        ~?= "[2,3,2,3,2,2,3,2,3,2]"
+        ~?= "[2,3,2,3,2,7,2,3,2,3,2]"
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic53 =
@@ -669,9 +669,9 @@ testITQuadratic53 =
             VarText
             OutWords
             ComQuadratic{gapSize = 1, maxError = 2}
-            (3, Just 6)
+            3
             "\"blaAPPab'li"
-        ~?= "[\"bla\",\"blaA\",\"blaAP\",\"blaAPP\",\"laAPP\",\"aAPP\",\"APPab\",\"PPab\",\"PPab'l\",\"Pab'l\",\"Pab'li\",\"ab'li\",\"b'li\"]"
+        ~?= "[\"bla\",\"blaA\",\"blaAP\",\"blaAPP\",\"laAPP\",\"aAPP\",\"laAPPab\",\"blaAPPab'li\",\"APPab\",\"PPab\",\"PPab'l\",\"Pab'l\",\"Pab'li\",\"ab'li\",\"b'li\"]"
 
 -- String: Contains an even palindrome
 testITQuadratic54 =
@@ -679,10 +679,10 @@ testITQuadratic54 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComQuadratic{gapSize = 0, maxError = 0}
-            (1, Just 3)
+            (ComQuadratic 0 0)
+            1
             "blaAPPAbl"
-        ~?= "[\"b\",\"l\",\"a\",\"aA\",\"A\",\"P\",\"P\",\"A\",\"b\",\"l\"]"
+        ~?= "[\"b\",\"l\",\"a\",\"aA\",\"A\",\"P\",\"APPA\",\"P\",\"A\",\"b\",\"l\"]"
 
 -- String: Contains an odd palindrome
 testITQuadratic55 =
@@ -690,10 +690,10 @@ testITQuadratic55 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComQuadratic{gapSize = 9, maxError = 9}
-            (4, Just 7)
+            (ComQuadratic 9 9)
+            4
             "blaAPAbli"
-        ~?= "7"
+        ~?= "9"
 
 -- String: Contains an odd palindrome with punctuation
 testITQuadratic56 =
@@ -701,10 +701,10 @@ testITQuadratic56 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComQuadratic{gapSize = 3, maxError = 2}
-            (4, Just 7)
+            (ComQuadratic 3 2)
+            4
             "/blaAPa.bl.i.bl"
-        ~?= "[\"blaAPa.b\",\"aAPa.bl.i\",\"APa.bl.i.b\",\"Pa.bl.i.bl\"]"
+        ~?= "[\"blaAPa.bl.i\"]"
 
 -- String: Contains no palindromes, has punctuation
 testITQuadratic57 =
@@ -712,8 +712,8 @@ testITQuadratic57 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComQuadratic{gapSize = 0, maxError = 1}
-            (0, Nothing)
+            (ComQuadratic 0 1)
+            0
             "aba gdc."
         ~?= "2"
 
@@ -723,8 +723,8 @@ testITQuadratic58 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComQuadratic{gapSize = 0, maxError = 0}
-            (0, Nothing)
+            (ComQuadratic 0 0)
+            0
             "aba gdc"
         ~?= "[0,1,0,1,0]"
 
@@ -734,8 +734,8 @@ testITQuadratic59 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComQuadratic{gapSize = 0, maxError = 1}
-            (2, Just 5)
+            (ComQuadratic 0 1)
+            2
             "Hello. hi hi “hello”"
         ~?= "[\"Hello. hi\",\"Hello. hi hi\",\"Hello. hi hi “hello\",\"hi hi “hello\",\"hi “hello\"]"
 
@@ -745,8 +745,8 @@ testITQuadratic60 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComQuadratic{gapSize = 1, maxError = 2}
-            (6, Nothing)
+            (ComQuadratic 1 2)
+            6
             "hello hi hi hello"
         ~?= "No palindromes found"
 
@@ -756,8 +756,8 @@ testITQuadratic61 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComQuadratic{gapSize = 3, maxError = 3}
-            (2, Nothing)
+            (ComQuadratic 3 3)
+            2
             "bye so    bye?"
         ~?= "[\"bye so\",\"bye so    bye\",\"so    bye\"]"
 
@@ -767,8 +767,8 @@ testITQuadratic62 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComQuadratic{gapSize = 0, maxError = 9}
-            (3, Just 6)
+            (ComQuadratic 0 9)
+            3
             "bye so bye"
         ~?= "[\"bye so bye\"]"
 
@@ -778,8 +778,8 @@ testITQuadratic63 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComQuadratic{gapSize = 0, maxError = 2}
-            (2, Just 7)
+            (ComQuadratic 0 2)
+            2
             "Fout. Weer. Hi. Hi. Niet. Goed."
         ~?= "[\"Fout. Weer. Hi. Hi. Niet. Goed\"]"
 
@@ -789,8 +789,8 @@ testITQuadratic64 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComQuadratic{gapSize = 0, maxError = 1}
-            (0, Nothing)
+            (ComQuadratic 0 1)
+            0
             "fout weer hi hi niet goed"
         ~?= "4"
 
@@ -800,8 +800,8 @@ testITQuadratic65 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComQuadratic{gapSize = 0, maxError = 0}
-            (2, Just 3)
+            (ComQuadratic 0 0)
+            2
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
         ~?= "No palindromes found"
 
@@ -811,8 +811,8 @@ testITQuadratic66 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComQuadratic{gapSize = 9, maxError = 9}
-            (4, Nothing)
+            (ComQuadratic 9 9)
+            4
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[4,5,6,7,8,9,8,7,6,5,4]"
 
@@ -822,8 +822,8 @@ testITQuadratic67 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComQuadratic{gapSize = 2, maxError = 0}
-            (2, Just 3)
+            (ComQuadratic 2 0)
+            2
             "Doei&& hi ik b(e)n ??? een mens hi doei"
         ~?= "[2,2,2,2,2,2,2]"
 
@@ -833,8 +833,8 @@ testITQuadratic68 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComQuadratic{gapSize = 2, maxError = 1}
-            (3, Just 8)
+            (ComQuadratic 2 1)
+            3
             "doei hi ik ben een mens hi doei"
         ~?= "[\"doei hi ik\",\"doei hi ik ben\",\"hi ik ben\",\"hi ik ben een\",\"ik ben een\",\"doei hi ik ben een mens hi doei\",\"ben een mens\",\"ben een mens hi\",\"een mens hi\",\"een mens hi doei\",\"mens hi doei\"]"
 
@@ -844,8 +844,8 @@ testITQuadratic69 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComQuadratic{gapSize = 3, maxError = 1}
-            (4, Just 9)
+            (ComQuadratic 3 1)
+            4
             "dag h?i dri/e gap size. ... hi dag"
         ~?= "[\"dag h?i dri/e gap size. ... hi dag\"]"
 
@@ -855,8 +855,8 @@ testITQuadratic70 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComQuadratic{gapSize = 3, maxError = 0}
-            (2, Just 8)
+            (ComQuadratic 3 0)
+            2
             "dag hi drie gap size hi dag"
         ~?= "7"
 
@@ -866,8 +866,8 @@ testITQuadratic71 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComQuadratic{gapSize = 6, maxError = 6}
-            (0, Nothing)
+            (ComQuadratic 6 6)
+            0
             ",onzin, .dit pal\n pal dit/ gek"
         ~?= "[\"\",\"onzin\",\"onzin, .dit\",\"onzin, .dit pal\",\"onzin, .dit pal\n pal\",\"onzin, .dit pal\n pal dit\",\"onzin, .dit pal\n pal dit/ gek\",\"dit pal\n pal dit/ gek\",\"pal\n pal dit/ gek\",\"pal dit/ gek\",\"dit/ gek\",\"gek\",\"\"]"
 
@@ -877,8 +877,8 @@ testITQuadratic72 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComQuadratic{gapSize = 0, maxError = 0}
-            (0, Nothing)
+            (ComQuadratic 0 0)
+            0
             "onzin dit pal pal dit gek"
         ~?= "[0,1,0,1,0,1,4,1,0,1,0,1,0]"
 
@@ -888,8 +888,8 @@ testITQuadratic73 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComQuadratic{gapSize = 0, maxError = 1}
-            (2, Just 5)
+            (ComQuadratic 0 1)
+            2
             "Onzin. pAl is. Pal gek"
         ~?= "[\"Onzin. pAl\",\"Onzin. pAl is\",\"pAl is\",\"Onzin. pAl is. Pal gek\",\"is. Pal\",\"is. Pal gek\",\"Pal gek\"]"
 
@@ -899,7 +899,7 @@ testITQuadratic74 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComQuadratic{gapSize = 1, maxError = 2}
-            (3, Nothing)
+            (ComQuadratic 1 2)
+            3
             "onzin pal is pal gek"
         ~?= "[\"onzin pal is pal gek\"]"

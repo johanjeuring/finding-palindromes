@@ -173,5 +173,5 @@ For example:
 ```
 cabal repl
 import Data.Algorithms.Palindromes.Finders
-findPalindromeLengths VarDNA ComQuadratic {gapSize = 0, maxError = 0} (0, Nothing) "ATA"
+findPalindromeLengths VarDNA ComQuadratic {gapSize = 0, maxError = 0} 0 "ATA"
 ```

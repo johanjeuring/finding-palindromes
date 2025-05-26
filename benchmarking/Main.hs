@@ -67,11 +67,11 @@ benchComplexity :: String -> [Benchmark]
 benchComplexity content =
     [ bench "quadratic" $
         nf
-            (findPalindromes VarText (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarText (ComQuadratic 0 0) 0)
             content
     , bench "linear" $
         nf
-            (findPalindromes VarText ComLinear (0, Nothing))
+            (findPalindromes VarText ComLinear 0)
             content
     ]
 
@@ -82,19 +82,19 @@ benchTextVariants :: String -> [Benchmark]
 benchTextVariants content =
     [ bench "plain" $
         nf
-            (findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarPlain (ComQuadratic 0 0) 0)
             content
     , bench "text" $
         nf
-            (findPalindromes VarText (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarText (ComQuadratic 0 0) 0)
             content
     , bench "punctuation" $
         nf
-            (findPalindromes VarPunctuation (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarPunctuation (ComQuadratic 0 0) 0)
             content
     , bench "word" $
         nf
-            (findPalindromes VarWord (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarWord (ComQuadratic 0 0) 0)
             content
     ]
 
@@ -105,19 +105,19 @@ benchOutputOptions :: String -> [Benchmark]
 benchOutputOptions content =
     [ bench "length" $
         nf
-            (findPalindromesFormatted VarText OutLength (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromesFormatted VarText OutLength (ComQuadratic 0 0) 0)
             content
     , bench "lengths" $
         nf
-            (findPalindromesFormatted VarText OutLengths (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromesFormatted VarText OutLengths (ComQuadratic 0 0) 0)
             content
     , bench "word" $
         nf
-            (findPalindromesFormatted VarText OutWord (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromesFormatted VarText OutWord (ComQuadratic 0 0) 0)
             content
     , bench "words" $
         nf
-            (findPalindromesFormatted VarText OutWords (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromesFormatted VarText OutWords (ComQuadratic 0 0) 0)
             content
     ]
 
@@ -128,15 +128,15 @@ benchDna :: String -> [Benchmark]
 benchDna content =
     [ bench "plain" $
         nf
-            (findPalindromes VarPlain (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarPlain (ComQuadratic 0 0) 0)
             content
     , bench "dna" $
         nf
-            (findPalindromes VarDNA (ComQuadratic 0 0) (0, Nothing))
+            (findPalindromes VarDNA (ComQuadratic 0 0) 0)
             content
     , bench "odd gapped dna" $
         nf
-            (findPalindromes VarDNA (ComQuadratic 1 0) (0, Nothing))
+            (findPalindromes VarDNA (ComQuadratic 1 0) 0)
             content
     ]
 

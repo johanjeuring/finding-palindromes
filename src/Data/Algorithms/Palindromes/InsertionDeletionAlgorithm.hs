@@ -67,8 +67,8 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
   where
     -- Bound the used gapSize to not be more than the length of the input.
     gapSize' = min gapSize (V.length input)
-    -- Use iterateTimes to get the states for efficiency.
-    states = iterateTimes nrOfIterations (fillRow input gapSize' maxErrors) startState
+    -- Use takeIterations to get the states for efficiency.
+    states = takeIterations nrOfIterations (fillRow input gapSize' maxErrors) startState
     {- Required number of iterations is (+ 2) to also be able to spot maximal palindromes
     in the two upper rows. -}
     nrOfIterations = maxRow + 2
@@ -85,7 +85,6 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y)
         , [] -- no maximal palindromes found yet.
         , maxRow - 1 -- row number of the row above the bottom row of the matrix.
         )
-    -- The index of the last element of the input vector.
     lastIndex = V.length input - 1
     -- The index of the last row, adjusted with the gap size to ignore errors in the gap.
     maxRow = lastIndex - gapSize' + 1
@@ -109,10 +108,9 @@ fillRow input gapSize maxErrors (row, _, rowIndex) =
     {- The first cell of the current row. A new cell needs to be added at
     the start of this row because we don't add one in the evaluatePosition part
     and every row has one more cell to the left than the previous row. -}
-    firstCell =
-        [ Cell{cellColumn = initialColumn, cellBudget = initialBudget}
-        | initialColumn >= 0
-        ]
+    firstCell
+        | initialColumn >= 0 = [Cell{cellColumn = initialColumn, cellBudget = initialBudget}]
+        | otherwise = []
 
     -- The initial column is directly to the left of the diagonal on this row.
     initialColumn = rowIndex + gapSize - 1
@@ -153,10 +151,13 @@ fillRow input gapSize maxErrors (row, _, rowIndex) =
 bottom left cell to maxPals if it is maximal.
 
 Consider the following matrix:
+
+@
 ------------------------------
 | topLeft        topRight    |
 | bottomLeft     bottomRight |
 ------------------------------
+@
 
 We want to define the budget in topRight and check whether bottomLeft is maximal.
 -}
@@ -183,12 +184,12 @@ evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell{cellColumn =
                 , bottomLeft - errorCostAtPosition input (rowIndex, column)
                 ]
         | otherwise = -1
-    maxpals =
+    maxpals
         {- add (+ 1) to get inclusive start index and exclusive end index for the found
         maximal palindromes -}
-        [ (rowIndex + 1, column)
-        | bottomLeft >= 0 && topLeft < 0 && topRight < 0 && bottomRight < 0
-        ]
+        | bottomLeft >= 0 && topLeft < 0 && topRight < 0 && bottomRight < 0 =
+            [(rowIndex + 1, column)]
+        | otherwise = []
 
 {- | Replace long sequences of cells with (-1) budgets with two cells with (-1) budgets,
 one on either end of the sequence.
@@ -223,9 +224,9 @@ sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) =
     endf (lastPositiveColumnIndex, _) =
         [Cell{cellColumn = lastPositiveColumnIndex + 1, cellBudget = -1}]
 
--- | Returns first n elements of iterate f on start. This function is quite efficient.
-iterateTimes :: Int -> (a -> a) -> a -> [a]
-iterateTimes n f start = take n $ iterate f start
+-- | Returns first n elements of iterate f on start.
+takeIterations :: Int -> (a -> a) -> a -> [a]
+takeIterations n f start = take n $ iterate f start
 
 {- If elements are palindrome equal at position then no error cost, otherwise error cost
 of 1 for a substitution error. -}

@@ -12,7 +12,7 @@ University within the Software Project course.
 
 Incremental state generation with output extraction is a way to go through a list, keeping track of intermediate states of some
 kind and extracting zero or more elements of output based on each of these states. This
-way, output can be extracted from large (or infinite) lists withput first needing to
+way, output can be extracted from large (or infinite) lists without first needing to
 traverse the whole list.
 -}
 module Data.Algorithms.Palindromes.IncrementalStateGenerationWithOutputExtraction

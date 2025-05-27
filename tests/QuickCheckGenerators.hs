@@ -170,3 +170,5 @@ addErrors error charGenerator palGenerator = case error of
             replaceErrors' :: [(Int, a)] -> Vector a -> Vector a
             replaceErrors' zip _palGenerator = _palGenerator // zip
         if null _palGenerator || randomError == 0 then palGenerator else return replaceErrors
+
+

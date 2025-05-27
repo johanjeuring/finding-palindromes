@@ -34,7 +34,6 @@ library
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
-    Data.Algorithms.Palindromes.IncrementalStateGenerationWithOutputExtraction
     Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
@@ -62,7 +61,6 @@ executable palindromes
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
-    Data.Algorithms.Palindromes.IncrementalStateGenerationWithOutputExtraction
     Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options

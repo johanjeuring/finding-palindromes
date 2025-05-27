@@ -73,6 +73,10 @@ benchComplexity content =
         nf
             (findPalindromes VarText ComLinear 0)
             content
+    , bench "insertionDeletion" $
+        nf
+            (findPalindromes VarText (ComInsertionDeletion 0 0) 0)
+            content
     ]
 
 {- | Takes a string and creates a benchmark for every text based palindrome variant of

@@ -7,6 +7,8 @@ import Control.Exception (evaluate)
 import GHC.Generics (Generic)
 
 import Data.Algorithms.Palindromes.Finders
+import Data.Algorithms.Palindromes.Finders (Complexity (ComInsertionDeletion))
+import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified System.IO as Sys
@@ -33,6 +35,9 @@ main = do
     _ <-
         {-# SCC "quadratic" #-}
         evaluate $ force $ findPalindromes VarText (ComQuadratic 0 0) 0 as
+    _ <-
+        {-# SCC "insertionDeletionAlgorithm" #-}
+        evaluate $ force $ findPalindromes VarText (ComInsertionDeletion 0 0) 0 as
     return ()
 
 -- | Strictly loads the content of a file from Latin1 encoding

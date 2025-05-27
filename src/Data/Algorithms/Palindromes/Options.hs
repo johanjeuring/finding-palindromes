@@ -79,8 +79,8 @@ options =
     , Option
         "s"
         []
-        (OptArg parseInsertionDeletion "[errors]")
-        "Use Insertion Deletion algorithm, with optional argument for amount of errors (default is 0)"
+        (OptArg parseInsertionDeletion "[gapSize] [errors]")
+        "Use Insertion Deletion algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
         "p"
         []
@@ -156,32 +156,44 @@ isStandardInput _ = False
 {- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
 error is thrown.
 -}
+parseInsertionDeletion :: Maybe String -> Flag
+parseInsertionDeletion str
+    | isNothing str = Complexity ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+    | null y =
+        error
+            ( "Invalid arguments for gapsize and errors. (gapsize, errors) = ("
+                ++ gapsize
+                ++ ", "
+                ++ errors
+                ++ "). s must be the last flag in a series of flags."
+                ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
+            )
+    | otherwise =
+        Complexity ComInsertionDeletion{gapsID = read gapsize, maxIDError = read errors}
+  where
+    (x, y) = break (== '+') $ fromJust str
+    (gapsize, errors) = (x, drop 1 y)
+
+{- | Parses the optional error input to a Flag. If invalid inputs are given, an
+error is thrown.
+-}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
     | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
     | null y =
         error
             ( "Invalid arguments for gapsize and errors. (gapsize, errors) = ("
-                ++ fst nums
+                ++ gapsize
                 ++ ", "
-                ++ snd nums
+                ++ errors
                 ++ "). q must be the last flag in a series of flags."
                 ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Complexity ComQuadratic{gapSize = read (fst nums), maxError = read (snd nums)}
+        Complexity ComQuadratic{gapSize = read gapsize, maxError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
-    nums = (x, drop 1 y)
-
-{- | Parses the optional error input to a Flag. If invalid inputs are given, an
-error is thrown.
--}
-parseInsertionDeletion :: Maybe String -> Flag
-parseInsertionDeletion =
-    maybe
-        (Complexity ComInsertionDeletion{maxIDError = 0})
-        (\s -> Complexity ComInsertionDeletion{maxIDError = read s})
+    (gapsize, errors) = (x, drop 1 y)
 
 {- | From all input flags, gets the complexity setting. If more than one complexity flag
 is given, it throws an error, as this is not suppported by our program. If none are give it

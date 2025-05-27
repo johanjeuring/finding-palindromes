@@ -58,7 +58,7 @@ insertionDeletionAlgorithm
     -- ^ The input vector
     -> [PalRange]
     -- ^ The list of found maximal gapped approximate palindromes
-insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, y, _) -> y) states
+insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, palRanges, _) -> palRanges) states
   where
     -- Bound the used gapSize to not be more than the length of the input.
     gapSize' = min gapSize (V.length input)
@@ -133,8 +133,8 @@ fillRow input gapSize maxErrors (row, _, rowIndex) =
     scannedRow =
         drop 1 $
             scanl (evaluatePosition input rowIndex) ((maxErrors, maxErrors), [], []) sparsePrevRow
-    newRow = concatMap (\(_, y, _) -> y) scannedRow
-    foundMaxPals = concatMap (\(_, _, z) -> z) scannedRow
+    newRow = concatMap (\(_, rowSegment, _) -> rowSegment) scannedRow
+    foundMaxPals = concatMap (\(_, _, palRanges) -> palRanges) scannedRow
 
 {- | Define a new cell (the cell above the input cell) with the correct budget and add
 bottom left cell to maxPals if it is maximal.
@@ -187,6 +187,13 @@ sparsify :: Row -> Row
 sparsify [] = []
 sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) = sparseRow
   where
+    -- due to haskells lazy evaluation this only traverses the list once.
+    sparseRow =
+        -- Extracts the sparsified row by concatmapping all the second elements of the accumulator
+        concatMapWithEndFunction snd getFinalCell $
+            -- We filter the negatives from the row and add back negatives at positions at the
+            scanl insertNegatives (firstColumnIndex, []) (filter ((>= 0) . cellBudget) row)
+
     insertNegatives :: (Int, Row) -> Cell -> (Int, Row)
     insertNegatives (lastind, _) newCell@Cell{cellColumn = newIndex}
         -- Place two cells on either side of the sequence of negative budgets.
@@ -207,13 +214,6 @@ sparsify row@(Cell{cellColumn = firstColumnIndex, cellBudget = _} : _) = sparseR
     -- We always must add one -1 to the end of the sparsified row
     getFinalCell (lastPositiveColumnIndex, _) =
         [Cell{cellColumn = lastPositiveColumnIndex + 1, cellBudget = -1}]
-
-    -- due to haskells lazy evaluation this only traverses the list once.
-    sparseRow =
-        -- Extracts the sparsified row by concatmapping all the second elements of the accumulator
-        concatMapWithEndFunction snd getFinalCell $
-            -- We filter the negatives from the row and add back negatives at positions at the
-            scanl insertNegatives (firstColumnIndex, []) (filter ((>= 0) . cellBudget) row)
 
     -- concatMap but we also apply an "end function" to the final element
     concatMapWithEndFunction _ _ [] = []

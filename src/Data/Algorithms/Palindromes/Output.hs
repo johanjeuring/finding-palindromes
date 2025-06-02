@@ -18,7 +18,7 @@ module Data.Algorithms.Palindromes.Output
     , indicesInOutputWord
     , rangeToText
     , longestLength
-    , longestWord
+    , longestWords
     , allLengths
     , allWords
     , lengthAt
@@ -80,14 +80,16 @@ rangeToText (start, end) input
 longestLength :: [Int] -> String
 longestLength = show . maximum
 
--- | Converts the longest palindrome to text
-longestWord :: [Palindrome] -> String
-longestWord input = palText $ foldr1 longest input
+-- | Returns all longests palindromes of the same size
+longestWords :: [Palindrome] -> String
+longestWords input = allWords $ foldr longest [] input
   where
-    longest :: Palindrome -> Palindrome -> Palindrome
-    longest p1 p2
-        | getLength p1 < getLength p2 = p2
-        | otherwise = p1
+    longest :: Palindrome -> [Palindrome] -> [Palindrome]
+    longest p [] = [p]
+    longest p2 pals@(p1 : _)
+        | getLength p1 == getLength p2 = p2 : pals
+        | getLength p1 < getLength p2 = [p2]
+        | otherwise = pals
 
 -- | All maximal palindrome lengths
 allLengths :: [Int] -> String

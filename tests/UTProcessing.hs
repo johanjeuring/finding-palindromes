@@ -12,9 +12,6 @@ import qualified Data.Algorithms.Palindromes.PreProcessing as Pre
 testListProcessing =
     [ testFilterLetters
     , testTextToWord
-    , testFilterMin
-    , testFilterExact
-    , testFilterMax
     , testFilterPunctuationOnlySpace
     , testFilterPunctuationStaysSame
     , testFilterPunctuationPunctuationAndSpaces
@@ -38,31 +35,15 @@ testTextToWord =
             (Pre.textToWords "This is a   list of  words. ")
 
 -- Postprocessing functions
-testFilterMin =
-    TestCase $
-        assertEqual
-            "testFilterMin"
-            [-1, 2, 3, -1, 5]
-            (Post.filterMin 2 [1, 2, 3, 0, 5])
-
-testFilterExact =
-    TestCase $
-        assertEqual
-            "testFilterExact"
-            [-1, 2, -1, -1, -1]
-            (Post.filterExact 2 [1, 2, 3, 0, 5])
-testFilterMax =
-    TestCase $
-        assertEqual
-            "testFilterMax"
-            [1, 2, -1, 0, -1]
-            (Post.filterMax (Just 2) [1, 2, 3, 0, 5])
 testFilterPunctuationOnlySpace =
     TestCase $
         assertEqual
             "testFilterPunctuationOnlySpace"
             [(0, 0), (0, 0), (1, 1), (1, 1), (2, 2), (2, 2), (3, 3), (3, 4), (4, 4)]
-            (Post.filterPunctuation "aab a" [(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (1, 4), (3, 3), (3, 4), (4, 4)])
+            ( Post.filterPunctuation
+                "aab a"
+                [(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (1, 4), (3, 3), (3, 4), (4, 4)]
+            )
 
 testFilterPunctuationStaysSame =
     TestCase $
@@ -75,8 +56,34 @@ testFilterPunctuationPunctuationAndSpaces =
     TestCase $
         assertEqual
             "testFilterPunctuationPunctuationAndSpace"
-            [(0, 0), (0, 1), (1, 1), (1, 2), (2, 2), (2, 2), (0, 6), (3, 3), (4, 4), (4, 4), (5, 5), (5, 6), (6, 6)]
+            [ (0, 0)
+            , (0, 1)
+            , (1, 1)
+            , (1, 2)
+            , (2, 2)
+            , (2, 2)
+            , (0, 6)
+            , (3, 3)
+            , (4, 4)
+            , (4, 4)
+            , (5, 5)
+            , (5, 6)
+            , (6, 6)
+            ]
             ( Post.filterPunctuation
                 "a.b,aab a "
-                [(0, 0), (0, 1), (1, 1), (0, 3), (2, 2), (2, 3), (0, 6), (3, 4), (4, 4), (3, 6), (5, 5), (5, 6), (6, 6)]
+                [ (0, 0)
+                , (0, 1)
+                , (1, 1)
+                , (0, 3)
+                , (2, 2)
+                , (2, 3)
+                , (0, 6)
+                , (3, 4)
+                , (4, 4)
+                , (3, 6)
+                , (5, 5)
+                , (5, 6)
+                , (6, 6)
+                ]
             )

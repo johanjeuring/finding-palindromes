@@ -13,17 +13,28 @@ import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm
 import qualified Data.Vector as V
 
 testListInsertionDeletionAlgorithm =
-    [ testTeesZeroErrors
+    [ testSparsifySimple
+    , testSparsifyNegativeSingleton
+    , testSparsifyComplex
+    , testSparsifyLeadingNegative
+    , testSparsifyOnSparsifiedRow
+    , testSparsifyOnPartiallySparsifiedRow
+    , testTeesZeroErrors
     , testTeesOneError
     , testMississippiZeroErrors
     , testMississippiOneError
     , testMississippiTwoErrors
     , testMississippiThreeErrors
     , testMississippiFourErrors
-    , -- , testSparsifySimple
-      -- , testSparsifyEdgeCase
-      -- , testSparsifyComplex
-      testSmallDNAZeroErrors
+    , testTextEvenGapZeroErrors
+    , testTextEvenGapOneError
+    , testTextEvenGapTwoErrors
+    , testTextEvenGapTwoErrorsBiggerInput
+    , testTextEvenGapThreeErrorsBiggerInput
+    , testTextOddGapZeroErrors
+    , testTextOddGapOneError
+    , testTextOddGapTwoErrors
+    , testSmallDNAZeroErrors
     , testSmallDNAOneError
     , testDNAAsZeroErrors
     , testDNAAsOneError
@@ -44,6 +55,149 @@ testListInsertionDeletionAlgorithm =
     , testDNAGapSizeThreeOneError
     , testDNAGapSizeThreeFourErrors
     ]
+
+{- | Test sparsify using a simple example with a single sequence of cells with negative
+budgets.
+-}
+testSparsifySimple :: Test
+testSparsifySimple =
+    TestCase $
+        assertEqual
+            "testSparsifySimple"
+            [ Cell 0 1
+            , Cell 1 0
+            , Cell 2 (-1)
+            , Cell 5 (-1)
+            , Cell 6 0
+            , -- sparsify always adds one cell with (-1) budget to the end of the row.
+              Cell 7 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 1
+                , Cell 1 0
+                , Cell 2 (-1)
+                , Cell 3 (-1)
+                , Cell 4 (-1)
+                , Cell 5 (-1)
+                , Cell 6 0
+                ]
+            )
+
+-- | Test sparsify with a sequence of cells with negative budgets of length 1.
+testSparsifyNegativeSingleton :: Test
+testSparsifyNegativeSingleton =
+    TestCase $
+        assertEqual
+            "testSparsifyNegativeSingleton"
+            [Cell 0 1, Cell 1 0, Cell 2 (-1), Cell 3 0, Cell 4 (-1)]
+            (sparsify [Cell 0 1, Cell 1 0, Cell 2 (-1), Cell 3 0, Cell 4 (-1)])
+
+-- | Test sparsify with a larger input and different sequences of cells with negative budgets.
+testSparsifyComplex :: Test
+testSparsifyComplex =
+    TestCase $
+        assertEqual
+            "testSparsifyComplex"
+            [ Cell 0 1
+            , Cell 1 0
+            , Cell 2 (-1)
+            , Cell 5 (-1)
+            , Cell 6 0
+            , Cell 7 1
+            , Cell 8 0
+            , Cell 9 (-1)
+            , Cell 10 0
+            , Cell 11 0
+            , Cell 12 0
+            , Cell 13 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 1
+                , Cell 1 0
+                , Cell 2 (-1)
+                , Cell 3 (-1)
+                , Cell 4 (-1)
+                , Cell 5 (-1)
+                , Cell 6 0
+                , Cell 7 1
+                , Cell 8 0
+                , Cell 9 (-1)
+                , Cell 10 0
+                , Cell 11 0
+                , Cell 12 0
+                , Cell 13 (-1)
+                , Cell 14 (-2)
+                , Cell 15 (-3)
+                , Cell 16 (-4)
+                ]
+            )
+
+-- | Test whether sparsify deletes the first cell if it is negative.
+testSparsifyLeadingNegative :: Test
+testSparsifyLeadingNegative =
+    TestCase $
+        assertEqual
+            "testSparsifyLeadingNegative"
+            [ Cell 1 0
+            , Cell 2 0
+            , Cell 3 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 (-1)
+                , Cell 1 0
+                , Cell 2 0
+                , Cell 3 (-1)
+                ]
+            )
+
+-- | Test whether sparsify does not change an already fully sparsified row.
+testSparsifyOnSparsifiedRow :: Test
+testSparsifyOnSparsifiedRow =
+    TestCase $
+        assertEqual
+            "testSparsifyOnSparsifiedRow"
+            [ Cell 0 0
+            , Cell 1 (-1)
+            , Cell 10 (-1)
+            , Cell 11 0
+            , Cell 12 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 0
+                , Cell 1 (-1)
+                , Cell 10 (-1)
+                , Cell 11 0
+                , Cell 12 (-1)
+                ]
+            )
+
+-- | Test sparsify on a row which has previously already been partially sparsified.
+testSparsifyOnPartiallySparsifiedRow :: Test
+testSparsifyOnPartiallySparsifiedRow =
+    TestCase $
+        assertEqual
+            "testSparsifyOnPartiallySparsifiedRow"
+            [ Cell 0 0
+            , Cell 1 (-1)
+            , Cell 5 (-1)
+            , Cell 6 0
+            , Cell 7 (-1)
+            , Cell 9 (-1)
+            , Cell 10 0
+            , Cell 11 (-1)
+            ]
+            ( sparsify
+                [ Cell 0 0
+                , Cell 1 (-1)
+                , Cell 5 (-1)
+                , Cell 6 0
+                , Cell 7 (-1)
+                , Cell 8 (-1)
+                , Cell 9 (-1)
+                , Cell 10 0
+                , Cell 11 (-1)
+                ]
+            )
 
 {- | This tests the input string "tees" with zero errors. Output order does not matter, so
 it is sorted to check for equality. Output represents the strings "t", "ee" and "s".
@@ -119,7 +273,7 @@ testMississippiThreeErrors =
             "testMississippiThreeErrors"
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
-            (insertionDeletionAlgorithm 0 3 (V.fromList "mississippi"))
+            (sort $ insertionDeletionAlgorithm 0 3 (V.fromList "mississippi"))
 
 -- | Test the string "mississippi" with four errors.
 testMississippiFourErrors :: Test
@@ -129,73 +283,91 @@ testMississippiFourErrors =
             "testMississippiFourErrors"
             -- The whole string is an approximate palindrome with three errors
             [(0, 11)]
-            (insertionDeletionAlgorithm 0 4 (V.fromList "mississippi"))
+            (sort $ insertionDeletionAlgorithm 0 4 (V.fromList "mississippi"))
 
--- testSparsifySimple :: Test
--- testSparsifySimple =
---     TestCase $
---         assertEqual
---             "testSparsifySimple"
---             [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 5) (-1), Cell (0, 6) 0]
---             ( sparsify
---                 7
---                 [ Cell (0, 0) 1
---                 , Cell (0, 1) 0
---                 , Cell (0, 2) (-1)
---                 , Cell (0, 3) (-1)
---                 , Cell (0, 4) (-1)
---                 , Cell (0, 5) (-1)
---                 , Cell (0, 6) 0
---                 ]
---             )
+-- | Test text input with a non-zero even gap and no errors.
+testTextEvenGapZeroErrors :: Test
+testTextEvenGapZeroErrors =
+    TestCase $
+        assertEqual
+            "testTextEvenGapZeroErrors"
+            [(0, 2), (0, 6), (1, 3), (3, 5), (3, 7), (5, 7)]
+            (sort $ insertionDeletionAlgorithm 2 0 (V.fromList "dabcadc"))
 
--- testSparsifyEdgeCase :: Test
--- testSparsifyEdgeCase =
---     TestCase $
---         assertEqual
---             "testSparsifyEdgeCase"
---             [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0]
---             (sparsify 4 [Cell (0, 0) 1, Cell (0, 1) 0, Cell (0, 2) (-1), Cell (0, 3) 0])
+-- | Test text input with a non-zero even gap and one error.
+testTextEvenGapOneError :: Test
+testTextEvenGapOneError =
+    TestCase $
+        assertEqual
+            "testTextEvenGapOneError"
+            [(0, 7), (2, 7)]
+            (sort $ insertionDeletionAlgorithm 2 1 (V.fromList "dabcadc"))
 
--- testSparsifyComplex :: Test
--- testSparsifyComplex =
---     TestCase $
---         assertEqual
---             "testSparsifyComplex"
---             [ Cell (0, 0) 1
---             , Cell (0, 1) 0
---             , Cell (0, 2) (-1)
---             , Cell (0, 5) (-1)
---             , Cell (0, 6) 0
---             , Cell (0, 7) 1
---             , Cell (0, 8) 0
---             , Cell (0, 9) (-1)
---             , Cell (0, 10) 0
---             , Cell (0, 11) 0
---             , Cell (0, 12) 0
---             , Cell (0, 13) (-1)
---             ]
---             ( sparsify
---                 17
---                 [ Cell (0, 0) 1
---                 , Cell (0, 1) 0
---                 , Cell (0, 2) (-1)
---                 , Cell (0, 3) (-1)
---                 , Cell (0, 4) (-1)
---                 , Cell (0, 5) (-1)
---                 , Cell (0, 6) 0
---                 , Cell (0, 7) 1
---                 , Cell (0, 8) 0
---                 , Cell (0, 9) (-1)
---                 , Cell (0, 10) 0
---                 , Cell (0, 11) 0
---                 , Cell (0, 12) 0
---                 , Cell (0, 13) (-1)
---                 , Cell (0, 14) (-2)
---                 , Cell (0, 15) (-3)
---                 , Cell (0, 16) (-4)
---                 ]
---             )
+{- | Test text input with a non-zero even gap and two errors. The whole string is an
+approximate palindrome with one error and there are no substrings which are gapped
+maximal palindromes with 2 errors, so this should return the whole string.
+-}
+testTextEvenGapTwoErrors :: Test
+testTextEvenGapTwoErrors =
+    TestCase $
+        assertEqual
+            "testTextEvenGapTwoErrors"
+            [(0, 7)]
+            (sort $ insertionDeletionAlgorithm 2 2 (V.fromList "dabcadc"))
+
+{- | Test again with an even gap, but with bigger input with more interesting output when
+searching with a maximum of 2 errors.
+-}
+testTextEvenGapTwoErrorsBiggerInput :: Test
+testTextEvenGapTwoErrorsBiggerInput =
+    TestCase $
+        assertEqual
+            "testTextEvenGapTwoErrorsBiggerInput"
+            [(0, 9), (2, 10)]
+            (sort $ insertionDeletionAlgorithm 2 2 (V.fromList "cbadcabede"))
+
+{- | Use the same gap and input as "testTextEvenGapTwoErrorsBiggerInput", but search for
+maximum three errors. Should return the whole string.
+-}
+testTextEvenGapThreeErrorsBiggerInput :: Test
+testTextEvenGapThreeErrorsBiggerInput =
+    TestCase $
+        assertEqual
+            "testTextEvenGapThreeErrorsBiggerInput"
+            [(0, 10)]
+            (sort $ insertionDeletionAlgorithm 2 3 (V.fromList "cbadcabede"))
+
+{- | Test with an odd gap and zero errors. The gapSize is 3 and not 1, because 1 character
+is always a palindrome because of reflexitivity, so a gap of size 1 does not change the
+results.
+-}
+testTextOddGapZeroErrors :: Test
+testTextOddGapZeroErrors =
+    TestCase $
+        assertEqual
+            "testTextOddGapZeroErrors"
+            [(0, 3), (1, 5), (1, 7), (3, 8), (5, 8), (6, 9), (7, 10)]
+            (sort $ insertionDeletionAlgorithm 3 0 (V.fromList "cbdabdbacc"))
+
+-- | Test with an odd gap and one error.
+testTextOddGapOneError :: Test
+testTextOddGapOneError =
+    TestCase $
+        assertEqual
+            "testTextOddGapOneError"
+            [(0, 9), (2, 9), (5, 10)]
+            (sort $ insertionDeletionAlgorithm 3 1 (V.fromList "cbdabdbacc"))
+
+{- | Test with an odd gap and two errors. The only maximal gapped approximate palindrome
+satisfying these constraints is the whole string.
+-}
+testTextOddGapTwoErrors :: Test
+testTextOddGapTwoErrors =
+    TestCase $
+        assertEqual
+            "testTextOddGapTwoErrors"
+            [(0, 10)]
+            (sort $ insertionDeletionAlgorithm 3 2 (V.fromList "cbdabdbacc"))
 
 {- | Test a small DNA sequence with zero errors. Note that for an empty maximal
 approximate palindrome, the start character index is the same as the end character index.

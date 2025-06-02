@@ -5,7 +5,6 @@ import System.IO (hFlush)
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
-    , LengthMod
     , Variant (..)
     , findPalindromes
     )
@@ -18,9 +17,9 @@ import qualified System.IO as Sys
 
 -- | Streams the result of the given settings
 findPalindromesStream
-    :: Variant -> Complexity -> LengthMod -> String -> C.ConduitT () Palindrome IO ()
-findPalindromesStream variant complexity lengthMod input =
-    C.yieldMany $ findPalindromes variant complexity lengthMod input
+    :: Variant -> Complexity -> Int -> String -> C.ConduitT () Palindrome IO ()
+findPalindromesStream variant complexity minlen input =
+    C.yieldMany $ findPalindromes variant complexity minlen input
 
 {- | Returns the result of finding palindromes with the settings (The first 3 params) on the string
 whilst diplaying the intermediate progress using the given function
@@ -28,27 +27,24 @@ whilst diplaying the intermediate progress using the given function
 findPalindromesVisualised
     :: Variant
     -> Complexity
-    -> LengthMod
+    -> Int
     -> String
     -> (Float -> IO ())
     -- ^ Function that defines how to visualise progress
     -> IO [Palindrome]
-findPalindromesVisualised variant complexity (minLength, maybeMaxLength) input visualiseProgress =
+findPalindromesVisualised variant complexity minLength input visualiseProgress =
     do
         let chunkSize = 100
         -- Used for minimum detail level for progress, only use smaller than 2 if user explicitly overrides default
         let streamMinLength = min minLength 2
         visualiseProgress 0
         C.runConduit $
-            findPalindromesStream variant complexity (streamMinLength, Nothing) input
+            findPalindromesStream variant complexity streamMinLength input
                 C..| C.conduitVector chunkSize -- Chunk result stream
                 C..| calcVisualiseProgress (length input) visualiseProgress
                 C..| C.concat
                 C..| C.filter -- Filter to actual given filter size
-                    ( \pal ->
-                        minLength <= getLength pal
-                            && maybe True (\maxLen -> getLength pal <= maxLen) maybeMaxLength
-                    )
+                    ((minLength <=) . getLength)
                 C..| C.sinkList
 
 {- | Consumes a Vector of Palindrome and prints the progress made
@@ -64,9 +60,9 @@ calcVisualiseProgress totalLen visualise = C.awaitForever $ \pals -> do
 
 -- | Wrapper for findPalindromesVisualised where the visualisation method is printProgressbar
 findPalindromesWithProgressBar
-    :: Variant -> Complexity -> LengthMod -> String -> IO [Palindrome]
-findPalindromesWithProgressBar variant complexity lengthmod input =
-    findPalindromesVisualised variant complexity lengthmod input printProgressBar
+    :: Variant -> Complexity -> Int -> String -> IO [Palindrome]
+findPalindromesWithProgressBar variant complexity minLength input =
+    findPalindromesVisualised variant complexity minLength input printProgressBar
 
 {- | Prints a progress bar into the terminal with progress between 0 and 1,
 then flushes stdout to force a write

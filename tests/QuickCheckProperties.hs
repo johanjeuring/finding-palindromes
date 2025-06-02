@@ -71,7 +71,7 @@ propValidPalindromeRangeAndText settings = counterexample (show settings ++ " pr
         ( findPalindromes
             (variant settings)
             (complexity settings)
-            (lengthMod settings)
+            (minLength settings)
             originalString
         )
 
@@ -94,7 +94,7 @@ propValidPalindromeReverse settings = counterexample (show settings ++ " propert
         ( findPalindromes
             (variant settings)
             (complexity settings)
-            (lengthMod settings)
+            (minLength settings)
             originalString
         )
 
@@ -172,7 +172,7 @@ propValidPalLength settings = counterexample (show settings ++ " property 3") $ 
         ( findPalindromes
             (variant settings)
             (complexity settings)
-            (lengthMod settings)
+            (minLength settings)
             originalString
         )
 
@@ -195,7 +195,7 @@ propValidBoundaries settings = counterexample (show settings ++ " property 4") $
         ( findPalindromes
             (variant settings)
             (complexity settings)
-            (lengthMod settings)
+            (minLength settings)
             originalString
         )
 
@@ -232,13 +232,13 @@ propValidPalRange settings = counterexample (show settings ++ " property 5") $ f
         ( findPalindromes
             (variant settings)
             (complexity settings)
-            (lengthMod settings)
+            (minLength settings)
             originalString
         )
 
 -- Property 6 ---------------------------------------------------------
 
--- | Property for testing if the length of a character palindrome is allowed by the specified minimum and maximum length
+-- | Property for testing if the length of a character palindrome is allowed by the specified minimum length
 propAllowedPalLength :: Settings -> Property
 propAllowedPalLength settings = counterexample (show settings ++ " property 6") $ forAll (stringGenerator settings) $ \originalString ->
     all
@@ -246,17 +246,16 @@ propAllowedPalLength settings = counterexample (show settings ++ " property 6") 
         ( findPalindromes
             (variant settings)
             (complexity settings)
-            (lengthMod settings)
+            (minLength settings)
             originalString
         )
 
--- | Checks if the length of a palindrome is between the minimum and maximum length
+-- | Checks if the length of a palindrome is greater than the minimum length
 isAllowedPalLength :: Settings -> Palindrome -> Bool
-isAllowedPalLength settings pal = case lengthMod settings of
-    (l, Just u) ->
-        getLength pal >= l && getLength pal <= u
+isAllowedPalLength settings pal = case minLength settings of
+    l ->
+        getLength pal >= l
             || palText pal == ""
-    (l, Nothing) -> getLength pal >= l || palText pal == ""
 
 -- Property 7 ---------------------------------------------------------
 
@@ -270,13 +269,13 @@ propStreamSameResult settings = counterexample (show settings ++ " property 7") 
                 findPalindromes
                     (variant settings)
                     (complexity settings)
-                    (lengthMod settings)
+                    (minLength settings)
                     originalString
         streamed <-
             findPalindromesVisualised
                 (variant settings)
                 (complexity settings)
-                (lengthMod settings)
+                (minLength settings)
                 originalString
                 (const $ return ()) -- Don't do anything in the visualisation step
         return (pure == streamed)

@@ -1,6 +1,7 @@
 module QuickCheckProperties (propertyList) where
 
 import Data.Char (isAlphaNum, isSpace, readLitChar, toLower)
+import Data.Foldable.Levenshtein (levenshtein', levenshteinDistance')
 import Data.Maybe (fromJust)
 import Test.QuickCheck
     ( Arbitrary
@@ -19,7 +20,7 @@ import Test.QuickCheck
 
 import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (ComLinear, ComQuadratic)
+    ( Complexity (..)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
     , findPalindromeRanges
     , findPalindromes
@@ -98,20 +99,44 @@ propValidPalindromeReverse settings = counterexample (show settings ++ " propert
         )
 
 extractPalEq :: Settings -> Palindrome -> Bool
-extractPalEq settings pal = case variant settings of
-    VarWord ->
-        checkMismatches errors $
-            removeGap gapLength (words (cleanOriginalString (palText pal)))
-    VarPlain -> checkMismatches errors $ removeGap gapLength (palText pal)
-    VarDNA ->
-        checkMismatches errors $
-            removeGap gapLength (map (fromJust . charToDNA) (palText pal))
-    _ ->
-        checkMismatches errors $ removeGap gapLength (cleanOriginalString (palText pal))
+extractPalEq settings pal = case complexity settings of
+    ComInsertionDeletion _ _ -> case variant settings of
+        VarWord -> isApproximatePalindrome $ words (cleanOriginalString (palText pal))
+        VarPlain -> isApproximatePalindrome $ palText pal
+        VarDNA -> isApproximatePalindrome $ map (fromJust . charToDNA) (palText pal)
+        _ -> isApproximatePalindrome $ cleanOriginalString (palText pal)
+    _ -> case variant settings of
+        VarWord -> isPalindrome $ words (cleanOriginalString (palText pal))
+        VarPlain -> isPalindrome $ palText pal
+        VarDNA -> isPalindrome $ map (fromJust . charToDNA) (palText pal)
+        _ -> isPalindrome $ cleanOriginalString (palText pal)
   where
     (gapLength, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
+        ComInsertionDeletion gap err -> (gap, err)
         ComLinear -> (0, 0)
+
+    {- if any of the possible removed gaps has levenshteinDistance with its reverse is
+    less than 2 * errors we have an a valid approximate palindromes. This is because
+    2 * errors is equivalent to the levenshteinDistance -}
+    isApproximatePalindrome :: (PalEq a) => [a] -> Bool
+    isApproximatePalindrome input =
+        any
+            (<= 2 * errors)
+            ( zipWith
+                (levenshteinDistance' (=:=))
+                (allPossibleGapless gapLength errors input)
+                (map reverse (allPossibleGapless gapLength errors input))
+            )
+    isPalindrome :: (PalEq a) => [a] -> Bool
+    isPalindrome input = checkMismatches errors $ removeGap 0 gapLength input
+
+-- | for approximate palindromes the gap can be shifted due to insertions, so we need all.
+allPossibleGapless :: (PalEq a) => Int -> Int -> [a] -> [[a]]
+allPossibleGapless 0 _ palindrome = [palindrome]
+allPossibleGapless gap 0 palindrome = [removeGap 0 gap palindrome]
+allPossibleGapless gap errors palindrome =
+    map (\e -> removeGap e gap palindrome) [-errors .. errors]
 
 -- | Checks if the character string is a palindrome, taking gaps and errors into account
 checkMismatches :: (PalEq a) => Int -> [a] -> Bool
@@ -125,15 +150,17 @@ checkMismatches errors pal' = mismatches <= errors
             ]
 
 -- | Removes gap from palindrome
-removeGap :: Int -> [a] -> [a]
-removeGap gapLength palindrome = take start palindrome ++ drop end palindrome
+removeGap :: Int -> Int -> [a] -> [a]
+removeGap offset gapLength palindrome = take start palindrome ++ drop end palindrome
   where
-    start = (length palindrome - toRemove) `div` 2
-    end = start + toRemove
-    toRemove =
-        if even (length palindrome) == even gapLength || gapLength == 0
-            then gapLength
-            else gapLength - 1
+    start = (length palindrome - adjustedGap + offset) `div` 2
+    end = start + adjustedGap
+    adjustGap = if even offset then not adjustWhenOddOffset else adjustWhenOddOffset
+    adjustWhenOddOffset = even (length palindrome) == even gapLength || gapLength == 0
+    adjustedGap =
+        if adjustGap
+            then gapLength - 1
+            else gapLength
 
 -- Property 3 ---------------------------------------------------------
 

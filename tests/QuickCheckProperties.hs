@@ -101,15 +101,15 @@ propValidPalindromeReverse settings = counterexample (show settings ++ " propert
 extractPalEq :: Settings -> Palindrome -> Bool
 extractPalEq settings pal = case complexity settings of
     ComInsertionDeletion _ _ -> case variant settings of
-        VarWord -> isApproximatePalindrome (words (cleanOriginalString (palText pal)))
-        VarPlain -> isApproximatePalindrome (palText pal)
-        VarDNA -> isApproximatePalindrome (map (fromJust . charToDNA) (palText pal))
-        _ -> isApproximatePalindrome (cleanOriginalString (palText pal))
+        VarWord -> isApproximatePalindrome $ words (cleanOriginalString (palText pal))
+        VarPlain -> isApproximatePalindrome $ palText pal
+        VarDNA -> isApproximatePalindrome $ map (fromJust . charToDNA) (palText pal)
+        _ -> isApproximatePalindrome $ cleanOriginalString (palText pal)
     _ -> case variant settings of
-        VarWord -> isPalindrome (words (cleanOriginalString (palText pal)))
-        VarPlain -> isPalindrome (palText pal)
-        VarDNA -> isPalindrome (map (fromJust . charToDNA) (palText pal))
-        _ -> isPalindrome (cleanOriginalString (palText pal))
+        VarWord -> isPalindrome $ words (cleanOriginalString (palText pal))
+        VarPlain -> isPalindrome $ palText pal
+        VarDNA -> isPalindrome $ map (fromJust . charToDNA) (palText pal)
+        _ -> isPalindrome $ cleanOriginalString (palText pal)
   where
     (gapLength, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
@@ -122,7 +122,7 @@ extractPalEq settings pal = case complexity settings of
     isApproximatePalindrome :: (PalEq a) => [a] -> Bool
     isApproximatePalindrome input =
         any
-            (\x -> x <= 2 * errors)
+            (<= 2 * errors)
             ( zipWith
                 (levenshteinDistance' (=:=))
                 (allPossibleGapless gapLength errors input)
@@ -131,7 +131,7 @@ extractPalEq settings pal = case complexity settings of
     isPalindrome :: (PalEq a) => [a] -> Bool
     isPalindrome input = checkMismatches errors $ removeGap 0 gapLength input
 
--- for approximate palindromes the gap can be shifted due to insertions, so we need all.
+-- | for approximate palindromes the gap can be shifted due to insertions, so we need all.
 allPossibleGapless :: (PalEq a) => Int -> Int -> [a] -> [[a]]
 allPossibleGapless 0 _ palindrome = [palindrome]
 allPossibleGapless gap 0 palindrome = [removeGap 0 gap palindrome]
@@ -151,12 +151,12 @@ checkMismatches errors pal' = mismatches <= errors
 
 -- | Removes gap from palindrome
 removeGap :: Int -> Int -> [a] -> [a]
-removeGap ofset gapLength palindrome = take start palindrome ++ drop end palindrome
+removeGap offset gapLength palindrome = take start palindrome ++ drop end palindrome
   where
-    start = (length palindrome - adjustedGap + ofset) `div` 2
+    start = (length palindrome - adjustedGap + offset) `div` 2
     end = start + adjustedGap
-    adjustGap = if even ofset then not adjustWhenOddOfset else adjustWhenOddOfset
-    adjustWhenOddOfset = even (length palindrome) == even gapLength || gapLength == 0
+    adjustGap = if even offset then not adjustWhenOddOffset else adjustWhenOddOffset
+    adjustWhenOddOffset = even (length palindrome) == even gapLength || gapLength == 0
     adjustedGap =
         if adjustGap
             then gapLength - 1

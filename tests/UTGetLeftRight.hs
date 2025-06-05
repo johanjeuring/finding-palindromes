@@ -73,7 +73,7 @@ testCenterBetweenElemsOutOfBoundsRight =
             (4, 7)
             (getLeftRightCenterBetweenElems 8 6 7)
 
--- | Test input with gapsize of zero and center between two elements.
+-- | Test input with gap size of zero and center between two elements.
 testCenterBetweenElemsZeroGap =
     TestCase $
         assertEqual

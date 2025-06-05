@@ -102,14 +102,14 @@ functionality for including gaps and errors, therefore this is given as an extra
 data Complexity
     = ComLinear
     | ComQuadratic {gapSize :: Int, maxError :: Int}
-    | ComInsertionDeletion {gapsID :: Int, maxIDError :: Int}
+    | ComInsertionDeletion {gapSizeID :: Int, maxIDError :: Int}
     deriving (Show)
 
 {- This method returns whether uneven palindromes are impossible to exist based on the
 query settings. -}
 onlyEvenPals :: Variant -> Complexity -> Bool
-onlyEvenPals VarDNA (ComQuadratic gap _) = even gap
-onlyEvenPals VarDNA _ = True
+onlyEvenPals VarDNA (ComQuadratic gapSize _) = even gapSize
+onlyEvenPals VarDNA ComLinear = True
 onlyEvenPals _ _ = False
 
 {- | This function combines three phases based on the settings and input given: The
@@ -136,13 +136,13 @@ findPalindromeRanges variant complexity input =
     alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
-        ComQuadratic gap errors ->
+        ComQuadratic gapSize errors ->
             indexListToRanges
                 . quadraticAlgorithm
                     (onlyEvenPals variant complexity)
-                    gap
+                    gapSize
                     errors
-        ComInsertionDeletion gaps errors -> insertionDeletionAlgorithm gaps errors
+        ComInsertionDeletion gapSize errors -> insertionDeletionAlgorithm gapSize errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]
     indexListToRanges = zipWith (curry indexedLengthToRange) indexList

@@ -45,20 +45,20 @@ tests =
             ++ testListInsertionDeletionAlgorithm
             ++ testListText ComLinear
             ++ testListText ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             ++ testListPunctuation
             ++ testListGetLeftRight
             ++ testListDNA ComLinear
             ++ testListDNA ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             ++ testListProcessing
             ++ testListPalEq
             ++ testListWordPalindromes ComLinear
             ++ testListWordPalindromes ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic

@@ -77,8 +77,8 @@ lengthApproximatePalindrome input errorCount start end
 
 {- | Get the element index for the left and right characters to start expanding the
 palindrome from, essentially ignoring the gap. This function must be used when the
-palindrome center is between two elements. Note that if the gapSize is odd, the
-resulting gap will be maximum (gapSize - 1) big.
+palindrome center is between two elements. Note that if the inputted gap size is odd, the
+actually used gap size will be (gapSize - 1).
 -}
 getLeftRightCenterBetweenElems
     :: Int
@@ -143,7 +143,7 @@ lengthPalAtCenterReflexive
     => V.Vector a
     -- ^ The total vector to find palindromes in
     -> Int
-    -- ^ The (maximum) size of the gap
+    -- ^ The size of the gap
     -> Int
     -- ^ The (maximum) number of allowed errors
     -> Int
@@ -188,7 +188,7 @@ lengthPalAtCenterAntiReflexive
     => V.Vector a
     -- ^ The total vector to find palindromes in
     -> Int
-    -- ^ The (maximum) size of the gap
+    -- ^ The size of the gap
     -> Int
     -- ^ The (maximum) number of allowed errors
     -> Int

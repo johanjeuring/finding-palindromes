@@ -55,7 +55,7 @@ quadraticAlgorithm
     => Bool
     -- ^ isAntiReflexive
     -> Int
-    -- ^ gapsize
+    -- ^ gapSize
     -> Int
     -- ^ error count
     -> V.Vector a

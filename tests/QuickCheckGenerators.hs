@@ -91,7 +91,7 @@ function must be injective, which is an unnecessary restriction otherwise.
 generatePalindromeString
     :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Settings -> Gen [a]
 generatePalindromeString palComp charGenerator settings = do
-    -- get the gap and error settings from the complexity settings
+    -- get the gapSize and error settings from the complexity settings
     let (gapSize, error) = case complexity settings of
             ComQuadratic{gapSize = gapSize, maxError = error} -> (gapSize, error)
             _ -> (0, 0)

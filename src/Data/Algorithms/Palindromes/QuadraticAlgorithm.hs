@@ -41,16 +41,15 @@ gappedApproximatePalindromesAroundCentres
     -> Int
     -> V.Vector a
     -> [Int]
-gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize errorCount input =
-    if onlyEvenPals
-        then
-            L.map
-                (lengthPalAtCenterAntiReflexive input gapSize errorCount)
-                (if even gapSize then [0 .. V.length input] else [0 .. V.length input - 1])
-        else
-            L.map
-                (lengthPalAtCenterReflexive input gapSize errorCount)
-                [0 .. 2 * V.length input]
+gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize errorCount input
+    | onlyEvenPals =
+        L.map
+            (lengthPalAtCenterAntiReflexive input gapSize errorCount)
+            (if even gapSize then [0 .. V.length input] else [0 .. V.length input - 1])
+    | otherwise =
+        L.map
+            (lengthPalAtCenterReflexive input gapSize errorCount)
+            [0 .. 2 * V.length input]
 
 {- | Keep expanding the palindrome around the given center to get the maximal palindrome.
 Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of

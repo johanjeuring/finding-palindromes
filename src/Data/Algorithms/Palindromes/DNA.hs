@@ -38,7 +38,9 @@ instance {-# OVERLAPPING #-} PalEq DNA where
   the input cannot be fully parsed to DNA.
 -}
 toDNA :: (Functor f, Foldable f) => f Char -> Maybe (f DNA)
-toDNA x = if hasNothing then Nothing else Just $ fmap (fromJust . charToDNA) x
+toDNA x
+    | hasNothing = Nothing
+    | otherwise = Just $ fmap (fromJust . charToDNA) x
   where
     hasNothing = any (isNothing . charToDNA) x
 
@@ -54,7 +56,9 @@ charToDNA 't' = Just T
 charToDNA 'c' = Just C
 charToDNA 'g' = Just G
 charToDNA 'u' = Just T
-charToDNA c = if toUpper c `elem` "RYKMSWBDHVN" then Just N else Nothing
+charToDNA c
+    | toUpper c `elem` "RYKMSWBDHVN" = Just N
+    | otherwise = Nothing
 
 -- | Converts the DNA datatype to the corresponding Char symbol
 dnaToChar :: DNA -> Char

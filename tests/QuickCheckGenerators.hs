@@ -92,8 +92,8 @@ generatePalindromeString
     :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Settings -> Gen [a]
 generatePalindromeString palComp charGenerator settings = do
     -- get the gap and error settings from the complexity settings
-    let (gap, error) = case complexity settings of
-            ComQuadratic{gapSize = gap, maxError = error} -> (gap, error)
+    let (gapSize, error) = case complexity settings of
+            ComQuadratic{gapSize = gapSize, maxError = error} -> (gapSize, error)
             _ -> (0, 0)
 
     -- generate random string to add noise in front of the palindrome
@@ -102,8 +102,8 @@ generatePalindromeString palComp charGenerator settings = do
     palGenerator <-
         oneof
             [ listOf charGenerator
-            , addErrors error charGenerator $ generatePalindrome palComp charGenerator gap
-            , addErrors error charGenerator $ multiPalInPal palComp charGenerator gap
+            , addErrors error charGenerator $ generatePalindrome palComp charGenerator gapSize
+            , addErrors error charGenerator $ multiPalInPal palComp charGenerator gapSize
             ]
     -- generate random string to add noise behind the palindrome
     randomEnd <- listOf charGenerator
@@ -111,16 +111,16 @@ generatePalindromeString palComp charGenerator settings = do
 
 -- | Generates a palindrome
 generatePalindrome :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Int -> Gen [a]
-generatePalindrome palComp charGenerator gap = do
+generatePalindrome palComp charGenerator gapSize = do
     randomString <- listOf charGenerator
-    palInPal palComp charGenerator gap 1 randomString
+    palInPal palComp charGenerator gapSize 1 randomString
 
 -- | generates a palindrome with a random amount of palInPal depth, note that a non palindrome can be generated if the random number is 0
 multiPalInPal :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Int -> Gen [a]
-multiPalInPal palComp charGenerator gap = do
+multiPalInPal palComp charGenerator gapSize = do
     randomString <- listOf charGenerator
     palInPalDepth <- choose (0, maxPalInPalGeneration) -- generate a random int between 0 and maxDepth
-    palInPal palComp charGenerator gap palInPalDepth randomString
+    palInPal palComp charGenerator gapSize palInPalDepth randomString
 
 {- | Generate a palindrome from string with Int amount of palindromes -
 a depth of 0 gives the input back, (pal) -
@@ -128,29 +128,29 @@ a depth of 1 gives a palindrome with one level of palindrome (pallap) -
 a depth of 2 gives a palindrome with two levels of palindrome (pallappallap)
 -}
 palInPal :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Int -> Int -> [a] -> Gen [a]
-palInPal palComp charGenerator gap depth string = do
+palInPal palComp charGenerator gapSize depth string = do
     case depth of
         0 -> return string
         1 -> do
-            unevenOrGap <- generateGap charGenerator gap -- allows for uneven palindromes and gaps
+            unevenOrGap <- generateGap charGenerator gapSize -- allows for uneven palindromes and gaps
             return $ string ++ unevenOrGap ++ reversePal palComp string
         _ -> do
             uneven <- generateGap charGenerator 1 -- allows for uneven palInPals
-            palInPal palComp charGenerator gap (depth - 1) $
+            palInPal palComp charGenerator gapSize (depth - 1) $
                 string ++ uneven ++ reversePal palComp string
 
 reversePal :: (PalEq a) => (a -> a) -> [a] -> [a]
 reversePal palComp = reverse . map palComp
 
-{- | generates a string with a max length of 'gapSetting' -
+{- | generates a string with a max length of 'maxGapSize' -
 the string will be used to make gapped palindromes or uneven palindrome -
 even pals are reprented by this string being empty
 -}
 generateGap :: (Arbitrary a) => Gen a -> Int -> Gen [a]
-generateGap charGenerator gapSetting = do
-    let maxGapLength = fromIntegral $ max gapSetting 1 -- the maxGaplength is always set to at least 1 to account for uneven palindromes
-    randomGapLength <- choose (0, maxGapLength)
-    vectorOf randomGapLength charGenerator -- generates a string of length 'randomGapLength'
+generateGap charGenerator maxGapSize = do
+    let maxGapSize' = fromIntegral $ max maxGapSize 1 -- the maxGapSize' is always set to at least 1 to account for uneven palindromes
+    randomGapSize <- choose (0, maxGapSize')
+    vectorOf randomGapSize charGenerator -- generates a string of length 'randomGapSize'
 
 -- | Generate x amount of errors in a string
 addErrors :: Int -> Gen a -> Gen [a] -> Gen [a]
@@ -170,5 +170,3 @@ addErrors error charGenerator palGenerator = case error of
             replaceErrors' :: [(Int, a)] -> Vector a -> Vector a
             replaceErrors' zip _palGenerator = _palGenerator // zip
         if null _palGenerator || randomError == 0 then palGenerator else return replaceErrors
-
-

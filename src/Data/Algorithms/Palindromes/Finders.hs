@@ -147,13 +147,11 @@ findPalindromeRanges variant complexity input =
         ComInsertionDeletion gapSize errors -> insertionDeletionAlgorithm gapSize errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]
-    indexListToRanges = zipWith (curry indexedLengthToRange) indexList
+    indexListToRanges = go 0
       where
-        -- We have to adjust indices due to indexLengthToRange assuming indices between letters
-        indexList
-            | onlyEvenPals variant complexity =
-                [0, 2 ..]
-            | otherwise = [0 ..]
+        go !_ [] = []
+        go !i (x : xs) = indexedLengthToRange (i, x) : go (i + increment) xs
+        increment = if onlyEvenPals variant complexity then 2 else 1
 
     {- The post-processing phase changes the list of ranges so that they fit the
     requirements in the case of punctuation palindromes -}

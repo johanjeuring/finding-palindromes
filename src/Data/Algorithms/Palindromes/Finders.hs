@@ -38,13 +38,13 @@ import Data.Algorithms.Palindromes.Algorithms
     , quadraticAlgorithm
     )
 import Data.Algorithms.Palindromes.Output
-    ( allLengths
-    , allWords
-    , indicesInOutputText
+    ( indicesInOutputText
     , indicesInOutputWord
     , lengthAt
     , longest
     , rangeToText
+    , showLengths
+    , showTexts
     , wordAt
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq)
@@ -229,9 +229,9 @@ formatPalindromes outputFormat pals = case outputFormat of
     OutLength -> case lengths of
         [] -> undefined
         x : _ -> show x
-    OutWord -> allWords pals
-    OutLengths -> allLengths lengths
-    OutWords -> allWords pals
+    OutWord -> showTexts pals
+    OutLengths -> showLengths lengths
+    OutWords -> showTexts pals
     OutLengthAt x -> lengthAt x lengths
     OutWordAt x -> wordAt x pals
   where

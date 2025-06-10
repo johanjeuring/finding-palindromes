@@ -20,8 +20,8 @@ module Data.Algorithms.Palindromes.Output
     , indicesInOutputWord
     , rangeToText
     , longest
-    , allLengths
-    , allWords
+    , showLengths
+    , showTexts
     , lengthAt
     , wordAt
     ) where
@@ -83,14 +83,14 @@ longest pals@(p1 : _) p2
     | otherwise = pals
 
 -- | All maximal palindrome lengths
-allLengths :: [Int] -> String
-allLengths = show
+showLengths :: [Int] -> String
+showLengths = show
 
 {- | All maximal palindromes as a list of strings. Same as show $ map palText input except
 this doesn't apply show to the palindrome strings as that will turn \n into \\n.
 -}
-allWords :: [Palindrome] -> String
-allWords input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
+showTexts :: [Palindrome] -> String
+showTexts input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
 
 -- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String

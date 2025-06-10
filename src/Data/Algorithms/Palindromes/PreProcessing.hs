@@ -42,8 +42,8 @@ filterLetters x = U.map toLower $ U.filter isAlphaNum x
 {- | A function that filters the string so that only letters remain, but remembers the
 original index of each character.
 -}
-filterLetters' :: U.Vector Char -> U.Vector (Int, Char)
-filterLetters' x = U.filter (isAlphaNum . snd) (U.indexed (U.map toLower x))
+filterLetters' :: U.Vector Char -> U.Vector Int
+filterLetters' x = U.map fst $ U.filter (isAlphaNum . snd) (U.indexed (U.map toLower x))
 
 {- | A function that filters the string so that only letters and spaces remain, then
 splits the result on every space so that only words remain.

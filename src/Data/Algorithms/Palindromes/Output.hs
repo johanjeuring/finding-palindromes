@@ -40,14 +40,14 @@ import qualified Data.Vector.Unboxed as U
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: (Int, Int) -> Int -> U.Vector (Int, Char) -> (Int, Int)
+indicesInOutputText :: (Int, Int) -> Int -> U.Vector Int -> (Int, Int)
 indicesInOutputText (start', end') !inputLength originalIndices
     | start' >= U.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
     | otherwise = (start, start)
   where
-    start = fst $ originalIndices U.! start'
-    end = fst (originalIndices U.! (end' - 1)) + 1
+    start = originalIndices U.! start'
+    end = (originalIndices U.! (end' - 1)) + 1
 
 {- | Takes a start and end index in the list of words and returns the start and end
 indices of the text of the word palindrome in the original string
@@ -75,12 +75,12 @@ rangeToText (start, end) input
     | end - start > 0 = U.toList $ U.slice start (end - start) input
     | otherwise = ""
 
-    longest :: [Palindrome] -> Palindrome -> [Palindrome]
-    longest [] p = [p]
-    longest pals@(p1 : _) p2
-        | getLength p1 == getLength p2 = p2 : pals
-        | getLength p1 < getLength p2 = [p2]
-        | otherwise = pals
+longest :: [Palindrome] -> Palindrome -> [Palindrome]
+longest [] p = [p]
+longest pals@(p1 : _) p2
+    | getLength p1 == getLength p2 = p2 : pals
+    | getLength p1 < getLength p2 = [p2]
+    | otherwise = pals
 
 -- | All maximal palindrome lengths
 allLengths :: [Int] -> String

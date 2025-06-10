@@ -152,7 +152,7 @@ findPalindromeRanges variant complexity input =
     indexListToRanges :: [Int] -> [(Int, Int)]
     indexListToRanges = go 0
       where
-        go !_ [] = []
+        go _ [] = []
         go !i (x : xs) = indexedLengthToRange (i, x) : go (i + increment) xs
         increment = if onlyEvenPals variant complexity then 2 else 1
 

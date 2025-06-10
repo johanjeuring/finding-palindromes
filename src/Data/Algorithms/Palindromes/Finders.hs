@@ -172,7 +172,7 @@ findPalindromes variant complexity minlen input =
     rangeToPalindrome r =
         Palindrome
             { palRange = r
-            , palText = rangeToText (indicesInOriginal r) (V.fromList input)
+            , palText = rangeToText (indicesInOriginal r) inputVector
             , palRangeInText = indicesInOriginal r
             }
 
@@ -182,11 +182,13 @@ findPalindromes variant complexity minlen input =
     -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
     indicesInOriginal :: (Int, Int) -> (Int, Int)
     indicesInOriginal range = case variant of
-        VarText -> indicesInOutputText range input (filterLetters' input)
-        VarPunctuation -> indicesInOutputText range input (filterLetters' input)
-        VarDNA -> indicesInOutputText range input (filterLetters' input)
+        VarText -> indicesInOutputText range inputLength (filterLetters' input)
+        VarPunctuation -> indicesInOutputText range inputLength (filterLetters' input)
+        VarDNA -> indicesInOutputText range inputLength (filterLetters' input)
         VarPlain -> range
-        VarWord -> indicesInOutputWord range input (textToWordsWithIndices input)
+        VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices input)
+    !inputVector = U.fromList input
+    !inputLength = U.length inputVector
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

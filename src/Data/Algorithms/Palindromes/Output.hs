@@ -38,9 +38,9 @@ import qualified Data.Vector as V
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: (Int, Int) -> String -> V.Vector (Int, Char) -> (Int, Int)
-indicesInOutputText (start', end') input originalIndices
-    | start' >= length originalIndices = (length input, length input)
+indicesInOutputText ::  (Int, Int) -> Int -> V.Vector (Int, Char) -> (Int, Int)
+indicesInOutputText (start', end') !inputLength originalIndices
+    | start' >= V.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
     | otherwise = (start, start)
   where
@@ -50,16 +50,13 @@ indicesInOutputText (start', end') input originalIndices
 {- | Takes a start and end index in the list of words and returns the start and end
 indices of the text of the word palindrome in the original string
 -}
-indicesInOutputWord :: (Int, Int) -> String -> V.Vector ((Int, Int), String) -> (Int, Int)
-indicesInOutputWord (start', end') input wordsWithIndices
+indicesInOutputWord :: (Int, Int) -> Int -> V.Vector ((Int, Int), String) -> (Int, Int)
+indicesInOutputWord (start', end') !inputLength wordsWithIndices
     | start' >= length wordsWithIndices =
-        (maxIndex, maxIndex)
+        (inputLength, inputLength)
     | end' - start' > 0 = (startIndex, endIndex)
     | otherwise = (startIndex, startIndex)
   where
-    maxIndex :: Int
-    maxIndex = length input
-
     firstWord :: ((Int, Int), String)
     firstWord = wordsWithIndices V.! start'
     lastWord :: ((Int, Int), String)

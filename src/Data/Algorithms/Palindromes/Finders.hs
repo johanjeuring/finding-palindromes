@@ -154,7 +154,9 @@ findPalindromeRanges variant complexity input =
       where
         go _ [] = []
         go !i (x : xs) = indexedLengthToRange (i, x) : go (i + increment) xs
-        increment = if onlyEvenPals variant complexity then 2 else 1
+        increment
+            | onlyEvenPals variant complexity = 2
+            | otherwise = 1
 
     {- The post-processing phase changes the list of ranges so that they fit the
     requirements in the case of punctuation palindromes -}

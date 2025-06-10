@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns #-}
+
 module Data.Algorithms.Palindromes.Streaming (findPalindromesStream, findPalindromesWithProgressBar, findPalindromesVisualised) where
 
 import Control.Monad.IO.Class (liftIO)
@@ -37,11 +39,12 @@ findPalindromesVisualised variant complexity minLength input visualiseProgress =
         let chunkSize = 100
         -- Used for minimum detail level for progress, only use smaller than 2 if user explicitly overrides default
         let streamMinLength = min minLength 2
+        let !inputLength = length input
         visualiseProgress 0
         C.runConduit $
             findPalindromesStream variant complexity streamMinLength input
                 C..| C.conduitVector chunkSize -- Chunk result stream
-                C..| calcVisualiseProgress (length input) visualiseProgress
+                C..| calcVisualiseProgress inputLength visualiseProgress
                 C..| C.concat
                 C..| C.filter -- Filter to actual given filter size
                     ((minLength <=) . getLength)

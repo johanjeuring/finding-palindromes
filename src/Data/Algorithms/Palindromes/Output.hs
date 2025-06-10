@@ -19,8 +19,7 @@ module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
     , rangeToText
-    , longestLength
-    , longestWords
+    , longest
     , allLengths
     , allWords
     , lengthAt
@@ -76,14 +75,6 @@ rangeToText (start, end) input
     | end - start > 0 = U.toList $ U.slice start (end - start) input
     | otherwise = ""
 
--- | Returns the length of the longest palindrome as a string
-longestLength :: [Int] -> String
-longestLength = show . maximum
-
--- | Returns all longests palindromes of the same size
-longestWords :: [Palindrome] -> String
-longestWords input = allWords $ reverse $ foldl' longest [] input
-  where
     longest :: [Palindrome] -> Palindrome -> [Palindrome]
     longest [] p = [p]
     longest pals@(p1 : _) p2

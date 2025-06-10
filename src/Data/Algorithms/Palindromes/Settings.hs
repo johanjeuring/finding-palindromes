@@ -30,6 +30,7 @@ import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
     , OutputFormat (..)
     , Variant (..)
+    , filterFunctionsPalindromes
     , formatPalindromes
     )
 import Data.Algorithms.Palindromes.Options
@@ -90,7 +91,7 @@ getSettings flags =
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
 getOutput :: Settings -> (String -> IO String)
 getOutput (Settings{complexity = c, variant = v, outputFormat = o, minLength = l}) s = do
-    pals <- findPalindromesWithProgressBar v c l s
+    pals <- findPalindromesWithProgressBar v c l (filterFunctionsPalindromes o) s
     return (formatPalindromes o pals)
 
 {- | Based on input flags, gets a tuple with a function that directly encapsulates

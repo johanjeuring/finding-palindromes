@@ -26,7 +26,11 @@ module Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
+    , filterFunctionsPalindromes
+    , filterPalindromes
     ) where
+
+import Data.List (foldl')
 
 import Data.Algorithms.Palindromes.Algorithms
     ( insertionDeletionAlgorithm
@@ -39,8 +43,7 @@ import Data.Algorithms.Palindromes.Output
     , indicesInOutputText
     , indicesInOutputWord
     , lengthAt
-    , longestLength
-    , longestWords
+    , longest
     , rangeToText
     , wordAt
     )
@@ -199,13 +202,34 @@ to the given outputFormat.
 findPalindromesFormatted
     :: Variant -> OutputFormat -> Complexity -> Int -> String -> String
 findPalindromesFormatted variant outputFormat complexity minlen input =
-    formatPalindromes outputFormat $ findPalindromes variant complexity minlen input
+    formatPalindromes outputFormat $
+        filterPalindromes outputFormat $
+            findPalindromes variant complexity minlen input
+
+filterPalindromes :: OutputFormat -> [Palindrome] -> [Palindrome]
+filterPalindromes outputFormat = case filterFunctionsPalindromes outputFormat of
+    Nothing -> id
+    Just foldF -> reverse . foldl' foldF []
+
+filterFunctionsPalindromes
+    :: OutputFormat
+    -> Maybe
+        ([Palindrome] -> Palindrome -> [Palindrome])
+filterFunctionsPalindromes outputFormat = case outputFormat of
+    OutLength -> Just longest
+    OutWord -> Just longest
+    OutLengths -> Nothing
+    OutWords -> Nothing
+    OutLengthAt _ -> Nothing
+    OutWordAt _ -> Nothing
 
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
 formatPalindromes outputFormat pals = case outputFormat of
-    OutLength -> longestLength lengths
-    OutWord -> longestWords pals
+    OutLength -> show $ case lengths of
+        [] -> 0
+        x : _ -> x
+    OutWord -> allWords pals
     OutLengths -> allLengths lengths
     OutWords -> allWords pals
     OutLengthAt x -> lengthAt x lengths

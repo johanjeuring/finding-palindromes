@@ -276,7 +276,7 @@ propStreamSameResult settings = counterexample (show settings ++ " property 7") 
                 (variant settings)
                 (complexity settings)
                 (minLength settings)
-                Nothing
+                False
                 originalString
                 (const $ return ()) -- Don't do anything in the visualisation step
         return (pure == streamed)

@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
@@ -187,8 +188,8 @@ findPalindromes variant complexity minlen input =
         VarDNA -> indicesInOutputText range inputLength (filterLetters' input)
         VarPlain -> range
         VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices input)
-    !inputVector = U.fromList input
-    !inputLength = U.length inputVector
+    !inputVector = V.fromList input
+    !inputLength = V.length inputVector
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

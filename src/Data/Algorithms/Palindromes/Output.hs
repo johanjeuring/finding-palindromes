@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns #-}
+
 {- |
 Module      :  Data.Algorithms.Palindromes.Output
 Copyright   :  (c) 2007 - 2013 Johan Jeuring
@@ -25,7 +27,7 @@ module Data.Algorithms.Palindromes.Output
     , wordAt
     ) where
 
-import Data.List (find, intercalate)
+import Data.List (find, foldl', intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
@@ -38,7 +40,7 @@ import qualified Data.Vector as V
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText ::  (Int, Int) -> Int -> V.Vector (Int, Char) -> (Int, Int)
+indicesInOutputText :: (Int, Int) -> Int -> V.Vector (Int, Char) -> (Int, Int)
 indicesInOutputText (start', end') !inputLength originalIndices
     | start' >= V.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
@@ -79,11 +81,11 @@ longestLength = show . maximum
 
 -- | Returns all longests palindromes of the same size
 longestWords :: [Palindrome] -> String
-longestWords input = allWords $ foldr longest [] input
+longestWords input = allWords $ reverse $ foldl' longest [] input
   where
-    longest :: Palindrome -> [Palindrome] -> [Palindrome]
-    longest p [] = [p]
-    longest p2 pals@(p1 : _)
+    longest :: [Palindrome] -> Palindrome -> [Palindrome]
+    longest [] p = [p]
+    longest pals@(p1 : _) p2
         | getLength p1 == getLength p2 = p2 : pals
         | getLength p1 < getLength p2 = [p2]
         | otherwise = pals

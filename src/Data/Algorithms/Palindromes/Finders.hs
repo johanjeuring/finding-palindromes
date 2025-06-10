@@ -226,9 +226,9 @@ filterFunctionsPalindromes outputFormat = case outputFormat of
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
 formatPalindromes outputFormat pals = case outputFormat of
-    OutLength -> show $ case lengths of
-        [] -> 0
-        x : _ -> x
+    OutLength -> case lengths of
+        [] -> undefined
+        x : _ -> show x
     OutWord -> allWords pals
     OutLengths -> allLengths lengths
     OutWords -> allWords pals

@@ -25,7 +25,7 @@ import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
 import qualified Data.Vector.Unboxed as U
 
 -- | This function changes the a list of ranges for punctuation palindromes by shrinking to punctuation.
-filterPunctuation :: String -> [(Int, Int)] -> [(Int, Int)]
+filterPunctuation :: U.Vector Char -> [(Int, Int)] -> [(Int, Int)]
 filterPunctuation input = map shrinkRange
   where
     {- Shrinks a range on both sides until the resulting range is surrounded by
@@ -44,6 +44,5 @@ filterPunctuation input = map shrinkRange
         originalEnd = fst $ filterLetters' input U.! (endIndex - 1)
     punctuationAt :: Int -> Bool
     punctuationAt i
-        | i < U.length inputAsVector && i >= 0 = (not . isLetter) $ inputAsVector U.! i
+        | i < U.length input && i >= 0 = (not . isLetter) $ input U.! i
         | otherwise = True
-    inputAsVector = U.fromList input

@@ -119,19 +119,19 @@ pre-processing phase, the algorithm phase and the post-processing phase. It find
 returns a list of (Int, Int), which represents the range of every found palindrome in the input.
 -}
 findPalindromeRanges
-    :: Variant -> Complexity -> String -> [(Int, Int)]
+    :: Variant -> Complexity -> U.Vector Char -> [(Int, Int)]
 findPalindromeRanges variant complexity input =
     (post . preAlg) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
     vector of PalEq items. -}
-    preAlg :: String -> [(Int, Int)]
+    preAlg :: U.Vector Char -> [(Int, Int)]
     preAlg = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
         VarDNA -> alg . tryParseDNA
         VarWord -> alg . textToWords
-        _ -> alg . U.fromList
+        _ -> alg
 
     {- The algorithm phase runs one of the algorithms that finds the ranges, since the linear and quadratic
     find indexLists we must convert these to ranges. -}
@@ -168,7 +168,7 @@ then filters them by length and finally converts the found ranges to the Palindr
 -}
 findPalindromes :: Variant -> Complexity -> Int -> String -> [Palindrome]
 findPalindromes variant complexity minlen input =
-    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity input
+    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity inputVector
   where
     rangeToPalindrome :: (Int, Int) -> Palindrome
     rangeToPalindrome r =
@@ -184,11 +184,11 @@ findPalindromes variant complexity minlen input =
     -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
     indicesInOriginal :: (Int, Int) -> (Int, Int)
     indicesInOriginal range = case variant of
-        VarText -> indicesInOutputText range inputLength (filterLetters' input)
-        VarPunctuation -> indicesInOutputText range inputLength (filterLetters' input)
-        VarDNA -> indicesInOutputText range inputLength (filterLetters' input)
+        VarText -> indicesInOutputText range inputLength (filterLetters' inputVector)
+        VarPunctuation -> indicesInOutputText range inputLength (filterLetters' inputVector)
+        VarDNA -> indicesInOutputText range inputLength (filterLetters' inputVector)
         VarPlain -> range
-        VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices input)
+        VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices inputVector)
     !inputVector = U.fromList input
     !inputLength = U.length inputVector
 

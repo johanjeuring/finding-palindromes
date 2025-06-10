@@ -223,10 +223,8 @@ filterOnlyLongest outputFormat = case outputFormat of
 
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
-formatPalindromes outputFormat pals = case outputFormat of
-    OutLength -> case lengths of
-        [] -> undefined
-        x : _ -> show x
+formatPalindromes outputFormat pals@(h : _) = case outputFormat of
+    OutLength -> show $ getLength h
     OutWord -> showTexts pals
     OutLengths -> showLengths lengths
     OutWords -> showTexts pals

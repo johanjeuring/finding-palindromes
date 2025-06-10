@@ -26,7 +26,7 @@ module Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
-    , filterFunctionsPalindromes
+    , filterOnlyLongest
     , filterPalindromes
     ) where
 
@@ -207,21 +207,17 @@ findPalindromesFormatted variant outputFormat complexity minlen input =
             findPalindromes variant complexity minlen input
 
 filterPalindromes :: OutputFormat -> [Palindrome] -> [Palindrome]
-filterPalindromes outputFormat = case filterFunctionsPalindromes outputFormat of
-    Nothing -> id
-    Just foldF -> reverse . foldl' foldF []
+filterPalindromes outputFormat
+    | filterOnlyLongest outputFormat = reverse . foldl' longest []
+    | otherwise = id
 
-filterFunctionsPalindromes
+filterOnlyLongest
     :: OutputFormat
-    -> Maybe
-        ([Palindrome] -> Palindrome -> [Palindrome])
-filterFunctionsPalindromes outputFormat = case outputFormat of
-    OutLength -> Just longest
-    OutWord -> Just longest
-    OutLengths -> Nothing
-    OutWords -> Nothing
-    OutLengthAt _ -> Nothing
-    OutWordAt _ -> Nothing
+    -> Bool
+filterOnlyLongest outputFormat = case outputFormat of
+    OutLength -> True
+    OutWord -> True
+    _ -> False
 
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"

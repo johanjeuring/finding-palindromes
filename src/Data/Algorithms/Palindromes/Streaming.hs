@@ -10,6 +10,7 @@ import Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , findPalindromes
     )
+import Data.Algorithms.Palindromes.Output (longest)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
 
 import qualified Data.Conduit as C
@@ -30,13 +31,13 @@ findPalindromesVisualised
     :: Variant
     -> Complexity
     -> Int
-    -> Maybe ([Palindrome] -> Palindrome -> [Palindrome])
-    -- ^ Optional filter function implemented with a foldl
+    -> Bool
+    -- ^ Enable filtering to only return the longest palindromes
     -> String
     -> (Float -> IO ())
     -- ^ Function that defines how to visualise progress
     -> IO [Palindrome]
-findPalindromesVisualised variant complexity minLength mbFilter input visualiseProgress =
+findPalindromesVisualised variant complexity minLength filterLongest input visualiseProgress =
     do
         let chunkSize = 100
         -- Used for minimum detail level for progress, only use smaller than 2 if user explicitly overrides default
@@ -51,12 +52,11 @@ findPalindromesVisualised variant complexity minLength mbFilter input visualiseP
                     C..| C.concat
                     C..| C.filter -- Filter to actual given filter size
                         ((minLength <=) . getLength)
-                    C..| case mbFilter of
-                        Nothing -> C.sinkList
-                        Just foldF -> C.foldl foldF []
-        return $ case mbFilter of
-            Nothing -> result
-            Just _ -> reverse result
+                    C..| if filterLongest
+                        then
+                            C.foldl longest []
+                        else C.sinkList
+        return $ if filterLongest then reverse result else result
 
 {- | Consumes a Vector of Palindrome and prints the progress made
 based on the centre of the palindrome range compared to the input length.
@@ -74,11 +74,17 @@ findPalindromesWithProgressBar
     :: Variant
     -> Complexity
     -> Int
-    -> Maybe ([Palindrome] -> Palindrome -> [Palindrome])
+    -> Bool
     -> String
     -> IO [Palindrome]
-findPalindromesWithProgressBar variant complexity minLength mbFilter input =
-    findPalindromesVisualised variant complexity minLength mbFilter input printProgressBar
+findPalindromesWithProgressBar variant complexity minLength filterLongest input =
+    findPalindromesVisualised
+        variant
+        complexity
+        minLength
+        filterLongest
+        input
+        printProgressBar
 
 {- | Prints a progress bar into the terminal with progress between 0 and 1,
 then flushes stdout to force a write

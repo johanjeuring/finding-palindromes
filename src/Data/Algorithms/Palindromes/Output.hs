@@ -26,7 +26,7 @@ module Data.Algorithms.Palindromes.Output
     , wordAt
     ) where
 
-import Data.List (find, foldl', intercalate)
+import Data.List (find, intercalate)
 
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)

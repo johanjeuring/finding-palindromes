@@ -20,7 +20,7 @@ module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (Cell (..), insert
 
 import Data.Algorithms.Palindromes.PalEq (PalEq, (=:=))
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Generic as G
 
 {- | Represents the range of the substring of the input string containing a palindrome.
 Format: ([start index (inclusive)], [end index (exclusive)]).
@@ -49,19 +49,19 @@ type Budget = Int
 maximum number of errors.
 -}
 insertionDeletionAlgorithm
-    :: (PalEq a)
+    :: (PalEq a, G.Vector v a)
     => Int
     -- ^ The size of the gap
     -> Int
     -- ^ The maximum number of errors
-    -> V.Vector a
+    -> v a
     -- ^ The input vector
     -> [PalRange]
     -- ^ The list of found maximal gapped approximate palindromes
 insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, palRanges, _) -> palRanges) states
   where
     -- Bound the used gapSize to not be more than the length of the input.
-    gapSize' = min gapSize (V.length input)
+    gapSize' = min gapSize (G.length input)
     -- Use takeIterations to get the states for efficiency.
     states = takeIterations nrOfIterations (fillRow input gapSize' maxErrors) startState
     {- Required number of iterations is (+ 2) to also be able to spot maximal palindromes
@@ -80,14 +80,14 @@ insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, palRanges, 
         , [] -- no maximal palindromes found yet.
         , maxRow - 1 -- row number of the row above the bottom row of the matrix.
         )
-    lastIndex = V.length input - 1
+    lastIndex = G.length input - 1
     -- The index of the last row, adjusted with the gap size to ignore errors in the gap.
     maxRow = lastIndex - gapSize' + 1
 
 -- | Fills the next row and finds maximal palindromes in the previous row
 fillRow
-    :: (PalEq a)
-    => V.Vector a
+    :: (PalEq a, G.Vector v a)
+    => v a
     -- ^ Input vector
     -> Int
     -- ^ Maximum size of the gap
@@ -115,7 +115,7 @@ fillRow input gapSize maxErrors (row, _, rowIndex) =
     initialBudget
         {- For rows or columns out of bounds, the first cell of the previous row has no
         budget left, because it represents an invalid substring. -}
-        | rowIndex < 0 || initialColumn >= V.length input = -1
+        | rowIndex < 0 || initialColumn >= G.length input = -1
         {- In general, the first cell of the previous row has a budget of maxErrors,
         because it represent an empty substring, which has no errors. -}
         | otherwise =
@@ -151,8 +151,8 @@ Consider the following matrix:
 We want to define the budget in topRight and check whether bottomLeft is maximal.
 -}
 evaluatePosition
-    :: (PalEq a)
-    => V.Vector a
+    :: (PalEq a, G.Vector v a)
+    => v a
     -- ^ Input vector
     -> Int
     -- ^ row index
@@ -166,7 +166,7 @@ evaluatePosition input rowIndex ((topLeft, bottomLeft), _, _) (Cell{cellColumn =
     ((topRight, bottomRight), [Cell column topRight], maxpals)
   where
     topRight
-        | rowIndex >= 0 && column < V.length input =
+        | rowIndex >= 0 && column < G.length input =
             maximum
                 [ topLeft - 1
                 , bottomRight - 1
@@ -231,7 +231,7 @@ takeIterations n f start = take n $ iterate f start
 
 {- If elements are palindrome equal at position then no error cost, otherwise error cost
 of 1 for a substitution error. -}
-errorCostAtPosition :: (PalEq a) => V.Vector a -> (Int, Int) -> Int
+errorCostAtPosition :: (PalEq a, G.Vector v a) => v a -> (Int, Int) -> Int
 errorCostAtPosition input (row, column)
-    | (input V.! row) =:= (input V.! column) = 0
+    | (input G.! row) =:= (input G.! column) = 0
     | otherwise = 1

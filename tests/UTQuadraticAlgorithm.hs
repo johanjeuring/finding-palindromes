@@ -10,7 +10,7 @@ import Data.Algorithms.Palindromes.DNA
     ( DNA (..)
     )
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 import qualified Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
 
@@ -53,7 +53,7 @@ testGappedApproximatePalindromesAroundCentresDNA =
                 True
                 0
                 0
-                (V.fromList [A, T, C, G])
+                (U.fromList [A, T, C, G])
             )
 
 -- | Test gappedApproximatePalindromesAroundCentres on some small text input
@@ -66,7 +66,7 @@ testGappedApproximatePalindromesAroundCentresText =
                 False
                 0
                 0
-                (V.fromList "abbab")
+                (U.fromList "abbab")
             )
 
 {-
@@ -87,7 +87,7 @@ testLengthPalAtCenterReflexiveEven =
         assertEqual
             "testLengthPalAtCenterReflexiveEven"
             2
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabadabadoo") 0 0 20)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabadabadoo") 0 0 20)
 
 -- | Test lengthPalAtCenterReflexive with even center index, a gap and no errors
 testLengthGappedPalAtCenterReflexiveEven =
@@ -96,7 +96,7 @@ testLengthGappedPalAtCenterReflexiveEven =
             "testLengthGappedPalAtCenterReflexiveEven"
             6
             --                                       gap: |--|
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabaddabadoo") 4 0 14)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabaddabadoo") 4 0 14)
 
 -- | Test lengthPalAtCenterReflexive with even center index, no gap and with errors
 testLengthPalWithErrorsAtCenterReflexiveEven =
@@ -104,7 +104,7 @@ testLengthPalWithErrorsAtCenterReflexiveEven =
         assertEqual
             "testLengthGappedPalAtCenterReflexiveEven"
             6
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabaoabadoo") 0 2 14)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabaoabadoo") 0 2 14)
 
 -- | Test lengthPalAtCenterReflexive with even center index, a gap and with errors
 testLengthGappedPalWithErrorsAtCenterReflexiveEven =
@@ -113,7 +113,7 @@ testLengthGappedPalWithErrorsAtCenterReflexiveEven =
             "testLengthGappedPalWithErrorsAtCenterReflexiveEven"
             10
             --                                       gap: |--|
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabaddabadoo") 4 3 14)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabaddabadoo") 4 3 14)
 
 -- | Test lengthPalAtCenterReflexive with odd center index, no gap and no errors
 testLengthPalAtCenterReflexiveOdd =
@@ -121,7 +121,7 @@ testLengthPalAtCenterReflexiveOdd =
         assertEqual
             "testLengthPalAtCenterReflexiveEven"
             7
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabadabadoo") 0 0 9)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabadabadoo") 0 0 9)
 
 -- | Test lengthPalAtCenterReflexive with odd center index, a gap and no errors
 testLengthGappedPalAtCenterReflexiveOdd =
@@ -130,7 +130,7 @@ testLengthGappedPalAtCenterReflexiveOdd =
             "testLengthGappedPalAtCenterReflexiveOdd"
             7
             --                                       gap: |-|
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabbagapabadoo") 3 0 13)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabbagapabadoo") 3 0 13)
 
 -- | Test lengthPalAtCenterReflexive with odd center index, no gap and with errors
 testLengthPalWithErrorsAtCenterReflexiveOdd =
@@ -138,7 +138,7 @@ testLengthPalWithErrorsAtCenterReflexiveOdd =
         assertEqual
             "testLengthPalWithErrorsAtCenterReflexiveOdd"
             9
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabadabadoo") 0 2 13)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabadabadoo") 0 2 13)
 
 -- | Test lengthPalAtCenterReflexive with odd center index, a gap and with errors
 testLengthGappedPalWithErrorsAtCenterReflexiveOdd =
@@ -147,7 +147,7 @@ testLengthGappedPalWithErrorsAtCenterReflexiveOdd =
             "testLengthGappedPalWithErrorsAtCenterReflexiveOdd"
             11
             --                                       gap: |-|
-            (Q.lengthPalAtCenterReflexive (V.fromList "yabbagapabadoo") 3 2 13)
+            (Q.lengthPalAtCenterReflexive (U.fromList "yabbagapabadoo") 3 2 13)
 
 {-
 -------------------------------------------------
@@ -198,7 +198,7 @@ testLengthPalAtCenterAntiReflexive =
             "testLengthPalAtCenterAntiReflexive"
             4
             ( Q.lengthPalAtCenterAntiReflexive
-                (V.fromList [A, A, T {-center-}, A, T, G] :: V.Vector DNA)
+                (U.fromList [A, A, T {-center-}, A, T, G] :: U.Vector DNA)
                 0
                 0
                 3
@@ -214,7 +214,7 @@ testLengthGappedPalAtCenterAntiReflexive =
             8
             ( Q.lengthPalAtCenterAntiReflexive
                 --                  gap: |-------------------|
-                (V.fromList [A, A, T, G, T, G {-center-}, A, A, C, A, A, T, C] :: V.Vector DNA)
+                (U.fromList [A, A, T, G, T, G {-center-}, A, A, C, A, A, T, C] :: U.Vector DNA)
                 4
                 0
                 6
@@ -229,7 +229,7 @@ testLengthPalWithErrorsAtCenterAntiReflexive =
             "testLengthPalWithErrorsAtCenterAntiReflexive"
             10
             ( Q.lengthPalAtCenterAntiReflexive
-                (V.fromList [A, A, A, T, G, T, G {-center-}, A, A, C, A, A, G, C] :: V.Vector DNA)
+                (U.fromList [A, A, A, T, G, T, G {-center-}, A, A, C, A, A, G, C] :: U.Vector DNA)
                 0
                 2
                 7
@@ -244,7 +244,7 @@ testLengthGappedPalWithErrorsAtCenterAntiReflexive =
             "testLengthGappedPalWithErrorsAtCenterAntiReflexive"
             8
             ( Q.lengthPalAtCenterAntiReflexive
-                (V.fromList [A, A, A, T {-center-}, G, T, G, A, A, C, A, A, G, C] :: V.Vector DNA)
+                (U.fromList [A, A, A, T {-center-}, G, T, G, A, A, C, A, A, G, C] :: U.Vector DNA)
                 2
                 2
                 4
@@ -263,7 +263,7 @@ testLeftOutOfBoundsLengthApproximatePalindrome =
             "testLeftOutOfBoundsLengthApproximatePalindrome"
             2
             ( Q.lengthApproximatePalindrome
-                (V.fromList "yay")
+                (U.fromList "yay")
                 0
                 (-1)
                 2
@@ -276,7 +276,7 @@ testRightOutOfBoundsLengthApproximatePalindrome =
             "testRightOutOfBoundsLengthApproximatePalindrome"
             2
             ( Q.lengthApproximatePalindrome
-                (V.fromList "yay")
+                (U.fromList "yay")
                 0
                 0
                 3
@@ -289,7 +289,7 @@ testNoErrorLengthApproximatePalindrome =
             "testNoErrorLengthApproximatePalindrome"
             9
             ( Q.lengthApproximatePalindrome
-                (V.fromList "hallollah")
+                (U.fromList "hallollah")
                 0
                 4
                 4
@@ -302,7 +302,7 @@ testErrorLengthApproximatePalindrome =
             "testErrorLengthApproximatePalindrome"
             9
             ( Q.lengthApproximatePalindrome
-                (V.fromList "hellollah")
+                (U.fromList "hellollah")
                 1
                 4
                 4

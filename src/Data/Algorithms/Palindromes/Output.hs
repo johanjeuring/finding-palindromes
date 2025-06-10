@@ -36,18 +36,19 @@ import Data.Algorithms.Palindromes.Palindrome
 import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
 
 import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: (Int, Int) -> Int -> V.Vector (Int, Char) -> (Int, Int)
+indicesInOutputText :: (Int, Int) -> Int -> U.Vector (Int, Char) -> (Int, Int)
 indicesInOutputText (start', end') !inputLength originalIndices
-    | start' >= V.length originalIndices = (inputLength, inputLength)
+    | start' >= U.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
     | otherwise = (start, start)
   where
-    start = fst $ originalIndices V.! start'
-    end = fst (originalIndices V.! (end' - 1)) + 1
+    start = fst $ originalIndices U.! start'
+    end = fst (originalIndices U.! (end' - 1)) + 1
 
 {- | Takes a start and end index in the list of words and returns the start and end
 indices of the text of the word palindrome in the original string
@@ -70,9 +71,9 @@ indicesInOutputWord (start', end') !inputLength wordsWithIndices
     endIndex = snd (fst lastWord)
 
 -- | Takes a start and end index (exclusive) and returns the substring in the text with that range
-rangeToText :: (Int, Int) -> V.Vector Char -> String
+rangeToText :: (Int, Int) -> U.Vector Char -> String
 rangeToText (start, end) input
-    | end - start > 0 = V.toList $ V.slice start (end - start) input
+    | end - start > 0 = U.toList $ U.slice start (end - start) input
     | otherwise = ""
 
 -- | Returns the length of the longest palindrome as a string

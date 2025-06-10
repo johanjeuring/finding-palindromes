@@ -59,7 +59,8 @@ import Data.Algorithms.Palindromes.RangeFunctions
     , rangeToLength
     )
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Generic as G
+import qualified Data.Vector.Unboxed as U
 
 {- | Used as a setting for palindrome finding functions. This describes the kind of
 palindrome we want to find.
@@ -130,11 +131,11 @@ findPalindromeRanges variant complexity input =
         VarPunctuation -> alg . filterLetters
         VarDNA -> alg . tryParseDNA
         VarWord -> alg . textToWords
-        _ -> alg . V.fromList
+        _ -> alg . U.fromList
 
     {- The algorithm phase runs one of the algorithms that finds the ranges, since the linear and quadratic
     find indexLists we must convert these to ranges. -}
-    alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
+    alg :: (PalEq b, G.Vector v b) => v b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
         ComQuadratic gapSize errors ->
@@ -188,8 +189,8 @@ findPalindromes variant complexity minlen input =
         VarDNA -> indicesInOutputText range inputLength (filterLetters' input)
         VarPlain -> range
         VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices input)
-    !inputVector = V.fromList input
-    !inputLength = V.length inputVector
+    !inputVector = U.fromList input
+    !inputLength = U.length inputVector
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the

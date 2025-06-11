@@ -212,6 +212,9 @@ findPalindromesFormatted variant outputFormat complexity minlen input =
 
 filterPalindromes :: OutputFormat -> [Palindrome] -> [Palindrome]
 filterPalindromes outputFormat
+    -- reverse foldl' is more efficient in memory than foldr
+    -- This is because know the fold can be applied as soon as the result of the algorithm is computed
+    -- With foldr we would first have to compute the entire list before we can apply the filter
     | filterOnlyLongest outputFormat = reverse . foldl' longest []
     | otherwise = id
 

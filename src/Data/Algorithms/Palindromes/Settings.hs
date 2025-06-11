@@ -99,11 +99,12 @@ is from a file or standard input.
 -}
 handleFlags
     :: [Flag]
+    -> Bool -- hasFiles
     -> ( String -> IO String -- function from input to output
        , Bool -- if input is standard input
        )
-handleFlags flags =
-    ( if any isHelp flags || null flags
+handleFlags flags hasFiles =
+    ( if any isHelp flags || (null flags && not hasFiles)
         then const $ return (usageInfo headerHelpMessage options)
         else getOutput (getSettings flags)
     , any isStandardInput flags

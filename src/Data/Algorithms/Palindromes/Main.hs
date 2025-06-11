@@ -91,7 +91,7 @@ main = do
     if not (null errors)
         then putStrLn (concat errors)
         else
-            let (function, standardInput) = handleFlags optionArgs
+            let (function, standardInput) = handleFlags optionArgs (not $ null files)
             in  if standardInput
                     then handleStandardInputWith function
                     else handlePathsWith function files

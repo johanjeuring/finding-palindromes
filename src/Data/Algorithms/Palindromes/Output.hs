@@ -31,14 +31,14 @@ import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     , getLength
     )
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
+import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToPalindromeCenter)
 
 import qualified Data.Vector as V
 
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: (Int, Int) -> String -> V.Vector (Int, Char) -> (Int, Int)
+indicesInOutputText :: Range -> String -> V.Vector (Int, Char) -> Range
 indicesInOutputText (start', end') input originalIndices
     | start' >= length originalIndices = (length input, length input)
     | end' - start' > 0 = (start, end)
@@ -50,7 +50,7 @@ indicesInOutputText (start', end') input originalIndices
 {- | Takes a start and end index in the list of words and returns the start and end
 indices of the text of the word palindrome in the original string
 -}
-indicesInOutputWord :: (Int, Int) -> String -> V.Vector ((Int, Int), String) -> (Int, Int)
+indicesInOutputWord :: Range -> String -> V.Vector (Range, String) -> Range
 indicesInOutputWord (start', end') input wordsWithIndices
     | start' >= length wordsWithIndices =
         (maxIndex, maxIndex)
@@ -60,9 +60,9 @@ indicesInOutputWord (start', end') input wordsWithIndices
     maxIndex :: Int
     maxIndex = length input
 
-    firstWord :: ((Int, Int), String)
+    firstWord :: (Range, String)
     firstWord = wordsWithIndices V.! start'
-    lastWord :: ((Int, Int), String)
+    lastWord :: (Range, String)
     lastWord = wordsWithIndices V.! (end' - 1)
 
     startIndex :: Int
@@ -71,7 +71,7 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex = snd (fst lastWord)
 
 -- | Takes a start and end index (exclusive) and returns the substring in the text with that range
-rangeToText :: (Int, Int) -> V.Vector Char -> String
+rangeToText :: Range -> V.Vector Char -> String
 rangeToText (start, end) input
     | end - start > 0 = V.toList $ V.slice start (end - start) input
     | otherwise = ""
@@ -108,4 +108,4 @@ wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = maybe "" palText pal
   where
     pal :: Maybe Palindrome
-    pal = find ((== n) . rangeToCenter . palRange) pals
+    pal = find ((== n) . rangeToPalindromeCenter . palRange) pals

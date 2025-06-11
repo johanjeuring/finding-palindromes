@@ -14,12 +14,12 @@ Describes the palindrome datatype.
 -}
 module Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength) where
 
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToLength)
+import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToLength)
 
 -- | Data type to represent a single found palindrome
 data Palindrome
     = Palindrome
-    { palRange :: (Int, Int)
+    { palRange :: Range
     {- ^ The start (inclusive) and end (exclusive) index of the palindrome in the
     pre-pocessed input vector.
     -}
@@ -29,7 +29,7 @@ data Palindrome
     (not pre-processed) input string, meaning that e.g. present punctuation is in this
     string.
     -}
-    , palRangeInText :: (Int, Int)
+    , palRangeInText :: Range
     {- ^ The start (inclusive) and end (exclusive) index of the palindrome in the original
     string.
     -}

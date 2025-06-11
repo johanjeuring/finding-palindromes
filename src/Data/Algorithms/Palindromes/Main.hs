@@ -80,6 +80,7 @@ handlePathWith f path = do
 handleStandardInputWith :: (String -> IO String) -> IO ()
 handleStandardInputWith function =
     do
+        putStrLn "Write your input:"
         input <- getLine
         res <- function input
         putStrLn $ res ++ replicate 40 ' '

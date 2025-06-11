@@ -153,6 +153,8 @@ findPalindromeRanges variant complexity input =
     indexListToRanges = go 0
       where
         go _ [] = []
+        -- This code adds indexes for the indexedLengthToRange function to calculate the ranges
+        -- This implementation is preferred over using list generators for performance reasons
         go !i (x : xs) = indexedLengthToRange (i, x) : go (i + increment) xs
         increment
             | onlyEvenPals variant complexity = 2

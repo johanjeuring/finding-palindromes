@@ -83,7 +83,7 @@ handleStandardInputWith function =
         putStrLn "Write your input:"
         input <- getLine
         res <- function input
-        putStrLn $ res ++ replicate 40 ' '
+        putStrLn $ '\r' : "Palindromes:" ++ replicate 40 ' ' ++ "\n" ++ res
 main :: IO ()
 main = do
     args <- getArgs

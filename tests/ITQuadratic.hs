@@ -110,7 +110,7 @@ testITQuadratic2 =
             ComQuadratic{gapSize = 0, maxError = 0}
             4
             "A&T-AT"
-        ~?= "[\"A&T-AT\"]"
+        ~?= "\"A&T-AT\""
 
 -- String: Does not contain a palindrome
 testITQuadratic3 =
@@ -143,7 +143,7 @@ testITQuadratic5 =
             ComQuadratic{gapSize = 1, maxError = 2}
             3
             "“AC\nTA..,TTCT”"
-        ~?= "[\"AC\nT\",\"AC\nTA\",\"AC\nTA..,T\",\"AC\nTA..,TT\",\"C\nTA..,TT\",\"AC\nTA..,TTCT\",\"C\nTA..,TTCT\",\"A..,TTC\",\"A..,TTCT\",\"TTCT\",\"TCT\"]"
+        ~?= "\"AC\nT\"\n\"AC\nTA\"\n\"AC\nTA..,T\"\n\"AC\nTA..,TT\"\n\"C\nTA..,TT\"\n\"AC\nTA..,TTCT\"\n\"C\nTA..,TTCT\"\n\"A..,TTC\"\n\"A..,TTCT\"\n\"TTCT\"\n\"TCT\""
 
 -- String: Contains an even nested palindrome
 testITQuadratic6 =
@@ -165,7 +165,7 @@ testITQuadratic7 =
             ComQuadratic{gapSize = 4, maxError = 4}
             2
             "Ac\nC,T”"
-        ~?= "[\"Ac\nC,T\"]"
+        ~?= "\"Ac\nC,T\""
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic8 =
@@ -176,7 +176,7 @@ testITQuadratic8 =
             ComQuadratic{gapSize = 1, maxError = 2}
             2
             "ACTATTCT"
-        ~?= "[\"ACTATTCT\"]"
+        ~?= "\"ACTATTCT\""
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic9 =
@@ -198,7 +198,7 @@ testITQuadratic10 =
             ComQuadratic{gapSize = 5, maxError = 5}
             0
             "A;G;G;G;T"
-        ~?= "[\"\",\"A\",\"A;G\",\"A;G;G\",\"A;G;G;G\",\"A;G;G;G;T\",\"G;G;G;T\",\"G;G;T\",\"G;T\",\"T\",\"\"]"
+        ~?= "\"\"\n\"A\"\n\"A;G\"\n\"A;G;G\"\n\"A;G;G;G\"\n\"A;G;G;G;T\"\n\"G;G;G;T\"\n\"G;G;T\"\n\"G;T\"\n\"T\"\n\"\""
 
 -- String: Contains a palindrome with punctuation
 testITQuadratic11 =
@@ -231,7 +231,7 @@ testITQuadratic13 =
             ComQuadratic{gapSize = 0, maxError = 1}
             4
             "kabral"
-        ~?= "[\"abra\"]"
+        ~?= "\"abra\""
 
 -- String: Contains no palindrome
 testITQuadratic14 =
@@ -264,7 +264,7 @@ testITQuadratic16 =
             ComQuadratic{gapSize = 2, maxError = 0}
             0
             "abba"
-        ~?= "[\"abba\"]"
+        ~?= "\"abba\""
 
 -- String: Contains an odd palindrome with punctuation. Contains a special character.
 testITQuadratic17 =
@@ -286,7 +286,7 @@ testITQuadratic18 =
             ComQuadratic{gapSize = 5, maxError = 5}
             2
             "lepel"
-        ~?= "[\"lepel\"]"
+        ~?= "\"lepel\""
 
 -- String: Contains an approximate palindrome with punctuation
 testITQuadratic19 =
@@ -308,7 +308,7 @@ testITQuadratic20 =
             ComQuadratic{gapSize = 0, maxError = 0}
             0
             "Abc'd/.ef"
-        ~?= "[\"A\",\"b\",\"c\",\"'\",\"d\",\"/\",\".\",\"e\",\"f\"]"
+        ~?= "\"A\"\n\"b\"\n\"c\"\n\"'\"\n\"d\"\n\"/\"\n\".\"\n\"e\"\n\"f\""
 
 -- String: Contains an odd approximate palindrome, with punctuation
 testITQuadratic21 =
@@ -341,7 +341,7 @@ testITQuadratic23 =
             ComQuadratic{gapSize = 1, maxError = 2}
             5
             "blaA\\Bc..dA;b.l#i"
-        ~?= "[\"blaA\\\",\"laA\\B\",\"aA\\Bc\",\"A\\Bc.\",\"\\Bc..\",\"Bc..d\",\"Bc..dA\",\"c..dA\",\"..dA;\",\"..dA;b.\",\".dA;b.\",\"dA;b.\",\"A;b.l\",\";b.l#\",\"b.l#i\"]"
+        ~?= "\"blaA\\\"\n\"laA\\B\"\n\"aA\\Bc\"\n\"A\\Bc.\"\n\"\\Bc..\"\n\"Bc..d\"\n\"Bc..dA\"\n\"c..dA\"\n\"..dA;\"\n\"..dA;b.\"\n\".dA;b.\"\n\"dA;b.\"\n\"A;b.l\"\n\";b.l#\"\n\"b.l#i\""
 
 -- String: Contains an even gapped palindrome
 testITQuadratic24 =
@@ -363,7 +363,7 @@ testITQuadratic25 =
             ComQuadratic{gapSize = 10, maxError = 10}
             2
             "A-B*cde)BA"
-        ~?= "[\"A-B*cde)BA\"]"
+        ~?= "\"A-B*cde)BA\""
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic26 =
@@ -374,7 +374,7 @@ testITQuadratic26 =
             ComQuadratic{gapSize = 3, maxError = 2}
             4
             "ABcdeBA"
-        ~?= "[\"ABcdeBA\"]"
+        ~?= "\"ABcdeBA\""
 
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITQuadratic27 =
@@ -396,7 +396,7 @@ testITQuadratic28 =
             ComQuadratic{gapSize = 9, maxError = 9}
             0
             "blaAPPAbl"
-        ~?= "[\"\",\"b\",\"bl\",\"bla\",\"blaA\",\"blaAP\",\"blaAPP\",\"blaAPPA\",\"blaAPPAb\",\"blaAPPAbl\",\"laAPPAbl\",\"aAPPAbl\",\"APPAbl\",\"PPAbl\",\"PAbl\",\"Abl\",\"bl\",\"l\",\"\"]"
+        ~?= "\"\"\n\"b\"\n\"bl\"\n\"bla\"\n\"blaA\"\n\"blaAP\"\n\"blaAPP\"\n\"blaAPPA\"\n\"blaAPPAb\"\n\"blaAPPAbl\"\n\"laAPPAbl\"\n\"aAPPAbl\"\n\"APPAbl\"\n\"PPAbl\"\n\"PAbl\"\n\"Abl\"\n\"bl\"\n\"l\"\n\"\""
 
 -- String: Contains an odd palindrome
 testITQuadratic29 =
@@ -418,7 +418,7 @@ testITQuadratic30 =
             ComQuadratic{gapSize = 0, maxError = 1}
             4
             "/blaAPa.bl.i"
-        ~?= "[\"aAPa\",\".bl.\"]"
+        ~?= "\"aAPa\"\n\".bl.\""
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic31 =
@@ -429,7 +429,7 @@ testITQuadratic31 =
             ComQuadratic{gapSize = 3, maxError = 2}
             2
             "/abba/"
-        ~?= "[\"abba\"]"
+        ~?= "\"abba\""
 
 -- String: Conains an even gapped palindrome
 testITQuadratic32 =
@@ -451,7 +451,7 @@ testITQuadratic33 =
             ComQuadratic{gapSize = 10, maxError = 5}
             0
             "bla\\AP.PA.bli"
-        ~?= "[\"\",\"\",\"\",\"bla\",\"\",\"bla\\AP\",\"\",\"bla\\AP.PA\",\"AP\",\"\",\"bla\\AP.PA.bli\",\"\",\"PA\",\"AP.PA.bli\",\"\",\"PA.bli\",\"\",\"bli\",\"\",\"\",\"\"]"
+        ~?= "\"\"\n\"\"\n\"\"\n\"bla\"\n\"\"\n\"bla\\AP\"\n\"\"\n\"bla\\AP.PA\"\n\"AP\"\n\"\"\n\"bla\\AP.PA.bli\"\n\"\"\n\"PA\"\n\"AP.PA.bli\"\n\"\"\n\"PA.bli\"\n\"\"\n\"bli\"\n\"\"\n\"\"\n\"\""
 
 -- String: Contains an odd punctuation palindrome
 testITQuadratic34 =
@@ -506,7 +506,7 @@ testITQuadratic38 =
             ComQuadratic{gapSize = 0, maxError = 0}
             3
             "za.*ts&tat/”"
-        ~?= "[\"tat\"]"
+        ~?= "\"tat\""
 
 -- String: Contains no palindrome, with punctuation
 testITQuadratic39 =
@@ -539,7 +539,7 @@ testITQuadratic41 =
             ComQuadratic{gapSize = 0, maxError = 1}
             1
             "a’b/ba"
-        ~?= "[\"a\8217b/ba\"]"
+        ~?= "\"a\8217b/ba\""
 
 -- String: Contains an even palindrome
 testITQuadratic42 =
@@ -550,7 +550,7 @@ testITQuadratic42 =
             ComQuadratic{gapSize = 0, maxError = 0}
             2
             "abba"
-        ~?= "[\"abba\"]"
+        ~?= "\"abba\""
 
 -- String: Contains an odd palindrome, contains punctuations and special characters
 testITQuadratic43 =
@@ -561,7 +561,7 @@ testITQuadratic43 =
             ComQuadratic{gapSize = 0, maxError = 1}
             2
             "l.e.p’e;l"
-        ~?= "[\"l.e.p’e;l\"]"
+        ~?= "\"l.e.p’e;l\""
 
 -- String: Contains an odd palindrome
 testITQuadratic44 =
@@ -572,7 +572,7 @@ testITQuadratic44 =
             ComQuadratic{gapSize = 5, maxError = 2}
             3
             "lepel"
-        ~?= "[\"lep\",\"lepe\",\"lepel\",\"epel\",\"pel\"]"
+        ~?= "\"lep\"\n\"lepe\"\n\"lepel\"\n\"epel\"\n\"pel\""
 
 -- String: Contains an approximate even palindrome
 testITQuadratic45 =
@@ -594,7 +594,7 @@ testITQuadratic46 =
             ComQuadratic{gapSize = 2, maxError = 0}
             0
             "kabral"
-        ~?= "[\"abra\"]"
+        ~?= "\"abra\""
 
 -- String: Contains an approximate odd palindrome
 testITQuadratic47 =
@@ -616,7 +616,7 @@ testITQuadratic48 =
             ComQuadratic{gapSize = 7, maxError = 7}
             2
             "zatstat"
-        ~?= "[\"zatstat\"]"
+        ~?= "\"zatstat\""
 
 -- String: Contains an even gapped palindrome with punctuation
 testITQuadratic49 =
@@ -638,7 +638,7 @@ testITQuadratic50 =
             ComQuadratic{gapSize = 0, maxError = 0}
             2
             "blaABcdBAbli"
-        ~?= "[\"BAb\"]"
+        ~?= "\"BAb\""
 
 -- String: Contains an odd gapped palindrome
 testITQuadratic51 =
@@ -671,7 +671,7 @@ testITQuadratic53 =
             ComQuadratic{gapSize = 1, maxError = 2}
             3
             "\"blaAPPab'li"
-        ~?= "[\"bla\",\"blaA\",\"blaAP\",\"blaAPP\",\"laAPP\",\"aAPP\",\"laAPPab\",\"blaAPPab'li\",\"APPab\",\"PPab\",\"PPab'l\",\"Pab'l\",\"Pab'li\",\"ab'li\",\"b'li\"]"
+        ~?= "\"bla\"\n\"blaA\"\n\"blaAP\"\n\"blaAPP\"\n\"laAPP\"\n\"aAPP\"\n\"laAPPab\"\n\"blaAPPab'li\"\n\"APPab\"\n\"PPab\"\n\"PPab'l\"\n\"Pab'l\"\n\"Pab'li\"\n\"ab'li\"\n\"b'li\""
 
 -- String: Contains an even palindrome
 testITQuadratic54 =
@@ -682,7 +682,7 @@ testITQuadratic54 =
             (ComQuadratic 0 0)
             1
             "blaAPPAbl"
-        ~?= "[\"b\",\"l\",\"a\",\"aA\",\"A\",\"P\",\"APPA\",\"P\",\"A\",\"b\",\"l\"]"
+        ~?= "\"b\"\n\"l\"\n\"a\"\n\"aA\"\n\"A\"\n\"P\"\n\"APPA\"\n\"P\"\n\"A\"\n\"b\"\n\"l\""
 
 -- String: Contains an odd palindrome
 testITQuadratic55 =
@@ -704,7 +704,7 @@ testITQuadratic56 =
             (ComQuadratic 3 2)
             4
             "/blaAPa.bl.i.bl"
-        ~?= "[\"blaAPa.bl.i\"]"
+        ~?= "\"blaAPa.bl.i\""
 
 -- String: Contains no palindromes, has punctuation
 testITQuadratic57 =
@@ -737,7 +737,7 @@ testITQuadratic59 =
             (ComQuadratic 0 1)
             2
             "Hello. hi hi “hello”"
-        ~?= "[\"Hello. hi\",\"Hello. hi hi\",\"Hello. hi hi “hello\",\"hi hi “hello\",\"hi “hello\"]"
+        ~?= "\"Hello. hi\"\n\"Hello. hi hi\"\n\"Hello. hi hi “hello\"\n\"hi hi “hello\"\n\"hi “hello\""
 
 -- String: Contains an even palindrome
 testITQuadratic60 =
@@ -759,7 +759,7 @@ testITQuadratic61 =
             (ComQuadratic 3 3)
             2
             "bye so    bye?"
-        ~?= "[\"bye so\",\"bye so    bye\",\"so    bye\"]"
+        ~?= "\"bye so\"\n\"bye so    bye\"\n\"so    bye\""
 
 -- String: Contains an odd palindrome
 testITQuadratic62 =
@@ -770,7 +770,7 @@ testITQuadratic62 =
             (ComQuadratic 0 9)
             3
             "bye so bye"
-        ~?= "[\"bye so bye\"]"
+        ~?= "\"bye so bye\""
 
 -- String: Contains an approximate even palindrome with punctuation
 testITQuadratic63 =
@@ -781,7 +781,7 @@ testITQuadratic63 =
             (ComQuadratic 0 2)
             2
             "Fout. Weer. Hi. Hi. Niet. Goed."
-        ~?= "[\"Fout. Weer. Hi. Hi. Niet. Goed\"]"
+        ~?= "\"Fout. Weer. Hi. Hi. Niet. Goed\""
 
 -- String: Contains an approximate even palindrome
 testITQuadratic64 =
@@ -836,7 +836,7 @@ testITQuadratic68 =
             (ComQuadratic 2 1)
             3
             "doei hi ik ben een mens hi doei"
-        ~?= "[\"doei hi ik\",\"doei hi ik ben\",\"hi ik ben\",\"hi ik ben een\",\"ik ben een\",\"doei hi ik ben een mens hi doei\",\"ben een mens\",\"ben een mens hi\",\"een mens hi\",\"een mens hi doei\",\"mens hi doei\"]"
+        ~?= "\"doei hi ik\"\n\"doei hi ik ben\"\n\"hi ik ben\"\n\"hi ik ben een\"\n\"ik ben een\"\n\"doei hi ik ben een mens hi doei\"\n\"ben een mens\"\n\"ben een mens hi\"\n\"een mens hi\"\n\"een mens hi doei\"\n\"mens hi doei\""
 
 -- String: Contains a gapped odd palindrome with punctuation
 testITQuadratic69 =
@@ -847,7 +847,7 @@ testITQuadratic69 =
             (ComQuadratic 3 1)
             4
             "dag h?i dri/e gap size. ... hi dag"
-        ~?= "[\"dag h?i dri/e gap size. ... hi dag\"]"
+        ~?= "\"dag h?i dri/e gap size. ... hi dag\""
 
 -- String: Contains a gapped odd palindrome
 testITQuadratic70 =
@@ -869,7 +869,7 @@ testITQuadratic71 =
             (ComQuadratic 6 6)
             0
             ",onzin, .dit pal\n pal dit/ gek"
-        ~?= "[\"\",\"onzin\",\"onzin, .dit\",\"onzin, .dit pal\",\"onzin, .dit pal\n pal\",\"onzin, .dit pal\n pal dit\",\"onzin, .dit pal\n pal dit/ gek\",\"dit pal\n pal dit/ gek\",\"pal\n pal dit/ gek\",\"pal dit/ gek\",\"dit/ gek\",\"gek\",\"\"]"
+        ~?= "\"\"\n\"onzin\"\n\"onzin, .dit\"\n\"onzin, .dit pal\"\n\"onzin, .dit pal\n pal\"\n\"onzin, .dit pal\n pal dit\"\n\"onzin, .dit pal\n pal dit/ gek\"\n\"dit pal\n pal dit/ gek\"\n\"pal\n pal dit/ gek\"\n\"pal dit/ gek\"\n\"dit/ gek\"\n\"gek\"\n\"\""
 
 -- String: Contains an even palindrome
 testITQuadratic72 =
@@ -891,7 +891,7 @@ testITQuadratic73 =
             (ComQuadratic 0 1)
             2
             "Onzin. pAl is. Pal gek"
-        ~?= "[\"Onzin. pAl\",\"Onzin. pAl is\",\"pAl is\",\"Onzin. pAl is. Pal gek\",\"is. Pal\",\"is. Pal gek\",\"Pal gek\"]"
+        ~?= "\"Onzin. pAl\"\n\"Onzin. pAl is\"\n\"pAl is\"\n\"Onzin. pAl is. Pal gek\"\n\"is. Pal\"\n\"is. Pal gek\"\n\"Pal gek\""
 
 -- String: Contains an odd palindrome
 testITQuadratic74 =
@@ -902,4 +902,4 @@ testITQuadratic74 =
             (ComQuadratic 1 2)
             3
             "onzin pal is pal gek"
-        ~?= "[\"onzin pal is pal gek\"]"
+        ~?= "\"onzin pal is pal gek\""

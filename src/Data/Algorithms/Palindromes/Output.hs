@@ -95,11 +95,9 @@ longestWords input = allWords $ foldr longest [] input
 allLengths :: [Int] -> String
 allLengths = show
 
-{- | All maximal palindromes as a list of strings. Same as show $ map palText input except
-this doesn't apply show to the palindrome strings as that will turn \n into \\n.
--}
+-- | All maximal palindromes as a list of strings, separated by a newline.
 allWords :: [Palindrome] -> String
-allWords input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
+allWords input = intercalate "\n" (map (\x -> "\"" ++ palText x ++ "\"") input)
 
 -- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String

@@ -3,8 +3,10 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) -}
 module UTProcessing (testListProcessing) where
 
-import Data.Vector (fromList)
 import Test.HUnit (Test (..), assertEqual)
+
+import qualified Data.Vector as V (fromList)
+import qualified Data.Vector.Unboxed as U
 
 import qualified Data.Algorithms.Palindromes.PostProcessing as Post
 import qualified Data.Algorithms.Palindromes.PreProcessing as Pre
@@ -22,8 +24,8 @@ testFilterLetters =
     TestCase $
         assertEqual
             "testFilterLetters"
-            (fromList [(0, 'a'), (2, 'b'), (3, 'a'), (5, 'a')])
-            (Pre.filterLetters' "a'ba a")
+            (U.fromList [0, 2, 3, 5])
+            (Pre.filterLetters' (U.fromList "a'ba a"))
 
 -- ToDNA test al geschreven in UTPalindromeUtils. Moet verplaatst hiernaartoe
 
@@ -31,8 +33,8 @@ testTextToWord =
     TestCase $
         assertEqual
             "testTextToWord"
-            (fromList ["this", "is", "a", "list", "of", "words"])
-            (Pre.textToWords "This is a   list of  words. ")
+            (V.fromList ["this", "is", "a", "list", "of", "words"])
+            (Pre.textToWords (U.fromList "This is a   list of  words. "))
 
 -- Postprocessing functions
 testFilterPunctuationOnlySpace =
@@ -41,7 +43,7 @@ testFilterPunctuationOnlySpace =
             "testFilterPunctuationOnlySpace"
             [(0, 0), (0, 0), (1, 1), (1, 1), (2, 2), (2, 2), (3, 3), (3, 4), (4, 4)]
             ( Post.filterPunctuation
-                "aab a"
+                (U.fromList "aab a")
                 [(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (1, 4), (3, 3), (3, 4), (4, 4)]
             )
 
@@ -50,7 +52,10 @@ testFilterPunctuationStaysSame =
         assertEqual
             "testFilterPunctuationStaysSame"
             [(0, 0), (0, 1), (1, 1), (0, 3), (2, 2), (2, 3), (3, 3)]
-            (Post.filterPunctuation "a b a" [(0, 0), (0, 1), (1, 1), (0, 3), (2, 2), (2, 3), (3, 3)])
+            ( Post.filterPunctuation
+                (U.fromList "a b a")
+                [(0, 0), (0, 1), (1, 1), (0, 3), (2, 2), (2, 3), (3, 3)]
+            )
 
 testFilterPunctuationPunctuationAndSpaces =
     TestCase $
@@ -71,7 +76,7 @@ testFilterPunctuationPunctuationAndSpaces =
             , (6, 6)
             ]
             ( Post.filterPunctuation
-                "a.b,aab a "
+                (U.fromList "a.b,aab a ")
                 [ (0, 0)
                 , (0, 1)
                 , (1, 1)

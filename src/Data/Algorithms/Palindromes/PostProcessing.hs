@@ -22,10 +22,10 @@ import Data.Char (isLetter)
 
 import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 -- | This function changes the a list of ranges for punctuation palindromes by shrinking to punctuation.
-filterPunctuation :: String -> [(Int, Int)] -> [(Int, Int)]
+filterPunctuation :: U.Vector Char -> [(Int, Int)] -> [(Int, Int)]
 filterPunctuation input = map shrinkRange
   where
     {- Shrinks a range on both sides until the resulting range is surrounded by
@@ -39,11 +39,10 @@ filterPunctuation input = map shrinkRange
         | otherwise = shrinkRange (startIndex + 1, endIndex - 1)
       where
         originalStart :: Int
-        originalStart = fst $ filterLetters' input V.! startIndex
+        originalStart = filterLetters' input U.! startIndex
         originalEnd :: Int
-        originalEnd = fst $ filterLetters' input V.! (endIndex - 1)
+        originalEnd = filterLetters' input U.! (endIndex - 1)
     punctuationAt :: Int -> Bool
     punctuationAt i
-        | i < length input && i >= 0 = (not . isLetter) $ inputAsVector V.! i
+        | i < U.length input && i >= 0 = (not . isLetter) $ input U.! i
         | otherwise = True
-    inputAsVector = V.fromList input

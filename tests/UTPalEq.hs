@@ -15,7 +15,7 @@ import Data.Algorithms.Palindromes.PalEq
     , palEqToItselfAtIndex
     )
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 testListPalEq :: [Test]
 testListPalEq =
@@ -42,7 +42,7 @@ testsPalEq =
     , "testDNAPalEq2" ~: T =:= A ~?= True
     , "testDNAInPalEq1" ~: A =:= C ~?= False
     , "testDNAInPalEq2" ~: A =:= A ~?= False
-    , "testCharToDNA" ~: (fromJust . toDNA) "aA" ~?= [A, A]
+    , "testCharToDNA" ~: (U.toList . fromJust . toDNA . U.fromList) "aA" ~?= [A, A]
     ]
 
 {-
@@ -74,25 +74,25 @@ testPalEqToItselfFalse =
 -- | Test with a reflexive datatype and index in range.
 testPalEqToItselfAtIndexReflexive =
     "testPalEqToItselfAtIndex"
-        ~: palEqToItselfAtIndex (V.fromList "abc") 2
+        ~: palEqToItselfAtIndex (U.fromList "abc") 2
         ~?= True
 
 -- | Test with an anti-reflexive datatype and index in range.
 testPalEqToItselfAtIndexAntiReflexive =
     "testPalEqToItselfAtIndex"
-        ~: palEqToItselfAtIndex (V.fromList [A, T, C]) 2
+        ~: palEqToItselfAtIndex (U.fromList [A, T, C]) 2
         ~?= False
 
 -- | Test with an out of range index that is too small.
 testPalEqToItselfAtIndexOutOfLowerBound =
     "testPalEqToItselfAtIndexOutOfLowerBound"
-        ~: palEqToItselfAtIndex (V.fromList "abc") (-1)
+        ~: palEqToItselfAtIndex (U.fromList "abc") (-1)
         ~?= False
 
 -- | Test with an out of range index that is too big.
 testPalEqToItselfAtIndexOutOfUpperBound =
     "testPalEqToItselfAtIndexOutOfUpperBound"
-        ~: palEqToItselfAtIndex (V.fromList "abc") 3
+        ~: palEqToItselfAtIndex (U.fromList "abc") 3
         ~?= False
 
 {-

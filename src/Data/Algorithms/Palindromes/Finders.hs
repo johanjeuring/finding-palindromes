@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
@@ -25,7 +26,11 @@ module Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , OutputFormat (..)
     , Complexity (..)
+    , filterOnlyLongest
+    , filterPalindromes
     ) where
+
+import Data.List (foldl')
 
 import Data.Algorithms.Palindromes.Algorithms
     ( insertionDeletionAlgorithm
@@ -33,14 +38,13 @@ import Data.Algorithms.Palindromes.Algorithms
     , quadraticAlgorithm
     )
 import Data.Algorithms.Palindromes.Output
-    ( allLengths
-    , allWords
-    , indicesInOutputText
+    ( indicesInOutputText
     , indicesInOutputWord
     , lengthAt
-    , longestLength
-    , longestWords
+    , longest
     , rangeToText
+    , showLengths
+    , showTexts
     , wordAt
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq)
@@ -58,7 +62,8 @@ import Data.Algorithms.Palindromes.RangeFunctions
     , rangeToLength
     )
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Generic as G
+import qualified Data.Vector.Unboxed as U
 
 {- | Used as a setting for palindrome finding functions. This describes the kind of
 palindrome we want to find.
@@ -117,23 +122,23 @@ pre-processing phase, the algorithm phase and the post-processing phase. It find
 returns a list of (Int, Int), which represents the range of every found palindrome in the input.
 -}
 findPalindromeRanges
-    :: Variant -> Complexity -> String -> [(Int, Int)]
+    :: Variant -> Complexity -> U.Vector Char -> [(Int, Int)]
 findPalindromeRanges variant complexity input =
     (post . preAlg) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
     vector of PalEq items. -}
-    preAlg :: String -> [(Int, Int)]
+    preAlg :: U.Vector Char -> [(Int, Int)]
     preAlg = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
         VarDNA -> alg . tryParseDNA
         VarWord -> alg . textToWords
-        _ -> alg . V.fromList
+        _ -> alg
 
     {- The algorithm phase runs one of the algorithms that finds the ranges, since the linear and quadratic
     find indexLists we must convert these to ranges. -}
-    alg :: (PalEq b) => V.Vector b -> [(Int, Int)]
+    alg :: (PalEq b, G.Vector v b) => v b -> [(Int, Int)]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
         ComQuadratic gapSize errors ->
@@ -145,13 +150,15 @@ findPalindromeRanges variant complexity input =
         ComInsertionDeletion gapSize errors -> insertionDeletionAlgorithm gapSize errors
 
     indexListToRanges :: [Int] -> [(Int, Int)]
-    indexListToRanges = zipWith (curry indexedLengthToRange) indexList
+    indexListToRanges = go 0
       where
-        -- We have to adjust indices due to indexLengthToRange assuming indices between letters
-        indexList
-            | onlyEvenPals variant complexity =
-                [0, 2 ..]
-            | otherwise = [0 ..]
+        go _ [] = []
+        -- This code adds indexes for the indexedLengthToRange function to calculate the ranges
+        -- This implementation is preferred over using list generators for performance reasons
+        go !i (x : xs) = indexedLengthToRange (i, x) : go (i + increment) xs
+        increment
+            | onlyEvenPals variant complexity = 2
+            | otherwise = 1
 
     {- The post-processing phase changes the list of ranges so that they fit the
     requirements in the case of punctuation palindromes -}
@@ -166,13 +173,13 @@ then filters them by length and finally converts the found ranges to the Palindr
 -}
 findPalindromes :: Variant -> Complexity -> Int -> String -> [Palindrome]
 findPalindromes variant complexity minlen input =
-    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity input
+    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity inputVector
   where
     rangeToPalindrome :: (Int, Int) -> Palindrome
     rangeToPalindrome r =
         Palindrome
             { palRange = r
-            , palText = rangeToText (indicesInOriginal r) (V.fromList input)
+            , palText = rangeToText (indicesInOriginal r) inputVector
             , palRangeInText = indicesInOriginal r
             }
 
@@ -182,11 +189,13 @@ findPalindromes variant complexity minlen input =
     -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
     indicesInOriginal :: (Int, Int) -> (Int, Int)
     indicesInOriginal range = case variant of
-        VarText -> indicesInOutputText range input (filterLetters' input)
-        VarPunctuation -> indicesInOutputText range input (filterLetters' input)
-        VarDNA -> indicesInOutputText range input (filterLetters' input)
+        VarText -> indicesInOutputText range inputLength (filterLetters' inputVector)
+        VarPunctuation -> indicesInOutputText range inputLength (filterLetters' inputVector)
+        VarDNA -> indicesInOutputText range inputLength (filterLetters' inputVector)
         VarPlain -> range
-        VarWord -> indicesInOutputWord range input (textToWordsWithIndices input)
+        VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices inputVector)
+    !inputVector = U.fromList input
+    !inputLength = U.length inputVector
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the
@@ -197,15 +206,33 @@ to the given outputFormat.
 findPalindromesFormatted
     :: Variant -> OutputFormat -> Complexity -> Int -> String -> String
 findPalindromesFormatted variant outputFormat complexity minlen input =
-    formatPalindromes outputFormat $ findPalindromes variant complexity minlen input
+    formatPalindromes outputFormat $
+        filterPalindromes outputFormat $
+            findPalindromes variant complexity minlen input
+
+filterPalindromes :: OutputFormat -> [Palindrome] -> [Palindrome]
+filterPalindromes outputFormat
+    -- reverse foldl' is more efficient in memory than foldr
+    -- This is because know the fold can be applied as soon as the result of the algorithm is computed
+    -- With foldr we would first have to compute the entire list before we can apply the filter
+    | filterOnlyLongest outputFormat = reverse . foldl' longest []
+    | otherwise = id
+
+filterOnlyLongest
+    :: OutputFormat
+    -> Bool
+filterOnlyLongest outputFormat = case outputFormat of
+    OutLength -> True
+    OutWord -> True
+    _ -> False
 
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
-formatPalindromes outputFormat pals = case outputFormat of
-    OutLength -> longestLength lengths
-    OutWord -> longestWords pals
-    OutLengths -> allLengths lengths
-    OutWords -> allWords pals
+formatPalindromes outputFormat pals@(h : _) = case outputFormat of
+    OutLength -> show $ getLength h
+    OutWord -> showTexts pals
+    OutLengths -> showLengths lengths
+    OutWords -> showTexts pals
     OutLengthAt x -> lengthAt x lengths
     OutWordAt x -> wordAt x pals
   where

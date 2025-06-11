@@ -24,7 +24,7 @@ module Data.Algorithms.Palindromes.PalEq
     , palEqToItselfAtIndex
     ) where
 
-import Data.Vector as V
+import qualified Data.Vector.Generic as G
 
 {- |  “(=:=) determines whether or not two elements are equal when finding palindromes.
 This is not always standard equality for example, A (=:=) T in DNA, and 'z' (=:=) 'z' in normal text.
@@ -39,9 +39,9 @@ instance (Eq a) => PalEq a where
 {- | Safe function which returns whether an element at an index in the input vector is
 PalEq to itself.
 -}
-palEqToItselfAtIndex :: (PalEq a) => V.Vector a -> Int -> Bool
+palEqToItselfAtIndex :: (PalEq a, G.Vector v a) => v a -> Int -> Bool
 palEqToItselfAtIndex input index
-    | index < 0 || index >= V.length input = False
+    | index < 0 || index >= G.length input = False
     | otherwise = element =:= element
   where
-    element = input V.! index
+    element = input G.! index

@@ -38,11 +38,8 @@ indexedLengthToRange (index, len) = (startIndex, endIndex)
     endIndex :: Int
     endIndex = startIndex + len
 
--- | Converts a list of (start, end) tuples to a list of palindrome lengths.
-rangesToLengths :: [(Int, Int)] -> [Int]
-rangesToLengths = map rangeToLength
-
--- | Converts a (start, end) tuple to a palindrome length.
+{- Converts a (start, end) tuple to a palindrome length. We take max to cover an edge
+case where the range is negative. The palindrome should then be empty. -}
 rangeToLength :: (Int, Int) -> Int
 rangeToLength (start, end) = max 0 (end - start)
 

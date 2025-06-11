@@ -72,10 +72,10 @@ Here are some examples of working flags:
 
 ```
     cabal run palindromes -- input.txt
-    cabal run palindromes -- input.txt -l -q
-    cabal run palindromes -- input.txt -l -d
-    cabal run palindromes -- input.txt -q
-    cabal run palindromes -- input.txt -q3+0
+    cabal run palindromes -- input.txt -Q -n
+    cabal run palindromes -- input.txt -L -d
+    cabal run palindromes -- input.txt -Q
+    cabal run palindromes -- input.txt -Q3+0
 ```
 
 To see all the options run one of these:

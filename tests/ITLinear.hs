@@ -8,6 +8,7 @@ import Test.HUnit (Test (..), (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
+    , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
     , findPalindromesFormatted
@@ -81,7 +82,8 @@ testITLinear1 =
     "testITLinear1"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             0
             "A\nTAT"
@@ -92,18 +94,20 @@ testITLinear2 =
     "testITLinear2"
         ~: findPalindromesFormatted
             VarText
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             10
             "abcdeedcba"
-        ~?= "10"
+        ~?= "[10]"
 
 -- String: Has punctuation, even nested palindromes
 testITLinear3 =
     "testITLinear3"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             7
             "Word, word, word, palindrome. Word. Word, word."
@@ -114,7 +118,8 @@ testITLinear4 =
     "testITLinear4"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             0
             "nopalindromes"
@@ -125,7 +130,8 @@ testITLinear5 =
     "testITLinear5"
         ~: findPalindromesFormatted
             VarWord
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             6
             "Has? ...A palindrome; palindrome a has."
@@ -136,7 +142,8 @@ testITLinear6 =
     "testITLinear6"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             3
             "~ehhe~"
@@ -147,7 +154,8 @@ testITLinear7 =
     "testITLinear7"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             10
             "abcdefghij"
@@ -158,18 +166,20 @@ testITLinear8 =
     "testITLinear8"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             0
             "b abba, ...bc"
-        ~?= "4"
+        ~?= "[4]"
 
 -- String: Contains an even palindrome
 testITLinear9 =
     "testITLinear9"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             0
             "damittimad"
@@ -180,7 +190,8 @@ testITLinear10 =
     "testITLinear10"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             0
             "yabaddabadoo"
@@ -191,7 +202,8 @@ testITLinear11 =
     "testITLinear11"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             0
             "dam'itt!  \\ I'm ?ad."
@@ -202,7 +214,8 @@ testITLinear12 =
     "testITLinear12"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             23
             "level mad dog a goddam level"
@@ -213,7 +226,8 @@ testITLinear13 =
     "testITLinear13"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             3
             "abcdcba-"
@@ -224,7 +238,8 @@ testITLinear14 =
     "testITLinear14"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             0
             "word palindrome palindrome word"
@@ -235,7 +250,8 @@ testITLinear15 =
     "testITLinear15"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             23
             "keybo{  ..  }ardmash, samdrao   byek'"
@@ -246,7 +262,8 @@ testITLinear16 =
     "testITLinear16"
         ~: findPalindromesFormatted
             VarText
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             1
             "a#b, ,c^D efg[h"
@@ -257,7 +274,8 @@ testITLinear17 =
     "testITLinear17"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             3
             "nopalindromes"
@@ -268,7 +286,8 @@ testITLinear18 =
     "testITLinear18"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             2
             "Odd palindrome, odd- ly enough :)"
@@ -279,29 +298,32 @@ testITLinear19 =
     "testITLinear19"
         ~: findPalindromesFormatted
             VarText
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             2
             ".ehhe~"
-        ~?= "4"
+        ~?= "[4]"
 
 -- String: Contains an even nested palindrome
 testITLinear20 =
     "testITLinear20"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             4
             "ATATGCGCATAT"
-        ~?= "12"
+        ~?= "[12]"
 
 -- String: Contains an even nested palindrome
 testITLinear21 =
     "testITLinear21"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             10
             "That that, that that that -that that that refers to-"
@@ -312,18 +334,20 @@ testITLinear22 =
     "testITLinear22"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             5
             "A simple palindrome. Simple, a (ye)?"
-        ~?= "5"
+        ~?= "[5]"
 
 -- String: Contains a nested even palindrome
 testITLinear23 =
     "testITLinear23"
         ~: findPalindromesFormatted
             VarDNA
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             2
             "ATTCGGCGCAAT"
@@ -334,7 +358,8 @@ testITLinear24 =
     "testITLinear24"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             6
             "ab:c|+cba..."
@@ -345,7 +370,8 @@ testITLinear25 =
     "testITLinear25"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             0
             "ennestedetsenne"
@@ -356,40 +382,44 @@ testITLinear26 =
     "testITLinear26"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             7
             "*abc-dc ba#"
-        ~?= "7"
+        ~?= "[7]"
 
 -- String: Contains a nested odd palindrome
 testITLinear27 =
     "testITLinear27"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             0
             "nested odd word odd palindrome odd word odd nested"
-        ~?= "9"
+        ~?= "[9]"
 
 -- String: Contains an even palindrome, contains punctuation
 testITLinear28 =
     "testITLinear28"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             0
             "TATG\nCGATC  GCA.TAGC"
-        ~?= "14"
+        ~?= "[14]"
 
 -- String: Contains an even nested palindrome with punctuation
 testITLinear29 =
     "testITLinear29"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             0
             "d*eif:ied a-+bba deifie;d!"
@@ -400,7 +430,8 @@ testITLinear30 =
     "testITLinear30"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             0
             "abcbababcba"
@@ -411,18 +442,20 @@ testITLinear31 =
     "testITLinear31"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             4
             "AT\nATAT-A\tT"
-        ~?= "8"
+        ~?= "[8]"
 
 -- String: Contains an even palindrome
 testITLinear32 =
     "testITLinear32"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             18
             "evil is a deed as I live"
@@ -433,7 +466,8 @@ testITLinear33 =
     "testITLinear33"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             0
             "abbaccabba"
@@ -444,7 +478,8 @@ testITLinear34 =
     "testITLinear34"
         ~: findPalindromesFormatted
             VarDNA
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             14
             "TATG\nCGATC  GCA.TA"
@@ -455,7 +490,8 @@ testITLinear35 =
     "testITLinear35"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             3
             "Thi,s is not a p-alindro'me."
@@ -466,7 +502,8 @@ testITLinear36 =
     "testITLinear36"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             3
             "A simple palindrome. Simple, a (ye)?"
@@ -477,7 +514,8 @@ testITLinear37 =
     "testITLinear37"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             1
             "d*eif:ied a-+bba deifie;d!"
@@ -488,7 +526,8 @@ testITLinear38 =
     "testITLinear38"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             21
             "Thi,s is not a p-alindro'me."
@@ -499,7 +538,8 @@ testITLinear39 =
     "testITLinear39"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             0
             "ATGCGCATTA"
@@ -510,7 +550,8 @@ testITLinear40 =
     "testITLinear40"
         ~: findPalindromesFormatted
             VarDNA
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             2
             "AN\nTC\tAGTC"
@@ -521,7 +562,8 @@ testITLinear41 =
     "testITLinear41"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             1
             "NNNNNNNNNN"
@@ -532,7 +574,8 @@ testITLinear42 =
     "testITLinear42"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             0
             "\nodddo!"
@@ -543,7 +586,8 @@ testITLinear43 =
     "testITLinear43"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             1
             "releveler"
@@ -554,7 +598,8 @@ testITLinear44 =
     "testITLinear44"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             0
             "hi madam im adam bye"
@@ -565,7 +610,8 @@ testITLinear45 =
     "testITLinear45"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             3
             "Oi! You there! You! Stop!"
@@ -576,7 +622,8 @@ testITLinear46 =
     "testITLinear46"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             0
             "You! Rev Ile deliver, now!"
@@ -587,7 +634,8 @@ testITLinear47 =
     "testITLinear47"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             0
             "Revile.... Deliver!"
@@ -598,7 +646,8 @@ testITLinear48 =
     "testITLinear48"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             0
             "It's high noon..."
@@ -609,7 +658,8 @@ testITLinear49 =
     "testITLinear49"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             3
             "!dammit_timmad!"
@@ -620,18 +670,20 @@ testITLinear50 =
     "testITLinear50"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             0
             "begone enoge"
-        ~?= "0"
+        ~?= "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
 
 -- String: Contains an odd and an even palindrome
 testITLinear51 =
     "testITLinear51"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             2
             "madamoiselle"
@@ -642,7 +694,8 @@ testITLinear52 =
     "testITLinear52"
         ~: findPalindromesFormatted
             VarWord
-            OutLengths
+            FormatLength
+            SelectAll
             ComLinear
             4
             "Hello? my.... my .. hello!"
@@ -653,18 +706,20 @@ testITLinear53 =
     "testITLinear53"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             2
             "\nAT  CG /AT/"
-        ~?= "6"
+        ~?= "[6]"
 
 -- String: Contains an even palindrome
 testITLinear54 =
     "testITLinear54"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             4
             "CGCG"
@@ -675,40 +730,44 @@ testITLinear55 =
     "testITLinear55"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             0
             "hi madam i madam bye"
-        ~?= "15"
+        ~?= "[15]"
 
 -- String: Contains an even nested palindrome
 testITLinear56 =
     "testITLinear56"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             6
             "NNTATATATANN"
-        ~?= "8"
+        ~?= "[8]"
 
 -- String: Contains an even palindrome with punctuation
 testITLinear57 =
     "testITLinear57"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             5
             "!ma;dd;am!"
-        ~?= "10"
+        ~?= "[10]"
 
 -- String: Contains no palindrome
 testITLinear58 =
     "testITLinear58"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             ComLinear
             2
             "word1 word2 word3 word4"
@@ -719,7 +778,8 @@ testITLinear59 =
     "testITLinear59"
         ~: findPalindromesFormatted
             VarText
-            OutWords
+            FormatText
+            SelectAll
             ComLinear
             9
             "Releveler"
@@ -730,7 +790,8 @@ testITLinear60 =
     "testITLinear60"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComLinear
             5
             "\nOdd do!"

@@ -8,6 +8,7 @@ import Test.HUnit (Test (..), (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
+    , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
     , findPalindromesFormatted
@@ -95,18 +96,20 @@ testITQuadratic1 =
     "testITQuadratic1"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             0
             "AG\nTC"
-        ~?= "2"
+        ~?= "[2,2,2]"
 
 -- String: Contains a nested palindrome with punctuation
 testITQuadratic2 =
     "testITQuadratic2"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             4
             "A&T-AT"
@@ -117,7 +120,8 @@ testITQuadratic3 =
     "testITQuadratic3"
         ~: findPalindromesFormatted
             VarDNA
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 4, maxError = 4}
             1
             "AGTC"
@@ -128,7 +132,8 @@ testITQuadratic4 =
     "testITQuadratic4"
         ~: findPalindromesFormatted
             VarDNA
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 2, maxError = 0}
             2
             "ACCT"
@@ -139,7 +144,8 @@ testITQuadratic5 =
     "testITQuadratic5"
         ~: findPalindromesFormatted
             VarDNA
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 1, maxError = 2}
             3
             "“AC\nTA..,TTCT”"
@@ -150,7 +156,8 @@ testITQuadratic6 =
     "testITQuadratic6"
         ~: findPalindromesFormatted
             VarDNA
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 0}
             3
             "ATAT"
@@ -161,7 +168,8 @@ testITQuadratic7 =
     "testITQuadratic7"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 4, maxError = 4}
             2
             "Ac\nC,T”"
@@ -172,7 +180,8 @@ testITQuadratic8 =
     "testITQuadratic8"
         ~: findPalindromesFormatted
             VarDNA
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 1, maxError = 2}
             2
             "ACTATTCT"
@@ -183,18 +192,20 @@ testITQuadratic9 =
     "testITQuadratic9"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 2, maxError = 0}
             1
             "AGGGT"
-        ~?= "2"
+        ~?= "[2,2,2,2]"
 
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic10 =
     "testITQuadratic10"
         ~: findPalindromesFormatted
             VarDNA
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 5, maxError = 5}
             0
             "A;G;G;G;T"
@@ -205,7 +216,8 @@ testITQuadratic11 =
     "testITQuadratic11"
         ~: findPalindromesFormatted
             VarDNA
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 1}
             6
             "Ac.G-CgA "
@@ -216,7 +228,8 @@ testITQuadratic12 =
     "testITQuadratic12"
         ~: findPalindromesFormatted
             VarDNA
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             6
             "ACGCGA"
@@ -227,7 +240,8 @@ testITQuadratic13 =
     "testITQuadratic13"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             4
             "kabral"
@@ -238,7 +252,8 @@ testITQuadratic14 =
     "testITQuadratic14"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 6, maxError = 6}
             1
             "abcdef"
@@ -249,18 +264,20 @@ testITQuadratic15 =
     "testITQuadratic15"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 1, maxError = 2}
             3
             "a’b/ba"
-        ~?= "6"
+        ~?= "[6]"
 
 -- String: Contains an even palindrome
 testITQuadratic16 =
     "testITQuadratic16"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 2, maxError = 0}
             0
             "abba"
@@ -271,7 +288,8 @@ testITQuadratic17 =
     "testITQuadratic17"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 0}
             3
             "l.e.p’e;l"
@@ -282,7 +300,8 @@ testITQuadratic18 =
     "testITQuadratic18"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 5, maxError = 5}
             2
             "lepel"
@@ -293,18 +312,20 @@ testITQuadratic19 =
     "testITQuadratic19"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             0
             "kab^ra.L"
-        ~?= "5"
+        ~?= "[5]"
 
 -- String: Contains no palindrome, contains punctuation
 testITQuadratic20 =
     "testITQuadratic20"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             0
             "Abc'd/.ef"
@@ -315,7 +336,8 @@ testITQuadratic21 =
     "testITQuadratic21"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 10, maxError = 10}
             2
             "zat.,s&tat"
@@ -326,7 +348,8 @@ testITQuadratic22 =
     "testITQuadratic22"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 2, maxError = 0}
             2
             "zatstat"
@@ -337,7 +360,8 @@ testITQuadratic23 =
     "testITQuadratic23"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 1, maxError = 2}
             5
             "blaA\\Bc..dA;b.l#i"
@@ -348,7 +372,8 @@ testITQuadratic24 =
     "testITQuadratic24"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 0}
             1
             "blaABcdBAbli"
@@ -359,7 +384,8 @@ testITQuadratic25 =
     "testITQuadratic25"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 10, maxError = 10}
             2
             "A-B*cde)BA"
@@ -370,7 +396,8 @@ testITQuadratic26 =
     "testITQuadratic26"
         ~: findPalindromesFormatted
             VarPlain
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 3, maxError = 2}
             4
             "ABcdeBA"
@@ -381,7 +408,8 @@ testITQuadratic27 =
     "testITQuadratic27"
         ~: findPalindromesFormatted
             VarPlain
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 2, maxError = 0}
             3
             "\"blaAPPab’li "
@@ -392,7 +420,8 @@ testITQuadratic28 =
     "testITQuadratic28"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 9, maxError = 9}
             0
             "blaAPPAbl"
@@ -403,7 +432,8 @@ testITQuadratic29 =
     "testITQuadratic29"
         ~: findPalindromesFormatted
             VarPlain
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 0}
             0
             "blaAPAbli"
@@ -414,7 +444,8 @@ testITQuadratic30 =
     "testITQuadratic30"
         ~: findPalindromesFormatted
             VarPlain
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 1}
             4
             "/blaAPa.bl.i"
@@ -425,7 +456,8 @@ testITQuadratic31 =
     "testITQuadratic31"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 3, maxError = 2}
             2
             "/abba/"
@@ -436,18 +468,20 @@ testITQuadratic32 =
     "testITQuadratic32"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 2, maxError = 0}
             1
             "ABcdBA"
-        ~?= "6"
+        ~?= "[6]"
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic33 =
     "testITQuadratic33"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 10, maxError = 5}
             0
             "bla\\AP.PA.bli"
@@ -458,7 +492,8 @@ testITQuadratic34 =
     "testITQuadratic34"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 1}
             3
             "bla(APA)bli"
@@ -469,18 +504,20 @@ testITQuadratic35 =
     "testITQuadratic35"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             2
             "lepel”"
-        ~?= "5"
+        ~?= "[5]"
 
 -- String: Contains an odd gapped palindrome with punctuation
 testITQuadratic36 =
     "testITQuadratic36"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             2
             "AB/cde/BA"
@@ -491,18 +528,20 @@ testITQuadratic37 =
     "testITQuadratic37"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             0
             "(ka(b)ral)"
-        ~?= "3"
+        ~?= "[3,3]"
 
 -- String: Contains an approximate odd palindrome
 testITQuadratic38 =
     "testITQuadratic38"
         ~: findPalindromesFormatted
             VarPunctuation
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             3
             "za.*ts&tat/”"
@@ -513,7 +552,8 @@ testITQuadratic39 =
     "testITQuadratic39"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 2, maxError = 0}
             2
             "Abc'd/.ef"
@@ -524,18 +564,20 @@ testITQuadratic40 =
     "testITQuadratic40"
         ~: findPalindromesFormatted
             VarText
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 6, maxError = 3}
             5
             "abcdef"
-        ~?= "6"
+        ~?= "[6]"
 
 -- String: Contains an even palindrome, contains punctuation and special characters
 testITQuadratic41 =
     "testITQuadratic41"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             1
             "a’b/ba"
@@ -546,7 +588,8 @@ testITQuadratic42 =
     "testITQuadratic42"
         ~: findPalindromesFormatted
             VarText
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 0}
             2
             "abba"
@@ -557,7 +600,8 @@ testITQuadratic43 =
     "testITQuadratic43"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             2
             "l.e.p’e;l"
@@ -568,7 +612,8 @@ testITQuadratic44 =
     "testITQuadratic44"
         ~: findPalindromesFormatted
             VarText
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 5, maxError = 2}
             3
             "lepel"
@@ -579,18 +624,20 @@ testITQuadratic45 =
     "testITQuadratic45"
         ~: findPalindromesFormatted
             VarText
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 1, maxError = 2}
             5
             "kab^ra.L"
-        ~?= "6"
+        ~?= "[6]"
 
 -- String: Contains an approximate even palindrome
 testITQuadratic46 =
     "testITQuadratic46"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 2, maxError = 0}
             0
             "kabral"
@@ -601,7 +648,8 @@ testITQuadratic47 =
     "testITQuadratic47"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 0}
             1
             "zat.,s&tat"
@@ -612,7 +660,8 @@ testITQuadratic48 =
     "testITQuadratic48"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 7, maxError = 7}
             2
             "zatstat"
@@ -623,18 +672,20 @@ testITQuadratic49 =
     "testITQuadratic49"
         ~: findPalindromesFormatted
             VarText
-            OutLength
+            FormatLength
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 1}
             0
             "blaA\\Bc..dA;b.l#i"
-        ~?= "5"
+        ~?= "[5,5,5]"
 
 -- String: Contains an even gapped palindrome
 testITQuadratic50 =
     "testITQuadratic50"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             ComQuadratic{gapSize = 0, maxError = 0}
             2
             "blaABcdBAbli"
@@ -645,7 +696,8 @@ testITQuadratic51 =
     "testITQuadratic51"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 0, maxError = 8}
             6
             "A-B*cde)BA"
@@ -656,7 +708,8 @@ testITQuadratic52 =
     "testITQuadratic52"
         ~: findPalindromesFormatted
             VarText
-            OutLengths
+            FormatLength
+            SelectAll
             ComQuadratic{gapSize = 3, maxError = 0}
             2
             "ABcdeBA"
@@ -667,7 +720,8 @@ testITQuadratic53 =
     "testITQuadratic53"
         ~: findPalindromesFormatted
             VarText
-            OutWords
+            FormatText
+            SelectAll
             ComQuadratic{gapSize = 1, maxError = 2}
             3
             "\"blaAPPab'li"
@@ -678,7 +732,8 @@ testITQuadratic54 =
     "testITQuadratic54"
         ~: findPalindromesFormatted
             VarText
-            OutWords
+            FormatText
+            SelectAll
             (ComQuadratic 0 0)
             1
             "blaAPPAbl"
@@ -689,18 +744,20 @@ testITQuadratic55 =
     "testITQuadratic55"
         ~: findPalindromesFormatted
             VarText
-            OutLength
+            FormatLength
+            SelectLongest
             (ComQuadratic 9 9)
             4
             "blaAPAbli"
-        ~?= "9"
+        ~?= "[9]"
 
 -- String: Contains an odd palindrome with punctuation
 testITQuadratic56 =
     "testITQuadratic56"
         ~: findPalindromesFormatted
             VarText
-            OutWord
+            FormatText
+            SelectLongest
             (ComQuadratic 3 2)
             4
             "/blaAPa.bl.i.bl"
@@ -711,18 +768,20 @@ testITQuadratic57 =
     "testITQuadratic57"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             (ComQuadratic 0 1)
             0
             "aba gdc."
-        ~?= "2"
+        ~?= "[2]"
 
 -- String: Contains no palindromes
 testITQuadratic58 =
     "testITQuadratic58"
         ~: findPalindromesFormatted
             VarWord
-            OutLengths
+            FormatLength
+            SelectAll
             (ComQuadratic 0 0)
             0
             "aba gdc"
@@ -733,7 +792,8 @@ testITQuadratic59 =
     "testITQuadratic59"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             (ComQuadratic 0 1)
             2
             "Hello. hi hi “hello”"
@@ -744,7 +804,8 @@ testITQuadratic60 =
     "testITQuadratic60"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             (ComQuadratic 1 2)
             6
             "hello hi hi hello"
@@ -755,7 +816,8 @@ testITQuadratic61 =
     "testITQuadratic61"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             (ComQuadratic 3 3)
             2
             "bye so    bye?"
@@ -766,7 +828,8 @@ testITQuadratic62 =
     "testITQuadratic62"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             (ComQuadratic 0 9)
             3
             "bye so bye"
@@ -777,7 +840,8 @@ testITQuadratic63 =
     "testITQuadratic63"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             (ComQuadratic 0 2)
             2
             "Fout. Weer. Hi. Hi. Niet. Goed."
@@ -788,18 +852,20 @@ testITQuadratic64 =
     "testITQuadratic64"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             (ComQuadratic 0 1)
             0
             "fout weer hi hi niet goed"
-        ~?= "4"
+        ~?= "[4]"
 
 -- String: Contains odd approximate palindrome, has punctuation
 testITQuadratic65 =
     "testITQuadratic65"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             (ComQuadratic 0 0)
             2
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
@@ -810,7 +876,8 @@ testITQuadratic66 =
     "testITQuadratic66"
         ~: findPalindromesFormatted
             VarWord
-            OutLengths
+            FormatLength
+            SelectAll
             (ComQuadratic 9 9)
             4
             "nope fout goed niet midden oeps goed nee ook"
@@ -821,7 +888,8 @@ testITQuadratic67 =
     "testITQuadratic67"
         ~: findPalindromesFormatted
             VarWord
-            OutLengths
+            FormatLength
+            SelectAll
             (ComQuadratic 2 0)
             2
             "Doei&& hi ik b(e)n ??? een mens hi doei"
@@ -832,7 +900,8 @@ testITQuadratic68 =
     "testITQuadratic68"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             (ComQuadratic 2 1)
             3
             "doei hi ik ben een mens hi doei"
@@ -843,7 +912,8 @@ testITQuadratic69 =
     "testITQuadratic69"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             (ComQuadratic 3 1)
             4
             "dag h?i dri/e gap size. ... hi dag"
@@ -854,18 +924,20 @@ testITQuadratic70 =
     "testITQuadratic70"
         ~: findPalindromesFormatted
             VarWord
-            OutLength
+            FormatLength
+            SelectLongest
             (ComQuadratic 3 0)
             2
             "dag hi drie gap size hi dag"
-        ~?= "7"
+        ~?= "[7]"
 
 -- String: Contains an even palindrome with punctuation
 testITQuadratic71 =
     "testITQuadratic71"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             (ComQuadratic 6 6)
             0
             ",onzin, .dit pal\n pal dit/ gek"
@@ -876,7 +948,8 @@ testITQuadratic72 =
     "testITQuadratic72"
         ~: findPalindromesFormatted
             VarWord
-            OutLengths
+            FormatLength
+            SelectAll
             (ComQuadratic 0 0)
             0
             "onzin dit pal pal dit gek"
@@ -887,7 +960,8 @@ testITQuadratic73 =
     "testITQuadratic73"
         ~: findPalindromesFormatted
             VarWord
-            OutWords
+            FormatText
+            SelectAll
             (ComQuadratic 0 1)
             2
             "Onzin. pAl is. Pal gek"
@@ -898,7 +972,8 @@ testITQuadratic74 =
     "testITQuadratic74"
         ~: findPalindromesFormatted
             VarWord
-            OutWord
+            FormatText
+            SelectLongest
             (ComQuadratic 1 2)
             3
             "onzin pal is pal gek"

@@ -25,8 +25,8 @@ module Data.Algorithms.Palindromes.Finders
     , formatPalindromes
     , Variant (..)
     , OutputFormat (..)
+    , OutputFilter (..)
     , Complexity (..)
-    , filterOnlyLongest
     , filterPalindromes
     ) where
 
@@ -40,15 +40,15 @@ import Data.Algorithms.Palindromes.Algorithms
 import Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
-    , lengthAt
     , longest
     , rangeToText
+    , showAll
     , showLengths
+    , showRanges
     , showTexts
-    , wordAt
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq)
-import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 import Data.Algorithms.Palindromes.PostProcessing (filterPunctuation)
 import Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
@@ -61,6 +61,7 @@ import Data.Algorithms.Palindromes.RangeFunctions
     ( Range
     , indexedLengthToRange
     , rangeToLength
+    , rangeToPalindromeCenter
     )
 
 import qualified Data.Vector.Generic as G
@@ -88,18 +89,23 @@ data Variant
 in finding functions.
 -}
 data OutputFormat
-    = -- | Output the length of the longest palindrome
-      OutLength
-    | -- | Output all longest palindromes of same size as text
-      OutWord
-    | -- | Output the lengths of all maximal palindromes around each center
-      OutLengths
-    | -- | Output all maximal palindromes around each center as text
-      OutWords
-    | -- | Output the length of the palindrome at a certain center index
-      OutLengthAt Int
-    | -- | Output the palindrome at a certain center index as text
-      OutWordAt Int
+    = -- | Output the length of the palindromes
+      FormatLength
+    | -- | Output palindrome as text
+      FormatText
+    | -- | Output the ranges of the palindromes
+      FormatRange
+    | -- | Output all details: Text, range and length
+      FormatAllDetails
+    deriving (Show)
+
+data OutputFilter
+    = -- | Select longest (can be multiple of same length)
+      SelectLongest
+    | -- | Select to only keep palindromes with certain center position
+      SelectAt Int
+    | -- | Select all palindromes
+      SelectAll
     deriving (Show)
 
 {- | Used as a setting for what algorithm to run. The quadratic algorithm also has
@@ -200,41 +206,30 @@ findPalindromes variant complexity minlen input =
 
 {- | This function combines four phases based on the settings and input given: The
 pre-processing, the algorithm phase, the post processing phase, the parsing phase and the
-output phase. The final phase takes the OutputFormat flag into account and returns a
+output phase. The final phase takes the filter and format flags into account and returns a
 String that can be printed. It return the palindrome found using the settings, formatted
-to the given outputFormat.
+to the given filter and format.
 -}
 findPalindromesFormatted
-    :: Variant -> OutputFormat -> Complexity -> Int -> String -> String
-findPalindromesFormatted variant outputFormat complexity minlen input =
+    :: Variant -> OutputFormat -> OutputFilter -> Complexity -> Int -> String -> String
+findPalindromesFormatted variant outputFormat outputFilter complexity minlen input =
     formatPalindromes outputFormat $
-        filterPalindromes outputFormat $
+        filterPalindromes outputFilter $
             findPalindromes variant complexity minlen input
 
-filterPalindromes :: OutputFormat -> [Palindrome] -> [Palindrome]
-filterPalindromes outputFormat
+filterPalindromes :: OutputFilter -> [Palindrome] -> [Palindrome]
+filterPalindromes outputFilter = case outputFilter of
     -- reverse foldl' is more efficient in memory than foldr
     -- This is because know the fold can be applied as soon as the result of the algorithm is computed
     -- With foldr we would first have to compute the entire list before we can apply the filter
-    | filterOnlyLongest outputFormat = reverse . foldl' longest []
-    | otherwise = id
-
-filterOnlyLongest
-    :: OutputFormat
-    -> Bool
-filterOnlyLongest outputFormat = case outputFormat of
-    OutLength -> True
-    OutWord -> True
-    _ -> False
+    SelectLongest -> reverse . foldl' longest []
+    SelectAt n -> filter ((== n) . rangeToPalindromeCenter . palRange)
+    SelectAll -> id
 
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
-formatPalindromes outputFormat pals@(h : _) = case outputFormat of
-    OutLength -> show $ getLength h
-    OutWord -> showTexts pals
-    OutLengths -> showLengths lengths
-    OutWords -> showTexts pals
-    OutLengthAt x -> lengthAt x lengths
-    OutWordAt x -> wordAt x pals
-  where
-    lengths = map getLength pals
+formatPalindromes outputFormat pals = case outputFormat of
+    FormatLength -> showLengths pals
+    FormatText -> showTexts pals
+    FormatRange -> showRanges pals
+    FormatAllDetails -> showAll pals

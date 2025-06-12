@@ -99,7 +99,7 @@ is from a file or standard input.
 -}
 handleFlags
     :: [Flag]
-    -> Bool -- hasFiles
+    -> Bool
     -> ( String -> IO String -- function from input to output
        , Bool -- if input is standard input
        )

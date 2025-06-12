@@ -20,9 +20,7 @@ import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToLength)
 data Palindrome
     = Palindrome
     { palRange :: Range
-    {- ^ The start (inclusive) and end (exclusive) index of the palindrome in the
-    pre-pocessed input vector.
-    -}
+    -- ^ The range of the palindrome in the pre-pocessed input vector.
     , palText :: String
     {- ^ The text representing the found palindrome. Note that this must be a string,
     not some abstract datatype. This string must be a subarray of the original

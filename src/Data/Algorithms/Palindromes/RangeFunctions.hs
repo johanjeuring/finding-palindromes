@@ -41,7 +41,7 @@ indexedLengthToRange (index, len) = (startIndex, endIndex)
     endIndex :: Int
     endIndex = startIndex + len
 
-{- Converts a (start, end) tuple to a palindrome length. We take max to cover an edge
+{- Converts a (palindrome's) range to a palindrome length. We take max to cover an edge
 case where the range is negative. The palindrome should then be empty. -}
 rangeToLength :: Range -> Int
 rangeToLength (start, end) = max 0 (end - start)

@@ -187,8 +187,7 @@ findPalindromes variant complexity minlen input =
     filterRanges :: [Range] -> [Range]
     filterRanges = filter ((>= minlen) . rangeToLength)
 
-    -- Takes a (start character index, end character index) pair referring to the pre-processed input.
-    -- Finds where this range is in the original input.
+    -- Takes a range in the pre-processed input and returns the range in the original input.
     indicesInOriginal :: Range -> Range
     indicesInOriginal range = case variant of
         VarText -> indicesInOutputText range inputLength (filterLetters' inputVector)

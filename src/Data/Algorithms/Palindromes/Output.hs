@@ -49,8 +49,8 @@ indicesInOutputText (start', end') !inputLength originalIndices
     start = originalIndices U.! start'
     end = (originalIndices U.! (end' - 1)) + 1
 
-{- | Takes a start and end index in the list of words and returns the start and end
-indices of the text of the word palindrome in the original string
+{- | Takes a range in the vector containing words and returns the range of the text
+of the word palindrome in the original string
 -}
 indicesInOutputWord :: Range -> Int -> V.Vector (Range, String) -> Range
 indicesInOutputWord (start', end') !inputLength wordsWithIndices

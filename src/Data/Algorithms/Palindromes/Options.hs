@@ -26,7 +26,7 @@ import System.Console.GetOpt
     , OptDescr (..)
     )
 
-import Data.Algorithms.Palindromes.Finders
+import qualified Data.Algorithms.Palindromes.Finders as F
     ( Complexity (..)
     , OutputFormat (..)
     , Variant (..)
@@ -35,19 +35,19 @@ import Data.Algorithms.Palindromes.Finders
 data Flag
     = Help
     | StandardInput
-    | Complexity Complexity
-    | Variant Variant
-    | OutputFormat OutputFormat
+    | Complexity F.Complexity
+    | Variant F.Variant
+    | OutputFormat F.OutputFormat
     | MinLength Int
 
-defaultComplexity :: Complexity
-defaultComplexity = ComQuadratic{gapSize = 0, maxError = 0}
+defaultComplexity :: F.Complexity
+defaultComplexity = F.ComQuadratic{F.gapSize = 0, F.maxError = 0}
 
-defaultVariant :: Variant
-defaultVariant = VarText
+defaultVariant :: F.Variant
+defaultVariant = F.VarText
 
-defaultOutputFormat :: OutputFormat
-defaultOutputFormat = OutWord
+defaultOutputFormat :: F.OutputFormat
+defaultOutputFormat = F.OutWord
 
 defaultMinLength :: Int
 defaultMinLength = 0
@@ -67,7 +67,7 @@ options =
     , Option
         ['L']
         ["linear"]
-        (NoArg (Complexity ComLinear))
+        (NoArg (Complexity F.ComLinear))
         "Use the linear algorithm"
     , Option
         ['Q']
@@ -82,47 +82,47 @@ options =
     , Option
         ['r']
         ["plain", "regular"]
-        (NoArg (Variant VarPlain))
+        (NoArg (Variant F.VarPlain))
         "plain (r for regular) palindrome"
     , Option
         ['t']
         ["text"]
-        (NoArg (Variant VarText))
+        (NoArg (Variant F.VarText))
         "Palindrome ignoring case, spacing and punctuation (default)"
     , Option
         ['p']
         ["punctuation"]
-        (NoArg (Variant VarPunctuation))
+        (NoArg (Variant F.VarPunctuation))
         "Palindrome surrounded by punctuation (if any)"
     , Option
         ['w']
         ["word"]
-        (NoArg (Variant VarWord))
+        (NoArg (Variant F.VarWord))
         "Word palindrome"
     , Option
         ['d']
         ["dna"]
-        (NoArg (Variant VarDNA))
+        (NoArg (Variant F.VarDNA))
         "DNA palindrome"
     , Option
         ['l']
         ["longest"]
-        (NoArg (OutputFormat OutWord))
+        (NoArg (OutputFormat F.OutWord))
         "All longest palindromes of same size (default)"
     , Option
         ['e']
         ["length"]
-        (NoArg (OutputFormat OutLength))
+        (NoArg (OutputFormat F.OutLength))
         "Length of the longest palindrome"
     , Option
         ['a']
         ["all"]
-        (NoArg (OutputFormat OutWords))
+        (NoArg (OutputFormat F.OutWords))
         "All maximal palindromes"
     , Option
         ['n']
         ["lengths"]
-        (NoArg (OutputFormat OutLengths))
+        (NoArg (OutputFormat F.OutLengths))
         "Length of the maximal palindrome around each position in the input"
     , Option
         ['m']
@@ -137,7 +137,7 @@ options =
     , Option
         ['x']
         ["extend"]
-        (ReqArg (OutputFormat . OutLengthAt . (read :: String -> Int)) "arg")
+        (ReqArg (OutputFormat . F.OutLengthAt . (read :: String -> Int)) "arg")
         "Extend a palindrome around center [arg]"
     ]
 
@@ -156,7 +156,7 @@ error is thrown.
 -}
 parseInsertionDeletion :: Maybe String -> Flag
 parseInsertionDeletion str
-    | isNothing str = Complexity ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
+    | isNothing str = Complexity F.ComInsertionDeletion{F.gapSizeID = 0, F.maxIDError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -167,7 +167,7 @@ parseInsertionDeletion str
                 ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Complexity ComInsertionDeletion{gapSizeID = read gapSize, maxIDError = read errors}
+        Complexity F.ComInsertionDeletion{F.gapSizeID = read gapSize, F.maxIDError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
@@ -177,7 +177,7 @@ error is thrown.
 -}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
-    | isNothing str = Complexity ComQuadratic{gapSize = 0, maxError = 0}
+    | isNothing str = Complexity F.ComQuadratic{F.gapSize = 0, F.maxError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -188,7 +188,7 @@ parseQuadratic str
                 ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Complexity ComQuadratic{gapSize = read gapSize, maxError = read errors}
+        Complexity F.ComQuadratic{F.gapSize = read gapSize, F.maxError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
@@ -197,7 +197,7 @@ parseQuadratic str
 is given, it throws an error, as this is not suppported by our program. If none are give it
 uses the default option.
 -}
-getComplexity :: [Flag] -> Complexity
+getComplexity :: [Flag] -> F.Complexity
 getComplexity xs
     | null complexityFlags = defaultComplexity
     | [Complexity c] <- complexityFlags = c
@@ -213,7 +213,7 @@ getComplexity xs
 given, it throws an error, as this is not suppported by our program. If none are give it
 uses the default option.
 -}
-getVariant :: [Flag] -> Variant
+getVariant :: [Flag] -> F.Variant
 getVariant xs
     | null variantFlags = defaultVariant
     | [Variant v] <- variantFlags = v
@@ -229,7 +229,7 @@ getVariant xs
 flag is given, it throws an error, as this is not suppported by our program. If none are
 give it uses the default option.
 -}
-getOutputFormat :: [Flag] -> OutputFormat
+getOutputFormat :: [Flag] -> F.OutputFormat
 getOutputFormat xs
     | null outputFormatFlags = defaultOutputFormat
     | [OutputFormat o] <- outputFormatFlags = o

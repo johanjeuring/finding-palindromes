@@ -100,7 +100,7 @@ propValidPalindromeReverse settings = counterexample (show settings ++ " propert
 
 extractPalEq :: Settings -> Palindrome -> Bool
 extractPalEq settings pal = case complexity settings of
-    ComInsertionDeletion _ _ -> case variant settings of
+    ComApproximate _ _ -> case variant settings of
         VarWord -> isApproximatePalindrome $ words (cleanOriginalString (palText pal))
         VarPlain -> isApproximatePalindrome $ palText pal
         VarDNA -> isApproximatePalindrome $ map (fromJust . charToDNA) (palText pal)
@@ -113,7 +113,7 @@ extractPalEq settings pal = case complexity settings of
   where
     (gapSize, errors) = case complexity settings of
         ComQuadratic gap err -> (gap, err)
-        ComInsertionDeletion gap err -> (gap, err)
+        ComApproximate gap err -> (gap, err)
         ComLinear -> (0, 0)
 
     {- if any of the possible removed gaps has levenshteinDistance with its reverse is

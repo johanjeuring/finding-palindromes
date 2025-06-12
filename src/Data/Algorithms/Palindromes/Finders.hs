@@ -35,7 +35,7 @@ module Data.Algorithms.Palindromes.Finders
 import Data.List (foldl')
 
 import Data.Algorithms.Palindromes.Algorithms
-    ( insertionDeletionAlgorithm
+    ( approximateAlgorithm
     , linearAlgorithm
     , quadraticAlgorithm
     )
@@ -116,7 +116,7 @@ functionality for including gaps and errors, therefore this is given as an extra
 data Complexity
     = ComLinear
     | ComQuadratic {gapSize :: Int, maxError :: Int}
-    | ComInsertionDeletion {gapSizeID :: Int, maxIDError :: Int}
+    | ComApproximate {gapSizeID :: Int, maxIDError :: Int}
     deriving (Show)
 
 {- | This method returns whether uneven palindromes are impossible to exist based on the
@@ -159,7 +159,7 @@ findPalindromeRanges variant complexity input =
                     (onlyEvenPals variant complexity)
                     gapSize'
                     errors
-        ComInsertionDeletion gapSize' errors -> insertionDeletionAlgorithm gapSize' errors
+        ComApproximate gapSize' errors -> approximateAlgorithm gapSize' errors
 
     indexListToRanges :: [Int] -> [Range]
     indexListToRanges = go 0

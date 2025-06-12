@@ -22,14 +22,14 @@ module Data.Algorithms.Palindromes.LinearAlgorithm
 
 import Data.Algorithms.Palindromes.PalEq (PalEq (..), palEqToItselfAtIndex)
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Generic as G
 
 -- | This function traverses input linearly, using an accumulator.
 extendPalindromeS
-    :: (PalEq a)
+    :: (PalEq a, G.Vector v a)
     => Bool
     -- ^ indicates whether the input datatype is anti-reflexive
-    -> V.Vector a
+    -> v a
     -- ^ input, with only the elements we want to find palindromes in
     -> Int
     -- ^ the rightmost index which is checked by the algorithm
@@ -48,7 +48,7 @@ extendPalindromeS onlyEvenPals input rightmost maximalPalindromesIn currentPalin
             maximalPalindromesIn
             (currentPalindrome : maximalPalindromesIn)
     | rightmost - currentPalindrome == first
-        || not ((input V.! rightmost) =:= (input V.! (rightmost - currentPalindrome - 1))) =
+        || not ((input G.! rightmost) =:= (input G.! (rightmost - currentPalindrome - 1))) =
         -- the current palindrome extends to the start of the array, or it cannot be
         -- extended
         moveCenterS
@@ -68,14 +68,14 @@ extendPalindromeS onlyEvenPals input rightmost maximalPalindromesIn currentPalin
             (currentPalindrome + 2)
   where
     first = 0 -- first index of the input
-    lastPos = V.length input - 1 -- last index of the input
+    lastPos = G.length input - 1 -- last index of the input
 
 -- | If the current palindrome cannot be extended anymore, this function will move the centers one step
 moveCenterS
-    :: (PalEq a)
+    :: (PalEq a, G.Vector v a)
     => Bool
     -- ^ indicates whether the input datatype is anti-reflexive
-    -> V.Vector a
+    -> v a
     -- ^ input, with only the elements we want to find palindromes in
     -> Int
     -- ^ the rightmost index which is checked by the algorithm

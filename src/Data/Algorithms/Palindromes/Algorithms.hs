@@ -30,16 +30,16 @@ import Data.Algorithms.Palindromes.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Generic as G
 
 {- | Search for palindromes using the linear time algorithm. Returns a list of the maximum
 length palindromes which were found at each center index in the input.
 -}
 linearAlgorithm
-    :: (PalEq a)
+    :: (PalEq a, G.Vector v a)
     => Bool
     -- ^ isAntiReflexive, antireflexive types only need to check even indices
-    -> V.Vector a
+    -> v a
     -> [Int]
 linearAlgorithm isAntiReflexive input =
     reverse $
@@ -51,14 +51,14 @@ palindrome to have a gap at the center of given length. Errors allow some substi
 mistakes in the palindrome.
 -}
 quadraticAlgorithm
-    :: (PalEq a)
+    :: (PalEq a, G.Vector v a)
     => Bool
     -- ^ isAntiReflexive
     -> Int
-    -- ^ gapsize
+    -- ^ gapSize
     -> Int
     -- ^ error count
-    -> V.Vector a
+    -> v a
     -- ^ input
     -> [Int]
 quadraticAlgorithm = gappedApproximatePalindromesAroundCentres

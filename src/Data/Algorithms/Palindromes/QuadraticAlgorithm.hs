@@ -25,49 +25,49 @@ module Data.Algorithms.Palindromes.QuadraticAlgorithm
     ) where
 
 import Data.List as L
-import Data.Vector as V
 
 import Data.Algorithms.Palindromes.PalEq
     ( PalEq (..)
     )
 
+import qualified Data.Vector.Generic as G
+
 {- | For each center, finds the maximal palindrome around this center.
 This function runs in O(m), where m is the sum of palindrome sizes.
 -}
 gappedApproximatePalindromesAroundCentres
-    :: (PalEq a)
+    :: (PalEq a, G.Vector v a)
     => Bool
     -> Int
     -> Int
-    -> V.Vector a
+    -> v a
     -> [Int]
-gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize errorCount input =
-    if onlyEvenPals
-        then
-            L.map
-                (lengthPalAtCenterAntiReflexive input gapSize errorCount)
-                (if even gapSize then [0 .. V.length input] else [0 .. V.length input - 1])
-        else
-            L.map
-                (lengthPalAtCenterReflexive input gapSize errorCount)
-                [0 .. 2 * V.length input]
+gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize errorCount input
+    | onlyEvenPals =
+        L.map
+            (lengthPalAtCenterAntiReflexive input gapSize errorCount)
+            (if even gapSize then [0 .. G.length input] else [0 .. G.length input - 1])
+    | otherwise =
+        L.map
+            (lengthPalAtCenterReflexive input gapSize errorCount)
+            [0 .. 2 * G.length input]
 
 {- | Keep expanding the palindrome around the given center to get the maximal palindrome.
 Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of
 the found palindrome.
 -}
 lengthApproximatePalindrome
-    :: (PalEq a) => V.Vector a -> Int -> Int -> Int -> Int
+    :: (PalEq a, G.Vector v a) => v a -> Int -> Int -> Int -> Int
 lengthApproximatePalindrome input errorCount start end
     | start < 0 || end > lastPos = end - start - 1
-    | (input V.! start) =:= (input V.! end) =
+    | (input G.! start) =:= (input G.! end) =
         lengthApproximatePalindrome input errorCount (start - 1) (end + 1)
     | errorCount > 0 =
         lengthApproximatePalindrome input (errorCount - 1) (start - 1) (end + 1)
     | otherwise = end - start - 1
   where
     lastPos :: Int
-    lastPos = V.length input - 1
+    lastPos = G.length input - 1
 
 {-
 ---------------------------------------------------------------------
@@ -77,8 +77,8 @@ lengthApproximatePalindrome input errorCount start end
 
 {- | Get the element index for the left and right characters to start expanding the
 palindrome from, essentially ignoring the gap. This function must be used when the
-palindrome center is between two elements. Note that if the gapSize is odd, the
-resulting gap will be maximum (gapSize - 1) big.
+palindrome center is between two elements. Note that if the inputted gap size is odd, the
+actually used gap size will be (gapSize - 1).
 -}
 getLeftRightCenterBetweenElems
     :: Int
@@ -139,11 +139,11 @@ getLeftRightCenterOnElem gapSize elementIndex lengthInput = (left, right)
 
 -- | The length of the maximal palindrome around the specified center
 lengthPalAtCenterReflexive
-    :: (PalEq a)
-    => V.Vector a
+    :: (PalEq a, G.Vector v a)
+    => v a
     -- ^ The total vector to find palindromes in
     -> Int
-    -- ^ The (maximum) size of the gap
+    -- ^ The size of the gap
     -> Int
     -- ^ The (maximum) number of allowed errors
     -> Int
@@ -151,7 +151,7 @@ lengthPalAtCenterReflexive
     -> Int
     -- ^ The resulting length of the found maximal palindrome
 lengthPalAtCenterReflexive input gapSize errorCount center =
-    let (left, right) = getLeftRightReflexive gapSize center (V.length input)
+    let (left, right) = getLeftRightReflexive gapSize center (G.length input)
     in  lengthApproximatePalindrome input errorCount left right
 
 {- | Get the two new character indexes for the left and right character to
@@ -184,11 +184,11 @@ getLeftRightReflexive gapSize center lengthInput
 -}
 
 lengthPalAtCenterAntiReflexive
-    :: (PalEq a)
-    => V.Vector a
+    :: (PalEq a, G.Vector v a)
+    => v a
     -- ^ The total vector to find palindromes in
     -> Int
-    -- ^ The (maximum) size of the gap
+    -- ^ The size of the gap
     -> Int
     -- ^ The (maximum) number of allowed errors
     -> Int
@@ -197,7 +197,7 @@ lengthPalAtCenterAntiReflexive
 lengthPalAtCenterAntiReflexive input gapSize errorCount center =
     -- We can just use getLeftRightCenterBetweenElems, because with anti reflexive data
     -- types, the center is aways between two elements
-    let (left, right) = getLeftRightCenterBetweenElems gapSize center (V.length input)
+    let (left, right) = getLeftRightCenterBetweenElems gapSize center (G.length input)
     in  lengthApproximatePalindrome input errorCount left right
 
 {-

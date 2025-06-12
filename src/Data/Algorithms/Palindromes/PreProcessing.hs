@@ -16,7 +16,6 @@ algorithms.
 module Data.Algorithms.Palindromes.PreProcessing
     ( filterLetters
     , filterLetters'
-    , textToDNA
     , textToWords
     , textToWordsWithIndices
     , tryParseDNA
@@ -31,39 +30,37 @@ import Data.Algorithms.Palindromes.DNA
     )
 
 import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 -- Make sure all functions are of the type
 -- (PalEq b) => String -> [b]
 
 -- | A function that filters the string so that only letters remain
-filterLetters :: String -> V.Vector Char
-filterLetters x = V.map toLower $ V.filter isAlphaNum (V.fromList x)
+filterLetters :: U.Vector Char -> U.Vector Char
+filterLetters x = U.map toLower $ U.filter isAlphaNum x
 
 {- | A function that filters the string so that only letters remain, but remembers the
 original index of each character.
 -}
-filterLetters' :: String -> V.Vector (Int, Char)
-filterLetters' x = V.filter (isAlphaNum . snd) (V.indexed (V.fromList $ map toLower x))
-
--- | A function that parses ATGCN to the DNA datatype
-textToDNA :: String -> Maybe (V.Vector DNA)
-textToDNA = toDNA . V.fromList
+filterLetters' :: U.Vector Char -> U.Vector Int
+filterLetters' x = U.map fst $ U.filter (isAlphaNum . snd) (U.indexed (U.map toLower x))
 
 {- | A function that filters the string so that only letters and spaces remain, then
 splits the result on every space so that only words remain.
 -}
-textToWords :: String -> V.Vector String
-textToWords x = V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a || isSpace a) x
+textToWords :: U.Vector Char -> V.Vector String
+textToWords x =
+    V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a || isSpace a) $ U.toList x
 
 {- | A function that filters the string so that only letters and spaces remain, then
 splits the result on every space so that only words remain. It remembers the original
 start and end index of each word.
 -}
-textToWordsWithIndices :: String -> V.Vector ((Int, Int), [Char])
+textToWordsWithIndices :: U.Vector Char -> V.Vector ((Int, Int), String)
 textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexedCharacters
   where
     indexedCharacters :: [(Int, Char)]
-    indexedCharacters = V.toList $ filterSpaceAndLetters input
+    indexedCharacters = U.toList $ filterSpaceAndLetters input
 
     -- Convert a list of indexed characters to an indexed string
     toWord :: [(Int, Char)] -> ((Int, Int), [Char])
@@ -82,17 +79,17 @@ textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexe
         checking = dropWhile (isSpace . snd) s
         (word, remaining) = break (isSpace . snd) checking
 
-    filterSpaceAndLetters :: String -> V.Vector (Int, Char)
+    filterSpaceAndLetters :: U.Vector Char -> U.Vector (Int, Char)
     filterSpaceAndLetters w =
-        V.filter
+        U.filter
             (\x -> (isAlphaNum . snd) x || (isSpace . snd) x)
-            (V.indexed (V.fromList $ map toLower w))
+            (U.indexed (U.map toLower w))
 
 -- If trying to parse the string to DNA would fail, throw a more readable error
-tryParseDNA :: String -> V.Vector DNA
+tryParseDNA :: U.Vector Char -> U.Vector DNA
 -- tryParseDNA input
 --     | (isNothing . parseDna) input = error "Invalid DNA string"
 --     | otherwise = (fromJust . parseDna) input
 tryParseDNA input = fromMaybe (error "Invalid DNA string") (parseDna input)
-parseDna :: String -> Maybe (V.Vector DNA)
-parseDna = textToDNA . V.toList . filterLetters
+parseDna :: U.Vector Char -> Maybe (U.Vector DNA)
+parseDna = toDNA . filterLetters

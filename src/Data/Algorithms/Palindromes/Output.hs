@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns #-}
+
 {- |
 Module      :  Data.Algorithms.Palindromes.Output
 Copyright   :  (c) 2007 - 2013 Johan Jeuring
@@ -17,10 +19,9 @@ module Data.Algorithms.Palindromes.Output
     ( indicesInOutputText
     , indicesInOutputWord
     , rangeToText
-    , longestLength
-    , longestWords
-    , allLengths
-    , allWords
+    , longest
+    , showLengths
+    , showTexts
     , lengthAt
     , wordAt
     ) where
@@ -34,32 +35,30 @@ import Data.Algorithms.Palindromes.Palindrome
 import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToPalindromeCenter)
 
 import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: Range -> String -> V.Vector (Int, Char) -> Range
-indicesInOutputText (start', end') input originalIndices
-    | start' >= length originalIndices = (length input, length input)
+indicesInOutputText :: Range -> Int -> U.Vector Int -> Range
+indicesInOutputText (start', end') !inputLength originalIndices
+    | start' >= U.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
     | otherwise = (start, start)
   where
-    start = fst $ originalIndices V.! start'
-    end = fst (originalIndices V.! (end' - 1)) + 1
+    start = originalIndices U.! start'
+    end = (originalIndices U.! (end' - 1)) + 1
 
 {- | Takes a start and end index in the list of words and returns the start and end
 indices of the text of the word palindrome in the original string
 -}
-indicesInOutputWord :: Range -> String -> V.Vector (Range, String) -> Range
-indicesInOutputWord (start', end') input wordsWithIndices
+indicesInOutputWord :: Range -> Int -> V.Vector (Range, String) -> Range
+indicesInOutputWord (start', end') !inputLength wordsWithIndices
     | start' >= length wordsWithIndices =
-        (maxIndex, maxIndex)
+        (inputLength, inputLength)
     | end' - start' > 0 = (startIndex, endIndex)
     | otherwise = (startIndex, startIndex)
   where
-    maxIndex :: Int
-    maxIndex = length input
-
     firstWord :: (Range, String)
     firstWord = wordsWithIndices V.! start'
     lastWord :: (Range, String)
@@ -71,33 +70,25 @@ indicesInOutputWord (start', end') input wordsWithIndices
     endIndex = snd (fst lastWord)
 
 -- | Takes a start and end index (exclusive) and returns the substring in the text with that range
-rangeToText :: Range -> V.Vector Char -> String
+rangeToText :: Range -> U.Vector Char -> String
 rangeToText (start, end) input
-    | end - start > 0 = V.toList $ V.slice start (end - start) input
+    | end - start > 0 = U.toList $ U.slice start (end - start) input
     | otherwise = ""
 
--- | Returns the length of the longest palindrome as a string
-longestLength :: [Int] -> String
-longestLength = show . maximum
-
--- | Returns all longests palindromes of the same size
-longestWords :: [Palindrome] -> String
-longestWords input = allWords $ foldr longest [] input
-  where
-    longest :: Palindrome -> [Palindrome] -> [Palindrome]
-    longest p [] = [p]
-    longest p2 pals@(p1 : _)
-        | getLength p1 == getLength p2 = p2 : pals
-        | getLength p1 < getLength p2 = [p2]
-        | otherwise = pals
+longest :: [Palindrome] -> Palindrome -> [Palindrome]
+longest [] p = [p]
+longest pals@(p1 : _) p2
+    | getLength p1 == getLength p2 = p2 : pals
+    | getLength p1 < getLength p2 = [p2]
+    | otherwise = pals
 
 -- | All maximal palindrome lengths
-allLengths :: [Int] -> String
-allLengths = show
+showLengths :: [Int] -> String
+showLengths = show
 
 -- | All maximal palindromes as a list of strings, separated by a newline.
-allWords :: [Palindrome] -> String
-allWords input = intercalate "\n" (map (\x -> "\"" ++ palText x ++ "\"") input)
+showTexts :: [Palindrome] -> String
+showTexts input = intercalate "\n" (map (\x -> "\"" ++ palText x ++ "\"") input)
 
 -- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String

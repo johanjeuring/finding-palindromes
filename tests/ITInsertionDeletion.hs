@@ -95,7 +95,7 @@ testITInsertionDeletion1 =
         ~: findPalindromesFormatted
             VarDNA
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             0
             "AG\nTC"
         ~?= "3"
@@ -106,7 +106,7 @@ testITInsertionDeletion2 =
         ~: findPalindromesFormatted
             VarDNA
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             4
             "A&T-AT"
         ~?= "\"A&T-AT\""
@@ -117,7 +117,7 @@ testITInsertionDeletion3 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 4}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 4}
             1
             "AGTC"
         ~?= "[4]"
@@ -128,7 +128,7 @@ testITInsertionDeletion4 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             2
             "ACCT"
         ~?= "[2,2,4]"
@@ -139,7 +139,7 @@ testITInsertionDeletion5 =
         ~: findPalindromesFormatted
             VarDNA
             OutWords
-            ComInsertionDeletion{gapsID = 1, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 1, maxIDError = 2}
             3
             "“AC\nTA..,TTCT”"
         ~?= "\"AC\nTA..,TTCT\""
@@ -150,7 +150,7 @@ testITInsertionDeletion6 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             3
             "ATAT"
         ~?= "[4]"
@@ -161,7 +161,7 @@ testITInsertionDeletion7 =
         ~: findPalindromesFormatted
             VarDNA
             OutWord
-            ComInsertionDeletion{gapsID = 4, maxIDError = 4}
+            ComInsertionDeletion{gapSizeID = 4, maxIDError = 4}
             2
             "Ac\nC,T”"
         ~?= "\"Ac\nC,T\""
@@ -172,7 +172,7 @@ testITInsertionDeletion8 =
         ~: findPalindromesFormatted
             VarDNA
             OutWord
-            ComInsertionDeletion{gapsID = 1, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 1, maxIDError = 2}
             2
             "ACTATTCT"
         ~?= "\"ACTATTCT\""
@@ -183,7 +183,7 @@ testITInsertionDeletion9 =
         ~: findPalindromesFormatted
             VarDNA
             OutLength
-            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             1
             "AGGGT"
         ~?= "2"
@@ -194,7 +194,7 @@ testITInsertionDeletion10 =
         ~: findPalindromesFormatted
             VarDNA
             OutWords
-            ComInsertionDeletion{gapsID = 5, maxIDError = 5}
+            ComInsertionDeletion{gapSizeID = 5, maxIDError = 5}
             0
             "A;G;G;G;T"
         ~?= "\"A;G;G;G;T\""
@@ -205,7 +205,7 @@ testITInsertionDeletion11 =
         ~: findPalindromesFormatted
             VarDNA
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             6
             "Ac.G-CgA "
         ~?= "[6]"
@@ -216,7 +216,7 @@ testITInsertionDeletion12 =
         ~: findPalindromesFormatted
             VarDNA
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             6
             "ACGCGA"
         ~?= "No palindromes found"
@@ -227,7 +227,7 @@ testITInsertionDeletion13 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             4
             "kabral"
         ~?= "\"abra\""
@@ -238,7 +238,7 @@ testITInsertionDeletion14 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 6}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 6}
             1
             "abcdef"
         ~?= "[6]"
@@ -249,7 +249,7 @@ testITInsertionDeletion15 =
         ~: findPalindromesFormatted
             VarPlain
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "a’b/ba"
         ~?= "6"
@@ -260,7 +260,7 @@ testITInsertionDeletion16 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "abba"
         ~?= "\"abba\""
@@ -271,7 +271,7 @@ testITInsertionDeletion17 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             3
             "l.e.p’e;l"
         ~?= "[3]"
@@ -282,7 +282,7 @@ testITInsertionDeletion18 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{gapsID = 5, maxIDError = 5}
+            ComInsertionDeletion{gapSizeID = 5, maxIDError = 5}
             2
             "lepel"
         ~?= "\"lepel\""
@@ -293,7 +293,7 @@ testITInsertionDeletion19 =
         ~: findPalindromesFormatted
             VarPlain
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             0
             "kab^ra.L"
         ~?= "5"
@@ -304,7 +304,7 @@ testITInsertionDeletion20 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "Abc'd/.ef"
         ~?= "\"f\"\n\"e\"\n\".\"\n\"/\"\n\"d\"\n\"'\"\n\"c\"\n\"b\"\n\"A\""
@@ -315,7 +315,7 @@ testITInsertionDeletion21 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 10}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 10}
             2
             "zat.,s&tat"
         ~?= "[10]"
@@ -326,7 +326,7 @@ testITInsertionDeletion22 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "zatstat"
         ~?= "[3,5]"
@@ -337,7 +337,7 @@ testITInsertionDeletion23 =
         ~: findPalindromesFormatted
             VarPlain
             OutWords
-            ComInsertionDeletion{gapsID = 1, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 1, maxIDError = 2}
             5
             "blaA\\Bc..dA;b.l#i"
         ~?= "\"b.l#i\"\n\";b.l#\"\n\"A;b.l\"\n\"..dA;\"\n\"..dA;b.\"\n\"Bc..dA\"\n\"\\Bc..\"\n\"A\\Bc.\"\n\"aA\\Bc\"\n\"laA\\B\"\n\"blaA\\\""
@@ -348,7 +348,7 @@ testITInsertionDeletion24 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             1
             "blaABcdBAbli"
         ~?= "[2,2,2,2,2,2,2,6,2,2,2]"
@@ -359,7 +359,7 @@ testITInsertionDeletion25 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{gapsID = 10, maxIDError = 10}
+            ComInsertionDeletion{gapSizeID = 10, maxIDError = 10}
             2
             "A-B*cde)BA"
         ~?= "\"A-B*cde)BA\""
@@ -370,7 +370,7 @@ testITInsertionDeletion26 =
         ~: findPalindromesFormatted
             VarPlain
             OutWord
-            ComInsertionDeletion{gapsID = 3, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 3, maxIDError = 2}
             4
             "ABcdeBA"
         ~?= "\"ABcdeBA\""
@@ -382,7 +382,7 @@ testITInsertionDeletion27 =
         ~: findPalindromesFormatted
             VarPlain
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             3
             "\"blaAPPab’li "
         ~?= "No palindromes found"
@@ -393,7 +393,7 @@ testITInsertionDeletion28 =
         ~: findPalindromesFormatted
             VarPlain
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 9}
             0
             "blaAPPAbl"
         ~?= "\"blaAPPAbl\""
@@ -404,7 +404,7 @@ testITInsertionDeletion29 =
         ~: findPalindromesFormatted
             VarPlain
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "blaAPAbli"
         ~?= "[1,1,1,1,1,3,1,1,1]"
@@ -415,7 +415,7 @@ testITInsertionDeletion30 =
         ~: findPalindromesFormatted
             VarPlain
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             4
             "/blaAPa.bl.i"
         ~?= "\".bl.\"\n\"aAPa\""
@@ -426,7 +426,7 @@ testITInsertionDeletion31 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             2
             "/abba/"
         ~?= "\"abba\""
@@ -437,7 +437,7 @@ testITInsertionDeletion32 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLength
-            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             1
             ".,.ABcdBA,a"
         ~?= "6"
@@ -448,7 +448,7 @@ testITInsertionDeletion33 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 5}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 5}
             0
             "bla\\AP.PA.bli"
         ~?= "\"bla\\AP.PA.bli\""
@@ -459,7 +459,7 @@ testITInsertionDeletion34 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             4
             "blaAPA)bli"
         ~?= "No palindromes found"
@@ -470,7 +470,7 @@ testITInsertionDeletion35 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "lepel”"
         ~?= "5"
@@ -481,7 +481,7 @@ testITInsertionDeletion36 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "AB/cde/BA"
         ~?= "No palindromes found"
@@ -492,7 +492,7 @@ testITInsertionDeletion37 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             0
             "(ka(b)ral)"
         ~?= "3"
@@ -503,7 +503,7 @@ testITInsertionDeletion38 =
         ~: findPalindromesFormatted
             VarPunctuation
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             3
             "za.*ts&tat/”"
         ~?= "\"tat\""
@@ -514,7 +514,7 @@ testITInsertionDeletion39 =
         ~: findPalindromesFormatted
             VarText
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "Abc'd/.ef"
         ~?= "No palindromes found"
@@ -525,7 +525,7 @@ testITInsertionDeletion40 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 3}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 3}
             5
             "abcdef"
         ~?= "6"
@@ -536,7 +536,7 @@ testITInsertionDeletion41 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             1
             "a’b/ba"
         ~?= "\"a’b/ba\""
@@ -547,7 +547,7 @@ testITInsertionDeletion42 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "abba"
         ~?= "\"abba\""
@@ -558,7 +558,7 @@ testITInsertionDeletion43 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             2
             "l.e.p’e;l"
         ~?= "\"l.e.p’e;l\""
@@ -569,7 +569,7 @@ testITInsertionDeletion44 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "lepel"
         ~?= "\"lepel\""
@@ -580,7 +580,7 @@ testITInsertionDeletion45 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             6
             "kab^ra.L"
         ~?= "6"
@@ -591,7 +591,7 @@ testITInsertionDeletion46 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             0
             "kabral"
         ~?= "\"abra\""
@@ -602,7 +602,7 @@ testITInsertionDeletion47 =
         ~: findPalindromesFormatted
             VarText
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             1
             "zat.,s&tat"
         ~?= "[1,1,3,1,1,5,1]"
@@ -613,7 +613,7 @@ testITInsertionDeletion48 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 7}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 7}
             2
             "zatstat"
         ~?= "\"zatstat\""
@@ -624,7 +624,7 @@ testITInsertionDeletion49 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             0
             "blaA\\Bc..dA;b.l#i"
         ~?= "5"
@@ -635,7 +635,7 @@ testITInsertionDeletion50 =
         ~: findPalindromesFormatted
             VarText
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "blaABcdBAbli"
         ~?= "\"BAb\""
@@ -646,7 +646,7 @@ testITInsertionDeletion51 =
         ~: findPalindromesFormatted
             VarText
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 8}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 8}
             6
             "A-B*cde)BA"
         ~?= "[7]"
@@ -657,7 +657,7 @@ testITInsertionDeletion52 =
         ~: findPalindromesFormatted
             VarText
             OutLengths
-            ComInsertionDeletion{gapsID = 3, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 3, maxIDError = 0}
             2
             "ABcdeBA"
         ~?= "[3,3,3,3,7]"
@@ -668,7 +668,7 @@ testITInsertionDeletion53 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "\"blaAPPab'li"
         ~?= "\"Pab'li\"\n\"blaAPP\"\n\"blaAPPab'li\""
@@ -679,7 +679,7 @@ testITInsertionDeletion54 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             1
             "blaAPPAbl"
         ~?= "\"l\"\n\"b\"\n\"A\"\n\"APPA\"\n\"aA\"\n\"l\"\n\"b\""
@@ -690,7 +690,7 @@ testITInsertionDeletion55 =
         ~: findPalindromesFormatted
             VarText
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 9}
             4
             "blaAPAbli"
         ~?= "9"
@@ -701,7 +701,7 @@ testITInsertionDeletion56 =
         ~: findPalindromesFormatted
             VarText
             OutWords
-            ComInsertionDeletion{gapsID = 3, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 3, maxIDError = 2}
             4
             "/blaAPa.bl.i.bl"
         ~?= "\"Pa.bl.i.bl\"\n\"APa.bl.i.b\"\n\"blaAPa.bl.i.b\""
@@ -712,7 +712,7 @@ testITInsertionDeletion57 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             0
             "aba gdc."
         ~?= "2"
@@ -723,7 +723,7 @@ testITInsertionDeletion58 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "aba gdc"
         ~?= "[1,1]"
@@ -734,7 +734,7 @@ testITInsertionDeletion59 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             2
             "Hello. hi hi “hello”"
         ~?= "\"Hello. hi hi “hello\""
@@ -745,7 +745,7 @@ testITInsertionDeletion60 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             6
             "hello hi hi hello"
         ~?= "No palindromes found"
@@ -756,7 +756,7 @@ testITInsertionDeletion61 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 3}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 3}
             2
             "bye so    bye?"
         ~?= "\"bye so    bye\""
@@ -767,7 +767,7 @@ testITInsertionDeletion62 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 9}
             3
             "bye so bye"
         ~?= "\"bye so bye\""
@@ -778,7 +778,7 @@ testITInsertionDeletion63 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             2
             "Fout. Weer. Hi. Hi. Niet. Goed."
         ~?= "\"Fout. Weer. Hi. Hi. Niet. Goed\""
@@ -789,7 +789,7 @@ testITInsertionDeletion64 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             0
             "fout weer hi hi niet goed"
         ~?= "4"
@@ -800,7 +800,7 @@ testITInsertionDeletion65 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
         ~?= "No palindromes found"
@@ -811,7 +811,7 @@ testITInsertionDeletion66 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 9}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 9}
             4
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[9]"
@@ -822,7 +822,7 @@ testITInsertionDeletion67 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{gapsID = 2, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             2
             "Doei&& hi ik b(e)n ??? een mens hi doei"
         ~?= "[2,2,2,2,2,2,2]"
@@ -833,7 +833,7 @@ testITInsertionDeletion68 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{gapsID = 2, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 2, maxIDError = 1}
             3
             "doei hi ik ben een mens hi doei"
         ~?= "\"een mens hi doei\"\n\"ben een mens hi\"\n\"hi ik ben een\"\n\"doei hi ik ben\"\n\"doei hi ik ben een mens hi doei\""
@@ -844,7 +844,7 @@ testITInsertionDeletion69 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{gapsID = 3, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 3, maxIDError = 1}
             4
             "dag h?i dri/e gap size. ... hi dag"
         ~?= "\"dag h?i dri/e gap size. ... hi dag\""
@@ -855,7 +855,7 @@ testITInsertionDeletion70 =
         ~: findPalindromesFormatted
             VarWord
             OutLength
-            ComInsertionDeletion{gapsID = 3, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 3, maxIDError = 0}
             2
             "dag hi drie gap size hi dag"
         ~?= "7"
@@ -866,7 +866,7 @@ testITInsertionDeletion71 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 6}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 6}
             0
             ",onzin, .dit pal\n pal dit/ gek"
         ~?= "\"onzin, .dit pal\n pal dit/ gek\""
@@ -877,7 +877,7 @@ testITInsertionDeletion72 =
         ~: findPalindromesFormatted
             VarWord
             OutLengths
-            ComInsertionDeletion{gapsID = 0, maxIDError = 0}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "onzin dit pal pal dit gek"
         ~?= "[1,1,1,4,1]"
@@ -888,7 +888,7 @@ testITInsertionDeletion73 =
         ~: findPalindromesFormatted
             VarWord
             OutWords
-            ComInsertionDeletion{gapsID = 0, maxIDError = 1}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             2
             "Onzin. pAl is. Pal gek"
         ~?= "\"Onzin. pAl is. Pal gek\""
@@ -899,7 +899,7 @@ testITInsertionDeletion74 =
         ~: findPalindromesFormatted
             VarWord
             OutWord
-            ComInsertionDeletion{gapsID = 0, maxIDError = 2}
+            ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "onzin pal is pal gek"
         ~?= "\"onzin pal is pal gek\""

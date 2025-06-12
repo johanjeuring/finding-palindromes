@@ -8,7 +8,7 @@ import Test.HUnit (Test (..), assertEqual)
 
 import Data.Algorithms.Palindromes.DNA (DNA (..), toDNA)
 
-import qualified Data.Vector as V
+import qualified Data.Vector.Unboxed as U
 
 import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
 
@@ -46,7 +46,7 @@ testExtendPalindromeSSimple =
             [0, 1, 0, 3, 0, 1, 0, 1, 2, 1, 0]
             ( P.extendPalindromeS
                 False
-                (V.fromList "nnaba")
+                (U.fromList "nnaba")
                 0
                 []
                 0
@@ -60,7 +60,7 @@ testExtendPalindromeSWhole =
             [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
             ( P.extendPalindromeS
                 False
-                (V.fromList "meetsysteem")
+                (U.fromList "meetsysteem")
                 0
                 []
                 0
@@ -75,7 +75,7 @@ testExtendPalindromeSIntertwined =
             [0, 1, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 7, 0, 1, 2, 1, 0, 1, 0]
             ( P.extendPalindromeS
                 False
-                (V.fromList "leepeeleep")
+                (U.fromList "leepeeleep")
                 0
                 []
                 0
@@ -89,7 +89,7 @@ testExtendPalindromeSNothing =
             [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.extendPalindromeS
                 False
-                (V.fromList "abcdefgh")
+                (U.fromList "abcdefgh")
                 0
                 []
                 0
@@ -103,7 +103,7 @@ testExtendPalindromeSEmpty =
             [0]
             ( P.extendPalindromeS
                 False
-                (V.fromList "")
+                (U.fromList "")
                 0
                 []
                 0
@@ -117,7 +117,7 @@ testExtendPalindromeSDNA =
             [0, 2, 0, 6, 0, 2, 0]
             ( P.extendPalindromeS
                 True
-                (V.fromList [A, T, G, C, A, T])
+                (U.fromList [A, T, G, C, A, T])
                 0
                 []
                 0
@@ -132,7 +132,7 @@ testExtendPalindromeSDNAAllCenters =
             [0, 0, 2, 0, 4, 0, 2, 0, 0, 0, 2, 0, 0]
             ( P.extendPalindromeS
                 False
-                (V.fromList [A, T, G, C, G, C])
+                (U.fromList [A, T, G, C, G, C])
                 0
                 []
                 0
@@ -158,7 +158,7 @@ testMoveCenterSSimple =
             [0, 1, 0, 1, 4, 1, 0, 1, 4, 1, 0, 3, 0, 1, 0]
             ( P.moveCenterS
                 False
-                (V.fromList "abaabba")
+                (U.fromList "abaabba")
                 5
                 [4, 1, 0, 3, 0, 1, 0]
                 [1, 0, 3, 0, 1, 0]
@@ -174,7 +174,7 @@ testMoveCenterSGuard1 =
             [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.moveCenterS
                 False
-                (V.fromList "abcdefgh")
+                (U.fromList "abcdefgh")
                 4
                 [0, 1, 0, 1, 0, 1, 0, 1, 0]
                 [1, 0, 1, 0, 1, 0, 1, 0]
@@ -191,7 +191,7 @@ testMoveCenterSGuard2 =
             [0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
             ( P.moveCenterS
                 False
-                (V.fromList "abcaaaaxyz")
+                (U.fromList "abcaaaaxyz")
                 7
                 [4, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
                 [3, 2, 1, 0, 1, 0, 1, 0, 1, 0]
@@ -208,7 +208,7 @@ testMoveCenterSGuard3 =
             [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
             ( P.moveCenterS
                 False
-                (V.fromList "meetsysteem")
+                (U.fromList "meetsysteem")
                 11
                 [11, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
                 [0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0]
@@ -223,7 +223,7 @@ testMoveCenterSDNA =
             [0, 2, 0, 0, 0, 6, 0, 0, 0, 2, 0]
             ( P.moveCenterS
                 True
-                (V.fromList [A, T, G, A, C, G, T, C, C, G])
+                (U.fromList [A, T, G, A, C, G, T, C, C, G])
                 8
                 [6, 0, 0, 0, 2, 0]
                 [0, 0, 0, 2, 0]
@@ -238,7 +238,7 @@ testMoveCenterSDNAAllCenters =
             [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0]
             ( P.moveCenterS
                 False
-                (V.fromList [A, T, G, A, C, G, T, C, C, G])
+                (U.fromList [A, T, G, A, C, G, T, C, C, G])
                 8
                 [6, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0]
                 [0, 0, 0, 0, 0, 0, 0, 2, 0, 0]

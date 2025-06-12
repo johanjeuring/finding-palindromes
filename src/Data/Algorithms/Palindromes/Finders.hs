@@ -30,6 +30,8 @@ module Data.Algorithms.Palindromes.Finders
     , filterPalindromes
     ) where
 
+-- This import might throw a compiler warnings on GHC version 9.12 or higher,
+--    but the import is necessary on older versions.
 import Data.List (foldl')
 
 import Data.Algorithms.Palindromes.Algorithms
@@ -117,10 +119,12 @@ data Complexity
     | ComInsertionDeletion {gapSizeID :: Int, maxIDError :: Int}
     deriving (Show)
 
-{- This method returns whether uneven palindromes are impossible to exist based on the
-query settings. -}
+{- | This method returns whether uneven palindromes are impossible to exist based on the
+query settings.
+-}
 onlyEvenPals :: Variant -> Complexity -> Bool
-onlyEvenPals VarDNA (ComQuadratic gapSize _) = even gapSize
+onlyEvenPals VarDNA (ComQuadratic gapSize' _) = even gapSize'
+-- Note that the name gapSize' is used to avoid shadowing the record entry name gapSize.
 onlyEvenPals VarDNA ComLinear = True
 onlyEvenPals _ _ = False
 
@@ -148,13 +152,14 @@ findPalindromeRanges variant complexity input =
     alg :: (PalEq b, G.Vector v b) => v b -> [Range]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
-        ComQuadratic gapSize errors ->
+        ComQuadratic gapSize' errors ->
+            -- Note that the name gapSize' is used to avoid shadowing the record entry name gapSize.
             indexListToRanges
                 . quadraticAlgorithm
                     (onlyEvenPals variant complexity)
-                    gapSize
+                    gapSize'
                     errors
-        ComInsertionDeletion gapSize errors -> insertionDeletionAlgorithm gapSize errors
+        ComInsertionDeletion gapSize' errors -> insertionDeletionAlgorithm gapSize' errors
 
     indexListToRanges :: [Int] -> [Range]
     indexListToRanges = go 0

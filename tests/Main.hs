@@ -44,21 +44,21 @@ tests =
             ++ testListQuadraticAlgorithm
             ++ testListApproximateAlgorithm
             ++ testListText AlgLinear
-            ++ testListText AlgQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListText AlgQuadratic{algGapSize = 0, algMaxError = 0}
+            ++ testListText AlgApproximate{algGapSize = 0, algMaxError = 0}
             ++ testListPunctuation
             ++ testListGetLeftRight
             ++ testListDNA AlgLinear
-            ++ testListDNA AlgQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListDNA AlgQuadratic{algGapSize = 0, algMaxError = 0}
+            ++ testListText AlgApproximate{algGapSize = 0, algMaxError = 0}
             ++ testListExtend AlgLinear
-            ++ testListExtend AlgQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListExtend AlgQuadratic{algGapSize = 0, algMaxError = 0}
+            ++ testListText AlgApproximate{algGapSize = 0, algMaxError = 0}
             ++ testListProcessing
             ++ testListPalEq
             ++ testListWordPalindromes AlgLinear
-            ++ testListWordPalindromes AlgQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListWordPalindromes AlgQuadratic{algGapSize = 0, algMaxError = 0}
+            ++ testListText AlgApproximate{algGapSize = 0, algMaxError = 0}
             ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic

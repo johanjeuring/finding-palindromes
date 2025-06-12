@@ -85,7 +85,7 @@ options =
         (NoArg (Variant F.VarPlain))
         "plain (r for regular) palindrome"
     , Option
-        ['T']
+        []
         ["text"]
         (NoArg (Variant F.VarText))
         "Palindrome ignoring case, spacing and punctuation (default)"
@@ -105,7 +105,7 @@ options =
         (NoArg (Variant F.VarDNA))
         "DNA palindrome"
     , Option
-        ['t']
+        []
         ["textformat"]
         (NoArg (OutputFormat F.FormatText))
         "Output the text of the palindromes (default)"
@@ -125,7 +125,7 @@ options =
         (NoArg (OutputFormat F.FormatAllDetails))
         "Output the text, range and length of the palindromes"
     , Option
-        ['L']
+        []
         ["longest"]
         (NoArg (OutputFilter F.SelectLongest))
         "Select only the longest palindromes, can be multiple of same length (default)"
@@ -135,8 +135,8 @@ options =
         (NoArg (OutputFilter F.SelectAll))
         "Select all maximal palindromes"
     , Option
-        ['x']
-        ["extend"]
+        ['c']
+        ["center"]
         (ReqArg (OutputFilter . F.SelectAt . (read :: String -> Int)) "arg")
         "Find only the palindromes around the center [arg]"
     , Option

@@ -94,10 +94,6 @@ showRanges :: [Palindrome] -> String
 showRanges pals = show $ map palRangeInText pals
 
 showAll :: [Palindrome] -> String
-showAll pals =
-    intercalate
-        "\n"
-        ( map
-            (\x -> "\"" ++ palText x ++ "\"" ++ " " ++ show (palRange x) ++ " " ++ show (getLength x))
-            pals
-        )
+showAll pals = intercalate "\n" (map palToDetailString pals)
+  where
+    palToDetailString pal = "\"" ++ palText pal ++ "\" " ++ show (palRange pal) ++ " " ++ show (getLength pal)

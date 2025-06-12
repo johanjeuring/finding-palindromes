@@ -76,6 +76,7 @@ Here are some examples of working flags:
     cabal run palindromes -- input.txt -L -d
     cabal run palindromes -- input.txt -Q
     cabal run palindromes -- input.txt -Q3+0
+    cabal run palindromes -- -i --quadratic --DNA
 ```
 
 To see all the options run one of these:

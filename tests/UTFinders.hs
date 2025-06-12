@@ -3,7 +3,7 @@ module UTFinders (testListFinders) where
 import Test.HUnit (Test (..), (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (ComQuadratic)
+    ( Algorithm (AlgQuadratic)
     , Variant (VarDNA, VarPlain, VarText, VarWord)
     , findPalindromes
     )
@@ -21,7 +21,7 @@ testListFinders =
 
 testFinderPlain =
     "testFinderPlain"
-        ~: findPalindromes VarPlain (ComQuadratic 0 0) 1 "aba"
+        ~: findPalindromes VarPlain (AlgQuadratic 0 0) 1 "aba"
         ~?= [ ( Palindrome
                     { palRange = (0, 1)
                     , palText = "a"
@@ -44,7 +44,7 @@ testFinderPlain =
 
 testFinderText =
     "testFinderText"
-        ~: findPalindromes VarText (ComQuadratic 0 0) 1 "ab'A"
+        ~: findPalindromes VarText (AlgQuadratic 0 0) 1 "ab'A"
         ~?= [ ( Palindrome
                     { palRange = (0, 1)
                     , palText = "a"
@@ -67,7 +67,7 @@ testFinderText =
 
 testFinderWord =
     "testFinderWord"
-        ~: findPalindromes VarWord (ComQuadratic 0 0) 1 "aba' bbb\n aba"
+        ~: findPalindromes VarWord (AlgQuadratic 0 0) 1 "aba' bbb\n aba"
         ~?= [ ( Palindrome
                     { palRange = (0, 1)
                     , palText = "aba"
@@ -90,7 +90,7 @@ testFinderWord =
 
 testFinderDNA =
     "testFinderDNA"
-        ~: findPalindromes VarDNA (ComQuadratic 0 0) 1 "ATA"
+        ~: findPalindromes VarDNA (AlgQuadratic 0 0) 1 "ATA"
         ~?= [ ( Palindrome
                     { palRange = (0, 2)
                     , palText = "AT"

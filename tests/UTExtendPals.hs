@@ -6,7 +6,7 @@ module UTExtendPals (testListExtend) where
 
 import Test.HUnit (Test (..), assertEqual)
 
-import Data.Algorithms.Palindromes.Finders (Complexity)
+import Data.Algorithms.Palindromes.Finders (Algorithm)
 import PalindromeMethods (extendTextPalindrome)
 
 testExtendPalindrome1
@@ -17,7 +17,7 @@ testExtendPalindrome1
     , testExtendPalindrome6
     , testExtendPalindrome7
     , testExtendPalindrome8
-        :: Complexity -> Test
+        :: Algorithm -> Test
 
 testListExtend t =
     [ TestLabel "testExtendPalindrome1" $ testExtendPalindrome1 t

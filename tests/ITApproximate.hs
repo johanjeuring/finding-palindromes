@@ -7,7 +7,7 @@ module ITApproximate (testListITApproximate) where
 import Test.HUnit (Test (..), (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
@@ -97,7 +97,7 @@ testITApproximate1 =
             VarDNA
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             0
             "AG\nTC"
         ~?= "[3,3]"
@@ -109,7 +109,7 @@ testITApproximate2 =
             VarDNA
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             4
             "A&T-AT"
         ~?= "\"A&T-AT\""
@@ -121,7 +121,7 @@ testITApproximate3 =
             VarDNA
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 4}
+            AlgApproximate{gapSizeID = 0, maxIDError = 4}
             1
             "AGTC"
         ~?= "[4]"
@@ -133,7 +133,7 @@ testITApproximate4 =
             VarDNA
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 2, maxIDError = 0}
+            AlgApproximate{gapSizeID = 2, maxIDError = 0}
             2
             "ACCT"
         ~?= "[2,2,4]"
@@ -145,7 +145,7 @@ testITApproximate5 =
             VarDNA
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 1, maxIDError = 2}
+            AlgApproximate{gapSizeID = 1, maxIDError = 2}
             3
             "“AC\nTA..,TTCT”"
         ~?= "\"AC\nTA..,TTCT\""
@@ -157,7 +157,7 @@ testITApproximate6 =
             VarDNA
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             3
             "ATAT"
         ~?= "[4]"
@@ -169,7 +169,7 @@ testITApproximate7 =
             VarDNA
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 4, maxIDError = 4}
+            AlgApproximate{gapSizeID = 4, maxIDError = 4}
             2
             "Ac\nC,T”"
         ~?= "\"Ac\nC,T\""
@@ -181,7 +181,7 @@ testITApproximate8 =
             VarDNA
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 1, maxIDError = 2}
+            AlgApproximate{gapSizeID = 1, maxIDError = 2}
             2
             "ACTATTCT"
         ~?= "\"ACTATTCT\""
@@ -193,7 +193,7 @@ testITApproximate9 =
             VarDNA
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 2, maxIDError = 0}
+            AlgApproximate{gapSizeID = 2, maxIDError = 0}
             1
             "AGGGT"
         ~?= "[2,2,2,2]"
@@ -205,7 +205,7 @@ testITApproximate10 =
             VarDNA
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 5, maxIDError = 5}
+            AlgApproximate{gapSizeID = 5, maxIDError = 5}
             0
             "A;G;G;G;T"
         ~?= "\"A;G;G;G;T\""
@@ -217,7 +217,7 @@ testITApproximate11 =
             VarDNA
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             6
             "Ac.G-CgA "
         ~?= "[6]"
@@ -229,7 +229,7 @@ testITApproximate12 =
             VarDNA
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             6
             "ACGCGA"
         ~?= "No palindromes found"
@@ -241,7 +241,7 @@ testITApproximate13 =
             VarPlain
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             4
             "kabral"
         ~?= "\"abra\""
@@ -253,7 +253,7 @@ testITApproximate14 =
             VarPlain
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 6}
+            AlgApproximate{gapSizeID = 0, maxIDError = 6}
             1
             "abcdef"
         ~?= "[6]"
@@ -265,7 +265,7 @@ testITApproximate15 =
             VarPlain
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             3
             "a’b/ba"
         ~?= "[6]"
@@ -277,7 +277,7 @@ testITApproximate16 =
             VarPlain
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             0
             "abba"
         ~?= "\"abba\""
@@ -289,7 +289,7 @@ testITApproximate17 =
             VarPlain
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             3
             "l.e.p’e;l"
         ~?= "[3]"
@@ -301,7 +301,7 @@ testITApproximate18 =
             VarPlain
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 5, maxIDError = 5}
+            AlgApproximate{gapSizeID = 5, maxIDError = 5}
             2
             "lepel"
         ~?= "\"lepel\""
@@ -313,7 +313,7 @@ testITApproximate19 =
             VarPlain
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             0
             "kab^ra.L"
         ~?= "[5]"
@@ -325,7 +325,7 @@ testITApproximate20 =
             VarPlain
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             0
             "Abc'd/.ef"
         ~?= "\"f\"\n\"e\"\n\".\"\n\"/\"\n\"d\"\n\"'\"\n\"c\"\n\"b\"\n\"A\""
@@ -337,7 +337,7 @@ testITApproximate21 =
             VarPlain
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 10}
+            AlgApproximate{gapSizeID = 0, maxIDError = 10}
             2
             "zat.,s&tat"
         ~?= "[10]"
@@ -349,7 +349,7 @@ testITApproximate22 =
             VarPlain
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "zatstat"
         ~?= "[3,5]"
@@ -361,7 +361,7 @@ testITApproximate23 =
             VarPlain
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 1, maxIDError = 2}
+            AlgApproximate{gapSizeID = 1, maxIDError = 2}
             5
             "blaA\\Bc..dA;b.l#i"
         ~?= "\"b.l#i\"\n\";b.l#\"\n\"A;b.l\"\n\"..dA;\"\n\"..dA;b.\"\n\"Bc..dA\"\n\"\\Bc..\"\n\"A\\Bc.\"\n\"aA\\Bc\"\n\"laA\\B\"\n\"blaA\\\""
@@ -373,7 +373,7 @@ testITApproximate24 =
             VarPlain
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 2, maxIDError = 0}
+            AlgApproximate{gapSizeID = 2, maxIDError = 0}
             1
             "blaABcdBAbli"
         ~?= "[2,2,2,2,2,2,2,6,2,2,2]"
@@ -385,7 +385,7 @@ testITApproximate25 =
             VarPlain
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 10, maxIDError = 10}
+            AlgApproximate{gapSizeID = 10, maxIDError = 10}
             2
             "A-B*cde)BA"
         ~?= "\"A-B*cde)BA\""
@@ -397,7 +397,7 @@ testITApproximate26 =
             VarPlain
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 3, maxIDError = 2}
+            AlgApproximate{gapSizeID = 3, maxIDError = 2}
             4
             "ABcdeBA"
         ~?= "\"ABcdeBA\""
@@ -410,7 +410,7 @@ testITApproximate27 =
             VarPlain
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             3
             "\"blaAPPab’li "
         ~?= "No palindromes found"
@@ -422,7 +422,7 @@ testITApproximate28 =
             VarPlain
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 9}
+            AlgApproximate{gapSizeID = 0, maxIDError = 9}
             0
             "blaAPPAbl"
         ~?= "\"blaAPPAbl\""
@@ -434,7 +434,7 @@ testITApproximate29 =
             VarPlain
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             0
             "blaAPAbli"
         ~?= "[1,1,1,1,1,3,1,1,1]"
@@ -446,7 +446,7 @@ testITApproximate30 =
             VarPlain
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             4
             "/blaAPa.bl.i"
         ~?= "\".bl.\"\n\"aAPa\""
@@ -458,7 +458,7 @@ testITApproximate31 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             2
             "/abba/"
         ~?= "\"abba\""
@@ -470,7 +470,7 @@ testITApproximate32 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 2, maxIDError = 0}
+            AlgApproximate{gapSizeID = 2, maxIDError = 0}
             1
             ".,.ABcdBA,a"
         ~?= "[6]"
@@ -482,7 +482,7 @@ testITApproximate33 =
             VarPunctuation
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 5}
+            AlgApproximate{gapSizeID = 0, maxIDError = 5}
             0
             "bla\\AP.PA.bli"
         ~?= "\"bla\\AP.PA.bli\""
@@ -494,7 +494,7 @@ testITApproximate34 =
             VarPunctuation
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             4
             "blaAPA)bli"
         ~?= "No palindromes found"
@@ -506,7 +506,7 @@ testITApproximate35 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "lepel”"
         ~?= "[5]"
@@ -518,7 +518,7 @@ testITApproximate36 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "AB/cde/BA"
         ~?= "No palindromes found"
@@ -530,7 +530,7 @@ testITApproximate37 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             0
             "(ka(b)ral)"
         ~?= "[3,3]"
@@ -542,7 +542,7 @@ testITApproximate38 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             3
             "za.*ts&tat/”"
         ~?= "\"tat\""
@@ -554,7 +554,7 @@ testITApproximate39 =
             VarText
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "Abc'd/.ef"
         ~?= "No palindromes found"
@@ -566,7 +566,7 @@ testITApproximate40 =
             VarText
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 3}
+            AlgApproximate{gapSizeID = 0, maxIDError = 3}
             5
             "abcdef"
         ~?= "[6]"
@@ -578,7 +578,7 @@ testITApproximate41 =
             VarText
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             1
             "a’b/ba"
         ~?= "\"a’b/ba\""
@@ -590,7 +590,7 @@ testITApproximate42 =
             VarText
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "abba"
         ~?= "\"abba\""
@@ -602,7 +602,7 @@ testITApproximate43 =
             VarText
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             2
             "l.e.p’e;l"
         ~?= "\"l.e.p’e;l\""
@@ -614,7 +614,7 @@ testITApproximate44 =
             VarText
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             3
             "lepel"
         ~?= "\"lepel\""
@@ -626,7 +626,7 @@ testITApproximate45 =
             VarText
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             6
             "kab^ra.L"
         ~?= "[6]"
@@ -638,7 +638,7 @@ testITApproximate46 =
             VarText
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 2, maxIDError = 0}
+            AlgApproximate{gapSizeID = 2, maxIDError = 0}
             0
             "kabral"
         ~?= "\"abra\""
@@ -650,7 +650,7 @@ testITApproximate47 =
             VarText
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             1
             "zat.,s&tat"
         ~?= "[1,1,3,1,1,5,1]"
@@ -662,7 +662,7 @@ testITApproximate48 =
             VarText
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 7}
+            AlgApproximate{gapSizeID = 0, maxIDError = 7}
             2
             "zatstat"
         ~?= "\"zatstat\""
@@ -674,7 +674,7 @@ testITApproximate49 =
             VarText
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             0
             "blaA\\Bc..dA;b.l#i"
         ~?= "[5,5,5]"
@@ -686,7 +686,7 @@ testITApproximate50 =
             VarText
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "blaABcdBAbli"
         ~?= "\"BAb\""
@@ -698,7 +698,7 @@ testITApproximate51 =
             VarText
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 8}
+            AlgApproximate{gapSizeID = 0, maxIDError = 8}
             6
             "A-B*cde)BA"
         ~?= "[7]"
@@ -710,7 +710,7 @@ testITApproximate52 =
             VarText
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 3, maxIDError = 0}
+            AlgApproximate{gapSizeID = 3, maxIDError = 0}
             2
             "ABcdeBA"
         ~?= "[3,3,3,3,7]"
@@ -722,7 +722,7 @@ testITApproximate53 =
             VarText
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             3
             "\"blaAPPab'li"
         ~?= "\"Pab'li\"\n\"blaAPP\"\n\"blaAPPab'li\""
@@ -734,7 +734,7 @@ testITApproximate54 =
             VarText
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             1
             "blaAPPAbl"
         ~?= "\"l\"\n\"b\"\n\"A\"\n\"APPA\"\n\"aA\"\n\"l\"\n\"b\""
@@ -746,7 +746,7 @@ testITApproximate55 =
             VarText
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 9}
+            AlgApproximate{gapSizeID = 0, maxIDError = 9}
             4
             "blaAPAbli"
         ~?= "[9]"
@@ -758,7 +758,7 @@ testITApproximate56 =
             VarText
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 3, maxIDError = 2}
+            AlgApproximate{gapSizeID = 3, maxIDError = 2}
             4
             "/blaAPa.bl.i.bl"
         ~?= "\"Pa.bl.i.bl\"\n\"APa.bl.i.b\"\n\"blaAPa.bl.i.b\""
@@ -770,7 +770,7 @@ testITApproximate57 =
             VarWord
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             0
             "aba gdc."
         ~?= "[2]"
@@ -782,7 +782,7 @@ testITApproximate58 =
             VarWord
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             0
             "aba gdc"
         ~?= "[1,1]"
@@ -794,7 +794,7 @@ testITApproximate59 =
             VarWord
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             2
             "Hello. hi hi “hello”"
         ~?= "\"Hello. hi hi “hello\""
@@ -806,7 +806,7 @@ testITApproximate60 =
             VarWord
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             6
             "hello hi hi hello"
         ~?= "No palindromes found"
@@ -818,7 +818,7 @@ testITApproximate61 =
             VarWord
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 3}
+            AlgApproximate{gapSizeID = 0, maxIDError = 3}
             2
             "bye so    bye?"
         ~?= "\"bye so    bye\""
@@ -830,7 +830,7 @@ testITApproximate62 =
             VarWord
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 9}
+            AlgApproximate{gapSizeID = 0, maxIDError = 9}
             3
             "bye so bye"
         ~?= "\"bye so bye\""
@@ -842,7 +842,7 @@ testITApproximate63 =
             VarWord
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             2
             "Fout. Weer. Hi. Hi. Niet. Goed."
         ~?= "\"Fout. Weer. Hi. Hi. Niet. Goed\""
@@ -854,7 +854,7 @@ testITApproximate64 =
             VarWord
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             0
             "fout weer hi hi niet goed"
         ~?= "[4]"
@@ -866,7 +866,7 @@ testITApproximate65 =
             VarWord
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             2
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
         ~?= "No palindromes found"
@@ -878,7 +878,7 @@ testITApproximate66 =
             VarWord
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 9}
+            AlgApproximate{gapSizeID = 0, maxIDError = 9}
             4
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[9]"
@@ -890,7 +890,7 @@ testITApproximate67 =
             VarWord
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 2, maxIDError = 0}
+            AlgApproximate{gapSizeID = 2, maxIDError = 0}
             2
             "Doei&& hi ik b(e)n ??? een mens hi doei"
         ~?= "[2,2,2,2,2,2,2]"
@@ -902,7 +902,7 @@ testITApproximate68 =
             VarWord
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 2, maxIDError = 1}
+            AlgApproximate{gapSizeID = 2, maxIDError = 1}
             3
             "doei hi ik ben een mens hi doei"
         ~?= "\"een mens hi doei\"\n\"ben een mens hi\"\n\"hi ik ben een\"\n\"doei hi ik ben\"\n\"doei hi ik ben een mens hi doei\""
@@ -914,7 +914,7 @@ testITApproximate69 =
             VarWord
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 3, maxIDError = 1}
+            AlgApproximate{gapSizeID = 3, maxIDError = 1}
             4
             "dag h?i dri/e gap size. ... hi dag"
         ~?= "\"dag h?i dri/e gap size. ... hi dag\""
@@ -926,7 +926,7 @@ testITApproximate70 =
             VarWord
             FormatLength
             SelectLongest
-            ComApproximate{gapSizeID = 3, maxIDError = 0}
+            AlgApproximate{gapSizeID = 3, maxIDError = 0}
             2
             "dag hi drie gap size hi dag"
         ~?= "[7]"
@@ -938,7 +938,7 @@ testITApproximate71 =
             VarWord
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 6}
+            AlgApproximate{gapSizeID = 0, maxIDError = 6}
             0
             ",onzin, .dit pal\n pal dit/ gek"
         ~?= "\"onzin, .dit pal\n pal dit/ gek\""
@@ -950,7 +950,7 @@ testITApproximate72 =
             VarWord
             FormatLength
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 0}
+            AlgApproximate{gapSizeID = 0, maxIDError = 0}
             0
             "onzin dit pal pal dit gek"
         ~?= "[1,1,1,4,1]"
@@ -962,7 +962,7 @@ testITApproximate73 =
             VarWord
             FormatText
             SelectAll
-            ComApproximate{gapSizeID = 0, maxIDError = 1}
+            AlgApproximate{gapSizeID = 0, maxIDError = 1}
             2
             "Onzin. pAl is. Pal gek"
         ~?= "\"Onzin. pAl is. Pal gek\""
@@ -974,7 +974,7 @@ testITApproximate74 =
             VarWord
             FormatText
             SelectLongest
-            ComApproximate{gapSizeID = 0, maxIDError = 2}
+            AlgApproximate{gapSizeID = 0, maxIDError = 2}
             3
             "onzin pal is pal gek"
         ~?= "\"onzin pal is pal gek\""

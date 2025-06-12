@@ -6,7 +6,7 @@ import Control.Monad.IO.Class (liftIO)
 import System.IO (hFlush)
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , Variant (..)
     , findPalindromes
     )
@@ -20,16 +20,16 @@ import qualified System.IO as Sys
 
 -- | Streams the result of the given settings
 findPalindromesStream
-    :: Variant -> Complexity -> Int -> String -> C.ConduitT () Palindrome IO ()
-findPalindromesStream variant complexity minlen input =
-    C.yieldMany $ findPalindromes variant complexity minlen input
+    :: Variant -> Algorithm -> Int -> String -> C.ConduitT () Palindrome IO ()
+findPalindromesStream variant algorithm minlen input =
+    C.yieldMany $ findPalindromes variant algorithm minlen input
 
 {- | Returns the result of finding palindromes with the settings (The first 3 params) on the string
 whilst diplaying the intermediate progress using the given function
 -}
 findPalindromesVisualised
     :: Variant
-    -> Complexity
+    -> Algorithm
     -> Int
     -> Bool
     -- ^ Enable filtering to only return the longest palindromes
@@ -37,7 +37,7 @@ findPalindromesVisualised
     -> (Float -> IO ())
     -- ^ Function that defines how to visualise progress
     -> IO [Palindrome]
-findPalindromesVisualised variant complexity minLength filterLongest input visualiseProgress =
+findPalindromesVisualised variant algorithm minLength filterLongest input visualiseProgress =
     do
         let chunkSize = 100
         -- Used for minimum detail level for progress, only use smaller than 2 if user explicitly overrides default
@@ -46,7 +46,7 @@ findPalindromesVisualised variant complexity minLength filterLongest input visua
         visualiseProgress 0
         result <-
             C.runConduit $
-                findPalindromesStream variant complexity streamMinLength input
+                findPalindromesStream variant algorithm streamMinLength input
                     C..| C.conduitVector chunkSize -- Chunk result stream
                     C..| calcVisualiseProgress inputLength visualiseProgress
                     C..| C.concat
@@ -72,15 +72,15 @@ calcVisualiseProgress totalLen visualise = C.awaitForever $ \pals -> do
 -- | Wrapper for findPalindromesVisualised where the visualisation method is printProgressbar
 findPalindromesWithProgressBar
     :: Variant
-    -> Complexity
+    -> Algorithm
     -> Int
     -> Bool
     -> String
     -> IO [Palindrome]
-findPalindromesWithProgressBar variant complexity minLength filterLongest input =
+findPalindromesWithProgressBar variant algorithm minLength filterLongest input =
     findPalindromesVisualised
         variant
-        complexity
+        algorithm
         minLength
         filterLongest
         input

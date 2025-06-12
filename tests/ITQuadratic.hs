@@ -7,7 +7,7 @@ module ITQuadratic (testListITQuadratic) where
 import Test.HUnit (Test (..), (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
@@ -98,7 +98,7 @@ testITQuadratic1 =
             VarDNA
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             0
             "AG\nTC"
         ~?= "[2,2,2]"
@@ -110,7 +110,7 @@ testITQuadratic2 =
             VarDNA
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             4
             "A&T-AT"
         ~?= "\"A&T-AT\""
@@ -122,7 +122,7 @@ testITQuadratic3 =
             VarDNA
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 4, maxError = 4}
+            AlgQuadratic{gapSize = 4, maxError = 4}
             1
             "AGTC"
         ~?= "[2,4,2]"
@@ -134,7 +134,7 @@ testITQuadratic4 =
             VarDNA
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             2
             "ACCT"
         ~?= "[2,4,2]"
@@ -146,7 +146,7 @@ testITQuadratic5 =
             VarDNA
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 1, maxError = 2}
+            AlgQuadratic{gapSize = 1, maxError = 2}
             3
             "“AC\nTA..,TTCT”"
         ~?= "\"AC\nT\"\n\"AC\nTA\"\n\"AC\nTA..,T\"\n\"AC\nTA..,TT\"\n\"C\nTA..,TT\"\n\"AC\nTA..,TTCT\"\n\"C\nTA..,TTCT\"\n\"A..,TTC\"\n\"A..,TTCT\"\n\"TTCT\"\n\"TCT\""
@@ -158,7 +158,7 @@ testITQuadratic6 =
             VarDNA
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             3
             "ATAT"
         ~?= "[4]"
@@ -170,7 +170,7 @@ testITQuadratic7 =
             VarDNA
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 4, maxError = 4}
+            AlgQuadratic{gapSize = 4, maxError = 4}
             2
             "Ac\nC,T”"
         ~?= "\"Ac\nC,T\""
@@ -182,7 +182,7 @@ testITQuadratic8 =
             VarDNA
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 1, maxError = 2}
+            AlgQuadratic{gapSize = 1, maxError = 2}
             2
             "ACTATTCT"
         ~?= "\"ACTATTCT\""
@@ -194,7 +194,7 @@ testITQuadratic9 =
             VarDNA
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             1
             "AGGGT"
         ~?= "[2,2,2,2]"
@@ -206,7 +206,7 @@ testITQuadratic10 =
             VarDNA
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 5, maxError = 5}
+            AlgQuadratic{gapSize = 5, maxError = 5}
             0
             "A;G;G;G;T"
         ~?= "\"\"\n\"A\"\n\"A;G\"\n\"A;G;G\"\n\"A;G;G;G\"\n\"A;G;G;G;T\"\n\"G;G;G;T\"\n\"G;G;T\"\n\"G;T\"\n\"T\"\n\"\""
@@ -218,7 +218,7 @@ testITQuadratic11 =
             VarDNA
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             6
             "Ac.G-CgA "
         ~?= "[6]"
@@ -230,7 +230,7 @@ testITQuadratic12 =
             VarDNA
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             6
             "ACGCGA"
         ~?= "No palindromes found"
@@ -242,7 +242,7 @@ testITQuadratic13 =
             VarPlain
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             4
             "kabral"
         ~?= "\"abra\""
@@ -254,7 +254,7 @@ testITQuadratic14 =
             VarPlain
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 6, maxError = 6}
+            AlgQuadratic{gapSize = 6, maxError = 6}
             1
             "abcdef"
         ~?= "[1,2,3,4,5,6,5,4,3,2,1]"
@@ -266,7 +266,7 @@ testITQuadratic15 =
             VarPlain
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 1, maxError = 2}
+            AlgQuadratic{gapSize = 1, maxError = 2}
             3
             "a’b/ba"
         ~?= "[6]"
@@ -278,7 +278,7 @@ testITQuadratic16 =
             VarPlain
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             0
             "abba"
         ~?= "\"abba\""
@@ -290,7 +290,7 @@ testITQuadratic17 =
             VarPlain
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             3
             "l.e.p’e;l"
         ~?= "[3]"
@@ -302,7 +302,7 @@ testITQuadratic18 =
             VarPlain
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 5, maxError = 5}
+            AlgQuadratic{gapSize = 5, maxError = 5}
             2
             "lepel"
         ~?= "\"lepel\""
@@ -314,7 +314,7 @@ testITQuadratic19 =
             VarPlain
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             0
             "kab^ra.L"
         ~?= "[5]"
@@ -326,7 +326,7 @@ testITQuadratic20 =
             VarPlain
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             0
             "Abc'd/.ef"
         ~?= "\"A\"\n\"b\"\n\"c\"\n\"'\"\n\"d\"\n\"/\"\n\".\"\n\"e\"\n\"f\""
@@ -338,7 +338,7 @@ testITQuadratic21 =
             VarPlain
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 10, maxError = 10}
+            AlgQuadratic{gapSize = 10, maxError = 10}
             2
             "zat.,s&tat"
         ~?= "[2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2]"
@@ -350,7 +350,7 @@ testITQuadratic22 =
             VarPlain
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             2
             "zatstat"
         ~?= "[2,2,2,5,2,2,3,2]"
@@ -362,7 +362,7 @@ testITQuadratic23 =
             VarPlain
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 1, maxError = 2}
+            AlgQuadratic{gapSize = 1, maxError = 2}
             5
             "blaA\\Bc..dA;b.l#i"
         ~?= "\"blaA\\\"\n\"laA\\B\"\n\"aA\\Bc\"\n\"A\\Bc.\"\n\"\\Bc..\"\n\"Bc..d\"\n\"Bc..dA\"\n\"c..dA\"\n\"..dA;\"\n\"..dA;b.\"\n\".dA;b.\"\n\"dA;b.\"\n\"A;b.l\"\n\";b.l#\"\n\"b.l#i\""
@@ -374,7 +374,7 @@ testITQuadratic24 =
             VarPlain
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             1
             "blaABcdBAbli"
         ~?= "[1,1,1,1,1,1,1,1,1,1,1,1]"
@@ -386,7 +386,7 @@ testITQuadratic25 =
             VarPlain
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 10, maxError = 10}
+            AlgQuadratic{gapSize = 10, maxError = 10}
             2
             "A-B*cde)BA"
         ~?= "\"A-B*cde)BA\""
@@ -398,7 +398,7 @@ testITQuadratic26 =
             VarPlain
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 3, maxError = 2}
+            AlgQuadratic{gapSize = 3, maxError = 2}
             4
             "ABcdeBA"
         ~?= "\"ABcdeBA\""
@@ -410,7 +410,7 @@ testITQuadratic27 =
             VarPlain
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             3
             "\"blaAPPab’li "
         ~?= "No palindromes found"
@@ -422,7 +422,7 @@ testITQuadratic28 =
             VarPlain
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 9, maxError = 9}
+            AlgQuadratic{gapSize = 9, maxError = 9}
             0
             "blaAPPAbl"
         ~?= "\"\"\n\"b\"\n\"bl\"\n\"bla\"\n\"blaA\"\n\"blaAP\"\n\"blaAPP\"\n\"blaAPPA\"\n\"blaAPPAb\"\n\"blaAPPAbl\"\n\"laAPPAbl\"\n\"aAPPAbl\"\n\"APPAbl\"\n\"PPAbl\"\n\"PAbl\"\n\"Abl\"\n\"bl\"\n\"l\"\n\"\""
@@ -434,7 +434,7 @@ testITQuadratic29 =
             VarPlain
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             0
             "blaAPAbli"
         ~?= "[0,1,0,1,0,1,0,1,0,3,0,1,0,1,0,1,0,1,0]"
@@ -446,7 +446,7 @@ testITQuadratic30 =
             VarPlain
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             4
             "/blaAPa.bl.i"
         ~?= "\"aAPa\"\n\".bl.\""
@@ -458,7 +458,7 @@ testITQuadratic31 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 3, maxError = 2}
+            AlgQuadratic{gapSize = 3, maxError = 2}
             2
             "/abba/"
         ~?= "\"abba\""
@@ -470,7 +470,7 @@ testITQuadratic32 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             1
             "ABcdBA"
         ~?= "[6]"
@@ -482,7 +482,7 @@ testITQuadratic33 =
             VarPunctuation
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 10, maxError = 5}
+            AlgQuadratic{gapSize = 10, maxError = 5}
             0
             "bla\\AP.PA.bli"
         ~?= "\"\"\n\"\"\n\"\"\n\"bla\"\n\"\"\n\"bla\\AP\"\n\"\"\n\"bla\\AP.PA\"\n\"AP\"\n\"\"\n\"bla\\AP.PA.bli\"\n\"\"\n\"PA\"\n\"AP.PA.bli\"\n\"\"\n\"PA.bli\"\n\"\"\n\"bli\"\n\"\"\n\"\"\n\"\""
@@ -494,7 +494,7 @@ testITQuadratic34 =
             VarPunctuation
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             3
             "bla(APA)bli"
         ~?= "[3,3,3]"
@@ -506,7 +506,7 @@ testITQuadratic35 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             2
             "lepel”"
         ~?= "[5]"
@@ -518,7 +518,7 @@ testITQuadratic36 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             2
             "AB/cde/BA"
         ~?= "No palindromes found"
@@ -530,7 +530,7 @@ testITQuadratic37 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             0
             "(ka(b)ral)"
         ~?= "[3,3]"
@@ -542,7 +542,7 @@ testITQuadratic38 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             3
             "za.*ts&tat/”"
         ~?= "\"tat\""
@@ -554,7 +554,7 @@ testITQuadratic39 =
             VarText
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             2
             "Abc'd/.ef"
         ~?= "[2,2,2,2,2]"
@@ -566,7 +566,7 @@ testITQuadratic40 =
             VarText
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 6, maxError = 3}
+            AlgQuadratic{gapSize = 6, maxError = 3}
             5
             "abcdef"
         ~?= "[6]"
@@ -578,7 +578,7 @@ testITQuadratic41 =
             VarText
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             1
             "a’b/ba"
         ~?= "\"a\8217b/ba\""
@@ -590,7 +590,7 @@ testITQuadratic42 =
             VarText
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             2
             "abba"
         ~?= "\"abba\""
@@ -602,7 +602,7 @@ testITQuadratic43 =
             VarText
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             2
             "l.e.p’e;l"
         ~?= "\"l.e.p’e;l\""
@@ -614,7 +614,7 @@ testITQuadratic44 =
             VarText
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 5, maxError = 2}
+            AlgQuadratic{gapSize = 5, maxError = 2}
             3
             "lepel"
         ~?= "\"lep\"\n\"lepe\"\n\"lepel\"\n\"epel\"\n\"pel\""
@@ -626,7 +626,7 @@ testITQuadratic45 =
             VarText
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 1, maxError = 2}
+            AlgQuadratic{gapSize = 1, maxError = 2}
             5
             "kab^ra.L"
         ~?= "[6]"
@@ -638,7 +638,7 @@ testITQuadratic46 =
             VarText
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 2, maxError = 0}
+            AlgQuadratic{gapSize = 2, maxError = 0}
             0
             "kabral"
         ~?= "\"abra\""
@@ -650,7 +650,7 @@ testITQuadratic47 =
             VarText
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             1
             "zat.,s&tat"
         ~?= "[1,1,1,5,1,3,1]"
@@ -662,7 +662,7 @@ testITQuadratic48 =
             VarText
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 7, maxError = 7}
+            AlgQuadratic{gapSize = 7, maxError = 7}
             2
             "zatstat"
         ~?= "\"zatstat\""
@@ -674,7 +674,7 @@ testITQuadratic49 =
             VarText
             FormatLength
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 1}
+            AlgQuadratic{gapSize = 0, maxError = 1}
             0
             "blaA\\Bc..dA;b.l#i"
         ~?= "[5,5,5]"
@@ -686,7 +686,7 @@ testITQuadratic50 =
             VarText
             FormatText
             SelectLongest
-            ComQuadratic{gapSize = 0, maxError = 0}
+            AlgQuadratic{gapSize = 0, maxError = 0}
             2
             "blaABcdBAbli"
         ~?= "\"BAb\""
@@ -698,7 +698,7 @@ testITQuadratic51 =
             VarText
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 0, maxError = 8}
+            AlgQuadratic{gapSize = 0, maxError = 8}
             6
             "A-B*cde)BA"
         ~?= "[6,7,6]"
@@ -710,7 +710,7 @@ testITQuadratic52 =
             VarText
             FormatLength
             SelectAll
-            ComQuadratic{gapSize = 3, maxError = 0}
+            AlgQuadratic{gapSize = 3, maxError = 0}
             2
             "ABcdeBA"
         ~?= "[2,3,2,3,2,7,2,3,2,3,2]"
@@ -722,7 +722,7 @@ testITQuadratic53 =
             VarText
             FormatText
             SelectAll
-            ComQuadratic{gapSize = 1, maxError = 2}
+            AlgQuadratic{gapSize = 1, maxError = 2}
             3
             "\"blaAPPab'li"
         ~?= "\"bla\"\n\"blaA\"\n\"blaAP\"\n\"blaAPP\"\n\"laAPP\"\n\"aAPP\"\n\"laAPPab\"\n\"blaAPPab'li\"\n\"APPab\"\n\"PPab\"\n\"PPab'l\"\n\"Pab'l\"\n\"Pab'li\"\n\"ab'li\"\n\"b'li\""
@@ -734,7 +734,7 @@ testITQuadratic54 =
             VarText
             FormatText
             SelectAll
-            (ComQuadratic 0 0)
+            (AlgQuadratic 0 0)
             1
             "blaAPPAbl"
         ~?= "\"b\"\n\"l\"\n\"a\"\n\"aA\"\n\"A\"\n\"P\"\n\"APPA\"\n\"P\"\n\"A\"\n\"b\"\n\"l\""
@@ -746,7 +746,7 @@ testITQuadratic55 =
             VarText
             FormatLength
             SelectLongest
-            (ComQuadratic 9 9)
+            (AlgQuadratic 9 9)
             4
             "blaAPAbli"
         ~?= "[9]"
@@ -758,7 +758,7 @@ testITQuadratic56 =
             VarText
             FormatText
             SelectLongest
-            (ComQuadratic 3 2)
+            (AlgQuadratic 3 2)
             4
             "/blaAPa.bl.i.bl"
         ~?= "\"blaAPa.bl.i\""
@@ -770,7 +770,7 @@ testITQuadratic57 =
             VarWord
             FormatLength
             SelectLongest
-            (ComQuadratic 0 1)
+            (AlgQuadratic 0 1)
             0
             "aba gdc."
         ~?= "[2]"
@@ -782,7 +782,7 @@ testITQuadratic58 =
             VarWord
             FormatLength
             SelectAll
-            (ComQuadratic 0 0)
+            (AlgQuadratic 0 0)
             0
             "aba gdc"
         ~?= "[0,1,0,1,0]"
@@ -794,7 +794,7 @@ testITQuadratic59 =
             VarWord
             FormatText
             SelectAll
-            (ComQuadratic 0 1)
+            (AlgQuadratic 0 1)
             2
             "Hello. hi hi “hello”"
         ~?= "\"Hello. hi\"\n\"Hello. hi hi\"\n\"Hello. hi hi “hello\"\n\"hi hi “hello\"\n\"hi “hello\""
@@ -806,7 +806,7 @@ testITQuadratic60 =
             VarWord
             FormatLength
             SelectLongest
-            (ComQuadratic 1 2)
+            (AlgQuadratic 1 2)
             6
             "hello hi hi hello"
         ~?= "No palindromes found"
@@ -818,7 +818,7 @@ testITQuadratic61 =
             VarWord
             FormatText
             SelectAll
-            (ComQuadratic 3 3)
+            (AlgQuadratic 3 3)
             2
             "bye so    bye?"
         ~?= "\"bye so\"\n\"bye so    bye\"\n\"so    bye\""
@@ -830,7 +830,7 @@ testITQuadratic62 =
             VarWord
             FormatText
             SelectLongest
-            (ComQuadratic 0 9)
+            (AlgQuadratic 0 9)
             3
             "bye so bye"
         ~?= "\"bye so bye\""
@@ -842,7 +842,7 @@ testITQuadratic63 =
             VarWord
             FormatText
             SelectLongest
-            (ComQuadratic 0 2)
+            (AlgQuadratic 0 2)
             2
             "Fout. Weer. Hi. Hi. Niet. Goed."
         ~?= "\"Fout. Weer. Hi. Hi. Niet. Goed\""
@@ -854,7 +854,7 @@ testITQuadratic64 =
             VarWord
             FormatLength
             SelectLongest
-            (ComQuadratic 0 1)
+            (AlgQuadratic 0 1)
             0
             "fout weer hi hi niet goed"
         ~?= "[4]"
@@ -866,7 +866,7 @@ testITQuadratic65 =
             VarWord
             FormatText
             SelectLongest
-            (ComQuadratic 0 0)
+            (AlgQuadratic 0 0)
             2
             "Nope / fout / goed / niet / midden / oeps / goed / nee / ook"
         ~?= "No palindromes found"
@@ -878,7 +878,7 @@ testITQuadratic66 =
             VarWord
             FormatLength
             SelectAll
-            (ComQuadratic 9 9)
+            (AlgQuadratic 9 9)
             4
             "nope fout goed niet midden oeps goed nee ook"
         ~?= "[4,5,6,7,8,9,8,7,6,5,4]"
@@ -890,7 +890,7 @@ testITQuadratic67 =
             VarWord
             FormatLength
             SelectAll
-            (ComQuadratic 2 0)
+            (AlgQuadratic 2 0)
             2
             "Doei&& hi ik b(e)n ??? een mens hi doei"
         ~?= "[2,2,2,2,2,2,2]"
@@ -902,7 +902,7 @@ testITQuadratic68 =
             VarWord
             FormatText
             SelectAll
-            (ComQuadratic 2 1)
+            (AlgQuadratic 2 1)
             3
             "doei hi ik ben een mens hi doei"
         ~?= "\"doei hi ik\"\n\"doei hi ik ben\"\n\"hi ik ben\"\n\"hi ik ben een\"\n\"ik ben een\"\n\"doei hi ik ben een mens hi doei\"\n\"ben een mens\"\n\"ben een mens hi\"\n\"een mens hi\"\n\"een mens hi doei\"\n\"mens hi doei\""
@@ -914,7 +914,7 @@ testITQuadratic69 =
             VarWord
             FormatText
             SelectLongest
-            (ComQuadratic 3 1)
+            (AlgQuadratic 3 1)
             4
             "dag h?i dri/e gap size. ... hi dag"
         ~?= "\"dag h?i dri/e gap size. ... hi dag\""
@@ -926,7 +926,7 @@ testITQuadratic70 =
             VarWord
             FormatLength
             SelectLongest
-            (ComQuadratic 3 0)
+            (AlgQuadratic 3 0)
             2
             "dag hi drie gap size hi dag"
         ~?= "[7]"
@@ -938,7 +938,7 @@ testITQuadratic71 =
             VarWord
             FormatText
             SelectAll
-            (ComQuadratic 6 6)
+            (AlgQuadratic 6 6)
             0
             ",onzin, .dit pal\n pal dit/ gek"
         ~?= "\"\"\n\"onzin\"\n\"onzin, .dit\"\n\"onzin, .dit pal\"\n\"onzin, .dit pal\n pal\"\n\"onzin, .dit pal\n pal dit\"\n\"onzin, .dit pal\n pal dit/ gek\"\n\"dit pal\n pal dit/ gek\"\n\"pal\n pal dit/ gek\"\n\"pal dit/ gek\"\n\"dit/ gek\"\n\"gek\"\n\"\""
@@ -950,7 +950,7 @@ testITQuadratic72 =
             VarWord
             FormatLength
             SelectAll
-            (ComQuadratic 0 0)
+            (AlgQuadratic 0 0)
             0
             "onzin dit pal pal dit gek"
         ~?= "[0,1,0,1,0,1,4,1,0,1,0,1,0]"
@@ -962,7 +962,7 @@ testITQuadratic73 =
             VarWord
             FormatText
             SelectAll
-            (ComQuadratic 0 1)
+            (AlgQuadratic 0 1)
             2
             "Onzin. pAl is. Pal gek"
         ~?= "\"Onzin. pAl\"\n\"Onzin. pAl is\"\n\"pAl is\"\n\"Onzin. pAl is. Pal gek\"\n\"is. Pal\"\n\"is. Pal gek\"\n\"Pal gek\""
@@ -974,7 +974,7 @@ testITQuadratic74 =
             VarWord
             FormatText
             SelectLongest
-            (ComQuadratic 1 2)
+            (AlgQuadratic 1 2)
             3
             "onzin pal is pal gek"
         ~?= "\"onzin pal is pal gek\""

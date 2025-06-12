@@ -13,7 +13,7 @@ import System.Directory (getDirectoryContents)
 import System.FilePath (takeFileName)
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , OutputFormat (..)
     , Variant (..)
     , findPalindromes
@@ -33,8 +33,8 @@ deriving instance NFData Palindrome
 main =
     do
         textFiles <- getTextFiles
-        let complexityBenchmarks =
-                bgroup "complexity" $ map (`benchFile` benchComplexity) textFiles
+        let algorithmBenchmarks =
+                bgroup "algorithm" $ map (`benchFile` benchAlgorithm) textFiles
         let textVariantBenchmarks =
                 bgroup "text-variants" $ map (`benchFile` benchTextVariants) textFiles
         let outputBenchmarks =
@@ -45,7 +45,7 @@ main =
 
         defaultMainWith
             config
-            [complexityBenchmarks, textVariantBenchmarks, outputBenchmarks, dnaBenchmarks]
+            [algorithmBenchmarks, textVariantBenchmarks, outputBenchmarks, dnaBenchmarks]
 
 -- | Contains the location where we want the report file to be located
 config :: Config
@@ -60,22 +60,22 @@ benchFile filePath benchmarks =
         \content ->
             bgroup (takeFileName filePath) (benchmarks content)
 
-{- | Takes a string and creates a benchmark for every complexity option of findPalindromes
+{- | Takes a string and creates a benchmark for every algorithm option of findPalindromes
 on that string.
 -}
-benchComplexity :: String -> [Benchmark]
-benchComplexity content =
+benchAlgorithm :: String -> [Benchmark]
+benchAlgorithm content =
     [ bench "quadratic" $
         nf
-            (findPalindromes VarText (ComQuadratic 0 0) 0)
+            (findPalindromes VarText (AlgQuadratic 0 0) 0)
             content
     , bench "linear" $
         nf
-            (findPalindromes VarText ComLinear 0)
+            (findPalindromes VarText AlgLinear 0)
             content
     , bench "approximate" $
         nf
-            (findPalindromes VarText (ComApproximate 0 0) 0)
+            (findPalindromes VarText (AlgApproximate 0 0) 0)
             content
     ]
 
@@ -86,19 +86,19 @@ benchTextVariants :: String -> [Benchmark]
 benchTextVariants content =
     [ bench "plain" $
         nf
-            (findPalindromes VarPlain (ComQuadratic 0 0) 0)
+            (findPalindromes VarPlain (AlgQuadratic 0 0) 0)
             content
     , bench "text" $
         nf
-            (findPalindromes VarText (ComQuadratic 0 0) 0)
+            (findPalindromes VarText (AlgQuadratic 0 0) 0)
             content
     , bench "punctuation" $
         nf
-            (findPalindromes VarPunctuation (ComQuadratic 0 0) 0)
+            (findPalindromes VarPunctuation (AlgQuadratic 0 0) 0)
             content
     , bench "word" $
         nf
-            (findPalindromes VarWord (ComQuadratic 0 0) 0)
+            (findPalindromes VarWord (AlgQuadratic 0 0) 0)
             content
     ]
 
@@ -109,19 +109,19 @@ benchOutputOptions :: String -> [Benchmark]
 benchOutputOptions content =
     [ bench "length" $
         nf
-            (findPalindromesFormatted VarText OutLength (ComQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText OutLength (AlgQuadratic 0 0) 0)
             content
     , bench "lengths" $
         nf
-            (findPalindromesFormatted VarText OutLengths (ComQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText OutLengths (AlgQuadratic 0 0) 0)
             content
     , bench "word" $
         nf
-            (findPalindromesFormatted VarText OutWord (ComQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText OutWord (AlgQuadratic 0 0) 0)
             content
     , bench "words" $
         nf
-            (findPalindromesFormatted VarText OutWords (ComQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText OutWords (AlgQuadratic 0 0) 0)
             content
     ]
 
@@ -132,15 +132,15 @@ benchDna :: String -> [Benchmark]
 benchDna content =
     [ bench "plain" $
         nf
-            (findPalindromes VarPlain (ComQuadratic 0 0) 0)
+            (findPalindromes VarPlain (AlgQuadratic 0 0) 0)
             content
     , bench "dna" $
         nf
-            (findPalindromes VarDNA (ComQuadratic 0 0) 0)
+            (findPalindromes VarDNA (AlgQuadratic 0 0) 0)
             content
     , bench "odd gapped dna" $
         nf
-            (findPalindromes VarDNA (ComQuadratic 1 0) 0)
+            (findPalindromes VarDNA (AlgQuadratic 1 0) 0)
             content
     ]
 

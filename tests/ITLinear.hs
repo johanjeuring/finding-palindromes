@@ -7,7 +7,7 @@ module ITLinear (testListITLinear) where
 import Test.HUnit (Test (..), (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
@@ -84,7 +84,7 @@ testITLinear1 =
             VarDNA
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "A\nTAT"
         ~?= "\"A\nTAT\""
@@ -96,7 +96,7 @@ testITLinear2 =
             VarText
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             10
             "abcdeedcba"
         ~?= "[10]"
@@ -108,7 +108,7 @@ testITLinear3 =
             VarWord
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             7
             "Word, word, word, palindrome. Word. Word, word."
         ~?= "\"Word, word, word, palindrome. Word. Word, word\""
@@ -120,7 +120,7 @@ testITLinear4 =
             VarText
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "nopalindromes"
         ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]"
@@ -132,7 +132,7 @@ testITLinear5 =
             VarWord
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             6
             "Has? ...A palindrome; palindrome a has."
         ~?= "[6]"
@@ -144,7 +144,7 @@ testITLinear6 =
             VarPlain
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             3
             "~ehhe~"
         ~?= "\"~ehhe~\""
@@ -156,7 +156,7 @@ testITLinear7 =
             VarPlain
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             10
             "abcdefghij"
         ~?= "No palindromes found"
@@ -168,7 +168,7 @@ testITLinear8 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "b abba, ...bc"
         ~?= "[4]"
@@ -180,7 +180,7 @@ testITLinear9 =
             VarPlain
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "damittimad"
         ~?= "[0,1,0,1,0,1,0,1,0,1,10,1,0,1,0,1,0,1,0,1,0]"
@@ -192,7 +192,7 @@ testITLinear10 =
             VarPlain
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "yabaddabadoo"
         ~?= "\"abaddaba\""
@@ -204,7 +204,7 @@ testITLinear11 =
             VarPunctuation
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "dam'itt!  \\ I'm ?ad."
         ~?= "\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"dam'itt!  \\ I'm ?ad\"\n\"\"\n\"\"\n\"I\"\n\"\"\n\"m\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\""
@@ -216,7 +216,7 @@ testITLinear12 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             23
             "level mad dog a goddam level"
         ~?= "\"level mad dog a goddam level\""
@@ -228,7 +228,7 @@ testITLinear13 =
             VarPunctuation
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             3
             "abcdcba-"
         ~?= "[7]"
@@ -240,7 +240,7 @@ testITLinear14 =
             VarWord
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "word palindrome palindrome word"
         ~?= "\"\"\n\"word\"\n\"\"\n\"palindrome\"\n\"word palindrome palindrome word\"\n\"palindrome\"\n\"\"\n\"word\"\n\"\""
@@ -252,7 +252,7 @@ testITLinear15 =
             VarText
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             23
             "keybo{  ..  }ardmash, samdrao   byek'"
         ~?= "\"keybo{  ..  }ardmash, samdrao   byek\""
@@ -264,7 +264,7 @@ testITLinear16 =
             VarText
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             1
             "a#b, ,c^D efg[h"
         ~?= "\"a\"\n\"b\"\n\"c\"\n\"D\"\n\"e\"\n\"f\"\n\"g\"\n\"h\""
@@ -276,7 +276,7 @@ testITLinear17 =
             VarPlain
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             3
             "nopalindromes"
         ~?= "No palindromes found"
@@ -288,7 +288,7 @@ testITLinear18 =
             VarWord
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             2
             "Odd palindrome, odd- ly enough :)"
         ~?= "\"Odd palindrome, odd\""
@@ -300,7 +300,7 @@ testITLinear19 =
             VarText
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             2
             ".ehhe~"
         ~?= "[4]"
@@ -312,7 +312,7 @@ testITLinear20 =
             VarDNA
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             4
             "ATATGCGCATAT"
         ~?= "[12]"
@@ -324,7 +324,7 @@ testITLinear21 =
             VarWord
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             10
             "That that, that that that -that that that refers to-"
         ~?= "No palindromes found"
@@ -336,7 +336,7 @@ testITLinear22 =
             VarWord
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             5
             "A simple palindrome. Simple, a (ye)?"
         ~?= "[5]"
@@ -348,7 +348,7 @@ testITLinear23 =
             VarDNA
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             2
             "ATTCGGCGCAAT"
         ~?= "[2,2,2,4,2,2]"
@@ -360,7 +360,7 @@ testITLinear24 =
             VarText
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             6
             "ab:c|+cba..."
         ~?= "\"ab:c|+cba\""
@@ -372,7 +372,7 @@ testITLinear25 =
             VarPlain
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "ennestedetsenne"
         ~?= "\"\"\n\"e\"\n\"\"\n\"n\"\n\"enne\"\n\"n\"\n\"\"\n\"e\"\n\"\"\n\"s\"\n\"\"\n\"t\"\n\"\"\n\"e\"\n\"\"\n\"ennestedetsenne\"\n\"\"\n\"e\"\n\"\"\n\"t\"\n\"\"\n\"s\"\n\"\"\n\"e\"\n\"\"\n\"n\"\n\"enne\"\n\"n\"\n\"\"\n\"e\"\n\"\""
@@ -384,7 +384,7 @@ testITLinear26 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             7
             "*abc-dc ba#"
         ~?= "[7]"
@@ -396,7 +396,7 @@ testITLinear27 =
             VarWord
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "nested odd word odd palindrome odd word odd nested"
         ~?= "[9]"
@@ -408,7 +408,7 @@ testITLinear28 =
             VarDNA
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "TATG\nCGATC  GCA.TAGC"
         ~?= "[14]"
@@ -420,7 +420,7 @@ testITLinear29 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "d*eif:ied a-+bba deifie;d!"
         ~?= "\"d*eif:ied a-+bba deifie;d\""
@@ -432,7 +432,7 @@ testITLinear30 =
             VarText
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "abcbababcba"
         ~?= "[0,1,0,1,0,5,0,1,0,3,0,11,0,3,0,1,0,5,0,1,0,1,0]"
@@ -444,7 +444,7 @@ testITLinear31 =
             VarDNA
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             4
             "AT\nATAT-A\tT"
         ~?= "[8]"
@@ -456,7 +456,7 @@ testITLinear32 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             18
             "evil is a deed as I live"
         ~?= "\"evil is a deed as I live\""
@@ -468,7 +468,7 @@ testITLinear33 =
             VarText
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "abbaccabba"
         ~?= "[0,1,0,1,4,1,0,1,0,1,10,1,0,1,0,1,4,1,0,1,0]"
@@ -480,7 +480,7 @@ testITLinear34 =
             VarDNA
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             14
             "TATG\nCGATC  GCA.TA"
         ~?= "\"TATG\nCGATC  GCA.TA\""
@@ -492,7 +492,7 @@ testITLinear35 =
             VarWord
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             3
             "Thi,s is not a p-alindro'me."
         ~?= "No palindromes found"
@@ -504,7 +504,7 @@ testITLinear36 =
             VarWord
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             3
             "A simple palindrome. Simple, a (ye)?"
         ~?= "\"A simple palindrome. Simple, a\""
@@ -516,7 +516,7 @@ testITLinear37 =
             VarPunctuation
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             1
             "d*eif:ied a-+bba deifie;d!"
         ~?= "\"d\"\n\"d*eif:ied\"\n\"a\"\n\"d*eif:ied a-+bba deifie;d\"\n\"deifie;d\"\n\"d\""
@@ -528,7 +528,7 @@ testITLinear38 =
             VarPunctuation
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             21
             "Thi,s is not a p-alindro'me."
         ~?= "No palindromes found"
@@ -540,7 +540,7 @@ testITLinear39 =
             VarDNA
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "ATGCGCATTA"
         ~?= "\"ATGCGCAT\""
@@ -552,7 +552,7 @@ testITLinear40 =
             VarDNA
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             2
             "AN\nTC\tAGTC"
         ~?= "No palindromes found"
@@ -564,7 +564,7 @@ testITLinear41 =
             VarDNA
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             1
             "NNNNNNNNNN"
         ~?= "No palindromes found"
@@ -576,7 +576,7 @@ testITLinear42 =
             VarPlain
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "\nodddo!"
         ~?= "[0,1,0,1,0,1,2,5,2,1,0,1,0,1,0]"
@@ -588,7 +588,7 @@ testITLinear43 =
             VarPlain
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             1
             "releveler"
         ~?= "\"r\"\n\"e\"\n\"ele\"\n\"e\"\n\"releveler\"\n\"e\"\n\"ele\"\n\"e\"\n\"r\""
@@ -600,7 +600,7 @@ testITLinear44 =
             VarText
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "hi madam im adam bye"
         ~?= "\"madam im adam\""
@@ -612,7 +612,7 @@ testITLinear45 =
             VarWord
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             3
             "Oi! You there! You! Stop!"
         ~?= "\"You there! You\""
@@ -624,7 +624,7 @@ testITLinear46 =
             VarPunctuation
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "You! Rev Ile deliver, now!"
         ~?= "\"Rev Ile deliver\""
@@ -636,7 +636,7 @@ testITLinear47 =
             VarText
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "Revile.... Deliver!"
         ~?= "[0,1,0,1,0,1,0,1,0,1,0,1,0,13,0,1,0,1,0,1,0,1,0,1,0,1,0]"
@@ -648,7 +648,7 @@ testITLinear48 =
             VarPlain
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             0
             "It's high noon..."
         ~?= "\"\"\n\"I\"\n\"\"\n\"t\"\n\"\"\n\"'\"\n\"\"\n\"s\"\n\"\"\n\" \"\n\"\"\n\"h\"\n\"\"\n\"i\"\n\"\"\n\"g\"\n\"\"\n\"h\"\n\"\"\n\" \"\n\"\"\n\"n\"\n\"\"\n\"o\"\n\"noon\"\n\"o\"\n\"\"\n\"n\"\n\"\"\n\".\"\n\"..\"\n\"...\"\n\"..\"\n\".\"\n\"\""
@@ -660,7 +660,7 @@ testITLinear49 =
             VarPlain
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             3
             "!dammit_timmad!"
         ~?= "\"!dammit_timmad!\""
@@ -672,7 +672,7 @@ testITLinear50 =
             VarPunctuation
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "begone enoge"
         ~?= "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
@@ -684,7 +684,7 @@ testITLinear51 =
             VarText
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             2
             "madamoiselle"
         ~?= "[5,4]"
@@ -696,7 +696,7 @@ testITLinear52 =
             VarWord
             FormatLength
             SelectAll
-            ComLinear
+            AlgLinear
             4
             "Hello? my.... my .. hello!"
         ~?= "[4]"
@@ -708,7 +708,7 @@ testITLinear53 =
             VarDNA
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             2
             "\nAT  CG /AT/"
         ~?= "[6]"
@@ -720,7 +720,7 @@ testITLinear54 =
             VarDNA
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             4
             "CGCG"
         ~?= "\"CGCG\""
@@ -732,7 +732,7 @@ testITLinear55 =
             VarPlain
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             0
             "hi madam i madam bye"
         ~?= "[15]"
@@ -744,7 +744,7 @@ testITLinear56 =
             VarDNA
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             6
             "NNTATATATANN"
         ~?= "[8]"
@@ -756,7 +756,7 @@ testITLinear57 =
             VarPlain
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             5
             "!ma;dd;am!"
         ~?= "[10]"
@@ -768,7 +768,7 @@ testITLinear58 =
             VarWord
             FormatText
             SelectLongest
-            ComLinear
+            AlgLinear
             2
             "word1 word2 word3 word4"
         ~?= "No palindromes found"
@@ -780,7 +780,7 @@ testITLinear59 =
             VarText
             FormatText
             SelectAll
-            ComLinear
+            AlgLinear
             9
             "Releveler"
         ~?= "\"Releveler\""
@@ -792,7 +792,7 @@ testITLinear60 =
             VarPlain
             FormatLength
             SelectLongest
-            ComLinear
+            AlgLinear
             5
             "\nOdd do!"
         ~?= "No palindromes found"

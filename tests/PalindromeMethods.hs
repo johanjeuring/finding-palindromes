@@ -10,7 +10,7 @@ module PalindromeMethods
     ) where
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
@@ -20,13 +20,13 @@ import Data.Algorithms.Palindromes.PalEq
     ( PalEq
     )
 
-{- takes a flag to edit the complexity
+{- takes a flag to edit the algorithm
 to enable the usage of both algorithm types on the same unit tests -}
-longestTextPalindrome :: Complexity -> String -> String
-longestTextPalindrome complexity =
-    findPalindromesFormatted VarText FormatText SelectLongest complexity 0
+longestTextPalindrome :: Algorithm -> String -> String
+longestTextPalindrome algorithm =
+    findPalindromesFormatted VarText FormatText SelectLongest algorithm 0
 
-longestWordPalindrome :: Complexity -> String -> String
+longestWordPalindrome :: Algorithm -> String -> String
 longestWordPalindrome t =
     findPalindromesFormatted
         VarWord
@@ -41,23 +41,23 @@ longestPunctuationPalindrome =
         VarPunctuation
         FormatText
         SelectLongest
-        ComLinear
+        AlgLinear
         0
 
-longestDNAPalindrome :: Complexity -> String -> String
-longestDNAPalindrome complexity =
+longestDNAPalindrome :: Algorithm -> String -> String
+longestDNAPalindrome algorithm =
     findPalindromesFormatted
         VarDNA
         FormatText
         SelectLongest
-        complexity
+        algorithm
         0
 
-extendTextPalindrome :: Complexity -> Int -> String -> String
-extendTextPalindrome complexity n =
+extendTextPalindrome :: Algorithm -> Int -> String -> String
+extendTextPalindrome algorithm n =
     findPalindromesFormatted
         VarText
         FormatText
         (SelectAt n)
-        complexity
+        algorithm
         0

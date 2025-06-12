@@ -31,14 +31,14 @@ import qualified Data.Algorithms.Palindromes.Finders as F
 data Flag
     = Help
     | StandardInput
-    | Complexity F.Complexity
+    | Algorithm F.Algorithm
     | Variant F.Variant
     | OutputFormat F.OutputFormat
     | OutputFilter F.OutputFilter
     | MinLength Int
 
-defaultComplexity :: F.Complexity
-defaultComplexity = F.ComQuadratic{F.gapSize = 0, F.maxError = 0}
+defaultAlgorithm :: F.Algorithm
+defaultAlgorithm = F.AlgQuadratic{F.gapSize = 0, F.maxError = 0}
 
 defaultVariant :: F.Variant
 defaultVariant = F.VarText
@@ -67,7 +67,7 @@ options =
     , Option
         ['L']
         ["linear"]
-        (NoArg (Complexity F.ComLinear))
+        (NoArg (Algorithm F.AlgLinear))
         "Use the linear algorithm"
     , Option
         ['Q']
@@ -166,7 +166,7 @@ error is thrown.
 -}
 parseApproximate :: Maybe String -> Flag
 parseApproximate str
-    | isNothing str = Complexity F.ComApproximate{F.gapSizeID = 0, F.maxIDError = 0}
+    | isNothing str = Algorithm F.AlgApproximate{F.gapSizeID = 0, F.maxIDError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -177,7 +177,7 @@ parseApproximate str
                 ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Complexity F.ComApproximate{F.gapSizeID = read gapSize, F.maxIDError = read errors}
+        Algorithm F.AlgApproximate{F.gapSizeID = read gapSize, F.maxIDError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
@@ -187,7 +187,7 @@ error is thrown.
 -}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
-    | isNothing str = Complexity F.ComQuadratic{F.gapSize = 0, F.maxError = 0}
+    | isNothing str = Algorithm F.AlgQuadratic{F.gapSize = 0, F.maxError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -198,26 +198,26 @@ parseQuadratic str
                 ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Complexity F.ComQuadratic{F.gapSize = read gapSize, F.maxError = read errors}
+        Algorithm F.AlgQuadratic{F.gapSize = read gapSize, F.maxError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
 
-{- | From all input flags, gets the complexity setting. If more than one complexity flag
+{- | From all input flags, gets the algorithm setting. If more than one algorithm flag
 is given, it throws an error, as this is not suppported by our program. If none are give it
 uses the default option.
 -}
-getComplexity :: [Flag] -> F.Complexity
-getComplexity xs
-    | null complexityFlags = defaultComplexity
-    | [Complexity c] <- complexityFlags = c
-    | otherwise = error "Multiple complexity flags detected."
+getAlgorithm :: [Flag] -> F.Algorithm
+getAlgorithm xs
+    | null algorithmFlags = defaultAlgorithm
+    | [Algorithm c] <- algorithmFlags = c
+    | otherwise = error "Multiple algorithm flags detected."
   where
-    isComplexity :: Flag -> Bool
-    isComplexity (Complexity _) = True
-    isComplexity _ = False
-    complexityFlags :: [Flag]
-    complexityFlags = filter isComplexity xs
+    isAlgorithm :: Flag -> Bool
+    isAlgorithm (Algorithm _) = True
+    isAlgorithm _ = False
+    algorithmFlags :: [Flag]
+    algorithmFlags = filter isAlgorithm xs
 
 {- | From all input flags, gets the variant setting. If more than one variant flag is
 given, it throws an error, as this is not suppported by our program. If none are give it

@@ -6,10 +6,10 @@ module UTTextPals (testListText) where
 
 import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 
-import Data.Algorithms.Palindromes.Finders (Complexity)
+import Data.Algorithms.Palindromes.Finders (Algorithm)
 import PalindromeMethods (longestTextPalindrome)
 
-testListText :: Complexity -> [Test]
+testListText :: Algorithm -> [Test]
 testListText t =
     [ testTextPalindrome10 t
     , testTextPalindrome11 t

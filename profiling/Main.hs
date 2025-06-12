@@ -8,7 +8,7 @@ import GHC.Generics (Generic)
 
 import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
 import Data.Algorithms.Palindromes.Finders
-import Data.Algorithms.Palindromes.Finders (Complexity (ComApproximate))
+import Data.Algorithms.Palindromes.Finders (Algorithm (AlgApproximate))
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified System.IO as Sys
@@ -31,13 +31,13 @@ main = do
 
     _ <-
         {-# SCC "linear" #-}
-        evaluate $ force $ findPalindromes VarText ComLinear 0 as
+        evaluate $ force $ findPalindromes VarText AlgLinear 0 as
     _ <-
         {-# SCC "quadratic" #-}
-        evaluate $ force $ findPalindromes VarText (ComQuadratic 0 0) 0 as
+        evaluate $ force $ findPalindromes VarText (AlgQuadratic 0 0) 0 as
     _ <-
         {-# SCC "approximateAlgorithm" #-}
-        evaluate $ force $ findPalindromes VarText (ComApproximate 0 0) 0 as
+        evaluate $ force $ findPalindromes VarText (AlgApproximate 0 0) 0 as
     return ()
 
 -- | Strictly loads the content of a file from Latin1 encoding

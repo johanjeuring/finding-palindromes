@@ -223,7 +223,7 @@ setting21 =
         10
 setting22 =
     Settings
-        (ComInsertionDeletion 10 5)
+        (ComApproximate 10 5)
         VarPunctuation
         FormatLength
         SelectLongest
@@ -231,7 +231,7 @@ setting22 =
 setting23 :: Settings
 setting23 =
     Settings
-        (ComInsertionDeletion 3 1)
+        (ComApproximate 3 1)
         VarPlain
         FormatLength
         SelectLongest
@@ -239,7 +239,7 @@ setting23 =
 setting24 :: Settings
 setting24 =
     Settings
-        (ComInsertionDeletion 3 5)
+        (ComApproximate 3 5)
         VarText
         FormatLength
         SelectLongest
@@ -247,7 +247,7 @@ setting24 =
 setting25 :: Settings
 setting25 =
     Settings
-        (ComInsertionDeletion 10 0)
+        (ComApproximate 10 0)
         VarPlain
         FormatLength
         SelectLongest
@@ -255,7 +255,7 @@ setting25 =
 setting26 :: Settings
 setting26 =
     Settings
-        (ComInsertionDeletion 0 1)
+        (ComApproximate 0 1)
         VarWord
         FormatLength
         SelectLongest
@@ -263,7 +263,7 @@ setting26 =
 setting27 :: Settings
 setting27 =
     Settings
-        (ComInsertionDeletion 10 5)
+        (ComApproximate 10 5)
         VarWord
         FormatLength
         SelectLongest
@@ -271,7 +271,7 @@ setting27 =
 setting28 :: Settings
 setting28 =
     Settings
-        (ComInsertionDeletion 10 0)
+        (ComApproximate 10 0)
         VarText
         FormatLength
         SelectLongest
@@ -279,7 +279,7 @@ setting28 =
 setting29 :: Settings
 setting29 =
     Settings
-        (ComInsertionDeletion 3 0)
+        (ComApproximate 3 0)
         VarWord
         FormatLength
         SelectLongest
@@ -287,7 +287,7 @@ setting29 =
 setting30 :: Settings
 setting30 =
     Settings
-        (ComInsertionDeletion 0 1)
+        (ComApproximate 0 1)
         VarPunctuation
         FormatLength
         SelectLongest
@@ -295,7 +295,7 @@ setting30 =
 setting31 :: Settings
 setting31 =
     Settings
-        (ComInsertionDeletion 0 5)
+        (ComApproximate 0 5)
         VarPlain
         FormatLength
         SelectLongest
@@ -303,7 +303,7 @@ setting31 =
 setting32 :: Settings
 setting32 =
     Settings
-        (ComInsertionDeletion 10 1)
+        (ComApproximate 10 1)
         VarDNA
         FormatLength
         SelectLongest
@@ -311,7 +311,7 @@ setting32 =
 setting33 :: Settings
 setting33 =
     Settings
-        (ComInsertionDeletion 3 0)
+        (ComApproximate 3 0)
         VarDNA
         FormatLength
         SelectLongest
@@ -319,7 +319,7 @@ setting33 =
 setting34 :: Settings
 setting34 =
     Settings
-        (ComInsertionDeletion 0 5)
+        (ComApproximate 0 5)
         VarDNA
         FormatLength
         SelectLongest
@@ -327,7 +327,7 @@ setting34 =
 setting35 :: Settings
 setting35 =
     Settings
-        (ComInsertionDeletion 3 1)
+        (ComApproximate 3 1)
         VarPunctuation
         FormatLength
         SelectLongest
@@ -335,7 +335,7 @@ setting35 =
 setting36 :: Settings
 setting36 =
     Settings
-        (ComInsertionDeletion 0 1)
+        (ComApproximate 0 1)
         VarText
         FormatLength
         SelectLongest
@@ -343,7 +343,7 @@ setting36 =
 setting37 :: Settings
 setting37 =
     Settings
-        (ComInsertionDeletion 0 5)
+        (ComApproximate 0 5)
         VarPlain
         FormatLength
         SelectLongest
@@ -351,7 +351,7 @@ setting37 =
 setting38 :: Settings
 setting38 =
     Settings
-        (ComInsertionDeletion 2 3)
+        (ComApproximate 2 3)
         VarDNA
         FormatLength
         SelectLongest

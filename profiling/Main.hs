@@ -6,9 +6,9 @@ import Control.DeepSeq (NFData, force)
 import Control.Exception (evaluate)
 import GHC.Generics (Generic)
 
+import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
 import Data.Algorithms.Palindromes.Finders
-import Data.Algorithms.Palindromes.Finders (Complexity (ComInsertionDeletion))
-import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm)
+import Data.Algorithms.Palindromes.Finders (Complexity (ComApproximate))
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified System.IO as Sys
@@ -36,8 +36,8 @@ main = do
         {-# SCC "quadratic" #-}
         evaluate $ force $ findPalindromes VarText (ComQuadratic 0 0) 0 as
     _ <-
-        {-# SCC "insertionDeletionAlgorithm" #-}
-        evaluate $ force $ findPalindromes VarText (ComInsertionDeletion 0 0) 0 as
+        {-# SCC "approximateAlgorithm" #-}
+        evaluate $ force $ findPalindromes VarText (ComApproximate 0 0) 0 as
     return ()
 
 -- | Strictly loads the content of a file from Latin1 encoding

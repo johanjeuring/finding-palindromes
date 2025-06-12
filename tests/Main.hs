@@ -19,15 +19,15 @@ import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 
 import Data.Algorithms.Palindromes.Finders (Complexity (..))
-import ITInsertionDeletion (testListITInsertionDeletion)
+import ITApproximate (testListITApproximate)
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
 import QuickCheckProperties (propertyList)
+import UTApproximateAlgorithm (testListApproximateAlgorithm)
 import UTDNAPals (testListDNA)
 import UTExtendPals (testListExtend)
 import UTFinders (testListFinders)
 import UTGetLeftRight (testListGetLeftRight)
-import UTInsertionDeletionAlgorithm (testListInsertionDeletionAlgorithm)
 import UTLinearAlgorithm (testListLinearAlgorithm)
 import UTPalEq (testListPalEq)
 import UTProcessing (testListProcessing)
@@ -40,25 +40,25 @@ tests :: Test
 tests =
     TestList $
         testListLinearAlgorithm
-            ++ testListITInsertionDeletion
+            ++ testListITApproximate
             ++ testListQuadraticAlgorithm
-            ++ testListInsertionDeletionAlgorithm
+            ++ testListApproximateAlgorithm
             ++ testListText ComLinear
             ++ testListText ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
+            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListPunctuation
             ++ testListGetLeftRight
             ++ testListDNA ComLinear
             ++ testListDNA ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
+            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListExtend ComLinear
             ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
+            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListProcessing
             ++ testListPalEq
             ++ testListWordPalindromes ComLinear
             ++ testListWordPalindromes ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
+            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic

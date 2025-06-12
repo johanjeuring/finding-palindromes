@@ -13,10 +13,10 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-The insertion deletion algorithm for maximal gapped approximate palindromes with a maximum
+The approximate algorithm for finding maximal gapped approximate palindromes with a maximum
 number of insertion, deletion and substitution errors.
 -}
-module Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (Cell (..), insertionDeletionAlgorithm, sparsify) where
+module Data.Algorithms.Palindromes.ApproximateAlgorithm (Cell (..), approximateAlgorithm, sparsify) where
 
 import Data.Algorithms.Palindromes.PalEq (PalEq, (=:=))
 
@@ -48,7 +48,7 @@ type Budget = Int
 {- | Find all maximal gapped approximate palindromes with a certain gap and a certain
 maximum number of errors.
 -}
-insertionDeletionAlgorithm
+approximateAlgorithm
     :: (PalEq a, G.Vector v a)
     => Int
     -- ^ The size of the gap
@@ -58,7 +58,7 @@ insertionDeletionAlgorithm
     -- ^ The input vector
     -> [PalRange]
     -- ^ The list of found maximal gapped approximate palindromes
-insertionDeletionAlgorithm gapSize maxErrors input = concatMap (\(_, palRanges, _) -> palRanges) states
+approximateAlgorithm gapSize maxErrors input = concatMap (\(_, palRanges, _) -> palRanges) states
   where
     -- Bound the used gapSize to not be more than the length of the input.
     gapSize' = min gapSize (G.length input)

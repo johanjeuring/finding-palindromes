@@ -73,9 +73,9 @@ benchComplexity content =
         nf
             (findPalindromes VarText ComLinear 0)
             content
-    , bench "insertionDeletion" $
+    , bench "approximate" $
         nf
-            (findPalindromes VarText (ComInsertionDeletion 0 0) 0)
+            (findPalindromes VarText (ComApproximate 0 0) 0)
             content
     ]
 

@@ -77,7 +77,7 @@ options =
     , Option
         ['A']
         ["approximate"]
-        (OptArg parseInsertionDeletion "[gapSize] [errors]")
+        (OptArg parseApproximate "[gapSize] [errors]")
         "Use approximate algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
         ['R']
@@ -164,9 +164,9 @@ isStandardInput _ = False
 {- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
 error is thrown.
 -}
-parseInsertionDeletion :: Maybe String -> Flag
-parseInsertionDeletion str
-    | isNothing str = Complexity F.ComInsertionDeletion{F.gapSizeID = 0, F.maxIDError = 0}
+parseApproximate :: Maybe String -> Flag
+parseApproximate str
+    | isNothing str = Complexity F.ComApproximate{F.gapSizeID = 0, F.maxIDError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -177,7 +177,7 @@ parseInsertionDeletion str
                 ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Complexity F.ComInsertionDeletion{F.gapSizeID = read gapSize, F.maxIDError = read errors}
+        Complexity F.ComApproximate{F.gapSizeID = read gapSize, F.maxIDError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)

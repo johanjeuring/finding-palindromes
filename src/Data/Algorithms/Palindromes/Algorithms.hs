@@ -20,10 +20,10 @@ They return a list with the length of the maximal palindrome at each center inde
 module Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
-    , insertionDeletionAlgorithm
+    , approximateAlgorithm
     ) where
 
-import Data.Algorithms.Palindromes.InsertionDeletionAlgorithm (insertionDeletionAlgorithm)
+import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
 import Data.Algorithms.Palindromes.LinearAlgorithm (extendPalindromeS)
 import Data.Algorithms.Palindromes.PalEq (PalEq)
 import Data.Algorithms.Palindromes.QuadraticAlgorithm

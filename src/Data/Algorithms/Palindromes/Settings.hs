@@ -27,19 +27,21 @@ import System.Console.GetOpt (usageInfo)
 
 import Data.Algorithms.Palindromes.Finders
     ( Complexity (..)
+    , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
-    , filterOnlyLongest
     , formatPalindromes
     )
 import Data.Algorithms.Palindromes.Options
     ( Flag
     , defaultComplexity
     , defaultMinLength
+    , defaultOutputFilter
     , defaultOutputFormat
     , defaultVariant
     , getComplexity
     , getMinLength
+    , getOutputFilter
     , getOutputFormat
     , getVariant
     , headerHelpMessage
@@ -54,6 +56,7 @@ data Settings = Settings
     { complexity :: Complexity
     , variant :: Variant
     , outputFormat :: OutputFormat
+    , outputFilter :: OutputFilter
     , minLength :: Int
     }
 
@@ -64,6 +67,7 @@ instance Show Settings where
             [ show (complexity settings)
             , show (variant settings)
             , show (outputFormat settings)
+            , show (outputFilter settings)
             , show (minLength settings)
             ]
 
@@ -74,6 +78,7 @@ defaultSettings =
         { complexity = defaultComplexity
         , variant = defaultVariant
         , outputFormat = defaultOutputFormat
+        , outputFilter = defaultOutputFilter
         , minLength = defaultMinLength
         }
 
@@ -84,14 +89,19 @@ getSettings flags =
         { complexity = getComplexity flags
         , variant = getVariant flags
         , outputFormat = getOutputFormat flags
+        , outputFilter = getOutputFilter flags
         , minLength = getMinLength flags
         }
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
 applySettingsToFinder :: Settings -> (String -> IO String)
-applySettingsToFinder (Settings{complexity = c, variant = v, outputFormat = o, minLength = l}) s = do
-    pals <- findPalindromesWithProgressBar v c l (filterOnlyLongest o) s
+applySettingsToFinder (Settings{complexity = c, variant = v, outputFormat = o, outputFilter = f, minLength = l}) s = do
+    pals <- findPalindromesWithProgressBar v c l filterOnlyLongest s
     return (formatPalindromes o pals)
+  where
+    filterOnlyLongest = case f of
+        SelectLongest -> True
+        _ -> False
 
 {- | Based on input flags, gets a tuple with a function that directly encapsulates
 everything from the input string to the output string. Also encodes whether input string

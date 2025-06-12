@@ -39,7 +39,7 @@ handleFileWith f file = do
     Sys.hSetEncoding Sys.stdout Sys.utf8
     input <- Sys.hGetContents file'
     res <- f input
-    putStrLn $ "\r" ++ res ++ replicate 40 ' '
+    putStrLn $ '\r' : "Palindromes:" ++ replicate 40 ' ' ++ "\n" ++ res
     Sys.hClose file'
     putStrLn "--------------------------------------------------------------"
 

@@ -34,6 +34,7 @@ data Flag
     | Complexity F.Complexity
     | Variant F.Variant
     | OutputFormat F.OutputFormat
+    | OutputFilter F.OutputFilter
     | MinLength Int
 
 defaultComplexity :: F.Complexity
@@ -43,7 +44,10 @@ defaultVariant :: F.Variant
 defaultVariant = F.VarText
 
 defaultOutputFormat :: F.OutputFormat
-defaultOutputFormat = F.OutWord
+defaultOutputFormat = F.FormatText
+
+defaultOutputFilter :: F.OutputFilter
+defaultOutputFilter = F.SelectLongest
 
 defaultMinLength :: Int
 defaultMinLength = 0
@@ -74,52 +78,67 @@ options =
         ['A']
         ["approximate"]
         (OptArg parseInsertionDeletion "[gapSize] [errors]")
-        "Use Insertion Deletion algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
+        "Use approximate algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
-        ['r']
+        ['R']
         ["plain", "regular"]
         (NoArg (Variant F.VarPlain))
         "plain (r for regular) palindrome"
     , Option
-        ['t']
+        []
         ["text"]
         (NoArg (Variant F.VarText))
         "Palindrome ignoring case, spacing and punctuation (default)"
     , Option
-        ['p']
+        ['P']
         ["punctuation"]
         (NoArg (Variant F.VarPunctuation))
         "Palindrome surrounded by punctuation (if any)"
     , Option
-        ['w']
+        ['W']
         ["word"]
         (NoArg (Variant F.VarWord))
         "Word palindrome"
     , Option
-        ['d']
+        ['D']
         ["dna"]
         (NoArg (Variant F.VarDNA))
         "DNA palindrome"
     , Option
-        ['l']
-        ["longest"]
-        (NoArg (OutputFormat F.OutWord))
-        "All longest palindromes of same size (default)"
+        []
+        ["textformat"]
+        (NoArg (OutputFormat F.FormatText))
+        "Output the text of the palindromes (default)"
     , Option
-        ['e']
+        ['l']
         ["length"]
-        (NoArg (OutputFormat F.OutLength))
-        "Length of the longest palindrome"
+        (NoArg (OutputFormat F.FormatLength))
+        "Output the length of the palindromes"
+    , Option
+        ['r']
+        ["range"]
+        (NoArg (OutputFormat F.FormatRange))
+        "Output the range of the palindromes"
+    , Option
+        ['d']
+        ["details"]
+        (NoArg (OutputFormat F.FormatAllDetails))
+        "Output the text, range and length of the palindromes"
+    , Option
+        []
+        ["longest"]
+        (NoArg (OutputFilter F.SelectLongest))
+        "Select only the longest palindromes, can be multiple of same length (default)"
     , Option
         ['a']
         ["all"]
-        (NoArg (OutputFormat F.OutWords))
-        "All maximal palindromes"
+        (NoArg (OutputFilter F.SelectAll))
+        "Select all maximal palindromes"
     , Option
-        ['n']
-        ["lengths"]
-        (NoArg (OutputFormat F.OutLengths))
-        "Length of the maximal palindrome around each position in the input"
+        ['c']
+        ["center"]
+        (ReqArg (OutputFilter . F.SelectAt . (read :: String -> Int)) "arg")
+        "Find only the palindromes around the center [arg]"
     , Option
         ['m']
         ["minlength", "min"]
@@ -130,11 +149,6 @@ options =
         ["input"]
         (NoArg StandardInput)
         "Read input from standard input"
-    , Option
-        ['x']
-        ["extend"]
-        (ReqArg (OutputFormat . F.OutLengthAt . (read :: String -> Int)) "arg")
-        "Extend a palindrome around center [arg]"
     ]
 
 -- | Detects help flag constructor.
@@ -236,6 +250,22 @@ getOutputFormat xs
     isOutputFormat _ = False
     outputFormatFlags :: [Flag]
     outputFormatFlags = filter isOutputFormat xs
+
+{- | From all input flags, gets the output filter setting. If more than one output filter
+flag is given, it throws an error, as this is not suppported by our program. If none are
+give it uses the default option.
+-}
+getOutputFilter :: [Flag] -> F.OutputFilter
+getOutputFilter xs
+    | null outputFilterFlags = defaultOutputFilter
+    | [OutputFilter o] <- outputFilterFlags = o
+    | otherwise = error "Multiple outputFilter flags detected."
+  where
+    isOutputFilter :: Flag -> Bool
+    isOutputFilter (OutputFilter _) = True
+    isOutputFilter _ = False
+    outputFilterFlags :: [Flag]
+    outputFilterFlags = filter isOutputFilter xs
 
 {- | From all input flags, gets the length modifier setting. If more than one length
 modifier flag is given, it throws an error, as this is not suppported by our program. If

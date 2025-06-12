@@ -27,10 +27,6 @@ import System.Console.GetOpt
     )
 
 import qualified Data.Algorithms.Palindromes.Finders as F
-    ( Complexity (..)
-    , OutputFormat (..)
-    , Variant (..)
-    )
 
 data Flag
     = Help

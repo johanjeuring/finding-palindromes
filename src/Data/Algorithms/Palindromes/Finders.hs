@@ -30,6 +30,8 @@ module Data.Algorithms.Palindromes.Finders
     , filterPalindromes
     ) where
 
+-- This import might throw a compiler warnings on GHC version 9.12 or higher,
+--    but the import is necessary on older versions.
 import Data.List (foldl')
 
 import Data.Algorithms.Palindromes.Algorithms
@@ -150,7 +152,6 @@ findPalindromeRanges variant complexity input =
                 . quadraticAlgorithm
                     (onlyEvenPals variant complexity)
                     gapSize'
-                    -- Note that the name gapSize' is used to avoid shadowing the record entry name gapSize.
                     errors
         ComInsertionDeletion gapSize' errors -> insertionDeletionAlgorithm gapSize' errors
 

@@ -17,7 +17,6 @@ and therefore also functions that apply settings to go from input to output are 
 module Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     , getSettings
-    , getOutput
     , defaultSettings
     , handleFlags
     )
@@ -89,8 +88,8 @@ getSettings flags =
         }
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
-getOutput :: Settings -> (String -> IO String)
-getOutput (Settings{complexity = c, variant = v, outputFormat = o, minLength = l}) s = do
+applySettingsToFinder :: Settings -> (String -> IO String)
+applySettingsToFinder (Settings{complexity = c, variant = v, outputFormat = o, minLength = l}) s = do
     pals <- findPalindromesWithProgressBar v c l (filterOnlyLongest o) s
     return (formatPalindromes o pals)
 
@@ -100,12 +99,13 @@ is from a file or standard input.
 -}
 handleFlags
     :: [Flag]
+    -> Bool
     -> ( String -> IO String -- function from input to output
        , Bool -- if input is standard input
        )
-handleFlags flags =
-    ( if any isHelp flags || null flags
+handleFlags flags hasFiles =
+    ( if any isHelp flags || (null flags && not hasFiles)
         then const $ return (usageInfo headerHelpMessage options)
-        else getOutput (getSettings flags)
+        else applySettingsToFinder (getSettings flags)
     , any isStandardInput flags
     )

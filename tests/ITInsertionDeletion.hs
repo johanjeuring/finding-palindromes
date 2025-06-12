@@ -109,7 +109,7 @@ testITInsertionDeletion2 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             4
             "A&T-AT"
-        ~?= "[\"A&T-AT\"]"
+        ~?= "\"A&T-AT\""
 
 -- String: Does not contain a palindrome
 testITInsertionDeletion3 =
@@ -142,7 +142,7 @@ testITInsertionDeletion5 =
             ComInsertionDeletion{gapSizeID = 1, maxIDError = 2}
             3
             "“AC\nTA..,TTCT”"
-        ~?= "[\"AC\nTA..,TTCT\"]"
+        ~?= "\"AC\nTA..,TTCT\""
 
 -- String: Contains an even nested palindrome
 testITInsertionDeletion6 =
@@ -164,7 +164,7 @@ testITInsertionDeletion7 =
             ComInsertionDeletion{gapSizeID = 4, maxIDError = 4}
             2
             "Ac\nC,T”"
-        ~?= "[\"Ac\nC,T\"]"
+        ~?= "\"Ac\nC,T\""
 
 -- String: Contains an odd gapped palindrome
 testITInsertionDeletion8 =
@@ -175,7 +175,7 @@ testITInsertionDeletion8 =
             ComInsertionDeletion{gapSizeID = 1, maxIDError = 2}
             2
             "ACTATTCT"
-        ~?= "[\"ACTATTCT\"]"
+        ~?= "\"ACTATTCT\""
 
 -- String: Contains an odd gapped palindrome
 testITInsertionDeletion9 =
@@ -197,7 +197,7 @@ testITInsertionDeletion10 =
             ComInsertionDeletion{gapSizeID = 5, maxIDError = 5}
             0
             "A;G;G;G;T"
-        ~?= "[\"A;G;G;G;T\"]"
+        ~?= "\"A;G;G;G;T\""
 
 -- String: Contains a palindrome with punctuation
 testITInsertionDeletion11 =
@@ -230,7 +230,7 @@ testITInsertionDeletion13 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             4
             "kabral"
-        ~?= "[\"abra\"]"
+        ~?= "\"abra\""
 
 -- String: Contains no palindrome
 testITInsertionDeletion14 =
@@ -263,7 +263,7 @@ testITInsertionDeletion16 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "abba"
-        ~?= "[\"abba\"]"
+        ~?= "\"abba\""
 
 -- String: Contains an odd palindrome with punctuation. Contains a special character.
 testITInsertionDeletion17 =
@@ -285,7 +285,7 @@ testITInsertionDeletion18 =
             ComInsertionDeletion{gapSizeID = 5, maxIDError = 5}
             2
             "lepel"
-        ~?= "[\"lepel\"]"
+        ~?= "\"lepel\""
 
 -- String: Contains an approximate palindrome with punctuation
 testITInsertionDeletion19 =
@@ -307,7 +307,7 @@ testITInsertionDeletion20 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             0
             "Abc'd/.ef"
-        ~?= "[\"f\",\"e\",\".\",\"/\",\"d\",\"'\",\"c\",\"b\",\"A\"]"
+        ~?= "\"f\"\n\"e\"\n\".\"\n\"/\"\n\"d\"\n\"'\"\n\"c\"\n\"b\"\n\"A\""
 
 -- String: Contains an odd approximate palindrome, with punctuation
 testITInsertionDeletion21 =
@@ -340,7 +340,7 @@ testITInsertionDeletion23 =
             ComInsertionDeletion{gapSizeID = 1, maxIDError = 2}
             5
             "blaA\\Bc..dA;b.l#i"
-        ~?= "[\"b.l#i\",\";b.l#\",\"A;b.l\",\"..dA;\",\"..dA;b.\",\"Bc..dA\",\"\\Bc..\",\"A\\Bc.\",\"aA\\Bc\",\"laA\\B\",\"blaA\\\"]"
+        ~?= "\"b.l#i\"\n\";b.l#\"\n\"A;b.l\"\n\"..dA;\"\n\"..dA;b.\"\n\"Bc..dA\"\n\"\\Bc..\"\n\"A\\Bc.\"\n\"aA\\Bc\"\n\"laA\\B\"\n\"blaA\\\""
 
 -- String: Contains an even gapped palindrome
 testITInsertionDeletion24 =
@@ -362,7 +362,7 @@ testITInsertionDeletion25 =
             ComInsertionDeletion{gapSizeID = 10, maxIDError = 10}
             2
             "A-B*cde)BA"
-        ~?= "[\"A-B*cde)BA\"]"
+        ~?= "\"A-B*cde)BA\""
 
 -- String: Contains an odd gapped palindrome
 testITInsertionDeletion26 =
@@ -373,7 +373,7 @@ testITInsertionDeletion26 =
             ComInsertionDeletion{gapSizeID = 3, maxIDError = 2}
             4
             "ABcdeBA"
-        ~?= "[\"ABcdeBA\"]"
+        ~?= "\"ABcdeBA\""
 
 -- String: Contains an even palindrome, with punctuation, with special characters
 testITInsertionDeletion27 :: Test
@@ -396,7 +396,7 @@ testITInsertionDeletion28 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 9}
             0
             "blaAPPAbl"
-        ~?= "[\"blaAPPAbl\"]"
+        ~?= "\"blaAPPAbl\""
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion29 =
@@ -418,7 +418,7 @@ testITInsertionDeletion30 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             4
             "/blaAPa.bl.i"
-        ~?= "[\".bl.\",\"aAPa\"]"
+        ~?= "\".bl.\"\n\"aAPa\""
 
 -- String: Contains an even palindrome with punctuation
 testITInsertionDeletion31 =
@@ -429,7 +429,7 @@ testITInsertionDeletion31 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             2
             "/abba/"
-        ~?= "[\"abba\"]"
+        ~?= "\"abba\""
 
 -- String: Conains an even gapped palindrome
 testITInsertionDeletion32 =
@@ -451,7 +451,7 @@ testITInsertionDeletion33 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 5}
             0
             "bla\\AP.PA.bli"
-        ~?= "[\"bla\\AP.PA.bli\"]"
+        ~?= "\"bla\\AP.PA.bli\""
 
 -- String: Contains an odd punctuation palindrome
 testITInsertionDeletion34 =
@@ -506,7 +506,7 @@ testITInsertionDeletion38 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             3
             "za.*ts&tat/”"
-        ~?= "[\"tat\"]"
+        ~?= "\"tat\""
 
 -- String: Contains no palindrome, with punctuation
 testITInsertionDeletion39 =
@@ -539,7 +539,7 @@ testITInsertionDeletion41 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             1
             "a’b/ba"
-        ~?= "[\"a’b/ba\"]"
+        ~?= "\"a’b/ba\""
 
 -- String: Contains an even palindrome
 testITInsertionDeletion42 =
@@ -550,7 +550,7 @@ testITInsertionDeletion42 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "abba"
-        ~?= "[\"abba\"]"
+        ~?= "\"abba\""
 
 -- String: Contains an odd palindrome, contains punctuations and special characters
 testITInsertionDeletion43 =
@@ -561,7 +561,7 @@ testITInsertionDeletion43 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             2
             "l.e.p’e;l"
-        ~?= "[\"l.e.p’e;l\"]"
+        ~?= "\"l.e.p’e;l\""
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion44 =
@@ -572,7 +572,7 @@ testITInsertionDeletion44 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "lepel"
-        ~?= "[\"lepel\"]"
+        ~?= "\"lepel\""
 
 -- String: Contains an approximate even palindrome
 testITInsertionDeletion45 =
@@ -594,7 +594,7 @@ testITInsertionDeletion46 =
             ComInsertionDeletion{gapSizeID = 2, maxIDError = 0}
             0
             "kabral"
-        ~?= "[\"abra\"]"
+        ~?= "\"abra\""
 
 -- String: Contains an approximate odd palindrome
 testITInsertionDeletion47 =
@@ -616,7 +616,7 @@ testITInsertionDeletion48 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 7}
             2
             "zatstat"
-        ~?= "[\"zatstat\"]"
+        ~?= "\"zatstat\""
 
 -- String: Contains an even gapped palindrome with punctuation
 testITInsertionDeletion49 =
@@ -638,7 +638,7 @@ testITInsertionDeletion50 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             2
             "blaABcdBAbli"
-        ~?= "[\"BAb\"]"
+        ~?= "\"BAb\""
 
 -- String: Contains an odd gapped palindrome
 testITInsertionDeletion51 =
@@ -671,7 +671,7 @@ testITInsertionDeletion53 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "\"blaAPPab'li"
-        ~?= "[\"Pab'li\",\"blaAPP\",\"blaAPPab'li\"]"
+        ~?= "\"Pab'li\"\n\"blaAPP\"\n\"blaAPPab'li\""
 
 -- String: Contains an even palindrome
 testITInsertionDeletion54 =
@@ -682,7 +682,7 @@ testITInsertionDeletion54 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 0}
             1
             "blaAPPAbl"
-        ~?= "[\"l\",\"b\",\"A\",\"APPA\",\"aA\",\"l\",\"b\"]"
+        ~?= "\"l\"\n\"b\"\n\"A\"\n\"APPA\"\n\"aA\"\n\"l\"\n\"b\""
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion55 =
@@ -704,7 +704,7 @@ testITInsertionDeletion56 =
             ComInsertionDeletion{gapSizeID = 3, maxIDError = 2}
             4
             "/blaAPa.bl.i.bl"
-        ~?= "[\"Pa.bl.i.bl\",\"APa.bl.i.b\",\"blaAPa.bl.i.b\"]"
+        ~?= "\"Pa.bl.i.bl\"\n\"APa.bl.i.b\"\n\"blaAPa.bl.i.b\""
 
 -- String: Contains no palindromes, has punctuation
 testITInsertionDeletion57 =
@@ -737,7 +737,7 @@ testITInsertionDeletion59 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             2
             "Hello. hi hi “hello”"
-        ~?= "[\"Hello. hi hi “hello\"]"
+        ~?= "\"Hello. hi hi “hello\""
 
 -- String: Contains an even palindrome
 testITInsertionDeletion60 =
@@ -759,7 +759,7 @@ testITInsertionDeletion61 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 3}
             2
             "bye so    bye?"
-        ~?= "[\"bye so    bye\"]"
+        ~?= "\"bye so    bye\""
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion62 =
@@ -770,7 +770,7 @@ testITInsertionDeletion62 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 9}
             3
             "bye so bye"
-        ~?= "[\"bye so bye\"]"
+        ~?= "\"bye so bye\""
 
 -- String: Contains an approximate even palindrome with punctuation
 testITInsertionDeletion63 =
@@ -781,7 +781,7 @@ testITInsertionDeletion63 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             2
             "Fout. Weer. Hi. Hi. Niet. Goed."
-        ~?= "[\"Fout. Weer. Hi. Hi. Niet. Goed\"]"
+        ~?= "\"Fout. Weer. Hi. Hi. Niet. Goed\""
 
 -- String: Contains an approximate even palindrome
 testITInsertionDeletion64 =
@@ -836,7 +836,7 @@ testITInsertionDeletion68 =
             ComInsertionDeletion{gapSizeID = 2, maxIDError = 1}
             3
             "doei hi ik ben een mens hi doei"
-        ~?= "[\"een mens hi doei\",\"ben een mens hi\",\"hi ik ben een\",\"doei hi ik ben\",\"doei hi ik ben een mens hi doei\"]"
+        ~?= "\"een mens hi doei\"\n\"ben een mens hi\"\n\"hi ik ben een\"\n\"doei hi ik ben\"\n\"doei hi ik ben een mens hi doei\""
 
 -- String: Contains a gapped odd palindrome with punctuation
 testITInsertionDeletion69 =
@@ -847,7 +847,7 @@ testITInsertionDeletion69 =
             ComInsertionDeletion{gapSizeID = 3, maxIDError = 1}
             4
             "dag h?i dri/e gap size. ... hi dag"
-        ~?= "[\"dag h?i dri/e gap size. ... hi dag\"]"
+        ~?= "\"dag h?i dri/e gap size. ... hi dag\""
 
 -- String: Contains a gapped odd palindrome
 testITInsertionDeletion70 =
@@ -869,7 +869,7 @@ testITInsertionDeletion71 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 6}
             0
             ",onzin, .dit pal\n pal dit/ gek"
-        ~?= "[\"onzin, .dit pal\n pal dit/ gek\"]"
+        ~?= "\"onzin, .dit pal\n pal dit/ gek\""
 
 -- String: Contains an even palindrome
 testITInsertionDeletion72 =
@@ -891,7 +891,7 @@ testITInsertionDeletion73 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 1}
             2
             "Onzin. pAl is. Pal gek"
-        ~?= "[\"Onzin. pAl is. Pal gek\"]"
+        ~?= "\"Onzin. pAl is. Pal gek\""
 
 -- String: Contains an odd palindrome
 testITInsertionDeletion74 =
@@ -902,4 +902,4 @@ testITInsertionDeletion74 =
             ComInsertionDeletion{gapSizeID = 0, maxIDError = 2}
             3
             "onzin pal is pal gek"
-        ~?= "[\"onzin pal is pal gek\"]"
+        ~?= "\"onzin pal is pal gek\""

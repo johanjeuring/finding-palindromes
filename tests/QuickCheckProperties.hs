@@ -27,7 +27,7 @@ import Data.Algorithms.Palindromes.Finders
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToLength)
+import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToLength)
 import Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     )
@@ -212,7 +212,7 @@ checkValidBoundaries settings inputString pal = case variant settings of
     _ -> let (s, e) = palRangeInText pal in e - s == getLength pal
 
 -- | Counts the amount of words that are in the substring of the input string corresponding with the given range
-countWordsInRange :: (Int, Int) -> String -> Int
+countWordsInRange :: Range -> String -> Int
 countWordsInRange (s, e) inputString = length . words $ cleanOriginalString $ take (e - s) (drop s inputString)
 
 -- | Counts the amount of non-alphabetic characters in the string

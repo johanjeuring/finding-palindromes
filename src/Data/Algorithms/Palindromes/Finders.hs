@@ -58,7 +58,8 @@ import Data.Algorithms.Palindromes.PreProcessing
     , tryParseDNA
     )
 import Data.Algorithms.Palindromes.RangeFunctions
-    ( indexedLengthToRange
+    ( Range
+    , indexedLengthToRange
     , rangeToLength
     )
 
@@ -119,16 +120,16 @@ onlyEvenPals _ _ = False
 
 {- | This function combines three phases based on the settings and input given: The
 pre-processing phase, the algorithm phase and the post-processing phase. It finds and
-returns a list of (Int, Int), which represents the range of every found palindrome in the input.
+returns a list of ranges of every found palindrome in the input.
 -}
 findPalindromeRanges
-    :: Variant -> Complexity -> U.Vector Char -> [(Int, Int)]
+    :: Variant -> Complexity -> U.Vector Char -> [Range]
 findPalindromeRanges variant complexity input =
     (post . preAlg) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
     vector of PalEq items. -}
-    preAlg :: U.Vector Char -> [(Int, Int)]
+    preAlg :: U.Vector Char -> [Range]
     preAlg = case variant of
         VarText -> alg . filterLetters
         VarPunctuation -> alg . filterLetters
@@ -138,7 +139,7 @@ findPalindromeRanges variant complexity input =
 
     {- The algorithm phase runs one of the algorithms that finds the ranges, since the linear and quadratic
     find indexLists we must convert these to ranges. -}
-    alg :: (PalEq b, G.Vector v b) => v b -> [(Int, Int)]
+    alg :: (PalEq b, G.Vector v b) => v b -> [Range]
     alg = case complexity of
         ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
         ComQuadratic gapSize errors ->
@@ -149,7 +150,7 @@ findPalindromeRanges variant complexity input =
                     errors
         ComInsertionDeletion gapSize errors -> insertionDeletionAlgorithm gapSize errors
 
-    indexListToRanges :: [Int] -> [(Int, Int)]
+    indexListToRanges :: [Int] -> [Range]
     indexListToRanges = go 0
       where
         go _ [] = []
@@ -162,7 +163,7 @@ findPalindromeRanges variant complexity input =
 
     {- The post-processing phase changes the list of ranges so that they fit the
     requirements in the case of punctuation palindromes -}
-    post :: [(Int, Int)] -> [(Int, Int)]
+    post :: [Range] -> [Range]
     post = case variant of
         VarPunctuation -> filterPunctuation input
         _ -> id
@@ -175,7 +176,7 @@ findPalindromes :: Variant -> Complexity -> Int -> String -> [Palindrome]
 findPalindromes variant complexity minlen input =
     map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity inputVector
   where
-    rangeToPalindrome :: (Int, Int) -> Palindrome
+    rangeToPalindrome :: Range -> Palindrome
     rangeToPalindrome r =
         Palindrome
             { palRange = r
@@ -183,11 +184,11 @@ findPalindromes variant complexity minlen input =
             , palRangeInText = indicesInOriginal r
             }
 
-    filterRanges :: [(Int, Int)] -> [(Int, Int)]
+    filterRanges :: [Range] -> [Range]
     filterRanges = filter ((>= minlen) . rangeToLength)
 
-    -- Takes a (start character index, end character index) pair. These character indeces are in the original (not pre-processed)
-    indicesInOriginal :: (Int, Int) -> (Int, Int)
+    -- Takes a range in the pre-processed input and returns the range in the original input.
+    indicesInOriginal :: Range -> Range
     indicesInOriginal range = case variant of
         VarText -> indicesInOutputText range inputLength (filterLetters' inputVector)
         VarPunctuation -> indicesInOutputText range inputLength (filterLetters' inputVector)

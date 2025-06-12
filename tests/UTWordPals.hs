@@ -28,80 +28,80 @@ testWord1 t =
         ~: longestWordPalindrome
             t
             "abc def def abc"
-        ~?= "[\"abc def def abc\"]"
+        ~?= "\"abc def def abc\""
 
 testWord2 t =
     "testWord2"
         ~: longestWordPalindrome
             t
             "abc abc def abcdefghi"
-        ~?= "[\"abc abc\"]"
+        ~?= "\"abc abc\""
 
 testWord3 t =
     "testWord3"
         ~: longestWordPalindrome
             t
             "AbC aBb a bb Abc aBC"
-        ~?= "[\"Abc aBC\"]"
+        ~?= "\"Abc aBC\""
 
 testWord4 t =
     "testWord4"
         ~: longestWordPalindrome
             t
             "abc def     abc"
-        ~?= "[\"abc def     abc\"]"
+        ~?= "\"abc def     abc\""
 
 testWord5 t =
     "testWord5"
         ~: longestWordPalindrome
             t
             "abc., abc"
-        ~?= "[\"abc., abc\"]"
+        ~?= "\"abc., abc\""
 
 testWord6 t =
     "testWord6"
         ~: longestWordPalindrome
             t
             "abc.d   abcd .. . a"
-        ~?= "[\"abc.d   abcd\"]"
+        ~?= "\"abc.d   abcd\""
 
 testWord7 t =
     "testWord7"
         ~: longestWordPalindrome
             t
             "a a"
-        ~?= "[\"a a\"]"
+        ~?= "\"a a\""
 
 testWord8 t =
     "testWord8"
         ~: longestWordPalindrome
             t
             ""
-        ~?= "[\"\"]"
+        ~?= "\"\""
 testWord9 t =
     "testWord9"
         ~: longestWordPalindrome
             t
             " leading spaces"
-        ~?= "[\"leading\",\"spaces\"]"
+        ~?= "\"leading\"\n\"spaces\""
 
 testWord10 t =
     "testWord10"
         ~: longestWordPalindrome
             t
             "/.;/;,';,.,,leading garbage"
-        ~?= "[\"leading\",\"garbage\"]"
+        ~?= "\"leading\"\n\"garbage\""
 
 testWord11 t =
     "testWord11"
         ~: longestWordPalindrome
             t
             "several; different,.; characters .char-acter[s"
-        ~?= "[\"characters .char-acter[s\"]"
+        ~?= "\"characters .char-acter[s\""
 
 testWord12 t =
     "testWord12"
         ~: longestWordPalindrome
             t
             "."
-        ~?= "[\"\"]"
+        ~?= "\"\""

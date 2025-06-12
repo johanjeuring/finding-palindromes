@@ -56,89 +56,87 @@ defaultMinLength = 0
 -- Options
 -----------------------------------------------------------------------------
 
-{- Options describe the input flags that can be used in the command line. Only single
-letter options are used (except "help"), because if a letter within a multiple letter
-option is recognized, it is taken as a single letter option. -}
+{- Options describe the input flags that can be used in the command line. -}
 options :: [OptDescr Flag]
 options =
     [ Option
-        "h"
+        ['h']
         ["help"]
         (NoArg Help)
         "This message"
     , Option
-        "r"
-        []
+        ['L']
+        ["linear"]
         (NoArg (Complexity ComLinear))
         "Use the linear algorithm"
     , Option
-        "q"
-        []
+        ['Q']
+        ["quadratic"]
         (OptArg parseQuadratic "[gapSize] [errors]")
         "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
-        "s"
-        []
+        ['A']
+        ["approximate"]
         (OptArg parseInsertionDeletion "[gapSize] [errors]")
         "Use Insertion Deletion algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
     , Option
-        "p"
-        []
+        ['r']
+        ["plain", "regular"]
         (NoArg (Variant VarPlain))
-        "Plain palindrome"
+        "plain (r for regular) palindrome"
     , Option
-        "t"
-        []
+        ['t']
+        ["text"]
         (NoArg (Variant VarText))
         "Palindrome ignoring case, spacing and punctuation (default)"
     , Option
-        "u"
-        []
+        ['p']
+        ["punctuation"]
         (NoArg (Variant VarPunctuation))
         "Palindrome surrounded by punctuation (if any)"
     , Option
-        "w"
-        []
+        ['w']
+        ["word"]
         (NoArg (Variant VarWord))
         "Word palindrome"
     , Option
-        "d"
-        []
+        ['d']
+        ["dna"]
         (NoArg (Variant VarDNA))
         "DNA palindrome"
     , Option
-        "l"
-        []
+        ['l']
+        ["longest"]
         (NoArg (OutputFormat OutWord))
         "All longest palindromes of same size (default)"
     , Option
-        "e"
-        []
+        ['e']
+        ["length"]
         (NoArg (OutputFormat OutLength))
         "Length of the longest palindrome"
     , Option
-        "m"
-        []
+        ['a']
+        ["all"]
         (NoArg (OutputFormat OutWords))
-        "Maximal palindrome around each position in the input"
+        "All maximal palindromes"
     , Option
-        "a"
-        []
+        ['n']
+        ["lengths"]
         (NoArg (OutputFormat OutLengths))
         "Length of the maximal palindrome around each position in the input"
     , Option
-        "b"
-        []
+        ['m']
+        ["minlength", "min"]
         (ReqArg (MinLength . (read :: String -> Int)) "arg")
         "Maximal palindromes of length at least [arg]. A value larger than 1 is strongly recommended to avoid trivial palindromes."
     , Option
-        "i"
-        []
+        ['i']
+        ["input"]
         (NoArg StandardInput)
         "Read input from standard input"
     , Option
-        "x"
-        []
+        ['x']
+        ["extend"]
         (ReqArg (OutputFormat . OutLengthAt . (read :: String -> Int)) "arg")
         "Extend a palindrome around center [arg]"
     ]
@@ -267,4 +265,5 @@ headerHelpMessage =
         ++ "* Palindrome Finder *\n"
         ++ "* version 0.5       *\n"
         ++ "*********************\n"
-        ++ "Usage:"
+        ++ "Usage: \n"
+        ++ "Either give the path to a file or use the flag -i for manual input in the terminal. The following flags can be used to change settings."

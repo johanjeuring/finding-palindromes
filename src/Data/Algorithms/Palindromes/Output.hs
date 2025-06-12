@@ -32,7 +32,7 @@ import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     , getLength
     )
-import Data.Algorithms.Palindromes.RangeFunctions (rangeToCenter)
+import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToPalindromeCenter)
 
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
@@ -40,7 +40,7 @@ import qualified Data.Vector.Unboxed as U
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string
 -}
-indicesInOutputText :: (Int, Int) -> Int -> U.Vector Int -> (Int, Int)
+indicesInOutputText :: Range -> Int -> U.Vector Int -> Range
 indicesInOutputText (start', end') !inputLength originalIndices
     | start' >= U.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
@@ -49,19 +49,19 @@ indicesInOutputText (start', end') !inputLength originalIndices
     start = originalIndices U.! start'
     end = (originalIndices U.! (end' - 1)) + 1
 
-{- | Takes a start and end index in the list of words and returns the start and end
-indices of the text of the word palindrome in the original string
+{- | Takes a range in the vector containing words and returns the range of the text
+of the word palindrome in the original string
 -}
-indicesInOutputWord :: (Int, Int) -> Int -> V.Vector ((Int, Int), String) -> (Int, Int)
+indicesInOutputWord :: Range -> Int -> V.Vector (Range, String) -> Range
 indicesInOutputWord (start', end') !inputLength wordsWithIndices
     | start' >= length wordsWithIndices =
         (inputLength, inputLength)
     | end' - start' > 0 = (startIndex, endIndex)
     | otherwise = (startIndex, startIndex)
   where
-    firstWord :: ((Int, Int), String)
+    firstWord :: (Range, String)
     firstWord = wordsWithIndices V.! start'
-    lastWord :: ((Int, Int), String)
+    lastWord :: (Range, String)
     lastWord = wordsWithIndices V.! (end' - 1)
 
     startIndex :: Int
@@ -70,7 +70,7 @@ indicesInOutputWord (start', end') !inputLength wordsWithIndices
     endIndex = snd (fst lastWord)
 
 -- | Takes a start and end index (exclusive) and returns the substring in the text with that range
-rangeToText :: (Int, Int) -> U.Vector Char -> String
+rangeToText :: Range -> U.Vector Char -> String
 rangeToText (start, end) input
     | end - start > 0 = U.toList $ U.slice start (end - start) input
     | otherwise = ""
@@ -86,11 +86,9 @@ longest pals@(p1 : _) p2
 showLengths :: [Int] -> String
 showLengths = show
 
-{- | All maximal palindromes as a list of strings. Same as show $ map palText input except
-this doesn't apply show to the palindrome strings as that will turn \n into \\n.
--}
+-- | All maximal palindromes as a list of strings, separated by a newline.
 showTexts :: [Palindrome] -> String
-showTexts input = "[" ++ intercalate "," (map (\x -> "\"" ++ palText x ++ "\"") input) ++ "]"
+showTexts input = intercalate "\n" (map (\x -> "\"" ++ palText x ++ "\"") input)
 
 -- | Get the length of the maximal palindrome at the specified center index as a string.
 lengthAt :: Int -> [Int] -> String
@@ -101,4 +99,4 @@ wordAt :: Int -> [Palindrome] -> String
 wordAt n pals = maybe "" palText pal
   where
     pal :: Maybe Palindrome
-    pal = find ((== n) . rangeToCenter . palRange) pals
+    pal = find ((== n) . rangeToPalindromeCenter . palRange) pals

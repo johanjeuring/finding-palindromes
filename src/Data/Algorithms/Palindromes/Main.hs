@@ -80,9 +80,10 @@ handlePathWith f path = do
 handleStandardInputWith :: (String -> IO String) -> IO ()
 handleStandardInputWith function =
     do
+        putStrLn "Write your input:"
         input <- getLine
         res <- function input
-        putStrLn $ res ++ replicate 40 ' '
+        putStrLn $ '\r' : "Palindromes:" ++ replicate 40 ' ' ++ "\n" ++ res
 main :: IO ()
 main = do
     args <- getArgs
@@ -90,7 +91,7 @@ main = do
     if not (null errors)
         then putStrLn (concat errors)
         else
-            let (function, standardInput) = handleFlags optionArgs
+            let (function, standardInput) = handleFlags optionArgs (not $ null files)
             in  if standardInput
                     then handleStandardInputWith function
                     else handlePathsWith function files

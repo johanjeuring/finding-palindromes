@@ -21,16 +21,17 @@ module Data.Algorithms.Palindromes.PostProcessing
 import Data.Char (isLetter)
 
 import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
+import Data.Algorithms.Palindromes.RangeFunctions (Range)
 
 import qualified Data.Vector.Unboxed as U
 
 -- | This function changes the a list of ranges for punctuation palindromes by shrinking to punctuation.
-filterPunctuation :: U.Vector Char -> [(Int, Int)] -> [(Int, Int)]
+filterPunctuation :: U.Vector Char -> [Range] -> [Range]
 filterPunctuation input = map shrinkRange
   where
     {- Shrinks a range on both sides until the resulting range is surrounded by
     punctuation in the original input. -}
-    shrinkRange :: (Int, Int) -> (Int, Int)
+    shrinkRange :: Range -> Range
     shrinkRange (startIndex, endIndex)
         | startIndex == endIndex = (startIndex, endIndex)
         | startIndex > endIndex = (endIndex, endIndex)

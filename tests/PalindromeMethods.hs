@@ -19,8 +19,6 @@ import Data.Algorithms.Palindromes.PalEq
     ( PalEq
     )
 
-import qualified Data.Algorithms.Palindromes.Finders as C
-
 {- takes a flag to edit the complexity
 to enable the usage of both algorithm types on the same unit tests -}
 longestTextPalindrome :: Complexity -> String -> String

@@ -1,7 +1,3 @@
-# Developer Notes
-
-# Contributing
-
 When contributing or writing code for this repository please install the tools listed below. This ensures your code is written in the same style as the rest of the repository.
 
 # Installation
@@ -33,6 +29,8 @@ ghcup tui
 To use the correct version of Fourmolu we recommend you install ghc version 9.8.2
 
 Installing hls is recommended for developement.
+
+# Tooling
 
 ## Hlint
 
@@ -69,6 +67,8 @@ cabal install cabal-fmt
 ```
 
 For Windows type in system variables into the search bar and add C:\cabal\bin to the PATH variable. This ensures that you can access your cabal executables anywhere in your system.
+
+# Quality Metrics
 
 ## Testing
 
@@ -137,7 +137,7 @@ First make sure that profiling is enabled as described in the section above, the
 cabal run palindromes -- filename.txt -q  +RTS -hc -RTS"
 ```
 
-One of the easiest ways to view this report is by using hp2pretty. You can install this using
+One of the easiest ways to view the generated report is by using hp2pretty. You can install this using
 
 ```
 cabal install hp2pretty
@@ -146,7 +146,7 @@ cabal install hp2pretty
 Then afterwards you can run
 
 ```
-hp2pretty executable_name.hp
+hp2pretty palindromes.hp
 ```
 
 This will generate a file called profiling.svg that you can click on to view the generated graph.

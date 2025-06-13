@@ -7,8 +7,7 @@ import Control.Exception (evaluate)
 import GHC.Generics (Generic)
 
 import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
-import Data.Algorithms.Palindromes.Finders
-import Data.Algorithms.Palindromes.Finders (Algorithm (AlgApproximate))
+import Data.Algorithms.Palindromes.Finders (Algorithm (..), Variant (..), findPalindromes)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified System.IO as Sys

@@ -20,7 +20,7 @@ import Test.QuickCheck
 
 import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
     , findPalindromeRanges
     , findPalindromes
@@ -70,7 +70,7 @@ propValidPalindromeRangeAndText settings = counterexample (show settings ++ " pr
         (`checkPalRangeAndText` originalString)
         ( findPalindromes
             (variant settings)
-            (complexity settings)
+            (algorithm settings)
             (minLength settings)
             originalString
         )
@@ -93,14 +93,14 @@ propValidPalindromeReverse settings = counterexample (show settings ++ " propert
         (extractPalEq settings)
         ( findPalindromes
             (variant settings)
-            (complexity settings)
+            (algorithm settings)
             (minLength settings)
             originalString
         )
 
 extractPalEq :: Settings -> Palindrome -> Bool
-extractPalEq settings pal = case complexity settings of
-    ComApproximate _ _ -> case variant settings of
+extractPalEq settings pal = case algorithm settings of
+    AlgApproximate _ _ -> case variant settings of
         VarWord -> isApproximatePalindrome $ words (cleanOriginalString (palText pal))
         VarPlain -> isApproximatePalindrome $ palText pal
         VarDNA -> isApproximatePalindrome $ map (fromJust . charToDNA) (palText pal)
@@ -111,10 +111,10 @@ extractPalEq settings pal = case complexity settings of
         VarDNA -> isPalindrome $ map (fromJust . charToDNA) (palText pal)
         _ -> isPalindrome $ cleanOriginalString (palText pal)
   where
-    (gapSize, errors) = case complexity settings of
-        ComQuadratic gap err -> (gap, err)
-        ComApproximate gap err -> (gap, err)
-        ComLinear -> (0, 0)
+    (gapSize, errors) = case algorithm settings of
+        AlgQuadratic gap err -> (gap, err)
+        AlgApproximate gap err -> (gap, err)
+        AlgLinear -> (0, 0)
 
     {- if any of the possible removed gaps has levenshteinDistance with its reverse is
     less than 2 * errors we have an a valid approximate palindromes. This is because
@@ -171,7 +171,7 @@ propValidPalLength settings = counterexample (show settings ++ " property 3") $ 
         (validPalLength settings)
         ( findPalindromes
             (variant settings)
-            (complexity settings)
+            (algorithm settings)
             (minLength settings)
             originalString
         )
@@ -194,7 +194,7 @@ propValidBoundaries settings = counterexample (show settings ++ " property 4") $
         (checkValidBoundaries settings originalString)
         ( findPalindromes
             (variant settings)
-            (complexity settings)
+            (algorithm settings)
             (minLength settings)
             originalString
         )
@@ -231,7 +231,7 @@ propValidPalRange settings = counterexample (show settings ++ " property 5") $ f
         (\pal -> fst (palRangeInText pal) >= 0 && snd (palRangeInText pal) <= length originalString)
         ( findPalindromes
             (variant settings)
-            (complexity settings)
+            (algorithm settings)
             (minLength settings)
             originalString
         )
@@ -245,7 +245,7 @@ propAllowedPalLength settings = counterexample (show settings ++ " property 6") 
         (isAllowedPalLength settings)
         ( findPalindromes
             (variant settings)
-            (complexity settings)
+            (algorithm settings)
             (minLength settings)
             originalString
         )
@@ -268,13 +268,13 @@ propStreamSameResult settings = counterexample (show settings ++ " property 7") 
         let pure =
                 findPalindromes
                     (variant settings)
-                    (complexity settings)
+                    (algorithm settings)
                     (minLength settings)
                     originalString
         streamed <-
             findPalindromesVisualised
                 (variant settings)
-                (complexity settings)
+                (algorithm settings)
                 (minLength settings)
                 False
                 originalString

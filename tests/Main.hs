@@ -18,7 +18,7 @@ module Main (main) where
 import Test.HUnit (Counts, Test (..), runTestTT)
 import Test.QuickCheck (quickCheck)
 
-import Data.Algorithms.Palindromes.Finders (Complexity (..))
+import Data.Algorithms.Palindromes.Finders (Algorithm (..))
 import ITApproximate (testListITApproximate)
 import ITLinear (testListITLinear)
 import ITQuadratic (testListITQuadratic)
@@ -43,22 +43,22 @@ tests =
             ++ testListITApproximate
             ++ testListQuadraticAlgorithm
             ++ testListApproximateAlgorithm
-            ++ testListText ComLinear
-            ++ testListText ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListText AlgLinear
+            ++ testListText AlgQuadratic{gapSize = 0, maxError = 0}
+            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListPunctuation
             ++ testListGetLeftRight
-            ++ testListDNA ComLinear
-            ++ testListDNA ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
-            ++ testListExtend ComLinear
-            ++ testListExtend ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListDNA AlgLinear
+            ++ testListDNA AlgQuadratic{gapSize = 0, maxError = 0}
+            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListExtend AlgLinear
+            ++ testListExtend AlgQuadratic{gapSize = 0, maxError = 0}
+            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListProcessing
             ++ testListPalEq
-            ++ testListWordPalindromes ComLinear
-            ++ testListWordPalindromes ComQuadratic{gapSize = 0, maxError = 0}
-            ++ testListText ComApproximate{gapSizeID = 0, maxIDError = 0}
+            ++ testListWordPalindromes AlgLinear
+            ++ testListWordPalindromes AlgQuadratic{gapSize = 0, maxError = 0}
+            ++ testListText AlgApproximate{gapSizeID = 0, maxIDError = 0}
             ++ testListFinders
             ++ testListITLinear
             ++ testListITQuadratic

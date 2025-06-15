@@ -26,7 +26,7 @@ module Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , OutputFormat (..)
     , OutputFilter (..)
-    , Complexity (..)
+    , Algorithm (..)
     , filterPalindromes
     ) where
 
@@ -113,19 +113,19 @@ data OutputFilter
 {- | Used as a setting for what algorithm to run. The quadratic algorithm also has
 functionality for including gaps and errors, therefore this is given as an extra setting.
 -}
-data Complexity
-    = ComLinear
-    | ComQuadratic {gapSize :: Int, maxError :: Int}
-    | ComApproximate {gapSizeID :: Int, maxIDError :: Int}
+data Algorithm
+    = AlgLinear
+    | AlgQuadratic {gapSize :: Int, maxError :: Int}
+    | AlgApproximate {gapSizeID :: Int, maxIDError :: Int}
     deriving (Show)
 
 {- | This method returns whether uneven palindromes are impossible to exist based on the
 query settings.
 -}
-onlyEvenPals :: Variant -> Complexity -> Bool
-onlyEvenPals VarDNA (ComQuadratic gapSize' _) = even gapSize'
+onlyEvenPals :: Variant -> Algorithm -> Bool
+onlyEvenPals VarDNA (AlgQuadratic gapSize' _) = even gapSize'
 -- Note that the name gapSize' is used to avoid shadowing the record entry name gapSize.
-onlyEvenPals VarDNA ComLinear = True
+onlyEvenPals VarDNA AlgLinear = True
 onlyEvenPals _ _ = False
 
 {- | This function combines three phases based on the settings and input given: The
@@ -133,8 +133,8 @@ pre-processing phase, the algorithm phase and the post-processing phase. It find
 returns a list of ranges of every found palindrome in the input.
 -}
 findPalindromeRanges
-    :: Variant -> Complexity -> U.Vector Char -> [Range]
-findPalindromeRanges variant complexity input =
+    :: Variant -> Algorithm -> U.Vector Char -> [Range]
+findPalindromeRanges variant algorithm input =
     (post . preAlg) input
   where
     {- The pre-processing phase parses the text input based on the Variant provided to a
@@ -150,16 +150,16 @@ findPalindromeRanges variant complexity input =
     {- The algorithm phase runs one of the algorithms that finds the ranges, since the linear and quadratic
     find indexLists we must convert these to ranges. -}
     alg :: (PalEq b, G.Vector v b) => v b -> [Range]
-    alg = case complexity of
-        ComLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant complexity)
-        ComQuadratic gapSize' errors ->
+    alg = case algorithm of
+        AlgLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant algorithm)
+        AlgQuadratic gapSize' errors ->
             -- Note that the name gapSize' is used to avoid shadowing the record entry name gapSize.
             indexListToRanges
                 . quadraticAlgorithm
-                    (onlyEvenPals variant complexity)
+                    (onlyEvenPals variant algorithm)
                     gapSize'
                     errors
-        ComApproximate gapSize' errors -> approximateAlgorithm gapSize' errors
+        AlgApproximate gapSize' errors -> approximateAlgorithm gapSize' errors
 
     indexListToRanges :: [Int] -> [Range]
     indexListToRanges = go 0
@@ -169,7 +169,7 @@ findPalindromeRanges variant complexity input =
         -- This implementation is preferred over using list generators for performance reasons
         go !i (x : xs) = indexedLengthToRange (i, x) : go (i + increment) xs
         increment
-            | onlyEvenPals variant complexity = 2
+            | onlyEvenPals variant algorithm = 2
             | otherwise = 1
 
     {- The post-processing phase changes the list of ranges so that they fit the
@@ -183,9 +183,9 @@ findPalindromeRanges variant complexity input =
 It first finds all the palindrome ranges based on the settings,
 then filters them by length and finally converts the found ranges to the Palindrome datatype
 -}
-findPalindromes :: Variant -> Complexity -> Int -> String -> [Palindrome]
-findPalindromes variant complexity minlen input =
-    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant complexity inputVector
+findPalindromes :: Variant -> Algorithm -> Int -> String -> [Palindrome]
+findPalindromes variant algorithm minlen input =
+    map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant algorithm inputVector
   where
     rangeToPalindrome :: Range -> Palindrome
     rangeToPalindrome r =
@@ -216,11 +216,11 @@ String that can be printed. It return the palindrome found using the settings, f
 to the given filter and format.
 -}
 findPalindromesFormatted
-    :: Variant -> OutputFormat -> OutputFilter -> Complexity -> Int -> String -> String
-findPalindromesFormatted variant outputFormat outputFilter complexity minlen input =
+    :: Variant -> OutputFormat -> OutputFilter -> Algorithm -> Int -> String -> String
+findPalindromesFormatted variant outputFormat outputFilter algorithm minlen input =
     formatPalindromes outputFormat $
         filterPalindromes outputFilter $
-            findPalindromes variant complexity minlen input
+            findPalindromes variant algorithm minlen input
 
 filterPalindromes :: OutputFilter -> [Palindrome] -> [Palindrome]
 filterPalindromes outputFilter = case outputFilter of

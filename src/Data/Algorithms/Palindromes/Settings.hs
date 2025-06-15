@@ -26,7 +26,7 @@ import Data.List (intercalate)
 import System.Console.GetOpt (usageInfo)
 
 import Data.Algorithms.Palindromes.Finders
-    ( Complexity (..)
+    ( Algorithm (..)
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
@@ -34,12 +34,12 @@ import Data.Algorithms.Palindromes.Finders
     )
 import Data.Algorithms.Palindromes.Options
     ( Flag
-    , defaultComplexity
+    , defaultAlgorithm
     , defaultMinLength
     , defaultOutputFilter
     , defaultOutputFormat
     , defaultVariant
-    , getComplexity
+    , getAlgorithm
     , getMinLength
     , getOutputFilter
     , getOutputFormat
@@ -53,7 +53,7 @@ import Data.Algorithms.Palindromes.Streaming (findPalindromesWithProgressBar)
 
 -- | Data type with all the settings required for running algorithm.
 data Settings = Settings
-    { complexity :: Complexity
+    { algorithm :: Algorithm
     , variant :: Variant
     , outputFormat :: OutputFormat
     , outputFilter :: OutputFilter
@@ -64,7 +64,7 @@ instance Show Settings where
     show settings = intercalate ", " settingsSpecs
       where
         settingsSpecs =
-            [ show (complexity settings)
+            [ show (algorithm settings)
             , show (variant settings)
             , show (outputFormat settings)
             , show (outputFilter settings)
@@ -75,7 +75,7 @@ instance Show Settings where
 defaultSettings :: Settings
 defaultSettings =
     Settings
-        { complexity = defaultComplexity
+        { algorithm = defaultAlgorithm
         , variant = defaultVariant
         , outputFormat = defaultOutputFormat
         , outputFilter = defaultOutputFilter
@@ -86,7 +86,7 @@ defaultSettings =
 getSettings :: [Flag] -> Settings
 getSettings flags =
     Settings
-        { complexity = getComplexity flags
+        { algorithm = getAlgorithm flags
         , variant = getVariant flags
         , outputFormat = getOutputFormat flags
         , outputFilter = getOutputFilter flags
@@ -95,7 +95,7 @@ getSettings flags =
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
 applySettingsToFinder :: Settings -> (String -> IO String)
-applySettingsToFinder (Settings{complexity = c, variant = v, outputFormat = o, outputFilter = f, minLength = l}) s = do
+applySettingsToFinder (Settings{algorithm = c, variant = v, outputFormat = o, outputFilter = f, minLength = l}) s = do
     pals <- findPalindromesWithProgressBar v c l filterOnlyLongest s
     return (formatPalindromes o pals)
   where

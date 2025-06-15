@@ -39,7 +39,7 @@ For example:
 1. Run
 
 ```
-cabal run palindromes -- input.txt -q -l
+cabal run palindromes -- input.txt -Q -L
 ```
 
 to validate the longest palindrome is not found correctly

@@ -93,7 +93,7 @@ generatePalindromeString
 generatePalindromeString palComp charGenerator settings = do
     -- get the gapSize and error settings from the algorithm settings
     let (gapSize, error) = case algorithm settings of
-            AlgQuadratic{gapSize = gapSize, maxError = error} -> (gapSize, error)
+            AlgQuadratic{algGapSize = gapSize, algMaxError = error} -> (gapSize, error)
             _ -> (0, 0)
 
     -- generate random string to add noise in front of the palindrome

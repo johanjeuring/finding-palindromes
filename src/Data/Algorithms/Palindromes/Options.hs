@@ -26,28 +26,33 @@ import System.Console.GetOpt
     , OptDescr (..)
     )
 
-import qualified Data.Algorithms.Palindromes.Finders as F
+import Data.Algorithms.Palindromes.Finders
+    ( Algorithm (..)
+    , OutputFilter (..)
+    , OutputFormat (..)
+    , Variant (..)
+    )
 
 data Flag
     = Help
     | StandardInput
-    | Algorithm F.Algorithm
-    | Variant F.Variant
-    | OutputFormat F.OutputFormat
-    | OutputFilter F.OutputFilter
+    | Algorithm Algorithm
+    | Variant Variant
+    | OutputFormat OutputFormat
+    | OutputFilter OutputFilter
     | MinLength Int
 
-defaultAlgorithm :: F.Algorithm
-defaultAlgorithm = F.AlgQuadratic{F.gapSize = 0, F.maxError = 0}
+defaultAlgorithm :: Algorithm
+defaultAlgorithm = AlgQuadratic{algGapSize = 0, algMaxError = 0}
 
-defaultVariant :: F.Variant
-defaultVariant = F.VarText
+defaultVariant :: Variant
+defaultVariant = VarText
 
-defaultOutputFormat :: F.OutputFormat
-defaultOutputFormat = F.FormatText
+defaultOutputFormat :: OutputFormat
+defaultOutputFormat = FormatText
 
-defaultOutputFilter :: F.OutputFilter
-defaultOutputFilter = F.SelectLongest
+defaultOutputFilter :: OutputFilter
+defaultOutputFilter = SelectLongest
 
 defaultMinLength :: Int
 defaultMinLength = 0
@@ -67,7 +72,7 @@ options =
     , Option
         ['L']
         ["linear"]
-        (NoArg (Algorithm F.AlgLinear))
+        (NoArg (Algorithm AlgLinear))
         "Use the linear algorithm"
     , Option
         ['Q']
@@ -82,62 +87,62 @@ options =
     , Option
         ['R']
         ["plain", "regular"]
-        (NoArg (Variant F.VarPlain))
+        (NoArg (Variant VarPlain))
         "plain (r for regular) palindrome"
     , Option
         []
         ["text"]
-        (NoArg (Variant F.VarText))
+        (NoArg (Variant VarText))
         "Palindrome ignoring case, spacing and punctuation (default)"
     , Option
         ['P']
         ["punctuation"]
-        (NoArg (Variant F.VarPunctuation))
+        (NoArg (Variant VarPunctuation))
         "Palindrome surrounded by punctuation (if any)"
     , Option
         ['W']
         ["word"]
-        (NoArg (Variant F.VarWord))
+        (NoArg (Variant VarWord))
         "Word palindrome"
     , Option
         ['D']
         ["dna"]
-        (NoArg (Variant F.VarDNA))
+        (NoArg (Variant VarDNA))
         "DNA palindrome"
     , Option
         []
         ["textformat"]
-        (NoArg (OutputFormat F.FormatText))
+        (NoArg (OutputFormat FormatText))
         "Output the text of the palindromes (default)"
     , Option
         ['l']
         ["length"]
-        (NoArg (OutputFormat F.FormatLength))
+        (NoArg (OutputFormat FormatLength))
         "Output the length of the palindromes"
     , Option
         ['r']
         ["range"]
-        (NoArg (OutputFormat F.FormatRange))
+        (NoArg (OutputFormat FormatRange))
         "Output the range of the palindromes"
     , Option
         ['d']
         ["details"]
-        (NoArg (OutputFormat F.FormatAllDetails))
+        (NoArg (OutputFormat FormatAllDetails))
         "Output the text, range and length of the palindromes"
     , Option
         []
         ["longest"]
-        (NoArg (OutputFilter F.SelectLongest))
+        (NoArg (OutputFilter SelectLongest))
         "Select only the longest palindromes, can be multiple of same length (default)"
     , Option
         ['a']
         ["all"]
-        (NoArg (OutputFilter F.SelectAll))
+        (NoArg (OutputFilter SelectAll))
         "Select all maximal palindromes"
     , Option
         ['c']
         ["center"]
-        (ReqArg (OutputFilter . F.SelectAt . (read :: String -> Int)) "arg")
+        (ReqArg (OutputFilter . SelectAt . (read :: String -> Int)) "arg")
         "Find only the palindromes around the center [arg]"
     , Option
         ['m']
@@ -166,7 +171,7 @@ error is thrown.
 -}
 parseApproximate :: Maybe String -> Flag
 parseApproximate str
-    | isNothing str = Algorithm F.AlgApproximate{F.gapSizeID = 0, F.maxIDError = 0}
+    | isNothing str = Algorithm AlgApproximate{algGapSize = 0, algMaxError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -177,7 +182,7 @@ parseApproximate str
                 ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Algorithm F.AlgApproximate{F.gapSizeID = read gapSize, F.maxIDError = read errors}
+        Algorithm AlgApproximate{algGapSize = read gapSize, algMaxError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
@@ -187,7 +192,7 @@ error is thrown.
 -}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
-    | isNothing str = Algorithm F.AlgQuadratic{F.gapSize = 0, F.maxError = 0}
+    | isNothing str = Algorithm AlgQuadratic{algGapSize = 0, algMaxError = 0}
     | null y =
         error
             ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
@@ -198,7 +203,7 @@ parseQuadratic str
                 ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Algorithm F.AlgQuadratic{F.gapSize = read gapSize, F.maxError = read errors}
+        Algorithm AlgQuadratic{algGapSize = read gapSize, algMaxError = read errors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
@@ -207,7 +212,7 @@ parseQuadratic str
 is given, it throws an error, as this is not suppported by our program. If none are give it
 uses the default option.
 -}
-getAlgorithm :: [Flag] -> F.Algorithm
+getAlgorithm :: [Flag] -> Algorithm
 getAlgorithm xs
     | null algorithmFlags = defaultAlgorithm
     | [Algorithm c] <- algorithmFlags = c
@@ -223,7 +228,7 @@ getAlgorithm xs
 given, it throws an error, as this is not suppported by our program. If none are give it
 uses the default option.
 -}
-getVariant :: [Flag] -> F.Variant
+getVariant :: [Flag] -> Variant
 getVariant xs
     | null variantFlags = defaultVariant
     | [Variant v] <- variantFlags = v
@@ -239,7 +244,7 @@ getVariant xs
 flag is given, it throws an error, as this is not suppported by our program. If none are
 give it uses the default option.
 -}
-getOutputFormat :: [Flag] -> F.OutputFormat
+getOutputFormat :: [Flag] -> OutputFormat
 getOutputFormat xs
     | null outputFormatFlags = defaultOutputFormat
     | [OutputFormat o] <- outputFormatFlags = o
@@ -255,7 +260,7 @@ getOutputFormat xs
 flag is given, it throws an error, as this is not suppported by our program. If none are
 give it uses the default option.
 -}
-getOutputFilter :: [Flag] -> F.OutputFilter
+getOutputFilter :: [Flag] -> OutputFilter
 getOutputFilter xs
     | null outputFilterFlags = defaultOutputFilter
     | [OutputFilter o] <- outputFilterFlags = o

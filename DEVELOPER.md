@@ -134,7 +134,7 @@ To check what is allocating memory to the heap you can pass different flags like
 First make sure that profiling is enabled as described in the section above, then you could for example run:
 
 ```
-cabal run palindromes -- filename.txt -q  +RTS -hc -RTS"
+cabal run palindromes -- filename.txt -Q  +RTS -hc -RTS
 ```
 
 One of the easiest ways to view the generated report is by using hp2pretty. You can install this using

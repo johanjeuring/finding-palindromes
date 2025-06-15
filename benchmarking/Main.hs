@@ -14,6 +14,7 @@ import System.FilePath (takeFileName)
 
 import Data.Algorithms.Palindromes.Finders
     ( Algorithm (..)
+    , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
     , findPalindromes
@@ -109,19 +110,19 @@ benchOutputOptions :: String -> [Benchmark]
 benchOutputOptions content =
     [ bench "length" $
         nf
-            (findPalindromesFormatted VarText OutLength (AlgQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText FormatLength SelectLongest (AlgQuadratic 0 0) 0)
             content
     , bench "lengths" $
         nf
-            (findPalindromesFormatted VarText OutLengths (AlgQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText FormatLength SelectAll (AlgQuadratic 0 0) 0)
             content
     , bench "word" $
         nf
-            (findPalindromesFormatted VarText OutWord (AlgQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText FormatText SelectLongest (AlgQuadratic 0 0) 0)
             content
     , bench "words" $
         nf
-            (findPalindromesFormatted VarText OutWords (AlgQuadratic 0 0) 0)
+            (findPalindromesFormatted VarText FormatText SelectAll (AlgQuadratic 0 0) 0)
             content
     ]
 

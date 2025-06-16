@@ -48,7 +48,7 @@ findPalindromesVisualised variant algorithm minLength filterLongest input visual
             C.runConduit $
                 findPalindromesStream variant algorithm streamMinLength input
                     C..| C.conduitVector chunkSize -- Chunk result stream
-                    C..| calcVisualiseProgress inputLength visualiseProgress
+                    C..| calcVisualiseProgress inputLength algorithm visualiseProgress
                     C..| C.concat
                     C..| C.filter -- Filter to actual given filter size
                         ((minLength <=) . getLength)
@@ -63,9 +63,18 @@ based on the centre of the palindrome range compared to the input length.
 Then forces the values in the Vector to ensure progress has been made and passes them on.
 -}
 calcVisualiseProgress
-    :: Int -> (Float -> IO ()) -> C.ConduitT (V.Vector Palindrome) (V.Vector Palindrome) IO ()
-calcVisualiseProgress totalLen visualise = C.awaitForever $ \pals -> do
-    let progress = fromIntegral (sum $ palRangeInText (V.last pals)) / fromIntegral totalLen
+    :: Int
+    -- ^ Max length of the input vector, needed to calculate percentage
+    -> Algorithm
+    -- ^ Required because the Approximate algorithm returns the palindromes in reverse order
+    -> (Float -> IO ())
+    -- ^ Function that defines how to visualise the progress
+    -> C.ConduitT (V.Vector Palindrome) (V.Vector Palindrome) IO ()
+calcVisualiseProgress totalLen algorithm visualise = C.awaitForever $ \pals -> do
+    let rawProgress = fromIntegral (sum $ palRangeInText (V.last pals)) / fromIntegral totalLen
+    let progress = case algorithm of
+            AlgApproximate _ _ -> 1 - rawProgress
+            _ -> rawProgress
     liftIO $ visualise progress
     C.yield pals
 

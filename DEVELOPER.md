@@ -1,7 +1,3 @@
-# Developer Notes
-
-# Contributing
-
 When contributing or writing code for this repository please install the tools listed below. This ensures your code is written in the same style as the rest of the repository.
 
 # Installation
@@ -33,6 +29,8 @@ ghcup tui
 To use the correct version of Fourmolu we recommend you install ghc version 9.8.2
 
 Installing hls is recommended for developement.
+
+# Tooling
 
 ## Hlint
 
@@ -70,6 +68,8 @@ cabal install cabal-fmt
 
 For Windows type in system variables into the search bar and add C:\cabal\bin to the PATH variable. This ensures that you can access your cabal executables anywhere in your system.
 
+# Quality Metrics
+
 ## Testing
 
 To test that the package works run
@@ -91,13 +91,13 @@ cabal bench benchmark
 If you have problems with this try either:
 
 ```
-cabal bench benchmark --enable-benchmarking
+cabal bench benchmark --enable-benchmarks
 ```
 
 or
 
 ```
-cabal build --enable-benchmarking
+cabal build --enable-benchmarks
 ```
 
 Results of benchmarks are written into benchmark-report.html which Criterion generates to give you a complete overview.
@@ -129,9 +129,15 @@ Afterwards you can run the same command as before but you no longer have to use 
 
 ### Heap Profiling
 
-To check what is allocating memory to the heap you can pass different flags like `-hc` or `hT` to the benchmarking-option. These will generate a `.hp` report that you can use for heap profling. For information on all the flags go to: https://downloads.haskell.org/ghc/latest/docs/users_guide/profiling.html#rts-options-for-heap-profiling
+To check what is allocating memory to the heap you can pass different flags like `-hc` or `hT` to GHC. These will generate a `.hp` report that you can use for heap profling. For information on all the flags go to: https://downloads.haskell.org/ghc/latest/docs/users_guide/profiling.html#rts-options-for-heap-profiling
 
-One of the easiest ways to view this report is by using hp2pretty. You can install this using
+First make sure that profiling is enabled as described in the section above, then you could for example run:
+
+```
+cabal run palindromes -- filename.txt -Q  +RTS -hc -RTS
+```
+
+One of the easiest ways to view the generated report is by using hp2pretty. You can install this using
 
 ```
 cabal install hp2pretty
@@ -140,10 +146,10 @@ cabal install hp2pretty
 Then afterwards you can run
 
 ```
-hp2pretty profiling.hp
+hp2pretty palindromes.hp
 ```
 
-This will generate a file called profiling.svg that you can click on to view the generated graph.
+This will generate a file called palindromes.svg that you can click on to view the generated graph.
 
 ## Code coverage
 

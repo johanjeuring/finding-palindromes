@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns #-}
+
 {- |
 Module      :  Data.Algorithms.Palindromes.Settings
 Copyright   :  (c) 2007 - 2013 Johan Jeuring
@@ -82,16 +84,25 @@ defaultSettings =
         , minLength = defaultMinLength
         }
 
--- | Gets settings from the list of input flags. Uses default if no flags are given.
+{- | Gets settings from the list of input flags. Uses default if no flags are given.
+Evaluates all Settings records to WHNF using bang patterns to ensure all flags are valid
+before calculation begins
+-}
 getSettings :: [Flag] -> Settings
 getSettings flags =
     Settings
-        { algorithm = getAlgorithm flags
-        , variant = getVariant flags
-        , outputFormat = getOutputFormat flags
-        , outputFilter = getOutputFilter flags
-        , minLength = getMinLength flags
+        { algorithm = alg
+        , variant = var
+        , outputFormat = fmt
+        , outputFilter = flt
+        , minLength = minL
         }
+  where
+    !alg = getAlgorithm flags
+    !var = getVariant flags
+    !fmt = getOutputFormat flags
+    !flt = getOutputFilter flags
+    !minL = getMinLength flags
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
 applySettingsToFinder :: Settings -> (String -> IO String)

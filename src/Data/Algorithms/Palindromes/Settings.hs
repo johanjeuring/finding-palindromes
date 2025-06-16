@@ -30,6 +30,7 @@ import Data.Algorithms.Palindromes.Finders
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
+    , findPalindromesFormatted
     , formatPalindromes
     )
 import Data.Algorithms.Palindromes.Options
@@ -43,6 +44,7 @@ import Data.Algorithms.Palindromes.Options
     , getMinLength
     , getOutputFilter
     , getOutputFormat
+    , getProgressDisabled
     , getVariant
     , headerHelpMessage
     , isHelp
@@ -94,14 +96,26 @@ getSettings flags =
         }
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
-applySettingsToFinder :: Settings -> (String -> IO String)
-applySettingsToFinder (Settings{algorithm = c, variant = v, outputFormat = o, outputFilter = f, minLength = l}) s = do
-    pals <- findPalindromesWithProgressBar v c l filterOnlyLongest s
-    return (formatPalindromes o pals)
-  where
-    filterOnlyLongest = case f of
-        SelectLongest -> True
-        _ -> False
+applySettingsToFinder :: Bool -> Settings -> (String -> IO String)
+applySettingsToFinder
+    progressDisabled
+    ( Settings
+            { algorithm = c
+            , variant = v
+            , outputFormat = o
+            , outputFilter = f
+            , minLength = l
+            }
+        )
+    input
+        | progressDisabled = return $ findPalindromesFormatted v o f c l input
+        | otherwise = do
+            pals <- findPalindromesWithProgressBar v c l filterOnlyLongest input
+            return (formatPalindromes o pals)
+      where
+        filterOnlyLongest = case f of
+            SelectLongest -> True
+            _ -> False
 
 {- | Based on input flags, gets a tuple with a function that directly encapsulates
 everything from the input string to the output string. Also encodes whether input string
@@ -116,6 +130,8 @@ handleFlags
 handleFlags flags hasFiles =
     ( if any isHelp flags || (null flags && not hasFiles)
         then const $ return (usageInfo headerHelpMessage options)
-        else applySettingsToFinder (getSettings flags)
+        else applySettingsToFinder progressDisabled (getSettings flags)
     , any isStandardInput flags
     )
+  where
+    progressDisabled = getProgressDisabled flags

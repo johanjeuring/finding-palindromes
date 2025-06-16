@@ -159,7 +159,7 @@ options =
         ['p']
         ["disable-progress"]
         (NoArg ProgressDisabled)
-        "Disable the progress bar, this can help boost preformance by factor 1.5"
+        "Disable the progress bar, this can help boost preformance."
     ]
 
 -- | Detects help flag constructor.

@@ -95,8 +95,13 @@ getSettings flags =
         , minLength = getMinLength flags
         }
 
--- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string
-applySettingsToFinder :: Bool -> Settings -> (String -> IO String)
+-- | Finds all formatted palindromes given the settings. Can be done with and without a progress bar.
+applySettingsToFinder
+    :: Bool
+    -- ^ Is the progress bar disabled
+    -> Settings
+    -- ^ The settings to find palindromes with
+    -> (String -> IO String)
 applySettingsToFinder
     progressDisabled
     ( Settings

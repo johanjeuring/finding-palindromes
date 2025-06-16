@@ -149,7 +149,7 @@ Then afterwards you can run
 hp2pretty palindromes.hp
 ```
 
-This will generate a file called profiling.svg that you can click on to view the generated graph.
+This will generate a file called palindromes.svg that you can click on to view the generated graph.
 
 ## Code coverage
 

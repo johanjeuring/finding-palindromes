@@ -41,6 +41,7 @@ data Flag
     | OutputFormat OutputFormat
     | OutputFilter OutputFilter
     | MinLength Int
+    | ProgressDisabled
 
 defaultAlgorithm :: Algorithm
 defaultAlgorithm = AlgQuadratic{algGapSize = 0, algMaxError = 0}
@@ -154,6 +155,11 @@ options =
         ["input"]
         (NoArg StandardInput)
         "Read input from standard input"
+    , Option
+        ['p']
+        ["disable-progress"]
+        (NoArg ProgressDisabled)
+        "Disable the progress bar, this can help boost preformance."
     ]
 
 -- | Detects help flag constructor.
@@ -288,6 +294,18 @@ getMinLength xs = minLength
         | null mins = 2
         | [MinLength minL] <- mins = minL
         | otherwise = error "Multiple minimum lengths found."
+
+getProgressDisabled :: [Flag] -> Bool
+getProgressDisabled xs
+    | null progressDisabledFlags = False
+    | [ProgressDisabled] <- progressDisabledFlags = True
+    | otherwise = error "Multiple progress flags found."
+  where
+    isProgressDisabled :: Flag -> Bool
+    isProgressDisabled ProgressDisabled = True
+    isProgressDisabled _ = False
+    progressDisabledFlags :: [Flag]
+    progressDisabledFlags = filter isProgressDisabled xs
 
 -- | The header of the help message.
 headerHelpMessage :: String

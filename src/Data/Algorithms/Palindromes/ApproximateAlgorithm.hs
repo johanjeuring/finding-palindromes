@@ -2,8 +2,8 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.Palindrome
-Copyright   :  (c) 2007 - 2013 Johan Jeuring
+Module      :  Data.Algorithms.Palindromes.ApproximateAlgorithm
+Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
 Stability   :  experimental
@@ -11,10 +11,13 @@ Portability :  portable
 
 This program has been developed by students from the bachelor Computer Science at Utrecht
 University within the Software Project course.
-© Copyright Utrecht University (Department of Information and Computing Sciences)
+© Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-The approximate algorithm for finding maximal gapped approximate palindromes with a maximum
-number of insertion, deletion and substitution errors.
+
+The approximate algorithm for finding maximal gapped approximate palindromes with a
+maximum number of insertion, deletion and substitution errors. The main function is
+approximateAlgorithm, which returns the ranges of the found maximal (gapped) approximate
+palindromes.
 -}
 module Data.Algorithms.Palindromes.ApproximateAlgorithm (Cell (..), approximateAlgorithm, sparsify) where
 

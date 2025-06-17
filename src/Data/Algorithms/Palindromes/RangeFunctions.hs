@@ -1,6 +1,6 @@
 {- |
 Module      :  Data.Algorithms.Palindromes.RangeFunctions
-Copyright   :  (c) 2007 - 2013 Johan Jeuring
+Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
 Stability   :  experimental
@@ -8,7 +8,7 @@ Portability :  portable
 
 This program has been developed by students from the bachelor Computer Science at Utrecht
 University within the Software Project course.
-© Copyright Utrecht University (Department of Information and Computing Sciences)
+© Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
 Describes functions that do range calculations.
 -}

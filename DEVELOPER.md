@@ -181,3 +181,10 @@ cabal repl
 import Data.Algorithms.Palindromes.Finders
 findPalindromeLengths VarDNA AlgQuadratic {algGapSize = 0, algMaxErrors = 0} 0 "ATA"
 ```
+
+## Copyright
+
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+
+© Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring

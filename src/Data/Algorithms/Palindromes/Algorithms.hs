@@ -2,7 +2,7 @@
 
 {- |
 Module      :  Data.Algorithms.Palindromes.Algorithms
-Copyright   :  (c) 2007 - 2013 Johan Jeuring
+Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
 Stability   :  experimental
@@ -10,12 +10,11 @@ Portability :  portable
 
 This program has been developed by students from the bachelor Computer Science at Utrecht
 University within the Software Project course.
-© Copyright Utrecht University (Department of Information and Computing Sciences)
+© Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-This module Contains two functions that run algorithms for finding palindromes.
+This module exports three functions that run algorithms for finding palindromes.
 One runs a linear time algorithms and the other a quadratic algorithm.
 These assume text has been preprocessed.
-They return a list with the length of the maximal palindrome at each center index.
 -}
 module Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm

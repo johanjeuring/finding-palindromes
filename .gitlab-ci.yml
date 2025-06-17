@@ -1,3 +1,8 @@
+# This program has been developed by students from the bachelor Computer Science at Utrecht
+# University within the Software Project course.
+
+# Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring -}
+
 # A pipeline is composed of independent jobs that run scripts, grouped into stages.
 # Stages run in sequential order, but jobs within stages run in parallel.
 #

@@ -1,5 +1,20 @@
 {-# LANGUAGE BangPatterns #-}
 
+{- |
+Module      :  Data.Algorithms.Palindromes.Streaming
+Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
+License     :  BSD3
+Maintainer  :  johan@jeuring.net
+Stability   :  experimental
+Portability :  portable
+
+This program has been developed by students from the bachelor Computer Science at Utrecht
+University within the Software Project course.
+© Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
+
+This module contains functions for streaming the search for palindromes. This is used for
+the progress bar.
+-}
 module Data.Algorithms.Palindromes.Streaming (findPalindromesStream, findPalindromesWithProgressBar, findPalindromesVisualised) where
 
 import Control.Monad.IO.Class (liftIO)

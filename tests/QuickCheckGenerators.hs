@@ -154,19 +154,19 @@ generateGap charGenerator maxGapSize = do
 
 -- | Generate x amount of errors in a string
 addErrors :: Int -> Gen a -> Gen [a] -> Gen [a]
-addErrors errorCount charGenerator palGenerator = case errorCount of
+addErrors maxErrors charGenerator palGenerator = case maxErrors of
     0 -> palGenerator
     _ -> do
-        randomError <- choose (0, errorCount)
+        randomErrorCount <- choose (0, maxErrors)
         _palGenerator <- palGenerator
         -- generate x indices on which the errors will be applied
-        errorIndices <- vectorOf randomError $ choose (0, max 0 $ -1 + length _palGenerator)
+        errorIndices <- vectorOf randomErrorCount $ choose (0, max 0 $ -1 + length _palGenerator)
         -- generate x random characters to replace the characters at the error indices
-        replacementChars <- vectorOf randomError charGenerator
+        replacementChars <- vectorOf randomErrorCount charGenerator
         let -- replace the characters at the error indices with the replacement characters
             -- we do this by converting into and from a vector
             errorZip = zip errorIndices replacementChars
             replaceErrors = toList $ replaceErrors' errorZip $ fromList _palGenerator
             replaceErrors' :: [(Int, a)] -> Vector a -> Vector a
             replaceErrors' zip _palGenerator = _palGenerator // zip
-        if null _palGenerator || randomError == 0 then palGenerator else return replaceErrors
+        if null _palGenerator || randomErrorCount == 0 then palGenerator else return replaceErrors

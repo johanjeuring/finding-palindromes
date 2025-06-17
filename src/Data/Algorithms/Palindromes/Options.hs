@@ -59,13 +59,13 @@ options =
     , Option
         ['Q']
         ["quadratic"]
-        (OptArg parseQuadratic "[gapSize] [maxErrors]")
-        "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <maxErrors> (default for both is 0)"
+        (OptArg parseQuadratic "gapSize+maxErrors")
+        "Use the quadratic algorithm (default). Optional arguments gapSize and maxErrors, default is 0."
     , Option
         ['A']
         ["approximate"]
-        (OptArg parseApproximate "[gapSize] [maxErrors]")
-        "Use approximate algorithm. Optionally use the argument <gapSize> <maxErrors> (default for both is 0)"
+        (OptArg parseApproximate "gapSize+maxErrors")
+        "Use approximate algorithm. Optional arguments gapSize and maxErrors, default is 0."
     , Option
         ['R']
         ["plain", "regular"]

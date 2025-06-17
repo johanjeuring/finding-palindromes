@@ -91,9 +91,9 @@ function must be injective, which is an unnecessary restriction otherwise.
 generatePalindromeString
     :: (Arbitrary a, PalEq a) => (a -> a) -> Gen a -> Settings -> Gen [a]
 generatePalindromeString palComp charGenerator settings = do
-    -- get the gapSize and error settings from the algorithm settings
-    let (gapSize, error) = case algorithm settings of
-            AlgQuadratic{algGapSize = gapSize, algMaxError = error} -> (gapSize, error)
+    -- get the gapSize and maxErrors settings from the algorithm settings
+    let (gapSize, maxErrors) = case algorithm settings of
+            AlgQuadratic{algGapSize = gapSize, algMaxErrors = maxErrors} -> (gapSize, maxErrors)
             _ -> (0, 0)
 
     -- generate random string to add noise in front of the palindrome
@@ -102,8 +102,8 @@ generatePalindromeString palComp charGenerator settings = do
     palGenerator <-
         oneof
             [ listOf charGenerator
-            , addErrors error charGenerator $ generatePalindrome palComp charGenerator gapSize
-            , addErrors error charGenerator $ multiPalInPal palComp charGenerator gapSize
+            , addErrors maxErrors charGenerator $ generatePalindrome palComp charGenerator gapSize
+            , addErrors maxErrors charGenerator $ multiPalInPal palComp charGenerator gapSize
             ]
     -- generate random string to add noise behind the palindrome
     randomEnd <- listOf charGenerator
@@ -154,10 +154,10 @@ generateGap charGenerator maxGapSize = do
 
 -- | Generate x amount of errors in a string
 addErrors :: Int -> Gen a -> Gen [a] -> Gen [a]
-addErrors error charGenerator palGenerator = case error of
+addErrors errorCount charGenerator palGenerator = case errorCount of
     0 -> palGenerator
     _ -> do
-        randomError <- choose (0, error)
+        randomError <- choose (0, errorCount)
         _palGenerator <- palGenerator
         -- generate x indices on which the errors will be applied
         errorIndices <- vectorOf randomError $ choose (0, max 0 $ -1 + length _palGenerator)

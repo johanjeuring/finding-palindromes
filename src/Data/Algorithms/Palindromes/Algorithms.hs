@@ -57,7 +57,7 @@ quadraticAlgorithm
     -> Int
     -- ^ gapSize
     -> Int
-    -- ^ error count
+    -- ^ maxErrors
     -> v a
     -- ^ input
     -> [Int]

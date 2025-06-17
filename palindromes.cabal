@@ -30,6 +30,7 @@ source-repository this
 --------------------------------------------------------------------------------
 library
   hs-source-dirs:  src
+  default-language: Haskell2010
   exposed-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
@@ -55,8 +56,9 @@ library
 
 executable palindromes
   main-is:        Data/Algorithms/Palindromes/Main.hs
-  ghc-options:    -Wall -O2 -rtsopts -threaded
+  ghc-options:    -Wall -rtsopts -threaded
   hs-source-dirs: src
+  default-language: Haskell2010
   other-modules:
     Data.Algorithms.Palindromes.Algorithms
     Data.Algorithms.Palindromes.DNA
@@ -84,6 +86,7 @@ test-suite tests-palindromes
   type:           exitcode-stdio-1.0
   hs-source-dirs: tests
   main-is:        Main.hs
+  default-language: Haskell2010
   other-modules:
     ITApproximate
     ITLinear
@@ -112,11 +115,12 @@ test-suite tests-palindromes
     , palindromes  >=0.5      && <0.6
     , QuickCheck   >=2.14     && <3.0
     , vector       >=0.13.1.0 && <0.14
-
+  
 benchmark benchmark
   type:           exitcode-stdio-1.0
   hs-source-dirs: benchmarking
   main-is:        Main.hs
+  default-language: Haskell2010
   build-depends:
     , base         >=4.17 && <5
     , criterion    >=1.6  && <1.7
@@ -131,6 +135,7 @@ benchmark profiling
   hs-source-dirs: profiling
   main-is:        Main.hs
   ghc-options:    -rtsopts
+  default-language: Haskell2010
   build-depends:
     , base         >=4.17 && <5
     , deepseq      >=1.5  && <1.6

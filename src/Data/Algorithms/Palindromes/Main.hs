@@ -108,9 +108,11 @@ main = do
     handleFlags flags hasFiles =
         ( if Help `elem` flags || (null flags && not hasFiles)
             then const $ return (usageInfo headerHelpMessage options)
-            else applySettingsToFinder (getSettings flags)
+            else applySettingsToFinder progressDisabled (getSettings flags)
         , StandardInput `elem` flags
         )
+      where
+        progressDisabled = ProgressDisabled `elem` flags
 
     -- The header of the help message.
     headerHelpMessage :: String

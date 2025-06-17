@@ -31,6 +31,7 @@ import Data.Algorithms.Palindromes.Finders
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
+    , findPalindromesFormatted
     , formatPalindromes
     )
 import Data.Algorithms.Palindromes.Options
@@ -178,15 +179,29 @@ getSettings flags =
         minLengthFlags :: [Flag]
         minLengthFlags = filter isMinLength xs
 
-    getProgressDisabled :: [Flag] -> Bool
-    getProgressDisabled = elem ProgressDisabled
-
--- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string.
-applySettingsToFinder :: Settings -> (String -> IO String)
-applySettingsToFinder (Settings{algorithm = c, variant = v, outputFormat = o, outputFilter = f, minLength = l}) s = do
-    pals <- findPalindromesWithProgressBar v c l filterOnlyLongest s
-    return (formatPalindromes o pals)
-  where
-    filterOnlyLongest = case f of
-        SelectLongest -> True
-        _ -> False
+-- | Finds all formatted palindromes given the settings. Can be done with and without a progress bar.
+applySettingsToFinder
+    :: Bool
+    -- ^ Is the progress bar disabled
+    -> Settings
+    -- ^ The settings to find palindromes with
+    -> (String -> IO String)
+applySettingsToFinder
+    progressDisabled
+    ( Settings
+            { algorithm = c
+            , variant = v
+            , outputFormat = o
+            , outputFilter = f
+            , minLength = l
+            }
+        )
+    input
+        | progressDisabled = return $ findPalindromesFormatted v o f c l input
+        | otherwise = do
+            pals <- findPalindromesWithProgressBar v c l filterOnlyLongest input
+            return (formatPalindromes o pals)
+      where
+        filterOnlyLongest = case f of
+            SelectLongest -> True
+            _ -> False

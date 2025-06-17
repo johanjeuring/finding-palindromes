@@ -1,8 +1,3 @@
-{-# LANGUAGE PatternGuards #-}
--- Did not yet translate all options. Complete the table in dispatchFlags.
--- Default doesn't work yet
-{-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
-
 {- |
 Module      :  Data.Algorithms.Palindromes.Options
 Copyright   :  (c) 2007 - 2013 Johan Jeuring
@@ -15,10 +10,10 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences)
 
-Gives the options for flags that can be input in the command line.
-Also contains the functions that are used to convert these flags to their corresponding datatype.
+Gives the options for flags that can be inputted in the command line and contains
+functions for parsing to some flags.
 -}
-module Data.Algorithms.Palindromes.Options where
+module Data.Algorithms.Palindromes.Options (Flag (..), options) where
 
 import Data.Maybe (fromJust, isNothing)
 import System.Console.GetOpt
@@ -41,21 +36,7 @@ data Flag
     | OutputFormat OutputFormat
     | OutputFilter OutputFilter
     | MinLength Int
-
-defaultAlgorithm :: Algorithm
-defaultAlgorithm = AlgQuadratic{algGapSize = 0, algMaxError = 0}
-
-defaultVariant :: Variant
-defaultVariant = VarText
-
-defaultOutputFormat :: OutputFormat
-defaultOutputFormat = FormatText
-
-defaultOutputFilter :: OutputFilter
-defaultOutputFilter = SelectLongest
-
-defaultMinLength :: Int
-defaultMinLength = 0
+    deriving (Eq)
 
 -----------------------------------------------------------------------------
 -- Options
@@ -156,16 +137,6 @@ options =
         "Read input from standard input"
     ]
 
--- | Detects help flag constructor.
-isHelp :: Flag -> Bool
-isHelp Help = True
-isHelp _ = False
-
--- | Detects standard input flag constructor.
-isStandardInput :: Flag -> Bool
-isStandardInput StandardInput = True
-isStandardInput _ = False
-
 {- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
 error is thrown.
 -}
@@ -207,94 +178,3 @@ parseQuadratic str
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, errors) = (x, drop 1 y)
-
-{- | From all input flags, gets the algorithm setting. If more than one algorithm flag
-is given, it throws an error, as this is not suppported by our program. If none are give it
-uses the default option.
--}
-getAlgorithm :: [Flag] -> Algorithm
-getAlgorithm xs
-    | null algorithmFlags = defaultAlgorithm
-    | [Algorithm c] <- algorithmFlags = c
-    | otherwise = error "Multiple algorithm flags detected."
-  where
-    isAlgorithm :: Flag -> Bool
-    isAlgorithm (Algorithm _) = True
-    isAlgorithm _ = False
-    algorithmFlags :: [Flag]
-    algorithmFlags = filter isAlgorithm xs
-
-{- | From all input flags, gets the variant setting. If more than one variant flag is
-given, it throws an error, as this is not suppported by our program. If none are give it
-uses the default option.
--}
-getVariant :: [Flag] -> Variant
-getVariant xs
-    | null variantFlags = defaultVariant
-    | [Variant v] <- variantFlags = v
-    | otherwise = error "Multiple variant flags detected."
-  where
-    isVariant :: Flag -> Bool
-    isVariant (Variant _) = True
-    isVariant _ = False
-    variantFlags :: [Flag]
-    variantFlags = filter isVariant xs
-
-{- | From all input flags, gets the output format setting. If more than one output format
-flag is given, it throws an error, as this is not suppported by our program. If none are
-give it uses the default option.
--}
-getOutputFormat :: [Flag] -> OutputFormat
-getOutputFormat xs
-    | null outputFormatFlags = defaultOutputFormat
-    | [OutputFormat o] <- outputFormatFlags = o
-    | otherwise = error "Multiple outputFormat flags detected."
-  where
-    isOutputFormat :: Flag -> Bool
-    isOutputFormat (OutputFormat _) = True
-    isOutputFormat _ = False
-    outputFormatFlags :: [Flag]
-    outputFormatFlags = filter isOutputFormat xs
-
-{- | From all input flags, gets the output filter setting. If more than one output filter
-flag is given, it throws an error, as this is not suppported by our program. If none are
-give it uses the default option.
--}
-getOutputFilter :: [Flag] -> OutputFilter
-getOutputFilter xs
-    | null outputFilterFlags = defaultOutputFilter
-    | [OutputFilter o] <- outputFilterFlags = o
-    | otherwise = error "Multiple outputFilter flags detected."
-  where
-    isOutputFilter :: Flag -> Bool
-    isOutputFilter (OutputFilter _) = True
-    isOutputFilter _ = False
-    outputFilterFlags :: [Flag]
-    outputFilterFlags = filter isOutputFilter xs
-
-{- | From all input flags, gets the length modifier setting. If more than one length
-modifier flag is given, it throws an error, as this is not suppported by our program. If
-none are give it uses the default option.
--}
-getMinLength :: [Flag] -> Int
-getMinLength xs = minLength
-  where
-    isMinLength (MinLength _) = True
-    isMinLength _ = False
-    mins :: [Flag]
-    mins = filter isMinLength xs
-    minLength :: Int
-    minLength
-        | null mins = 2
-        | [MinLength minL] <- mins = minL
-        | otherwise = error "Multiple minimum lengths found."
-
--- | The header of the help message.
-headerHelpMessage :: String
-headerHelpMessage =
-    "*********************\n"
-        ++ "* Palindrome Finder *\n"
-        ++ "* version 0.5       *\n"
-        ++ "*********************\n"
-        ++ "Usage: \n"
-        ++ "Either give the path to a file or use the flag -i for manual input in the terminal. The following flags can be used to change settings."

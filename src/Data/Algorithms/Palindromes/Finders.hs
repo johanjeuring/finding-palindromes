@@ -85,7 +85,7 @@ data Variant
       VarPlain
     | -- | Compare words instead of individual characters to look for palindromes.
       VarWord
-    deriving (Show)
+    deriving (Eq, Show)
 
 {- | Used to describe different possible output formats of palindromes. Used as a setting
 in finding functions.
@@ -99,7 +99,7 @@ data OutputFormat
       FormatRange
     | -- | Output all details: Text, range and length
       FormatAllDetails
-    deriving (Show)
+    deriving (Eq, Show)
 
 data OutputFilter
     = -- | Select longest (can be multiple of same length)
@@ -108,7 +108,7 @@ data OutputFilter
       SelectAt Int
     | -- | Select all palindromes
       SelectAll
-    deriving (Show)
+    deriving (Eq, Show)
 
 {- | Used as a setting for what algorithm to run. The quadratic algorithm also has
 functionality for including gaps and errors, therefore this is given as an extra setting.
@@ -117,7 +117,7 @@ data Algorithm
     = AlgLinear
     | AlgQuadratic {algGapSize :: Int, algMaxError :: Int}
     | AlgApproximate {algGapSize :: Int, algMaxError :: Int}
-    deriving (Show)
+    deriving (Eq, Show)
 
 {- | This method returns whether uneven palindromes are impossible to exist based on the
 query settings.

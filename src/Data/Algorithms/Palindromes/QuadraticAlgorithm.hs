@@ -42,28 +42,28 @@ gappedApproximatePalindromesAroundCentres
     -> Int
     -> v a
     -> [Int]
-gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize errorCount input
+gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize maxErrors input
     | onlyEvenPals =
         L.map
-            (lengthPalAtCenterAntiReflexive input gapSize errorCount)
+            (lengthPalAtCenterAntiReflexive input gapSize maxErrors)
             (if even gapSize then [0 .. G.length input] else [0 .. G.length input - 1])
     | otherwise =
         L.map
-            (lengthPalAtCenterReflexive input gapSize errorCount)
+            (lengthPalAtCenterReflexive input gapSize maxErrors)
             [0 .. 2 * G.length input]
 
 {- | Keep expanding the palindrome around the given center to get the maximal palindrome.
-Allows a maximum of errorCount errors. This function runs in O(k), where k is the size of
+Allows a maximum of maxErrors errors. This function runs in O(k), where k is the size of
 the found palindrome.
 -}
 lengthApproximatePalindrome
     :: (PalEq a, G.Vector v a) => v a -> Int -> Int -> Int -> Int
-lengthApproximatePalindrome input errorCount start end
+lengthApproximatePalindrome input maxErrors start end
     | start < 0 || end > lastPos = end - start - 1
     | (input G.! start) =:= (input G.! end) =
-        lengthApproximatePalindrome input errorCount (start - 1) (end + 1)
-    | errorCount > 0 =
-        lengthApproximatePalindrome input (errorCount - 1) (start - 1) (end + 1)
+        lengthApproximatePalindrome input maxErrors (start - 1) (end + 1)
+    | maxErrors > 0 =
+        lengthApproximatePalindrome input (maxErrors - 1) (start - 1) (end + 1)
     | otherwise = end - start - 1
   where
     lastPos :: Int
@@ -150,9 +150,9 @@ lengthPalAtCenterReflexive
     -- ^ The index of the center
     -> Int
     -- ^ The resulting length of the found maximal palindrome
-lengthPalAtCenterReflexive input gapSize errorCount center =
+lengthPalAtCenterReflexive input gapSize maxErrors center =
     let (left, right) = getLeftRightReflexive gapSize center (G.length input)
-    in  lengthApproximatePalindrome input errorCount left right
+    in  lengthApproximatePalindrome input maxErrors left right
 
 {- | Get the two new character indexes for the left and right character to
 start expanding from, ignoring the gap.
@@ -194,11 +194,11 @@ lengthPalAtCenterAntiReflexive
     -> Int
     -- ^ The index of the center
     -> Int
-lengthPalAtCenterAntiReflexive input gapSize errorCount center =
+lengthPalAtCenterAntiReflexive input gapSize maxErrors center =
     -- We can just use getLeftRightCenterBetweenElems, because with anti reflexive data
     -- types, the center is aways between two elements
     let (left, right) = getLeftRightCenterBetweenElems gapSize center (G.length input)
-    in  lengthApproximatePalindrome input errorCount left right
+    in  lengthApproximatePalindrome input maxErrors left right
 
 {-
 ---------------------------------------------------------------------

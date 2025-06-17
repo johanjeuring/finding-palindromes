@@ -115,8 +115,8 @@ functionality for including gaps and errors, therefore this is given as an extra
 -}
 data Algorithm
     = AlgLinear
-    | AlgQuadratic {algGapSize :: Int, algMaxError :: Int}
-    | AlgApproximate {algGapSize :: Int, algMaxError :: Int}
+    | AlgQuadratic {algGapSize :: Int, algMaxErrors :: Int}
+    | AlgApproximate {algGapSize :: Int, algMaxErrors :: Int}
     deriving (Eq, Show)
 
 {- | This method returns whether uneven palindromes are impossible to exist based on the
@@ -151,13 +151,13 @@ findPalindromeRanges variant algorithm input =
     alg :: (PalEq b, G.Vector v b) => v b -> [Range]
     alg = case algorithm of
         AlgLinear -> indexListToRanges . linearAlgorithm (onlyEvenPals variant algorithm)
-        AlgQuadratic gapSize errors ->
+        AlgQuadratic gapSize maxErrors ->
             indexListToRanges
                 . quadraticAlgorithm
                     (onlyEvenPals variant algorithm)
                     gapSize
-                    errors
-        AlgApproximate gapSize errors -> approximateAlgorithm gapSize errors
+                    maxErrors
+        AlgApproximate gapSize maxErrors -> approximateAlgorithm gapSize maxErrors
 
     indexListToRanges :: [Int] -> [Range]
     indexListToRanges = go 0

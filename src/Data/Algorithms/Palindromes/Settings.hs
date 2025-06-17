@@ -70,7 +70,7 @@ defaultSettings =
         }
 
 defaultAlgorithm :: Algorithm
-defaultAlgorithm = AlgQuadratic{algGapSize = 0, algMaxError = 0}
+defaultAlgorithm = AlgQuadratic{algGapSize = 0, algMaxErrors = 0}
 
 defaultVariant :: Variant
 defaultVariant = VarText
@@ -177,6 +177,9 @@ getSettings flags =
         isMinLength _ = False
         minLengthFlags :: [Flag]
         minLengthFlags = filter isMinLength xs
+
+    getProgressDisabled :: [Flag] -> Bool
+    getProgressDisabled = elem ProgressDisabled
 
 -- | Retrieves all palindromes matching the settings using a progress bar and then formats them to a string.
 applySettingsToFinder :: Settings -> (String -> IO String)

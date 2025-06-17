@@ -36,6 +36,7 @@ data Flag
     | OutputFormat OutputFormat
     | OutputFilter OutputFilter
     | MinLength Int
+    | ProgressDisabled
     deriving (Eq)
 
 -----------------------------------------------------------------------------
@@ -58,13 +59,13 @@ options =
     , Option
         ['Q']
         ["quadratic"]
-        (OptArg parseQuadratic "[gapSize] [errors]")
-        "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <errors> (default for both is 0)"
+        (OptArg parseQuadratic "[gapSize] [maxErrors]")
+        "Use the quadratic algorithm. (default) Optionally use the argument <gapSize> <maxErrors> (default for both is 0)"
     , Option
         ['A']
         ["approximate"]
-        (OptArg parseApproximate "[gapSize] [errors]")
-        "Use approximate algorithm. Optionally use the argument <gapSize> <errors> (default for both is 0)"
+        (OptArg parseApproximate "[gapSize] [maxErrors]")
+        "Use approximate algorithm. Optionally use the argument <gapSize> <maxErrors> (default for both is 0)"
     , Option
         ['R']
         ["plain", "regular"]
@@ -135,6 +136,11 @@ options =
         ["input"]
         (NoArg StandardInput)
         "Read input from standard input"
+    , Option
+        ['p']
+        ["disable-progress"]
+        (NoArg ProgressDisabled)
+        "Disable the progress bar, this can help boost preformance."
     ]
 
 {- | Parses the optional error and gap input to a Flag. If invalid inputs are given, an
@@ -142,39 +148,39 @@ error is thrown.
 -}
 parseApproximate :: Maybe String -> Flag
 parseApproximate str
-    | isNothing str = Algorithm AlgApproximate{algGapSize = 0, algMaxError = 0}
+    | isNothing str = Algorithm AlgApproximate{algGapSize = 0, algMaxErrors = 0}
     | null y =
         error
-            ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
+            ( "Invalid arguments for gapSize and maxErrors. (gapSize, maxErrors) = ("
                 ++ gapSize
                 ++ ", "
-                ++ errors
+                ++ maxErrors
                 ++ "). s must be the last flag in a series of flags."
                 ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Algorithm AlgApproximate{algGapSize = read gapSize, algMaxError = read errors}
+        Algorithm AlgApproximate{algGapSize = read gapSize, algMaxErrors = read maxErrors}
   where
     (x, y) = break (== '+') $ fromJust str
-    (gapSize, errors) = (x, drop 1 y)
+    (gapSize, maxErrors) = (x, drop 1 y)
 
 {- | Parses the optional error input to a Flag. If invalid inputs are given, an
 error is thrown.
 -}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
-    | isNothing str = Algorithm AlgQuadratic{algGapSize = 0, algMaxError = 0}
+    | isNothing str = Algorithm AlgQuadratic{algGapSize = 0, algMaxErrors = 0}
     | null y =
         error
-            ( "Invalid arguments for gap size and errors. (gap size, errors) = ("
+            ( "Invalid arguments for gapSize and maxErrors. (gapSize, maxErrors) = ("
                 ++ gapSize
                 ++ ", "
-                ++ errors
+                ++ maxErrors
                 ++ "). q must be the last flag in a series of flags."
                 ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
             )
     | otherwise =
-        Algorithm AlgQuadratic{algGapSize = read gapSize, algMaxError = read errors}
+        Algorithm AlgQuadratic{algGapSize = read gapSize, algMaxErrors = read maxErrors}
   where
     (x, y) = break (== '+') $ fromJust str
-    (gapSize, errors) = (x, drop 1 y)
+    (gapSize, maxErrors) = (x, drop 1 y)

@@ -167,7 +167,7 @@ error is thrown.
 -}
 parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
-    | isNothing str = Algorithm AlgApproximate{algGapSize = 0, algMaxErrors = 0}
+    | isNothing str = Algorithm AlgQuadratic{algGapSize = 0, algMaxErrors = 0}
     | null y =
         error
             "Invalid arguments for -Q, enter arguments as 2 numbers after seperated by a '+'. For example: '-Q1+2'."
@@ -175,7 +175,7 @@ parseQuadratic str
     | isNothing gapSize || isNothing maxErrors =
         error "Invalid arguments for -Q, arguments must be integers."
     | otherwise =
-        Algorithm AlgApproximate{algGapSize = fromJust gapSize, algMaxErrors = fromJust maxErrors}
+        Algorithm AlgQuadratic{algGapSize = fromJust gapSize, algMaxErrors = fromJust maxErrors}
   where
     (x, y) = break (== '+') $ fromJust str
     (gapSize, maxErrors) = (readMaybe x, readMaybe (drop 1 y))

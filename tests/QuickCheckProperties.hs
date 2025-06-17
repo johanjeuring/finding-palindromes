@@ -111,36 +111,36 @@ extractPalEq settings pal = case algorithm settings of
         VarDNA -> isPalindrome $ map (fromJust . charToDNA) (palText pal)
         _ -> isPalindrome $ cleanOriginalString (palText pal)
   where
-    (gapSize, errors) = case algorithm settings of
+    (gapSize, maxErrors) = case algorithm settings of
         AlgQuadratic gap err -> (gap, err)
         AlgApproximate gap err -> (gap, err)
         AlgLinear -> (0, 0)
 
     {- if any of the possible removed gaps has levenshteinDistance with its reverse is
-    less than 2 * errors we have an a valid approximate palindromes. This is because
-    2 * errors is equivalent to the levenshteinDistance -}
+    less than 2 * maxErrors we have an a valid approximate palindromes. This is because
+    2 * maxErrors is equivalent to the levenshteinDistance -}
     isApproximatePalindrome :: (PalEq a) => [a] -> Bool
     isApproximatePalindrome input =
         any
-            (<= 2 * errors)
+            (<= 2 * maxErrors)
             ( zipWith
                 (levenshteinDistance' (=:=))
-                (allPossibleGapless gapSize errors input)
-                (map reverse (allPossibleGapless gapSize errors input))
+                (allPossibleGapless gapSize maxErrors input)
+                (map reverse (allPossibleGapless gapSize maxErrors input))
             )
     isPalindrome :: (PalEq a) => [a] -> Bool
-    isPalindrome input = checkMismatches errors $ removeGap 0 gapSize input
+    isPalindrome input = checkMismatches maxErrors $ removeGap 0 gapSize input
 
 -- | for approximate palindromes the gap can be shifted due to insertions, so we need all.
 allPossibleGapless :: (PalEq a) => Int -> Int -> [a] -> [[a]]
 allPossibleGapless 0 _ palindrome = [palindrome]
 allPossibleGapless gapSize 0 palindrome = [removeGap 0 gapSize palindrome]
-allPossibleGapless gapSize errors palindrome =
-    map (\e -> removeGap e gapSize palindrome) [-errors .. errors]
+allPossibleGapless gapSize maxErrors palindrome =
+    map (\e -> removeGap e gapSize palindrome) [-maxErrors .. maxErrors]
 
--- | Checks if the character string is a palindrome, taking gaps and errors into account
+-- | Checks if the character string is a palindrome, taking gapSize and maxErrors into account
 checkMismatches :: (PalEq a) => Int -> [a] -> Bool
-checkMismatches errors pal' = mismatches <= errors
+checkMismatches maxErrors pal' = mismatches <= maxErrors
   where
     mismatches =
         length

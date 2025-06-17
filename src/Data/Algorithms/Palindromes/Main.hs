@@ -15,11 +15,11 @@ Handles commandline.
 module Main where
 
 import Control.Monad (filterM)
-import System.Console.GetOpt (ArgOrder (Permute), getOpt)
+import System.Console.GetOpt (ArgOrder (Permute), getOpt, usageInfo)
 import System.Environment (getArgs)
 
-import Data.Algorithms.Palindromes.Options (options)
-import Data.Algorithms.Palindromes.Settings (handleFlags)
+import Data.Algorithms.Palindromes.Options (Flag (..), options)
+import Data.Algorithms.Palindromes.Settings (applySettingsToFinder, getSettings)
 
 import qualified System.Directory as Dir
 import qualified System.IO as Sys
@@ -95,3 +95,32 @@ main = do
             in  if standardInput
                     then handleStandardInputWith function
                     else handlePathsWith function files
+  where
+    {- Based on input flags, gets a tuple with a function that directly encapsulates
+    everything from the input string to the output string. Also encodes whether input string
+    is from a file or standard input. -}
+    handleFlags
+        :: [Flag]
+        -> Bool
+        -> ( String -> IO String -- function from input to output
+           , Bool -- if input is standard input
+           )
+    handleFlags flags hasFiles =
+        ( if Help `elem` flags || (null flags && not hasFiles)
+            then const $ return (usageInfo headerHelpMessage options)
+            else applySettingsToFinder progressDisabled (getSettings flags)
+        , StandardInput `elem` flags
+        )
+      where
+        progressDisabled = ProgressDisabled `elem` flags
+
+    -- The header of the help message.
+    headerHelpMessage :: String
+    headerHelpMessage =
+        "*********************\n"
+            ++ "* Palindrome Finder *\n"
+            ++ "* version 0.5       *\n"
+            ++ "*********************\n"
+            ++ "Usage: \n"
+            ++ "Either give the path to a file or directory or use the flag -i for manual input in the terminal. "
+            ++ "The following flags can be used to change settings."

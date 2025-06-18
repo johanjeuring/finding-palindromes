@@ -1,6 +1,4 @@
-When contributing or writing code for this repository please install the tools listed below. This ensures your code is written in the same style as the rest of the repository.
-
-# Installation
+## Installation
 
 To clone the repository either use an SSH key with the SHH link under the Code button.
 
@@ -12,7 +10,7 @@ git clone https://git.science.uu.nl/ics/sp/2025/v25b/finding-palindromes-package
 
 This should then prompt for a login where you need to use your UU credentials (Solis ID). After which the repository should be cloned
 
-## Set up
+### Set up
 
 If you are new to Haskell use ghcup for easy installation.
 Follow instructions on the following page:
@@ -32,6 +30,8 @@ Installing hls is recommended for developement.
 
 # Tooling
 
+When contributing or writing code for this repository please install the tools listed below. This ensures your code is written in the same style as the rest of the repository.
+
 ## Hlint
 
 For development using hlint is recommended. To install run
@@ -43,6 +43,7 @@ cabal install hlint
 If in visual studio code you also need to install the haskell-linter extension.
 
 ## Style guide and autoformatting with fourmolu and cabal-fmt
+
 Fourmolu is the autoformatter we used to automatically follow the style guide by [Kowainik (updated September 22, 2020)](https://kowainik.github.io/posts/2019-02-06-style-guide).
 
 To properly run fourmolu you need 4 things.
@@ -70,6 +71,13 @@ cabal install cabal-fmt
 For Windows type in system variables into the search bar and add C:\cabal\bin to the PATH variable. This ensures that you can access your cabal executables anywhere in your system.
 
 # Quality Metrics
+
+If you want to contribute to this project we maintain the following quality metrics:
+
+- All non-trivial code should be tested and all tests should pass.
+- Your code should not degrade performance.
+
+These quality metrics can be measured using the tools listed below.
 
 ## Testing
 
@@ -111,8 +119,8 @@ cabal bench profiling --enable-profiling --benchmark-options=" +RTS -p -RTS"
 This calls the profiling executable in which you put the functions to be profiled and then creates a report in profiling.prof.
 You can replace the `-p` flag with `-pj` to generate a JSON formatted report. Converting to JSON allows you to use https://www.speedscope.app/ to easily view the profiling result.
 
-This will not give much in-depth information on the workings of the package itself however as it will only give information about top-level functions.
-The best way to get information about subfunctions (functions in `where` clauses or `let` expressions) of the package is to create a cabal.project.local file with the following content:
+This will not give much in-depth information on the workings of the package itself however as it will only give information about the time and memory usage of functions that are directly called.
+The best way to get information about subfunctions of the package is to create a cabal.project.local file with the following content:
 
 ```
 package palindromes
@@ -181,6 +189,7 @@ findPalindromeRanges VarDNA AlgQuadratic {algGapSize = 0, algMaxErrors = 0} (U.f
 ```
 
 This should return:
+
 ```
 [(0,0),(0,2),(1,3),(3,3)]
 ```

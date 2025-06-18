@@ -1,5 +1,5 @@
 {- |
-Module      :  Data.Algorithms.Palindromes.Options
+Module      :  Options
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -13,7 +13,7 @@ University within the Software Project course.
 Gives the options for flags that can be inputted in the command line and contains
 functions for parsing to some flags.
 -}
-module Data.Algorithms.Palindromes.Options (Flag (..), options) where
+module Options (Flag (..), options) where
 
 import Data.Maybe (fromJust, isNothing)
 import System.Console.GetOpt

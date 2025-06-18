@@ -151,11 +151,16 @@ parseApproximate :: Maybe String -> Flag
 parseApproximate str
     | isNothing str = Algorithm AlgApproximate{algGapSize = 0, algMaxErrors = 0}
     | null y =
-        error
-            "Invalid arguments for -A, enter arguments as 2 numbers after seperated by a '+'. For example: '-A1+2'."
-    | y == "+" = error "Invalid arguments for -A, please enter second argument"
+        error $
+            "Invalid arguments \'"
+                ++ fromJust str
+                ++ "\' for -A, enter arguments as 2 numbers after seperated by a '+'. For example: '-A1+2'."
+    | y == "+" =
+        error $
+            "Invalid arguments \'" ++ fromJust str ++ "\' for -A, please enter second argument"
     | isNothing gapSize || isNothing maxErrors =
-        error "Invalid arguments for -A, arguments must be integers."
+        error $
+            "Invalid arguments  \'" ++ fromJust str ++ "\' for -A, arguments must be integers."
     | otherwise =
         Algorithm AlgApproximate{algGapSize = fromJust gapSize, algMaxErrors = fromJust maxErrors}
   where
@@ -169,11 +174,15 @@ parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
     | isNothing str = Algorithm AlgQuadratic{algGapSize = 0, algMaxErrors = 0}
     | null y =
-        error
-            "Invalid arguments for -Q, enter arguments as 2 numbers after seperated by a '+'. For example: '-Q1+2'."
-    | y == "+" = error "Invalid arguments for -Q, please enter second argument"
+        error $
+            "Invalid arguments \'"
+                ++ fromJust str
+                ++ "\' for -Q, enter arguments as 2 numbers after seperated by a '+'. For example: '-Q1+2'."
+    | y == "+" =
+        error $
+            "Invalid arguments \'" ++ fromJust str ++ "\' for -Q, please enter second argument"
     | isNothing gapSize || isNothing maxErrors =
-        error "Invalid arguments for -Q, arguments must be integers."
+        error $ "Invalid arguments for \'" ++ fromJust str ++ "\' -Q, arguments must be integers."
     | otherwise =
         Algorithm AlgQuadratic{algGapSize = fromJust gapSize, algMaxErrors = fromJust maxErrors}
   where

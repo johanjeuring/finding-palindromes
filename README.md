@@ -4,10 +4,9 @@ Palindromes is a package for finding palindromes in files.
 
 ## Features
 
-Palindromes includes two algorithms: a linear and a quadratic worst time complexity algorithm.
+Palindromes includes three algorithms: a linear and a quadratic worst time complexity algorithm and an algorithm for finding approximate palindromes.
 
-The linear and quadratic algorithm support:
-
+All three algorithms support the following features:
 - Finding plain palindromes
 - Finding text palindromes,
   ignoring spaces, case of characters, and punctuation
@@ -16,16 +15,35 @@ The linear and quadratic algorithm support:
 - Finding word palindromes,
   palindromes made up of words instead of characters.
 
-Furthermore, the quadratic algorithm supports:
+Furthermore, the individual algorithms support some other features. 
+Here comes an overview of what each individual algorithm further supports. 
+There is some overlap between these features, 
+but we handle each algorithm separately to reduce the complexity of this text.
 
+The linear algorithm further support:
 - Finding punctuation palindromes,
   text palindromes surrounded by (if at all) non-letters.
-  This is always quadratic because it requires a quadratic postprocessing step.
-  However, you can still choose between a quadratic or linear algorithm for finding the palindromes themselves.
-- Finding approximate palindromes,
-  in which a limited number of symbols
-  may be substituted by other symbols.
-- Finding palindromes with
+  This requires a quadratic postprocessing step.
+  However, you can still choose between the linear and 
+  quadratic palindrome algorithm for finding the palindromes themselves.
+
+
+The quadratic algorithm further supports:
+- Finding punctuation palindromes,
+  text palindromes surrounded by (if at all) non-letters.
+  This requires a quadratic postprocessing step.
+  However, you can still choose between the linear and 
+  quadratic palindrome algorithm for finding the palindromes themselves.
+- Finding approximate palindromes with substitution errors,
+  in which a limited number of symbols may be substituted by other symbols to get palindromes. 
+  Like 'river', which is a perfect palindrome if the 'i' is substituted for an 'e'. 
+- Finding (approximate) palindromes with
+  gaps in the center.
+
+The approximate palindrome algorithm further supports:
+- Finding approximate palindromes with insertion, deletion and substitution errors,
+  in which a limited number of insertion, deletion or substitution operations on the 'left arm' of the approximate palindrome results in a palindrome. Like 'aaaaaaba', which is a palindrome if you add one 'b' after the first 'a'.
+- Finding (approximate) palindromes with
   gaps in the center.
 
 ## Requirements
@@ -65,18 +83,19 @@ Guide].
 ## Usage
 
 run the following commands, with changing `<path-to-file>` to the file containing the input, and `<options>` with the flags you want enabled
-
+```
     cabal run palindromes -- <path-to-file> -<options>
-
-Here are some examples of working flags:
+```
+Here are some examples of working flags, provided input.txt is a file in the same directory as the palindromes.cabal file:
 
 ```
     cabal run palindromes -- input.txt
-    cabal run palindromes -- input.txt -Q -n
-    cabal run palindromes -- input.txt -L -d
+    cabal run palindromes -- input.txt --quadratic --punctuation
     cabal run palindromes -- input.txt -Q
     cabal run palindromes -- input.txt -Q3+0
-    cabal run palindromes -- -i --quadratic --DNA
+    cabal run palindromes -- input.txt -L --longest
+    cabal run palindromes -- input.txt -A0+2 --all --details --minlength=6
+    cabal run palindromes -- -i --dna
 ```
 
 To see all the options run one of these:
@@ -100,18 +119,6 @@ site.
 [Haddock]: http://hackage.haskell.org/package/haddock
 [Palindromes package]: http://hackage.haskell.org/package/palindromes
 
-## Examples
-
-You can find example palindromes, on which Palindromes has been tested, in the
-[`examples` directory] of the source distribution.
-
-[`examples` directory]: PLACEHOLDER
-
-## Bugs & Support
-
-To report bugs, use the [GitLab issue page].
-[GitLab issue page]: PLACEHOLDER
-
 ## Licensing
 
 Palindromes is licensed under the so-called [BSD3 license]. See the included
@@ -121,8 +128,7 @@ Palindromes is licensed under the so-called [BSD3 license]. See the included
 
 ## Credits
 
-Palindromes is based on the functional program developed by [Johan Jeuring] in
-his PhD thesis.
+Palindromes is based on the functional program developed by [Johan Jeuring].
 
 The current authors and maintainer of palindromes is [Johan Jeuring].
 

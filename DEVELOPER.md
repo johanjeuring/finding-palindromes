@@ -1,3 +1,5 @@
+# Developer
+
 ## Installation
 
 To clone the repository either use an SSH key with the SHH link under the Code button.
@@ -119,7 +121,7 @@ cabal bench profiling --enable-profiling --benchmark-options=" +RTS -p -RTS"
 This calls the profiling executable in which you put the functions to be profiled and then creates a report in profiling.prof.
 You can replace the `-p` flag with `-pj` to generate a JSON formatted report. Converting to JSON allows you to use https://www.speedscope.app/ to easily view the profiling result.
 
-This will not give much in-depth information on the workings of the package itself however as it will only give information about the time and memory usage of functions that are directly called.
+This will not give much in-depth information on the workings of the package itself however as it will only give information about the time and memory usage of functions that are exported by the modules they are in.
 The best way to get information about subfunctions of the package is to create a cabal.project.local file with the following content:
 
 ```

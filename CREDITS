@@ -13,7 +13,8 @@ Research and code
    using suffix trees. This version was slower, and could 
    process less data than this released version.
 
-As part of the Software Project course at the Utrecht University, a group of students called "Pal's Lab" worked on this code in 2025. These students are:
+As part of the Software Project course at the Utrecht University, a group of students
+called "Pal's Lab" worked on this code in 2025. These students are:
 * Ruben de Boer
 * Nick Broeks
 * David van Deursen

@@ -20,6 +20,7 @@ import System.Console.GetOpt
     ( ArgDescr (..)
     , OptDescr (..)
     )
+import Text.Read (readMaybe)
 
 import Data.Algorithms.Palindromes.Finders
     ( Algorithm (..)
@@ -150,19 +151,25 @@ parseApproximate :: Maybe String -> Flag
 parseApproximate str
     | isNothing str = Algorithm AlgApproximate{algGapSize = 0, algMaxErrors = 0}
     | null y =
-        error
-            ( "Invalid arguments for gapSize and maxErrors. (gapSize, maxErrors) = ("
-                ++ gapSize
-                ++ ", "
-                ++ maxErrors
-                ++ "). s must be the last flag in a series of flags."
-                ++ " Enter 2 numbers after s seperated by a '+'. For example: '-q1+2'."
-            )
+        error $
+            "Invalid arguments for -A/--approximate: \'"
+                ++ fromJust str
+                ++ "\'. Enter arguments as 2 numbers after seperated by a '+'. For example: '-A1+2'."
+    | y == "+" =
+        error $
+            "Invalid arguments for -A/--approximate: \'"
+                ++ fromJust str
+                ++ "\'. Please enter second argument"
+    | isNothing gapSize || isNothing maxErrors =
+        error $
+            "Invalid arguments for -A/--approximate: \'"
+                ++ fromJust str
+                ++ "\'. Arguments must be integers."
     | otherwise =
-        Algorithm AlgApproximate{algGapSize = read gapSize, algMaxErrors = read maxErrors}
+        Algorithm AlgApproximate{algGapSize = fromJust gapSize, algMaxErrors = fromJust maxErrors}
   where
     (x, y) = break (== '+') $ fromJust str
-    (gapSize, maxErrors) = (x, drop 1 y)
+    (gapSize, maxErrors) = (readMaybe x, readMaybe (drop 1 y))
 
 {- | Parses the optional error input to a Flag. If invalid inputs are given, an
 error is thrown.
@@ -171,16 +178,22 @@ parseQuadratic :: Maybe String -> Flag
 parseQuadratic str
     | isNothing str = Algorithm AlgQuadratic{algGapSize = 0, algMaxErrors = 0}
     | null y =
-        error
-            ( "Invalid arguments for gapSize and maxErrors. (gapSize, maxErrors) = ("
-                ++ gapSize
-                ++ ", "
-                ++ maxErrors
-                ++ "). q must be the last flag in a series of flags."
-                ++ " Enter 2 numbers after q seperated by a '+'. For example: '-q1+2'."
-            )
+        error $
+            "Invalid arguments for -Q/--quadratic: \'"
+                ++ fromJust str
+                ++ "\'. Enter arguments as 2 numbers after seperated by a '+'. For example: '-Q1+2'."
+    | y == "+" =
+        error $
+            "Invalid arguments for -Q/--quadratic: \'"
+                ++ fromJust str
+                ++ "\'. Please enter second argument"
+    | isNothing gapSize || isNothing maxErrors =
+        error $
+            "Invalid arguments for -Q/--quadratic: \'"
+                ++ fromJust str
+                ++ "\'. Arguments must be integers."
     | otherwise =
-        Algorithm AlgQuadratic{algGapSize = read gapSize, algMaxErrors = read maxErrors}
+        Algorithm AlgQuadratic{algGapSize = fromJust gapSize, algMaxErrors = fromJust maxErrors}
   where
     (x, y) = break (== '+') $ fromJust str
-    (gapSize, maxErrors) = (x, drop 1 y)
+    (gapSize, maxErrors) = (readMaybe x, readMaybe (drop 1 y))

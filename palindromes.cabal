@@ -49,10 +49,10 @@ library
     Data.Algorithms.Palindromes.Streaming
 
   build-depends:
-    , base       >=4.17     && <5
-    , conduit    >=1.3      && <1.4
-    , directory  >=1.3      && <1.4
-    , vector     >=0.13.1.0 && <0.14
+    , base       >=4.17 && <5
+    , conduit    >=1.3  && <1.4
+    , directory  >=1.3  && <1.4
+    , vector     >=0.13 && <0.14
 
 executable palindromes
   main-is:          Data/Algorithms/Palindromes/Main.hs
@@ -77,10 +77,10 @@ executable palindromes
     Data.Algorithms.Palindromes.Streaming
 
   build-depends:
-    , base       >=4.17     && <5
-    , conduit    >=1.3      && <1.4
-    , directory  >=1.3      && <1.4
-    , vector     >=0.13.1.0 && <0.14
+    , base       >=4.17 && <5
+    , conduit    >=1.3  && <1.4
+    , directory  >=1.3  && <1.4
+    , vector     >=0.13 && <0.14
 
 test-suite tests-palindromes
   type:             exitcode-stdio-1.0
@@ -109,12 +109,12 @@ test-suite tests-palindromes
     UTWordPals
 
   build-depends:
-    , base         >=4.17     && <5
-    , HUnit        >=1.6      && <1.7
-    , levenshtein  >=0.2      && <0.3
-    , palindromes  >=0.5      && <0.6
-    , QuickCheck   >=2.14     && <3.0
-    , vector       >=0.13.1.0 && <0.14
+    , base         >=4.17 && <5
+    , HUnit        >=1.6  && <1.7
+    , levenshtein  >=0.2  && <0.3
+    , palindromes  >=0.5  && <0.6
+    , QuickCheck   >=2.14 && <3.0
+    , vector       >=0.13 && <0.14
 
 benchmark benchmark
   type:             exitcode-stdio-1.0

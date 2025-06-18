@@ -29,13 +29,13 @@ source-repository this
 
 --------------------------------------------------------------------------------
 library
-  hs-source-dirs:  src
+  hs-source-dirs:   src
   default-language: Haskell2010
   exposed-modules:
     Data.Algorithms.Palindromes.Algorithms
+    Data.Algorithms.Palindromes.ApproximateAlgorithm
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
-    Data.Algorithms.Palindromes.ApproximateAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
@@ -55,15 +55,15 @@ library
     , vector     >=0.13.1.0 && <0.14
 
 executable palindromes
-  main-is:        Data/Algorithms/Palindromes/Main.hs
-  ghc-options:    -Wall -rtsopts -threaded
-  hs-source-dirs: src
+  main-is:          Data/Algorithms/Palindromes/Main.hs
+  ghc-options:      -Wall -rtsopts -threaded
+  hs-source-dirs:   src
   default-language: Haskell2010
   other-modules:
     Data.Algorithms.Palindromes.Algorithms
+    Data.Algorithms.Palindromes.ApproximateAlgorithm
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
-    Data.Algorithms.Palindromes.ApproximateAlgorithm
     Data.Algorithms.Palindromes.LinearAlgorithm
     Data.Algorithms.Palindromes.Options
     Data.Algorithms.Palindromes.Output
@@ -83,9 +83,9 @@ executable palindromes
     , vector     >=0.13.1.0 && <0.14
 
 test-suite tests-palindromes
-  type:           exitcode-stdio-1.0
-  hs-source-dirs: tests
-  main-is:        Main.hs
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   tests
+  main-is:          Main.hs
   default-language: Haskell2010
   other-modules:
     ITApproximate
@@ -95,11 +95,11 @@ test-suite tests-palindromes
     QuickCheckGenerators
     QuickCheckProperties
     QuickCheckSettings
+    UTApproximateAlgorithm
     UTDNAPals
     UTExtendPals
     UTFinders
     UTGetLeftRight
-    UTApproximateAlgorithm
     UTLinearAlgorithm
     UTPalEq
     UTProcessing
@@ -115,11 +115,11 @@ test-suite tests-palindromes
     , palindromes  >=0.5      && <0.6
     , QuickCheck   >=2.14     && <3.0
     , vector       >=0.13.1.0 && <0.14
-  
+
 benchmark benchmark
-  type:           exitcode-stdio-1.0
-  hs-source-dirs: benchmarking
-  main-is:        Main.hs
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   benchmarking
+  main-is:          Main.hs
   default-language: Haskell2010
   build-depends:
     , base         >=4.17 && <5
@@ -131,10 +131,10 @@ benchmark benchmark
     , strict       >=0.3  && <0.6
 
 benchmark profiling
-  type:           exitcode-stdio-1.0
-  hs-source-dirs: profiling
-  main-is:        Main.hs
-  ghc-options:    -rtsopts
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   profiling
+  main-is:          Main.hs
+  ghc-options:      -rtsopts
   default-language: Haskell2010
   build-depends:
     , base         >=4.17 && <5

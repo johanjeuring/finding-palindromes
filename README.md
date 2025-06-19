@@ -46,6 +46,8 @@ The approximate palindrome algorithm further supports:
 - Finding (approximate) palindromes with
   gaps in the center.
 
+For more information on the different algorithms and the different kinds of palindromes, see the tutorial on [our website](https://palindromes.science.uu.nl/smallsites/tutorial.html).
+
 ## Requirements
 
 Palindromes has the following requirements:

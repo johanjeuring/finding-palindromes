@@ -81,13 +81,8 @@ applySettingsToFinder
 Else, returns an empty string.
 -}
 checkSettingsWarnings :: Settings -> String
-checkSettingsWarnings Settings{algorithm = a, variant = v} =
-    case a of
-        AlgApproximate _ _ ->
-            if v == VarPunctuation
-                then
-                    "WARNING: The approximate palindrome algorithm currently does not "
-                        ++ "garantee that all maximal punctuation palindromes "
-                        ++ "are found."
-                else ""
-        _ -> ""
+checkSettingsWarnings Settings{algorithm = AlgApproximate _ _, variant = VarPunctuation} =
+    "WARNING: The approximate palindrome algorithm currently does not "
+        ++ "garantee that all maximal punctuation palindromes "
+        ++ "are found."
+checkSettingsWarnings _ = ""

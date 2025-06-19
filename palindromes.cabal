@@ -22,7 +22,7 @@ extra-doc-files:
   README.md
 
 build-type:      Simple
-tested-with:     GHC >=9.10 && <9.11
+tested-with:     GHC ==9.8.2 || ==9.10.1
 
 library
   hs-source-dirs:   src

@@ -4,7 +4,7 @@ Palindromes is a package for finding palindromes in files.
 
 ## Features
 
-Palindromes includes three algorithms: a linear and a quadratic worst time complexity algorithm and an algorithm for finding approximate palindromes.
+Palindromes includes three algorithms: a linear complexity algorithm, a quadratic time complexity algorithm and another quadratic algorithm for finding approximate palindromes.
 
 All three algorithms support the following features:
 - Finding plain palindromes
@@ -15,36 +15,35 @@ All three algorithms support the following features:
 - Finding word palindromes,
   palindromes made up of words instead of characters.
 
-Furthermore, the individual algorithms support some other features. 
-Here comes an overview of what each individual algorithm further supports. 
-There is some overlap between these features, 
-but we handle each algorithm separately to reduce the complexity of this text.
+Furthermore, an overview of features the individual algorithms support. 
+There is some overlap between these features, these are mentioned twice. 
+We also mention advantages and disadvantages of the algorithms.
 
 The linear algorithm further support:
 - Finding punctuation palindromes,
   text palindromes surrounded by (if at all) non-letters.
   This requires a quadratic postprocessing step.
-  However, you can still choose between the linear and 
-  quadratic palindrome algorithm for finding the palindromes themselves.
-
+- When there is many very large palindromes in the text, this algorithm is the fastest.  
 
 The quadratic algorithm further supports:
 - Finding punctuation palindromes,
   text palindromes surrounded by (if at all) non-letters.
   This requires a quadratic postprocessing step.
-  However, you can still choose between the linear and 
-  quadratic palindrome algorithm for finding the palindromes themselves.
-- Finding approximate palindromes with substitution errors,
+- Finding palindromes with substitution errors,
   in which a limited number of symbols may be substituted by other symbols to get palindromes. 
   Like 'river', which is a perfect palindrome if the 'i' is substituted for an 'e'. 
 - Finding (approximate) palindromes with
   gaps in the center.
+- This algorithm is faster than the approximate algorithm. It is also the fastest for most regular texts. 
 
 The approximate palindrome algorithm further supports:
 - Finding approximate palindromes with insertion, deletion and substitution errors,
-  in which a limited number of insertion, deletion or substitution operations on the 'left arm' of the approximate palindrome results in a palindrome. Like 'aaaaaaba', which is a palindrome if you add one 'b' after the first 'a'.
+  in which a limited number of insertion, deletion or substitution operations on the 'left arm' of the approximate palindrome results in a palindrome. A simple example is 'levels', which is a palindrome if you insert one 's' at the start of the word. 
 - Finding (approximate) palindromes with
   gaps in the center.
+
+The algorithms search for maximal palindromes but use different definitions of maximal. 
+For the linear and quadratic algorithm a maximal palindrome is the possible palindrome from a center (a position on a letter or inbetween two letters), from which the palindrome is extended on both sides. This means the algorithm will find a palindrome for each center. In approximate algoritm a maximal palindrome is any substring which cannot be extended on one or both sides without exceeding the allowed amount of insertions, deletions or substitions. 
 
 For more information on the different algorithms and the different kinds of palindromes, see the tutorial on [our website](https://palindromes.science.uu.nl/smallsites/tutorial.html).
 

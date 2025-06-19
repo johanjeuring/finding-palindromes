@@ -56,7 +56,7 @@ Palindromes has the following requirements:
 [GHC]: http://www.haskell.org/ghc/
 [Cabal]: http://www.haskell.org/cabal/
 
-## Download & Installation
+## Download & Installation of the executable
 
 _If you have [cabal-install]_, you should use that to install the package,
 because it will handle everything for you.
@@ -80,7 +80,7 @@ Guide].
 [cabal-install]: http://www.haskell.org/haskellwiki/Cabal-Install
 [Cabal User's Guide]: http://www.haskell.org/cabal/users-guide/
 
-## Usage
+## Usage of the executable
 
 run the following commands, with changing `<path-to-file>` to the file containing the input, and `<options>` with the flags you want enabled
 ```
@@ -110,6 +110,14 @@ If you want to see unicode characters in the output in a PowerShell terminal on 
 ```
     $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
 ```
+
+## Usage of the library
+If you want to use the palindromes library in your code, you probably want to use the finder functions in the Finder module. 
+These functions, like findPalindromes, return the found palindromes using the algorithms based on your arguments. 
+
+If your datatype does not use the standard Eq relation for 'palindrome equality', you can define an instance of PalEq for
+your datatype. For example, this is used for DNA, where A matches with T and G matches with C. 
+If you do not explicitly define a PalEq instance for your datatype, but you do define an Eq instance, the Eq instance is used.   
 
 ## Documentation
 

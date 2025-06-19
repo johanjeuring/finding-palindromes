@@ -43,7 +43,7 @@ The approximate palindrome algorithm further supports:
   gaps in the center.
 
 The algorithms search for maximal palindromes but use different definitions of maximal. 
-For the linear and quadratic algorithm a maximal palindrome is the possible palindrome from a center (a position on a letter or inbetween two letters), from which the palindrome is extended on both sides. This means the algorithm will find a palindrome for each center. In approximate algoritm a maximal palindrome is any substring which cannot be extended on one or both sides without exceeding the allowed amount of insertions, deletions or substitions. 
+For the linear and quadratic algorithm a maximal palindrome is the possible palindrome from a center (a position on a letter or inbetween two letters), from which the palindrome is extended on both sides. This means the algorithm will find a palindrome for each center. In approximate algorithm a maximal palindrome is any substring which cannot be extended on one or both sides without exceeding the allowed amount of insertions, deletions or substitions. 
 
 For more information on the different algorithms and the different kinds of palindromes, see the tutorial on [our website](https://palindromes.science.uu.nl/smallsites/tutorial.html).
 
@@ -85,26 +85,26 @@ Guide].
 
 run the following commands, with changing `<path-to-file-or-directory>` to the file or directory of files containing the input, and `<options>` with the flags you want enabled
 ```
-    palindromes.exe <path-to-file-or-directory> -<options>
+    palindromes <path-to-file-or-directory> -<options>
 ```
 Here are some examples of working flags, provided input.txt is a file in the same directory as the palindromes.cabal file:
 
 ```
-    palindromes.exe input.txt
-    palindromes.exe input.txt --quadratic --punctuation
-    palindromes.exe input.txt -Q
-    palindromes.exe input.txt -Q3+0
-    palindromes.exe input.txt -L --longest
-    palindromes.exe input.txt -A0+2 --all --details --minlength=6
-    palindromes.exe -i --dna
+    palindromes input.txt
+    palindromes input.txt --quadratic --punctuation
+    palindromes input.txt -Q
+    palindromes input.txt -Q3+0
+    palindromes input.txt -L --longest
+    palindromes input.txt -A0+2 --all --details --minlength=6
+    palindromes -i --dna
 ```
 
 To see all the options run one of these:
 
 ```
-    palindromes.exe
-    palindromes.exe -h
-    palindromes.exe --help
+    palindromes
+    palindromes -h
+    palindromes --help
 ```
 
 If you want to see unicode characters in the output in a PowerShell terminal on Windows, try to use the following commands in the terminal:
@@ -118,7 +118,7 @@ When working on the package in a code editor you can use:
 ```
 Instead of 
 ```
-    palindromes.exe
+    palindromes
 ```
 
 ## Usage of the library

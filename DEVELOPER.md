@@ -1,4 +1,4 @@
-# Developer
+# Palindromes - Developer Notes
 
 ## Installation
 
@@ -30,11 +30,11 @@ To use the correct version of Fourmolu we recommend you install ghc version 9.8.
 
 Installing hls is recommended for developement.
 
-# Tooling
+## Tooling
 
 When contributing or writing code for this repository please install the tools listed below. This ensures your code is written in the same style as the rest of the repository.
 
-## Hlint
+### Hlint
 
 For development using hlint is recommended. To install run
 
@@ -44,7 +44,7 @@ cabal install hlint
 
 If in visual studio code you also need to install the haskell-linter extension.
 
-## Style guide and autoformatting with fourmolu and cabal-fmt
+### Style guide and autoformatting with fourmolu and cabal-fmt
 
 Fourmolu is the autoformatter we used to automatically follow the style guide by [Kowainik (updated September 22, 2020)](https://kowainik.github.io/posts/2019-02-06-style-guide).
 
@@ -72,7 +72,7 @@ cabal install cabal-fmt
 
 For Windows type in system variables into the search bar and add C:\cabal\bin to the PATH variable. This ensures that you can access your cabal executables anywhere in your system.
 
-# Quality Metrics
+## Quality Metrics
 
 If you want to contribute to this project we maintain the following quality metrics:
 
@@ -81,7 +81,7 @@ If you want to contribute to this project we maintain the following quality metr
 
 These quality metrics can be measured using the tools listed below.
 
-## Testing
+### Testing
 
 To test that the package works run
 
@@ -91,7 +91,7 @@ cabal test --enable-tests
 
 This will run all the QuickCheck tests as well as unit tests.
 
-## Benchmarking
+### Benchmarking
 
 To run a benchmark you need to put the files you want to benchmark into the benchmarking/benchmarking-files folder. In either the dna-files or text-files subfolder depending on the type of the file. Then run:
 
@@ -108,7 +108,7 @@ cabal build --enable-benchmarks
 Results of benchmarks are written into benchmark-report.html which Criterion generates to give you a complete overview.
 For validating that changes did not significantly slow down the program there is a file called "benchmark-reference.html" which contains previous results of the benchmarks. Results can vary significantly per run but should not be off by more than a factor 10.
 
-## Profiling
+### Profiling
 
 For profiling there is a build target in profiling/Main.hs. This main contains an example that force evaluates a linear algorithm, a quadratic algorithm and an approximate palindrome algorithm call of findPalindromes on a text file. To profile your own files/functions/settings you can replace these function calls. Additionally you can use the SCC annotations to add cost centres for your profiling.
 
@@ -132,7 +132,7 @@ package palindromes
 
 Afterwards you can run the same command as before but you no longer have to use the flag `--enable-profiling`.
 
-### Heap Profiling
+#### Heap Profiling
 
 To check what is allocating memory to the heap you can pass different flags like `-hc` or `-hT` to GHC. These will generate a `.hp` report that you can use for heap profling. For information on all the flags go to: https://downloads.haskell.org/ghc/latest/docs/users_guide/profiling.html#rts-options-for-heap-profiling
 
@@ -156,7 +156,7 @@ hp2pretty palindromes.hp
 
 This will generate a file called palindromes.svg that you can click on to view the generated graph.
 
-## Code coverage
+### Code coverage
 
 The easiest way to measure code coverage is to use hpc using cabal. To do so simply run:
 

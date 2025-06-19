@@ -1,6 +1,11 @@
 Release history:
 
 --------
+19062025 Version 1.0.0.1
+--------
+Fix the cabal-version from 3.12 to 3.4, because 3.12 is not supported on Hackage.
+
+--------
 19062025 Version 1.0
 --------
 Features:

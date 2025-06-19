@@ -5,7 +5,7 @@ Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
-Stability   :  experimental
+Stability   :  provisional
 Portability :  portable
 
 This program has been developed by students from the bachelor Computer Science at Utrecht

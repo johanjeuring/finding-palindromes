@@ -16,7 +16,6 @@ author:
   Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
 maintainer:         johan@jeuring.net
-stability:          experimental
 extra-source-files:
   CREDITS
   README.md

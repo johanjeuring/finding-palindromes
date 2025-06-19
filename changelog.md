@@ -1,6 +1,24 @@
 Release history:
 
 --------
+19062025 Version 1.0
+--------
+Features:
+- Add approximate palindrome algorithm. 
+- Add benchmarking and profiling.
+- Optimizations to the finding algorithms.
+- Add --details and --ranges flags.
+- Directory can now be input.
+- Add progress bar.
+
+Fixes:
+- Support odd gapped palindromes for DNA.
+- Seperate executable from library.
+- Improved flag names.
+- Remove maxLength option.
+- Rename 'Complexity' datatype to 'Algorithms'
+
+--------
 07042025 Version 0.5
 --------
 Does a big clean up of the whole package:

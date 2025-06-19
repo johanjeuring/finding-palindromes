@@ -12,7 +12,7 @@ University within the Software Project course.
 
 Describes the settings for the palindrome finder functions.
 -}
-module Data.Algorithms.Palindromes.Settings (Settings (..))
+module Data.Algorithms.Palindromes.Settings (Settings (..), applySettingsToFinder)
 where
 
 import Data.List (intercalate)
@@ -43,3 +43,30 @@ instance Show Settings where
             , show (outputFilter settings)
             , show (minLength settings)
             ]
+
+-- | Finds all formatted palindromes given the settings. Can be done with and without a progress bar.
+applySettingsToFinder
+    :: Bool
+    -- ^ Is the progress bar disabled
+    -> Settings
+    -- ^ The settings to find palindromes with
+    -> (String -> IO String)
+applySettingsToFinder
+    progressDisabled
+    ( Settings
+            { algorithm = c
+            , variant = v
+            , outputFormat = o
+            , outputFilter = f
+            , minLength = l
+            }
+        )
+    input
+        | progressDisabled = return $ findPalindromesFormatted v o f c l input
+        | otherwise = do
+            pals <- findPalindromesWithProgressBar v c l filterOnlyLongest input
+            return (formatPalindromes o pals)
+      where
+        filterOnlyLongest = case f of
+            SelectLongest -> True
+            _ -> False

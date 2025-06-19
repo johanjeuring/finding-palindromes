@@ -18,7 +18,8 @@ import Control.Monad (filterM)
 import System.Console.GetOpt (ArgOrder (Permute), getOpt, usageInfo)
 import System.Environment (getArgs)
 
-import FlagsToSettings (applySettingsToFinder, getSettings)
+import Data.Algorithms.Palindromes.Settings (applySettingsToFinder)
+import FlagsToSettings (getSettings)
 import Options (Flag (..), options)
 
 import qualified System.Directory as Dir

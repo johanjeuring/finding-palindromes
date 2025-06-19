@@ -16,22 +16,12 @@ University within the Software Project course.
 This module contains functions that are used to get settings from the flags and apply them to the finder.
 -}
 module FlagsToSettings
-    ( applySettingsToFinder
-    , getSettings
+    ( getSettings
     , defaultSettings
     )
 where
 
-import Data.Algorithms.Palindromes.Finders
-    ( Algorithm (..)
-    , OutputFilter (..)
-    , OutputFormat (..)
-    , Variant (..)
-    , findPalindromesFormatted
-    , formatPalindromes
-    )
 import Data.Algorithms.Palindromes.Settings (Settings (..))
-import Data.Algorithms.Palindromes.Streaming (findPalindromesWithProgressBar)
 import Options (Flag (..))
 
 -- | If no flags are given to modify settings default settings are used
@@ -153,30 +143,3 @@ getSettings flags =
         isMinLength _ = False
         minLengthFlags :: [Flag]
         minLengthFlags = filter isMinLength xs
-
--- | Finds all formatted palindromes given the settings. Can be done with and without a progress bar.
-applySettingsToFinder
-    :: Bool
-    -- ^ Is the progress bar disabled
-    -> Settings
-    -- ^ The settings to find palindromes with
-    -> (String -> IO String)
-applySettingsToFinder
-    progressDisabled
-    ( Settings
-            { algorithm = c
-            , variant = v
-            , outputFormat = o
-            , outputFilter = f
-            , minLength = l
-            }
-        )
-    input
-        | progressDisabled = return $ findPalindromesFormatted v o f c l input
-        | otherwise = do
-            pals <- findPalindromesWithProgressBar v c l filterOnlyLongest input
-            return (formatPalindromes o pals)
-      where
-        filterOnlyLongest = case f of
-            SelectLongest -> True
-            _ -> False

@@ -16,6 +16,7 @@ Fixes:
 - Seperate executable from library.
 - Improved flag names.
 - Remove maxLength option.
+- Rename 'Complexity' datatype to 'Algorithms'
 
 --------
 07042025 Version 0.5

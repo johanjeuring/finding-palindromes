@@ -51,8 +51,8 @@ For more information on the different algorithms and the different kinds of pali
 
 Palindromes has the following requirements:
 
-- [GHC] version 9.4.8 or later - It has been tested with version 9.4.8 and 9.8.2
-- [Cabal] library version 3.12.1 or later - It has been tested with this version
+- [GHC] version 9.4.8 or later - It has been tested with version 9.4.8 and 9.8.2.
+- [Cabal] library version 3.4 or later - It has been tested with versions 3.4 and 3.12.1.
 
 [GHC]: http://www.haskell.org/ghc/
 [Cabal]: http://www.haskell.org/cabal/

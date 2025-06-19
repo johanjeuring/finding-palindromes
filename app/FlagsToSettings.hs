@@ -13,7 +13,7 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-This module contains functions that are used to get settings from the flags and apply them to the finder.
+This module contains functions that are used to get settings from the flags.
 -}
 module FlagsToSettings
     ( getSettings

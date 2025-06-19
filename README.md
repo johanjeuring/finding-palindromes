@@ -83,33 +83,42 @@ Guide].
 
 ## Usage of the executable
 
-run the following commands, with changing `<path-to-file>` to the file containing the input, and `<options>` with the flags you want enabled
+run the following commands, with changing `<path-to-file-or-directory>` to the file or directory of files containing the input, and `<options>` with the flags you want enabled
 ```
-    cabal run palindromes -- <path-to-file> -<options>
+    palindromes.exe <path-to-file-or-directory> -<options>
 ```
 Here are some examples of working flags, provided input.txt is a file in the same directory as the palindromes.cabal file:
 
 ```
-    cabal run palindromes -- input.txt
-    cabal run palindromes -- input.txt --quadratic --punctuation
-    cabal run palindromes -- input.txt -Q
-    cabal run palindromes -- input.txt -Q3+0
-    cabal run palindromes -- input.txt -L --longest
-    cabal run palindromes -- input.txt -A0+2 --all --details --minlength=6
-    cabal run palindromes -- -i --dna
+    palindromes.exe input.txt
+    palindromes.exe input.txt --quadratic --punctuation
+    palindromes.exe input.txt -Q
+    palindromes.exe input.txt -Q3+0
+    palindromes.exe input.txt -L --longest
+    palindromes.exe input.txt -A0+2 --all --details --minlength=6
+    palindromes.exe -i --dna
 ```
 
 To see all the options run one of these:
 
 ```
-    cabal run palindromes
-    cabal run palindromes -- -h
-    cabal run palindromes -- --help
+    palindromes.exe
+    palindromes.exe -h
+    palindromes.exe --help
 ```
 
 If you want to see unicode characters in the output in a PowerShell terminal on Windows, try to use the following commands in the terminal:
 ```
     $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
+```
+
+When working on the package in a code editor you can use:
+```
+    cabal run palindromes --
+```
+Instead of 
+```
+    palindromes.exe
 ```
 
 ## Usage of the library

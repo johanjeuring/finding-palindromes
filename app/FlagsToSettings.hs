@@ -21,6 +21,12 @@ module FlagsToSettings
     )
 where
 
+import Data.Algorithms.Palindromes.Finders
+    ( Algorithm (..)
+    , OutputFilter (..)
+    , OutputFormat (..)
+    , Variant (..)
+    )
 import Data.Algorithms.Palindromes.Settings (Settings (..))
 import Options (Flag (..))
 

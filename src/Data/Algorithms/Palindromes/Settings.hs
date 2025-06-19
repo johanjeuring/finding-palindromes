@@ -22,7 +22,10 @@ import Data.Algorithms.Palindromes.Finders
     , OutputFilter (..)
     , OutputFormat (..)
     , Variant (..)
+    , findPalindromesFormatted
+    , formatPalindromes
     )
+import Data.Algorithms.Palindromes.Streaming (findPalindromesWithProgressBar)
 
 -- | Data type with all the settings required for running algorithm.
 data Settings = Settings

@@ -1,5 +1,5 @@
 {- |
-Module      :  Data.Algorithms.Palindromes.Main
+Module      :  Main
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -18,8 +18,9 @@ import Control.Monad (filterM)
 import System.Console.GetOpt (ArgOrder (Permute), getOpt, usageInfo)
 import System.Environment (getArgs)
 
-import Data.Algorithms.Palindromes.Options (Flag (..), options)
-import Data.Algorithms.Palindromes.Settings (applySettingsToFinder, getSettings)
+import Data.Algorithms.Palindromes.Settings (applySettingsToFinder)
+import FlagsToSettings (getSettings)
+import Options (Flag (..), options)
 
 import qualified System.Directory as Dir
 import qualified System.IO as Sys

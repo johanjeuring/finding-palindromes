@@ -12,8 +12,11 @@ University within the Software Project course.
 
 Describes the settings for the palindrome finder functions.
 -}
-module Data.Algorithms.Palindromes.Settings (Settings (..), applySettingsToFinder)
-where
+module Data.Algorithms.Palindromes.Settings
+    ( Settings (..)
+    , applySettingsToFinder
+    , checkSettingsWarnings
+    ) where
 
 import Data.List (intercalate)
 
@@ -73,3 +76,18 @@ applySettingsToFinder
         filterOnlyLongest = case f of
             SelectLongest -> True
             _ -> False
+
+{- | Checks whether the found settings have problems. If so, returns a warnings message.
+Else, returns an empty string.
+-}
+checkSettingsWarnings :: Settings -> String
+checkSettingsWarnings Settings{algorithm = a, variant = v} =
+    case a of
+        AlgApproximate _ _ ->
+            if v == VarPunctuation
+                then
+                    "WARNING: The approximate palindrome algorithm currently does not "
+                        ++ "garantee that all maximal punctuation palindromes "
+                        ++ "are found."
+                else ""
+        _ -> ""

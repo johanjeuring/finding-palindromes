@@ -18,7 +18,7 @@ import Control.Monad (filterM)
 import System.Console.GetOpt (ArgOrder (Permute), getOpt, usageInfo)
 import System.Environment (getArgs)
 
-import Data.Algorithms.Palindromes.Settings (applySettingsToFinder)
+import Data.Algorithms.Palindromes.Settings (applySettingsToFinder, checkSettingsWarnings)
 import FlagsToSettings (getSettings)
 import Options (Flag (..), options)
 
@@ -109,11 +109,14 @@ main = do
     handleFlags flags hasFiles =
         ( if Help `elem` flags || (null flags && not hasFiles)
             then const $ return (usageInfo headerHelpMessage options)
-            else applySettingsToFinder progressDisabled (getSettings flags)
+            else \inputString -> do
+                putStrLn $ checkSettingsWarnings settings
+                applySettingsToFinder progressDisabled settings inputString
         , StandardInput `elem` flags
         )
       where
         progressDisabled = ProgressDisabled `elem` flags
+        settings = getSettings flags
 
     -- The header of the help message.
     headerHelpMessage :: String

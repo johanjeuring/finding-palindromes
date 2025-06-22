@@ -11,7 +11,7 @@ import Data.Algorithms.Palindromes.DNA (DNA (..), toDNA)
 
 import qualified Data.Vector.Unboxed as U
 
-import qualified Data.Algorithms.Palindromes.LinearAlgorithm as P
+import qualified Data.Algorithms.Palindromes.Internal.LinearAlgorithm as P
 
 testListLinearAlgorithm =
     [ testExtendPalindromeSSimple

@@ -1,5 +1,5 @@
 {- |
-Module      :  Data.Algorithms.Palindromes.PostProcessing
+Module      :  Data.Algorithms.Palindromes.Internal.PostProcessing
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -13,14 +13,14 @@ University within the Software Project course.
 Describes postprocessing functions. For now, this is used for the punctuation type to
 shorten palindromes to punctuation.
 -}
-module Data.Algorithms.Palindromes.PostProcessing
+module Data.Algorithms.Palindromes.Internal.PostProcessing
     ( filterPunctuation
     ) where
 
 import Data.Char (isLetter)
 
-import Data.Algorithms.Palindromes.PreProcessing (filterLetters')
-import Data.Algorithms.Palindromes.RangeFunctions (Range)
+import Data.Algorithms.Palindromes.Internal.PreProcessing (filterLetters')
+import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range)
 
 import qualified Data.Vector.Unboxed as U
 

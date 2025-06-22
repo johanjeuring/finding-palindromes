@@ -8,7 +8,7 @@ module UTApproximateAlgorithm (testListApproximateAlgorithm) where
 import Data.List (sort)
 import Test.HUnit (Test (..), assertEqual)
 
-import Data.Algorithms.Palindromes.ApproximateAlgorithm
+import Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm
     ( Cell (..)
     , approximateAlgorithm
     , sparsify

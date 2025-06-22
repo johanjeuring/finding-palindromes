@@ -10,8 +10,8 @@ import Test.HUnit (Test (..), assertEqual)
 import qualified Data.Vector as V (fromList)
 import qualified Data.Vector.Unboxed as U
 
-import qualified Data.Algorithms.Palindromes.PostProcessing as Post
-import qualified Data.Algorithms.Palindromes.PreProcessing as Pre
+import qualified Data.Algorithms.Palindromes.Internal.PostProcessing as Post
+import qualified Data.Algorithms.Palindromes.Internal.PreProcessing as Pre
 
 testListProcessing =
     [ testFilterLetters

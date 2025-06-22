@@ -22,12 +22,12 @@ module Data.Algorithms.Palindromes.Algorithms
     , approximateAlgorithm
     ) where
 
-import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
-import Data.Algorithms.Palindromes.LinearAlgorithm (extendPalindromeS)
-import Data.Algorithms.Palindromes.PalEq (PalEq)
-import Data.Algorithms.Palindromes.QuadraticAlgorithm
+import Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm (approximateAlgorithm)
+import Data.Algorithms.Palindromes.Internal.LinearAlgorithm (extendPalindromeS)
+import Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )
+import Data.Algorithms.Palindromes.PalEq (PalEq)
 
 import qualified Data.Vector.Generic as G
 

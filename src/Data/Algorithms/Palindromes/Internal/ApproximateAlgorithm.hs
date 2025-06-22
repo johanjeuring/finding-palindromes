@@ -2,7 +2,7 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.ApproximateAlgorithm
+Module      :  Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -19,7 +19,7 @@ maximum number of insertion, deletion and substitution errors. The main function
 approximateAlgorithm, which returns the ranges of the found maximal (gapped) approximate
 palindromes.
 -}
-module Data.Algorithms.Palindromes.ApproximateAlgorithm (Cell (..), approximateAlgorithm, sparsify) where
+module Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm (Cell (..), approximateAlgorithm, sparsify) where
 
 import Data.Algorithms.Palindromes.PalEq (PalEq, (=:=))
 

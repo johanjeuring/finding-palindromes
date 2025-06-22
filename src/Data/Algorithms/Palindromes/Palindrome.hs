@@ -14,7 +14,7 @@ Describes the palindrome datatype.
 -}
 module Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength) where
 
-import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToLength)
+import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range, rangeToLength)
 
 -- | Data type to represent a single found palindrome
 data Palindrome

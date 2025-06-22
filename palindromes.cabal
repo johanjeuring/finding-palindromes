@@ -29,17 +29,17 @@ library
   default-language: Haskell2010
   exposed-modules:
     Data.Algorithms.Palindromes.Algorithms
-    Data.Algorithms.Palindromes.ApproximateAlgorithm
     Data.Algorithms.Palindromes.DNA
     Data.Algorithms.Palindromes.Finders
-    Data.Algorithms.Palindromes.LinearAlgorithm
-    Data.Algorithms.Palindromes.Output
+    Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm
+    Data.Algorithms.Palindromes.Internal.LinearAlgorithm
+    Data.Algorithms.Palindromes.Internal.Output
+    Data.Algorithms.Palindromes.Internal.PostProcessing
+    Data.Algorithms.Palindromes.Internal.PreProcessing
+    Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
+    Data.Algorithms.Palindromes.Internal.RangeFunctions
     Data.Algorithms.Palindromes.PalEq
     Data.Algorithms.Palindromes.Palindrome
-    Data.Algorithms.Palindromes.PostProcessing
-    Data.Algorithms.Palindromes.PreProcessing
-    Data.Algorithms.Palindromes.QuadraticAlgorithm
-    Data.Algorithms.Palindromes.RangeFunctions
     Data.Algorithms.Palindromes.Settings
     Data.Algorithms.Palindromes.Streaming
 

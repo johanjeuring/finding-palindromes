@@ -25,7 +25,7 @@ import Data.Algorithms.Palindromes.Finders
     , Variant (..)
     , findPalindromes
     )
-import Data.Algorithms.Palindromes.Output (longest)
+import Data.Algorithms.Palindromes.Internal.Output (longest)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
 
 import qualified Data.Conduit as C

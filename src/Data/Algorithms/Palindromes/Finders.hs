@@ -34,12 +34,12 @@ module Data.Algorithms.Palindromes.Finders
 --    but the import is necessary on older versions.
 import Data.List (foldl')
 
-import Data.Algorithms.Palindromes.Algorithms
+import Data.Algorithms.Palindromes.Internal.Algorithms
     ( approximateAlgorithm
     , linearAlgorithm
     , quadraticAlgorithm
     )
-import Data.Algorithms.Palindromes.Output
+import Data.Algorithms.Palindromes.Internal.Output
     ( indicesInOutputText
     , indicesInOutputWord
     , longest
@@ -49,22 +49,22 @@ import Data.Algorithms.Palindromes.Output
     , showRanges
     , showTexts
     )
-import Data.Algorithms.Palindromes.PalEq (PalEq)
-import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
-import Data.Algorithms.Palindromes.PostProcessing (filterPunctuation)
-import Data.Algorithms.Palindromes.PreProcessing
+import Data.Algorithms.Palindromes.Internal.PostProcessing (filterPunctuation)
+import Data.Algorithms.Palindromes.Internal.PreProcessing
     ( filterLetters
     , filterLetters'
     , textToWords
     , textToWordsWithIndices
     , tryParseDNA
     )
-import Data.Algorithms.Palindromes.RangeFunctions
+import Data.Algorithms.Palindromes.Internal.RangeFunctions
     ( Range
     , indexedLengthToRange
     , rangeToLength
     , rangeToPalindromeCenter
     )
+import Data.Algorithms.Palindromes.PalEq (PalEq)
+import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 
 import qualified Data.Vector.Generic as G
 import qualified Data.Vector.Unboxed as U

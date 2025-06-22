@@ -30,9 +30,9 @@ import Data.Algorithms.Palindromes.Finders
     , findPalindromeRanges
     , findPalindromes
     )
+import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range, rangeToLength)
 import Data.Algorithms.Palindromes.PalEq (PalEq (..))
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength)
-import Data.Algorithms.Palindromes.RangeFunctions (Range, rangeToLength)
 import Data.Algorithms.Palindromes.Settings
     ( Settings (..)
     )

@@ -11,7 +11,7 @@ import Control.DeepSeq (NFData, force)
 import Control.Exception (evaluate)
 import GHC.Generics (Generic)
 
-import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
+import Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm (approximateAlgorithm)
 import Data.Algorithms.Palindromes.Finders (Algorithm (..), Variant (..), findPalindromes)
 import Data.Algorithms.Palindromes.Palindrome (Palindrome (..))
 

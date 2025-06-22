@@ -1,7 +1,7 @@
 {-# LANGUAGE BangPatterns #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.Output
+Module      :  Data.Algorithms.Palindromes.Internal.Output
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -13,9 +13,9 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
 This module contains functions that apply different ways of formatting the output of the
-algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
+algorithm functions (found in Data.Algorithms.Palindromes.Internal.Algorithms).
 -}
-module Data.Algorithms.Palindromes.Output
+module Data.Algorithms.Palindromes.Internal.Output
     ( indicesInOutputText
     , indicesInOutputWord
     , rangeToText
@@ -28,11 +28,11 @@ module Data.Algorithms.Palindromes.Output
 
 import Data.List (intercalate)
 
+import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range)
 import Data.Algorithms.Palindromes.Palindrome
     ( Palindrome (..)
     , getLength
     )
-import Data.Algorithms.Palindromes.RangeFunctions (Range)
 
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U

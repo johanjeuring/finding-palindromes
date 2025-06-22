@@ -1,5 +1,5 @@
 {- |
-Module      :  Data.Algorithms.Palindromes.PreProcessing
+Module      :  Data.Algorithms.Palindromes.Internal.PreProcessing
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -13,7 +13,7 @@ University within the Software Project course.
 Functions for converting string input to different variants that can be used in the
 algorithms.
 -}
-module Data.Algorithms.Palindromes.PreProcessing
+module Data.Algorithms.Palindromes.Internal.PreProcessing
     ( filterLetters
     , filterLetters'
     , textToWords

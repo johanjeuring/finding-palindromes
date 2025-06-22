@@ -13,7 +13,7 @@ import Data.Algorithms.Palindromes.DNA
 
 import qualified Data.Vector.Unboxed as U
 
-import qualified Data.Algorithms.Palindromes.QuadraticAlgorithm as Q
+import qualified Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm as Q
 
 testListQuadraticAlgorithm =
     [ testGappedApproximatePalindromesAroundCentresDNA

@@ -1,7 +1,7 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.LinearAlgorithm
+Module      :  Data.Algorithms.Palindromes.Internal.LinearAlgorithm
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -14,7 +14,7 @@ University within the Software Project course.
 
 This module contains an implementation of a linear algorithm to find palindromes.
 -}
-module Data.Algorithms.Palindromes.LinearAlgorithm
+module Data.Algorithms.Palindromes.Internal.LinearAlgorithm
     ( extendPalindromeS
     , finalPalindromesS
     , moveCenterS

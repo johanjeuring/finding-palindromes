@@ -1,7 +1,7 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.QuadraticAlgorithm
+Module      :  Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -14,7 +14,7 @@ University within the Software Project course.
 
 This module contains an implementation of a quadratic algorithm to find palindromes.
 -}
-module Data.Algorithms.Palindromes.QuadraticAlgorithm
+module Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     , getLeftRightCenterBetweenElems
     , getLeftRightCenterOnElem

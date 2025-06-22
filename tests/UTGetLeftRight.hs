@@ -7,7 +7,7 @@ module UTGetLeftRight (testListGetLeftRight) where
 
 import Test.HUnit (Test (..), assertEqual)
 
-import Data.Algorithms.Palindromes.QuadraticAlgorithm
+import Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
     ( getLeftRightCenterBetweenElems
     , getLeftRightCenterOnElem
     )

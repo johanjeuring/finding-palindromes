@@ -1,5 +1,5 @@
 {- |
-Module      :  Data.Algorithms.Palindromes.RangeFunctions
+Module      :  Data.Algorithms.Palindromes.Internal.RangeFunctions
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -12,7 +12,7 @@ University within the Software Project course.
 
 Describes functions that do range calculations.
 -}
-module Data.Algorithms.Palindromes.RangeFunctions
+module Data.Algorithms.Palindromes.Internal.RangeFunctions
     ( lengthsToRanges
     , indexedLengthToRange
     , rangeToLength

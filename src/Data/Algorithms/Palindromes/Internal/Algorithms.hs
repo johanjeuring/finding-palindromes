@@ -1,7 +1,7 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.Algorithms
+Module      :  Data.Algorithms.Palindromes.Internal.Algorithms
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -16,18 +16,18 @@ This module exports three functions that run algorithms for finding palindromes.
 One runs a linear time algorithms and the other a quadratic algorithm.
 These assume text has been preprocessed.
 -}
-module Data.Algorithms.Palindromes.Algorithms
+module Data.Algorithms.Palindromes.Internal.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
     , approximateAlgorithm
     ) where
 
-import Data.Algorithms.Palindromes.ApproximateAlgorithm (approximateAlgorithm)
-import Data.Algorithms.Palindromes.LinearAlgorithm (extendPalindromeS)
-import Data.Algorithms.Palindromes.PalEq (PalEq)
-import Data.Algorithms.Palindromes.QuadraticAlgorithm
+import Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm (approximateAlgorithm)
+import Data.Algorithms.Palindromes.Internal.LinearAlgorithm (extendPalindromeS)
+import Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
     ( gappedApproximatePalindromesAroundCentres
     )
+import Data.Algorithms.Palindromes.PalEq (PalEq)
 
 import qualified Data.Vector.Generic as G
 

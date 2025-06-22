@@ -13,7 +13,7 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
 This module contains functions that apply different ways of formatting the output of the
-algorithm functions (found in Data.Algorithms.Palindromes.Internal.Algorithms).
+algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
 -}
 module Data.Algorithms.Palindromes.Internal.Output
     ( indicesInOutputText

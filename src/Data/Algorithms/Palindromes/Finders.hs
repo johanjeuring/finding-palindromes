@@ -34,7 +34,7 @@ module Data.Algorithms.Palindromes.Finders
 --    but the import is necessary on older versions.
 import Data.List (foldl')
 
-import Data.Algorithms.Palindromes.Internal.Algorithms
+import Data.Algorithms.Palindromes.Algorithms
     ( approximateAlgorithm
     , linearAlgorithm
     , quadraticAlgorithm

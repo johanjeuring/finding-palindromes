@@ -1,7 +1,7 @@
 {-# LANGUAGE MonoLocalBinds #-}
 
 {- |
-Module      :  Data.Algorithms.Palindromes.Internal.Algorithms
+Module      :  Data.Algorithms.Palindromes.Algorithms
 Copyright   :  (c) 2007 - 2025 Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 License     :  BSD3
 Maintainer  :  johan@jeuring.net
@@ -16,7 +16,7 @@ This module exports three functions that run algorithms for finding palindromes.
 One runs a linear time algorithms and the other a quadratic algorithm.
 These assume text has been preprocessed.
 -}
-module Data.Algorithms.Palindromes.Internal.Algorithms
+module Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
     , quadraticAlgorithm
     , approximateAlgorithm

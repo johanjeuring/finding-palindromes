@@ -10,7 +10,7 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-Describes functions that do range calculations.
+Describes functions that do calculations on Ranges.
 -}
 module Data.Algorithms.Palindromes.Internal.RangeFunctions
     ( lengthsToRanges
@@ -41,14 +41,16 @@ indexedLengthToRange (index, len) = (startIndex, endIndex)
     endIndex :: Int
     endIndex = startIndex + len
 
-{- Converts a (palindrome's) range to a palindrome length. We take max to cover an edge
-case where the range is negative. The palindrome should then be empty. -}
+{- | Converts a (palindrome's) range to a palindrome length. We take max to cover an edge
+case where the range is negative. The palindrome should then be empty.
+-}
 rangeToLength :: Range -> Int
 rangeToLength (start, end) = max 0 (end - start)
 
-{- A center, in the context of palindromes, is the position in the string from where
+{- | A center, in the context of palindromes, is the position in the string from where
 the two arms of the palindrome extend. This can be on a character or inbetween two
 characters. Therefore this scales twice as fast, hence we can add both sides of the
-range in the string. -}
+range in the string.
+-}
 rangeToPalindromeCenter :: Range -> Int
 rangeToPalindromeCenter = uncurry (+)

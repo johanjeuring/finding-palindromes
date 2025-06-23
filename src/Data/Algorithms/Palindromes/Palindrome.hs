@@ -41,5 +41,6 @@ punctuation, the start character index is 1 (the first 'a') and the end characte
 is 6 (the 'c' after the second 'a'). The string representing this text palindrome is
 "ab..a". -}
 
+-- | Returns the length of the palindrome in the input vector.
 getLength :: Palindrome -> Int
 getLength = rangeToLength . palRange

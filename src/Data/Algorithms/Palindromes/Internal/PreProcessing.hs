@@ -32,10 +32,7 @@ import Data.Algorithms.Palindromes.DNA
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
 
--- Make sure all functions are of the type
--- (PalEq b) => String -> [b]
-
--- | A function that filters the string so that only letters remain
+-- | A function that filters the string so that only letters remain.
 filterLetters :: U.Vector Char -> U.Vector Char
 filterLetters x = U.map toLower $ U.filter isAlphaNum x
 
@@ -62,7 +59,7 @@ textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexe
     indexedCharacters :: [(Int, Char)]
     indexedCharacters = U.toList $ filterSpaceAndLetters input
 
-    -- Convert a list of indexed characters to an indexed string
+    -- Convert a list of indexed characters to an indexed string.
     toWord :: [(Int, Char)] -> ((Int, Int), [Char])
     toWord [] = error "Empty string"
     toWord word@(firstIndexedChar : _) =
@@ -70,7 +67,7 @@ textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexe
         , map snd word
         )
 
-    -- The words function as written in Prelude, but on indexed characters
+    -- The words function as written in Prelude, but on indexed characters.
     wordsWithIndices :: [(Int, Char)] -> [[(Int, Char)]]
     wordsWithIndices s
         | null checking = []
@@ -79,17 +76,20 @@ textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexe
         checking = dropWhile (isSpace . snd) s
         (word, remaining) = break (isSpace . snd) checking
 
+    {- Keep only (lowercase) letters and spaces. Returns a vector of tuples with the
+    original index of the charactar along with the character. -}
     filterSpaceAndLetters :: U.Vector Char -> U.Vector (Int, Char)
     filterSpaceAndLetters w =
         U.filter
             (\x -> (isAlphaNum . snd) x || (isSpace . snd) x)
             (U.indexed (U.map toLower w))
 
--- If trying to parse the string to DNA would fail, throw a more readable error
+-- | If trying to parse the string to DNA would fail, throw a more readable error.
 tryParseDNA :: U.Vector Char -> U.Vector DNA
--- tryParseDNA input
---     | (isNothing . parseDna) input = error "Invalid DNA string"
---     | otherwise = (fromJust . parseDna) input
 tryParseDNA input = fromMaybe (error "Invalid DNA string") (parseDna input)
+
+{- | Filters the string so that only letters remain and parses it to DNA. Returns Nothing
+if the string cannot be fully parsed to DNA.
+-}
 parseDna :: U.Vector Char -> Maybe (U.Vector DNA)
 parseDna = toDNA . filterLetters

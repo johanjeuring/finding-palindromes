@@ -38,7 +38,7 @@ import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
 
 {- | Takes a start and an end index in the filtered string and returns the indices
-in the unfiltered string
+in the unfiltered string.
 -}
 indicesInOutputText :: Range -> Int -> U.Vector Int -> Range
 indicesInOutputText (start', end') !inputLength originalIndices
@@ -50,7 +50,7 @@ indicesInOutputText (start', end') !inputLength originalIndices
     end = (originalIndices U.! (end' - 1)) + 1
 
 {- | Takes a range in the vector containing words and returns the range of the text
-of the word palindrome in the original string
+of the word palindrome in the original string.
 -}
 indicesInOutputWord :: Range -> Int -> V.Vector (Range, String) -> Range
 indicesInOutputWord (start', end') !inputLength wordsWithIndices
@@ -69,12 +69,15 @@ indicesInOutputWord (start', end') !inputLength wordsWithIndices
     endIndex :: Int
     endIndex = snd (fst lastWord)
 
--- | Takes a start and end index (exclusive) and returns the substring in the text with that range
+-- | Takes a start and end index (exclusive) and returns the substring in the text with that range.
 rangeToText :: Range -> U.Vector Char -> String
 rangeToText (start, end) input
     | end - start > 0 = U.toList $ U.slice start (end - start) input
     | otherwise = ""
 
+{- | foldl helper function that makes sure the resulting list only contains the longest
+palindromes out of the input list.
+-}
 longest :: [Palindrome] -> Palindrome -> [Palindrome]
 longest [] p = [p]
 longest pals@(p1 : _) p2
@@ -86,13 +89,15 @@ longest pals@(p1 : _) p2
 showLengths :: [Palindrome] -> String
 showLengths pals = show $ map getLength pals
 
--- | All maximal palindromes as a list of strings, separated by a newline.
+-- | Show all palindromes as a list of strings, separated by a newline.
 showTexts :: [Palindrome] -> String
 showTexts pals = intercalate "\n" (map (\x -> "\"" ++ palText x ++ "\"") pals)
 
+-- | Show all ranges of the palindromes.
 showRanges :: [Palindrome] -> String
 showRanges pals = show $ map palRangeInText pals
 
+-- | Show all details of the palindromes: text, range and length.
 showAll :: [Palindrome] -> String
 showAll pals = intercalate "\n" (map palToDetailString pals)
   where

@@ -101,6 +101,9 @@ data OutputFormat
       FormatAllDetails
     deriving (Eq, Show)
 
+{- | Used to describe different possible filters on the output. Used as a setting in
+finding functions.
+-}
 data OutputFilter
     = -- | Select longest (can be multiple of same length)
       SelectLongest
@@ -110,8 +113,9 @@ data OutputFilter
       SelectAll
     deriving (Eq, Show)
 
-{- | Used as a setting for what algorithm to run. The quadratic algorithm also has
-functionality for including gaps and errors, therefore this is given as an extra setting.
+{- | Used as a setting for what algorithm to run. The quadratic algorithm and Approximate
+Palindrome algorithm also have functionality for including gaps and errors, therefore this
+is given as an extra setting.
 -}
 data Algorithm
     = AlgLinear
@@ -220,15 +224,17 @@ findPalindromesFormatted variant outputFormat outputFilter algorithm minlen inpu
         filterPalindromes outputFilter $
             findPalindromes variant algorithm minlen input
 
+-- | Filter the list of found maximal palindromes using the selected OutputFilter.
 filterPalindromes :: OutputFilter -> [Palindrome] -> [Palindrome]
 filterPalindromes outputFilter = case outputFilter of
-    -- reverse foldl' is more efficient in memory than foldr
-    -- This is because know the fold can be applied as soon as the result of the algorithm is computed
-    -- With foldr we would first have to compute the entire list before we can apply the filter
+    {- reverse foldl' is more efficient in memory than foldr. This is because know the
+    fold can be applied as soon as the result of the algorithm is computed. With foldr we
+    would first have to compute the entire list before we can apply the filter. -}
     SelectLongest -> reverse . foldl' longest []
     SelectAt n -> filter ((== n) . rangeToPalindromeCenter . palRange)
     SelectAll -> id
 
+-- | Show the list of palindromes using the selected OutputFormat.
 formatPalindromes :: OutputFormat -> [Palindrome] -> String
 formatPalindromes _ [] = "No palindromes found"
 formatPalindromes outputFormat pals = case outputFormat of

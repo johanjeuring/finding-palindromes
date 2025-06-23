@@ -12,9 +12,13 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-This module exports three functions that run algorithms for finding palindromes.
-One runs a linear time algorithms and the other a quadratic algorithm.
+This module exports three functions that run algorithms for finding palindromes:
+1. The linear algorithm (for finding palindromes in linear time).
+2. The quadratic algorithm (for finding palindromes in quadratic time).
+3. The Approximate Palindrome algorithm for finding approximate palindromes.
 These assume text has been preprocessed.
+
+More information about what features the algorithms support is in the README.md.
 -}
 module Data.Algorithms.Palindromes.Algorithms
     ( linearAlgorithm
@@ -31,21 +35,23 @@ import Data.Algorithms.Palindromes.PalEq (PalEq)
 
 import qualified Data.Vector.Generic as G
 
-{- | Search for palindromes using the linear time algorithm. Returns a list of the maximum
-length palindromes which were found at each center index in the input.
+{- | Search for palindromes using the linear time algorithm. Returns a list of lengths of
+the maximal palindromes which were found at each center from the input.
 -}
 linearAlgorithm
     :: (PalEq a, G.Vector v a)
     => Bool
-    -- ^ isAntiReflexive, antireflexive types only need to check even indices
+    {- ^ isAntiReflexive, antireflexive types only need to check even indices, because the
+    linear algorithm does not support gaps.
+    -}
     -> v a
     -> [Int]
 linearAlgorithm isAntiReflexive input =
     reverse $
         extendPalindromeS isAntiReflexive input 0 [] 0
 
-{- | Search for palindromes using the quadratic algorithm. Returns a list of the maximum
-length palindromes which were found at each center index in the input. Gaps allow the
+{- | Search for palindromes using the quadratic algorithm. Returns a list of lengths of
+the maximal palindromes which were found at each center from the input. Gaps allow the
 palindrome to have a gap at the center of given length. Errors allow some substitution
 mistakes in the palindrome.
 -}

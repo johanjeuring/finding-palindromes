@@ -183,6 +183,11 @@ getLeftRightReflexive gapSize center lengthInput
 ---------------------------------------------------------------------
 -}
 
+{- | The length of the maximal palindrome around the specified center for anti-reflexive
+datatypes. This is a separate function because the center indices for anti-reflexive
+datatypes are different than those for reflexive datatypes, because there are fewer
+centers for anti-reflexive datatypes.
+-}
 lengthPalAtCenterAntiReflexive
     :: (PalEq a, G.Vector v a)
     => v a

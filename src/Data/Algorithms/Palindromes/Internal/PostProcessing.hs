@@ -24,7 +24,7 @@ import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range)
 
 import qualified Data.Vector.Unboxed as U
 
--- | This function changes the a list of ranges for punctuation palindromes by shrinking to punctuation.
+-- | This function changes a list of ranges for punctuation palindromes by shrinking to punctuation.
 filterPunctuation :: U.Vector Char -> [Range] -> [Range]
 filterPunctuation input = map shrinkRange
   where

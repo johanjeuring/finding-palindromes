@@ -75,8 +75,8 @@ instance {-# OVERLAPPING #-} PalEq DNA where
     C =:= G = True
     _ =:= _ = False
 
-{- | Parsed a foldable with chars to a foldable with the DNA datatype. Returns Nothing if
-  the input cannot be fully parsed to DNA.
+{- | Parses an unboxed vector with chars to an unboxed vector with the DNA datatype.
+Returns Nothing if the input cannot be fully parsed to DNA.
 -}
 toDNA :: U.Vector Char -> Maybe (U.Vector DNA)
 toDNA x

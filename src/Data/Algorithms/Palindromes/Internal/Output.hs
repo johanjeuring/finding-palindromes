@@ -40,7 +40,15 @@ import qualified Data.Vector.Unboxed as U
 {- | Takes a start and an end index in the filtered string and returns the indices
 in the unfiltered string.
 -}
-indicesInOutputText :: Range -> Int -> U.Vector Int -> Range
+indicesInOutputText
+    :: Range
+    -- ^ The range of the palindrome range in the filtered vector.
+    -> Int
+    -- ^ The length of the original input.
+    -> U.Vector Int
+    -- ^ The indices of every element in the filtered vector in the original string.
+    -> Range
+    -- ^ The range of the paldinrome in the original string.
 indicesInOutputText (start', end') !inputLength originalIndices
     | start' >= U.length originalIndices = (inputLength, inputLength)
     | end' - start' > 0 = (start, end)
@@ -52,22 +60,29 @@ indicesInOutputText (start', end') !inputLength originalIndices
 {- | Takes a range in the vector containing words and returns the range of the text
 of the word palindrome in the original string.
 -}
-indicesInOutputWord :: Range -> Int -> V.Vector (Range, String) -> Range
+indicesInOutputWord
+    :: Range
+    -- ^ The range of the word palindrome in the vector of words.
+    -> Int
+    -- ^ The length of the original text.
+    -> V.Vector Range
+    -- ^ A vector containing the indices in the original text of every word in that text.
+    -> Range
 indicesInOutputWord (start', end') !inputLength wordsWithIndices
     | start' >= length wordsWithIndices =
         (inputLength, inputLength)
     | end' - start' > 0 = (startIndex, endIndex)
     | otherwise = (startIndex, startIndex)
   where
-    firstWord :: (Range, String)
+    firstWord :: Range
     firstWord = wordsWithIndices V.! start'
-    lastWord :: (Range, String)
+    lastWord :: Range
     lastWord = wordsWithIndices V.! (end' - 1)
 
     startIndex :: Int
-    startIndex = fst $ fst firstWord
+    startIndex = fst firstWord
     endIndex :: Int
-    endIndex = snd (fst lastWord)
+    endIndex = snd lastWord
 
 -- | Takes a start and end index (exclusive) and returns the substring in the text with that range.
 rangeToText :: Range -> U.Vector Char -> String

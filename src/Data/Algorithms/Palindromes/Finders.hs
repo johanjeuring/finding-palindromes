@@ -53,8 +53,8 @@ import Data.Algorithms.Palindromes.Internal.PostProcessing (filterPunctuation)
 import Data.Algorithms.Palindromes.Internal.PreProcessing
     ( filterLetters
     , filterLetters'
+    , textToWordIndices
     , textToWords
-    , textToWordsWithIndices
     , tryParseDNA
     )
 import Data.Algorithms.Palindromes.Internal.RangeFunctions
@@ -207,7 +207,7 @@ findPalindromes variant algorithm minlen input =
         VarPunctuation -> indicesInOutputText range inputLength (filterLetters' inputVector)
         VarDNA -> indicesInOutputText range inputLength (filterLetters' inputVector)
         VarPlain -> range
-        VarWord -> indicesInOutputWord range inputLength (textToWordsWithIndices inputVector)
+        VarWord -> indicesInOutputWord range inputLength (textToWordIndices inputVector)
     !inputVector = U.fromList input
     !inputLength = U.length inputVector
 

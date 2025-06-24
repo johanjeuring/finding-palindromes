@@ -17,7 +17,7 @@ module Data.Algorithms.Palindromes.Internal.PreProcessing
     ( filterLetters
     , filterLetters'
     , textToWords
-    , textToWordsWithIndices
+    , textToWordIndices
     , tryParseDNA
     ) where
 
@@ -28,6 +28,7 @@ import Data.Algorithms.Palindromes.DNA
     ( DNA
     , toDNA
     )
+import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range)
 
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
@@ -49,29 +50,24 @@ textToWords :: U.Vector Char -> V.Vector String
 textToWords x =
     V.fromList $ words $ map toLower $ filter (\a -> isAlphaNum a || isSpace a) $ U.toList x
 
-{- | A function that filters the string so that only letters and spaces remain, then
-splits the result on every space so that only words remain. It remembers the original
-start and end index of each word.
--}
-textToWordsWithIndices :: U.Vector Char -> V.Vector ((Int, Int), String)
-textToWordsWithIndices input = V.fromList $ map toWord $ wordsWithIndices indexedCharacters
+-- | A function that returns a vector of ranges corresponding to the ranges of every word in the original input text.
+textToWordIndices :: U.Vector Char -> V.Vector Range
+textToWordIndices input = V.fromList $ map toWordRange $ wordIndices indexedCharacters
   where
     indexedCharacters :: [(Int, Char)]
     indexedCharacters = U.toList $ filterSpaceAndLetters input
 
-    -- Convert a list of indexed characters to an indexed string.
-    toWord :: [(Int, Char)] -> ((Int, Int), [Char])
-    toWord [] = error "Empty string"
-    toWord word@(firstIndexedChar : _) =
-        ( (fst firstIndexedChar, fst (last word) + 1)
-        , map snd word
-        )
+    -- Convert a list of indexed characters to the range of the word it represents.
+    toWordRange :: [Int] -> Range
+    toWordRange [] = error "Empty string"
+    toWord word@(firstIndex : _) =
+        (firstIndex, last word + 1)
 
     -- The words function as written in Prelude, but on indexed characters.
-    wordsWithIndices :: [(Int, Char)] -> [[(Int, Char)]]
-    wordsWithIndices s
+    wordIndices :: [(Int, Char)] -> [[Int]]
+    wordIndices s
         | null checking = []
-        | otherwise = word : wordsWithIndices remaining
+        | otherwise = map fst word : wordIndices remaining
       where
         checking = dropWhile (isSpace . snd) s
         (word, remaining) = break (isSpace . snd) checking

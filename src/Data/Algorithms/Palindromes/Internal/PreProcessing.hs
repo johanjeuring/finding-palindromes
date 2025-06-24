@@ -62,7 +62,7 @@ textToWordIndices input = V.fromList $ map toWordRange $ wordIndices indexedChar
     (inclusive) and last (exclusive) characters. -}
     toWordRange :: [Int] -> Range
     toWordRange [] = error "Empty string"
-    toWord word@(firstIndex : _) =
+    toWordRange word@(firstIndex : _) =
         (firstIndex, last word + 1)
 
     -- The words function as written in Prelude, but on indexed characters.

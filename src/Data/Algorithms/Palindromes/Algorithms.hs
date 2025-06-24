@@ -12,11 +12,10 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-This module exports three functions that run algorithms for finding palindromes:
+This module exports three functions that run algorithms for finding palindromes in Vectors:
 1. The linear algorithm (for finding palindromes in linear time).
 2. The quadratic algorithm (for finding palindromes in quadratic time).
-3. The Approximate Palindrome algorithm for finding approximate palindromes.
-These assume text has been preprocessed.
+3. The Approximate Palindrome algorithm for finding approximate palindromes. This algorithm also runs in quadratic time
 
 More information about what features the algorithms support is in the README.md.
 -}
@@ -41,11 +40,13 @@ the maximal palindromes which were found at each center from the input.
 linearAlgorithm
     :: (PalEq a, G.Vector v a)
     => Bool
-    {- ^ isAntiReflexive, antireflexive types only need to check even indices, because the
+    {- ^ Represents if the datatype 'a' is anti-reflexive, anti-reflexive types only need to check even indices, because the
     linear algorithm does not support gaps.
     -}
     -> v a
+    -- ^ The input vector to find palindromes in
     -> [Int]
+    -- ^ A list of integers representing the palindrome lengths at every center position.
 linearAlgorithm isAntiReflexive input =
     reverse $
         extendPalindromeS isAntiReflexive input 0 [] 0
@@ -53,17 +54,21 @@ linearAlgorithm isAntiReflexive input =
 {- | Search for palindromes using the quadratic algorithm. Returns a list of lengths of
 the maximal palindromes which were found at each center from the input. Gaps allow the
 palindrome to have a gap at the center of given length. Errors allow some substitution
-mistakes in the palindrome.
+errors in the palindrome.
 -}
 quadraticAlgorithm
     :: (PalEq a, G.Vector v a)
     => Bool
-    -- ^ isAntiReflexive
+    {- ^ Represents if the datatype 'a' is anti-reflexive, in the case where we search for an even-gapped,
+    anti-reflexive query we only need to look at even indices as odd palindromes can not exist then.
+    -}
     -> Int
-    -- ^ gapSize
+    {- -^ Represents a gap in the center when looking for palindromes.
+    This means that the middle X characters will be ignored at every center. -}
     -> Int
-    -- ^ maxErrors
+    -- ^ Represents that maximum allowed substitution errors when looking for palindromes..
     -> v a
-    -- ^ input
+    -- ^ The input vector to find palindromes in
     -> [Int]
+    -- ^ A list of integers representing the palindrome lengths at every center position.
 quadraticAlgorithm = gappedApproximatePalindromesAroundCentres

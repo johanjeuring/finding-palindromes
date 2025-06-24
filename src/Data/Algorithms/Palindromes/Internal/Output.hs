@@ -14,6 +14,7 @@ University within the Software Project course.
 
 This module contains functions that apply different ways of formatting the output of the
 algorithm functions (found in Data.Algorithms.Palindromes.Algorithms).
+It also contains the logic to convert a palindrome range to the text the range represents.
 -}
 module Data.Algorithms.Palindromes.Internal.Output
     ( indicesInOutputText
@@ -84,7 +85,7 @@ indicesInOutputWord (start', end') !inputLength wordsWithIndices
     endIndex :: Int
     endIndex = snd lastWord
 
--- | Takes a start and end index (exclusive) and returns the substring in the text with that range.
+-- | Takes a start and end index (exclusive) and returns the substring in the text with that range
 rangeToText :: Range -> U.Vector Char -> String
 rangeToText (start, end) input
     | end - start > 0 = U.toList $ U.slice start (end - start) input
@@ -100,7 +101,7 @@ longest pals@(p1 : _) p2
     | getLength p1 < getLength p2 = [p2]
     | otherwise = pals
 
--- | All maximal palindrome lengths
+-- | All maximal palindrome lengths.
 showLengths :: [Palindrome] -> String
 showLengths pals = show $ map getLength pals
 

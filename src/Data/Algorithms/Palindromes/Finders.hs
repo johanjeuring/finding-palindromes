@@ -13,20 +13,17 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-This module is the core of this package and contains the functions that find palindromes.
-Most useful perhaps is the findPalindromesFormatted which also formats the palindrome
-based on the outputFormat data type as described in this module. For more statistics the
-findPalindromes which outputs a palindrome can be used.
+This module is the core of this package and contains the functions to find palindromes in text.
+It defines the different options that can be used to find palindromes.
 -}
 module Data.Algorithms.Palindromes.Finders
-    ( findPalindromes
-    , findPalindromeRanges
-    , findPalindromesFormatted
-    , formatPalindromes
-    , Variant (..)
+    ( Variant (..)
     , OutputFormat (..)
     , OutputFilter (..)
     , Algorithm (..)
+    , findPalindromes
+    , findPalindromesFormatted
+    , formatPalindromes
     , filterPalindromes
     ) where
 
@@ -181,11 +178,18 @@ findPalindromeRanges variant algorithm input =
         VarPunctuation -> filterPunctuation input
         _ -> id
 
-{- | This function combines all the phases required to find palindromes.
-It first finds all the palindrome ranges based on the settings,
-then filters them by length and finally converts the found ranges to the Palindrome datatype
+{- | This function finds palindromes in the input string given the settings parameters.
+It does so by first converting the input to a vector of PalEq elements.
+The exact datatype depends on the Variant setting. Then using the selected Algorithm it finds the palindrome ranges.
+Finally the ranges are converted to palindrome objects which also contain the actual text of the ranges.
 -}
-findPalindromes :: Variant -> Algorithm -> Int -> String -> [Palindrome]
+findPalindromes
+    :: Variant
+    -> Algorithm
+    -> Int
+    -- ^ The minimum length of palindromes to find.
+    -> String
+    -> [Palindrome]
 findPalindromes variant algorithm minlen input =
     map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant algorithm inputVector
   where
@@ -211,14 +215,19 @@ findPalindromes variant algorithm minlen input =
     !inputVector = U.fromList input
     !inputLength = U.length inputVector
 
-{- | This function combines four phases based on the settings and input given: The
-pre-processing, the algorithm phase, the post processing phase, the parsing phase and the
-output phase. The final phase takes the filter and format flags into account and returns a
-String that can be printed. It return the palindrome found using the settings, formatted
-to the given filter and format.
+{- | Shows found palindromes in the input string given the setting parameters.
+It does so by finding all the palindromes, then applying the OutputFilter
+and finally formatting them to a string depending on the OutputFormat.
 -}
 findPalindromesFormatted
-    :: Variant -> OutputFormat -> OutputFilter -> Algorithm -> Int -> String -> String
+    :: Variant
+    -> OutputFormat
+    -> OutputFilter
+    -> Algorithm
+    -> Int
+    -- ^ The minimum length of palindromes to find.
+    -> String
+    -> String
 findPalindromesFormatted variant outputFormat outputFilter algorithm minlen input =
     formatPalindromes outputFormat $
         filterPalindromes outputFilter $

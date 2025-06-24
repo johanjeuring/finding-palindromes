@@ -29,8 +29,9 @@ import qualified Data.Vector.Generic as G (Vector (..))
 import qualified Data.Vector.Generic.Mutable as GM (MVector (..))
 import qualified Data.Vector.Unboxed as U (MVector, Unbox, Vector, any, map)
 
-{- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA
-  has palindromes, instead PalEq should be used.
+{- | Datatype for the different DNA bases, note that (=)/Eq is not suitable for checking if DNA
+  has palindromes, instead PalEq should be used. This is because DNA is anti-reflexive,
+   meaning it will never match with itself.
 -}
 data DNA = A | T | C | G | N deriving (Show, Eq, Enum)
 
@@ -67,7 +68,7 @@ instance G.Vector U.Vector DNA where
 
 instance U.Unbox DNA
 
--- | Declare instance PalEq for DNA. A and T form a couple, C and G form a couple.
+-- | Defined as the base pairs for DNA. Meaning A matches T and G matches with C.
 instance {-# OVERLAPPING #-} PalEq DNA where
     A =:= T = True
     T =:= A = True

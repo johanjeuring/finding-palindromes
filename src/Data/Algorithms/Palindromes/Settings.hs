@@ -10,7 +10,7 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-Describes the settings for the palindrome finder functions.
+Describes the settings for the palindrome finder functions. These are used to easily store and apply a group of settings.
 -}
 module Data.Algorithms.Palindromes.Settings
     ( Settings (..)

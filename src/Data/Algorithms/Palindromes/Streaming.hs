@@ -15,7 +15,7 @@ University within the Software Project course.
 This module contains functions for streaming the search for palindromes. This is used for
 the progress bar.
 -}
-module Data.Algorithms.Palindromes.Streaming (findPalindromesStream, findPalindromesWithProgressBar, findPalindromesVisualised) where
+module Data.Algorithms.Palindromes.Streaming (findPalindromesWithProgressBar, findPalindromesVisualised) where
 
 import Control.Monad.IO.Class (liftIO)
 import System.IO (hFlush)
@@ -32,12 +32,6 @@ import qualified Data.Conduit as C
 import qualified Data.Conduit.Combinators as C
 import qualified Data.Vector as V
 import qualified System.IO as Sys
-
--- | Streams the result of the given settings
-findPalindromesStream
-    :: Variant -> Algorithm -> Int -> String -> C.ConduitT () Palindrome IO ()
-findPalindromesStream variant algorithm minlen input =
-    C.yieldMany $ findPalindromes variant algorithm minlen input
 
 {- | Returns the result of finding palindromes with the settings (The first 3 params) on the string
 whilst diplaying the intermediate progress using the given function
@@ -61,7 +55,7 @@ findPalindromesVisualised variant algorithm minLength filterLongest input visual
         visualiseProgress 0
         result <-
             C.runConduit $
-                findPalindromesStream variant algorithm streamMinLength input
+                C.yieldMany (findPalindromes variant algorithm minLength input)
                     C..| C.conduitVector chunkSize -- Chunk result stream
                     C..| calcVisualiseProgress inputLength algorithm visualiseProgress
                     C..| C.concat

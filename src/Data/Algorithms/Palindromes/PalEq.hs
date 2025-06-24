@@ -26,13 +26,13 @@ module Data.Algorithms.Palindromes.PalEq
 
 import qualified Data.Vector.Generic as G
 
-{- |  “(=:=) determines whether or not two elements are equal when finding palindromes.
+{- | (=:=) determines whether or not two elements are equal when finding palindromes.
 This is not always standard equality for example, A (=:=) T in DNA, and 'z' (=:=) 'z' in normal text.
 -}
 class PalEq a where
     (=:=) :: a -> a -> Bool
 
--- | Define PalEq instance for any a of class Eq. Just use the equality relation.
+-- | Define PalEq instance for any a of class Eq. Just use the equality relation. If it is different it can be overriden.
 instance (Eq a) => PalEq a where
     (=:=) = (==)
 

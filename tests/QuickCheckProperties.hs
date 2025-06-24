@@ -27,7 +27,6 @@ import Data.Algorithms.Palindromes.DNA (DNA (A, C, G, T), charToDNA, dnaToChar)
 import Data.Algorithms.Palindromes.Finders
     ( Algorithm (..)
     , Variant (VarDNA, VarPlain, VarPunctuation, VarText, VarWord)
-    , findPalindromeRanges
     , findPalindromes
     )
 import Data.Algorithms.Palindromes.Internal.RangeFunctions (Range, rangeToLength)

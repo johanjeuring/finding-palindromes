@@ -16,8 +16,8 @@ import qualified Data.Vector.Unboxed as U
 import qualified Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm as Q
 
 testListQuadraticAlgorithm =
-    [ testGappedApproximatePalindromesAroundCentresDNA
-    , testGappedApproximatePalindromesAroundCentresText
+    [ testMaxPalindromePerCenterDNA
+    , testMaxPalindromePerCenterText
     , testLengthPalAtCenterReflexiveEven
     , testLengthGappedPalAtCenterReflexiveEven
     , testLengthPalWithErrorsAtCenterReflexiveEven
@@ -40,30 +40,30 @@ testListQuadraticAlgorithm =
 
 {-
 ----------------------------------------------------------
-    Begin tests for gappedApproximatePalindromesAroundCentres
+    Begin tests for maxPalindromePerCenter
 ----------------------------------------------------------
 -}
 
--- | Test gappedApproximatePalindromesAroundCentres on some small DNA input
-testGappedApproximatePalindromesAroundCentresDNA =
+-- | Test maxPalindromePerCenter on some small DNA input
+testMaxPalindromePerCenterDNA =
     TestCase $
         assertEqual
-            "testGappedApproximatePalindromesAroundCentresDNA"
+            "testMaxPalindromePerCenterDNA"
             [0, 2, 0, 2, 0]
-            ( Q.gappedApproximatePalindromesAroundCentres
+            ( Q.maxPalindromePerCenter
                 True
                 0
                 0
                 (U.fromList [A, T, C, G])
             )
 
--- | Test gappedApproximatePalindromesAroundCentres on some small text input
-testGappedApproximatePalindromesAroundCentresText =
+-- | Test maxPalindromePerCenter on some small text input
+testMaxPalindromePerCenterText =
     TestCase $
         assertEqual
-            "testGappedApproximatePalindromesAroundCentresText"
+            "testMaxPalindromePerCenterText"
             [0, 1, 0, 1, 4, 1, 0, 3, 0, 1, 0]
-            ( Q.gappedApproximatePalindromesAroundCentres
+            ( Q.maxPalindromePerCenter
                 False
                 0
                 0
@@ -72,7 +72,7 @@ testGappedApproximatePalindromesAroundCentresText =
 
 {-
 ----------------------------------------------------------
-    End tests for gappedApproximatePalindromesAroundCentres
+    End tests for maxPalindromePerCenter
 ----------------------------------------------------------
 -}
 

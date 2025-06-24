@@ -15,7 +15,7 @@ University within the Software Project course.
 This module contains an implementation of a quadratic algorithm to find palindromes.
 -}
 module Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
-    ( gappedApproximatePalindromesAroundCentres
+    ( maxPalindromePerCenter
     , getLeftRightCenterBetweenElems
     , getLeftRightCenterOnElem
     , lengthPalAtCenterReflexive
@@ -33,16 +33,17 @@ import Data.Algorithms.Palindromes.PalEq
 import qualified Data.Vector.Generic as G
 
 {- | For each center, finds the maximal palindrome around this center.
-This function runs in O(m), where m is the sum of palindrome sizes.
+Taking gaps and substition errors into account. This function runs in O(m),
+where m is the sum of palindrome sizes.
 -}
-gappedApproximatePalindromesAroundCentres
+maxPalindromePerCenter
     :: (PalEq a, G.Vector v a)
     => Bool
     -> Int
     -> Int
     -> v a
     -> [Int]
-gappedApproximatePalindromesAroundCentres onlyEvenPals gapSize maxErrors input
+maxPalindromePerCenter onlyEvenPals gapSize maxErrors input
     | onlyEvenPals =
         L.map
             (lengthPalAtCenterAntiReflexive input gapSize maxErrors)

@@ -29,9 +29,9 @@ import qualified Data.Vector.Generic as G (Vector (..))
 import qualified Data.Vector.Generic.Mutable as GM (MVector (..))
 import qualified Data.Vector.Unboxed as U (MVector, Unbox, Vector, any, map)
 
-{- | Datatype for the different DNA bases, note that (=)/Eq is not suitable for checking if DNA
-  has palindromes, instead PalEq should be used. This is because DNA is anti-reflexive,
-   meaning it will never match with itself.
+{- | Datatype for the different DNA bases, note that (=)/Eq is not suitable for checking
+if DNA has palindromes. Instead PalEq should be used. This is because in DNA, A only
+matches with T and vice versa and C only matches with G and vice versa.
 -}
 data DNA = A | T | C | G | N deriving (Show, Eq, Enum)
 

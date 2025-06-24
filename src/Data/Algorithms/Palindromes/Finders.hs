@@ -14,7 +14,11 @@ University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
 This module is the core of this package and contains the functions to find palindromes in text.
-It defines the different options that can be used to find palindromes.
+It defines the different options that can be used to find palindromes:
+- The palindrome variant.
+- The output format.
+- The output filter.
+- The algorithm to use.
 -}
 module Data.Algorithms.Palindromes.Finders
     ( Variant (..)
@@ -185,11 +189,15 @@ Finally the ranges are converted to palindrome objects which also contain the ac
 -}
 findPalindromes
     :: Variant
+    -- ^ The palindrome variant to search for.
     -> Algorithm
+    -- ^ The algorithm to use for finding palindromes.
     -> Int
     -- ^ The minimum length of palindromes to find.
     -> String
+    -- ^ The input string.
     -> [Palindrome]
+    -- ^ The list of all found maximal palindromes not smaller than the minimum length.
 findPalindromes variant algorithm minlen input =
     map rangeToPalindrome $ filterRanges $ findPalindromeRanges variant algorithm inputVector
   where
@@ -221,13 +229,19 @@ and finally formatting them to a string depending on the OutputFormat.
 -}
 findPalindromesFormatted
     :: Variant
+    -- ^ The palindrome variant to search for.
     -> OutputFormat
+    -- ^ The format of the string representing the found palindromes.
     -> OutputFilter
+    -- ^ The filter the output goes through to select the requested output.
     -> Algorithm
+    -- ^ The algorithm to use for finding palindromes.
     -> Int
     -- ^ The minimum length of palindromes to find.
     -> String
+    -- ^ The input string.
     -> String
+    -- ^ The output string representing the found palindromes.
 findPalindromesFormatted variant outputFormat outputFilter algorithm minlen input =
     formatPalindromes outputFormat $
         filterPalindromes outputFilter $

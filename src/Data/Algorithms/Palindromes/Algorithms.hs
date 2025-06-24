@@ -59,17 +59,18 @@ errors in the palindrome.
 quadraticAlgorithm
     :: (PalEq a, G.Vector v a)
     => Bool
-    {- ^ Represents if the datatype 'a' is anti-reflexive, in the case where we search for an even-gapped,
-    anti-reflexive query we only need to look at even indices as odd palindromes can not exist then.
+    {- ^ Represents if the datatype 'a' is anti-reflexive, in the case where we search for
+    an even-gapped, anti-reflexive query we only need to look at even indices as odd
+    palindromes can not exist then.
     -}
     -> Int
-    {- ^ Represents a gap in the center when looking for palindromes.
+    {- ^ Represents the size of a gap in the center when looking for palindromes.
     This means that the middle X characters will be ignored at every center.
     -}
     -> Int
-    -- ^ Represents that maximum allowed substitution errors when looking for palindromes..
+    -- ^ Represents that maximum allowed substitution errors when looking for palindromes.
     -> v a
-    -- ^ The input vector to find palindromes in
+    -- ^ The input vector to find palindromes in.
     -> [Int]
     -- ^ A list of integers representing the palindrome lengths at every center position.
 quadraticAlgorithm = gappedApproximatePalindromesAroundCentres

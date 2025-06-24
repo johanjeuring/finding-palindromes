@@ -57,7 +57,9 @@ textToWordIndices input = V.fromList $ map toWordRange $ wordIndices indexedChar
     indexedCharacters :: [(Int, Char)]
     indexedCharacters = U.toList $ filterSpaceAndLetters input
 
-    -- Convert a list of indexed characters to the range of the word it represents.
+    {- The input list is a word represented by the indices of every character of it in the
+    original input string. Turn this list into a range, with only the indices of the first
+    (inclusive) and last (exclusive) characters. -}
     toWordRange :: [Int] -> Range
     toWordRange [] = error "Empty string"
     toWord word@(firstIndex : _) =
@@ -80,7 +82,7 @@ textToWordIndices input = V.fromList $ map toWordRange $ wordIndices indexedChar
             (\x -> (isAlphaNum . snd) x || (isSpace . snd) x)
             (U.indexed (U.map toLower w))
 
--- | If trying to parse the string to DNA would fail, throw a more readable error.
+-- | If trying to parse the string to DNA would fail, throw a readable error.
 tryParseDNA :: U.Vector Char -> U.Vector DNA
 tryParseDNA input = fromMaybe (error "Invalid DNA string") (parseDna input)
 

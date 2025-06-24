@@ -9,6 +9,7 @@ import Test.HUnit (Test (..), assertEqual, (~:), (~?=))
 
 import Data.Algorithms.Palindromes.Finders (Algorithm)
 import PalindromeMethods (longestTextPalindrome)
+import TestStrings (dammitImMad, longTextPalindrome)
 
 testListText :: Algorithm -> [Test]
 testListText t =
@@ -36,17 +37,15 @@ testTextPalindrome8 t = "testTextPalindrome8" ~: longestTextPalindrome t "g.ab,a
 testTextPalindrome9 t = "testTextPalindrome9" ~: longestTextPalindrome t "" ~?= "\"\""
 
 testTextPalindrome10 t =
-    TestCase $ do
-        string <- readFile "./examples/palindromes/Damnitimmad.txt"
-        assertEqual
+    TestCase
+        $ assertEqual
             "testTextPalindrome10"
-            ("\"" ++ init string ++ "\"")
-            $ longestTextPalindrome t string
+            ("\"" ++ init dammitImMad ++ "\"")
+        $ longestTextPalindrome t dammitImMad
 
 testTextPalindrome11 t =
-    TestCase $ do
-        string <- readFile "./examples/palindromes/pal17.txt"
-        assertEqual
+    TestCase
+        $ assertEqual
             "testTextPalindrome11"
-            ("\"" ++ init string ++ "\"")
-            $ longestTextPalindrome t string
+            ("\"" ++ init longTextPalindrome ++ "\"")
+        $ longestTextPalindrome t longTextPalindrome

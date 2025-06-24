@@ -76,6 +76,7 @@ test-suite tests-palindromes
     QuickCheckGenerators
     QuickCheckProperties
     QuickCheckSettings
+    TestStrings
     UTApproximateAlgorithm
     UTDNAPals
     UTExtendPals

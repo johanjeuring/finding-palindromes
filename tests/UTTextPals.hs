@@ -37,15 +37,15 @@ testTextPalindrome8 t = "testTextPalindrome8" ~: longestTextPalindrome t "g.ab,a
 testTextPalindrome9 t = "testTextPalindrome9" ~: longestTextPalindrome t "" ~?= "\"\""
 
 testTextPalindrome10 t =
-    TestCase $ do
-        assertEqual
+    TestCase
+        $ assertEqual
             "testTextPalindrome10"
             ("\"" ++ init dammitImMad ++ "\"")
-            $ longestTextPalindrome t dammitImMad
+        $ longestTextPalindrome t dammitImMad
 
 testTextPalindrome11 t =
-    TestCase $ do
-        assertEqual
+    TestCase
+        $ assertEqual
             "testTextPalindrome11"
             ("\"" ++ init longTextPalindrome ++ "\"")
-            $ longestTextPalindrome t longTextPalindrome
+        $ longestTextPalindrome t longTextPalindrome

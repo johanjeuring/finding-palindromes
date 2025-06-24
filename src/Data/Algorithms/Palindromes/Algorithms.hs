@@ -63,8 +63,9 @@ quadraticAlgorithm
     anti-reflexive query we only need to look at even indices as odd palindromes can not exist then.
     -}
     -> Int
-    {- -^ Represents a gap in the center when looking for palindromes.
-    This means that the middle X characters will be ignored at every center. -}
+    {- ^ Represents a gap in the center when looking for palindromes.
+    This means that the middle X characters will be ignored at every center.
+    -}
     -> Int
     -- ^ Represents that maximum allowed substitution errors when looking for palindromes..
     -> v a

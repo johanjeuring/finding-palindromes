@@ -161,9 +161,9 @@ testCenterOnElemOutOfBoundsRight2 =
             (3, 7)
             (getLeftRightCenterOnElem 9 5 7)
 
-{- | Test input with gapsize of zero and center on element. The output must have left
-and right equal to the element index so the not anti-reflexive function can check
-whether the element on the index is PalEq to itself.
+{- | Test input with gapsize of zero and center on element. The output must have left and
+right equal to the element index so that it is checked that the element on the index is
+PalEq to itself. This is to support non-reflexive datatypes.
 -}
 testCenterOnElemZeroGap =
     TestCase $

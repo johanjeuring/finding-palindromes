@@ -18,9 +18,9 @@ module Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
     ( maxPalindromePerCenter
     , getLeftRightCenterBetweenElems
     , getLeftRightCenterOnElem
-    , lengthPalAtCenterReflexive
-    , lengthPalAtCenterAntiReflexive
-    , getLeftRightReflexive
+    , lengthPalAtCenter
+    , lengthPalAtCenterOnlyEvenPals
+    , getLeftRight
     , lengthApproximatePalindrome
     ) where
 
@@ -46,11 +46,11 @@ maxPalindromePerCenter
 maxPalindromePerCenter onlyEvenPals gapSize maxErrors input
     | onlyEvenPals =
         L.map
-            (lengthPalAtCenterAntiReflexive input gapSize maxErrors)
+            (lengthPalAtCenterOnlyEvenPals input gapSize maxErrors)
             (if even gapSize then [0 .. G.length input] else [0 .. G.length input - 1])
     | otherwise =
         L.map
-            (lengthPalAtCenterReflexive input gapSize maxErrors)
+            (lengthPalAtCenter input gapSize maxErrors)
             [0 .. 2 * G.length input]
 
 {- | Keep expanding the palindrome around the given center to get the maximal palindrome.
@@ -84,7 +84,7 @@ actually used gap size will be (gapSize - 1).
 getLeftRightCenterBetweenElems
     :: Int
     -> Int
-    -- ^ The index of the element to the right of the center
+    -- ^ The index of the element to the right of the center.
     -> Int
     -> (Int, Int)
 getLeftRightCenterBetweenElems gapSize elementIndex lengthInput = (left, right)
@@ -96,7 +96,7 @@ getLeftRightCenterBetweenElems gapSize elementIndex lengthInput = (left, right)
     {- How far the gap can span to the right without going out of
     bounds to the right. -}
     leewayRight = lengthInput - elementIndex
-    -- make sure halfg' is not larger than leewayLeft or leewayRight
+    -- make sure halfg' is not larger than leewayLeft or leewayRight.
     halfg' = L.minimum [halfg, leewayLeft, leewayRight]
     left = elementIndex - 1 - halfg'
     right = elementIndex + halfg'
@@ -109,7 +109,7 @@ resulting gap will be maximum (gapSize - 1) big.
 getLeftRightCenterOnElem
     :: Int
     -> Int
-    -- ^ The index of the element on the center
+    -- ^ The index of the element on the center.
     -> Int
     -> (Int, Int)
 getLeftRightCenterOnElem gapSize elementIndex lengthInput = (left, right)
@@ -118,10 +118,10 @@ getLeftRightCenterOnElem gapSize elementIndex lengthInput = (left, right)
     {- How far the gap can span to the left without going out of
     bounds to the left. -}
     leewayLeft = elementIndex + 1
-    {- How far the gap can span to the right without going out of
+    {- How far the gap can span to the right without going out of.
     bounds to the right. -}
     leewayRight = lengthInput - elementIndex
-    -- make sure halfg' is not larger than leewayLeft or leewayRight
+    -- make sure halfg' is not larger than leewayLeft or leewayRight.
     halfg' = L.minimum [halfg, leewayLeft, leewayRight]
     left = elementIndex - halfg'
     right = elementIndex + halfg'
@@ -134,39 +134,39 @@ getLeftRightCenterOnElem gapSize elementIndex lengthInput = (left, right)
 
 {-
 ---------------------------------------------------------------------
-      Begin reflexive quadratic functions
+      Begin quadratic functions
 ---------------------------------------------------------------------
 -}
 
 -- | The length of the maximal palindrome around the specified center
-lengthPalAtCenterReflexive
+lengthPalAtCenter
     :: (PalEq a, G.Vector v a)
     => v a
-    -- ^ The total vector to find palindromes in
+    -- ^ The total vector to find palindromes in.
     -> Int
-    -- ^ The size of the gap
+    -- ^ The size of the gap.
     -> Int
-    -- ^ The (maximum) number of allowed errors
+    -- ^ The (maximum) number of allowed substitution errors.
     -> Int
-    -- ^ The index of the center
+    -- ^ The index of the center if searching for odd and even palindromes.
     -> Int
-    -- ^ The resulting length of the found maximal palindrome
-lengthPalAtCenterReflexive input gapSize maxErrors center =
-    let (left, right) = getLeftRightReflexive gapSize center (G.length input)
+    -- ^ The found length of the maximal palindrome.
+lengthPalAtCenter input gapSize maxErrors center =
+    let (left, right) = getLeftRight gapSize center (G.length input)
     in  lengthApproximatePalindrome input maxErrors left right
 
 {- | Get the two new character indexes for the left and right character to
 start expanding from, ignoring the gap.
 -}
-getLeftRightReflexive
+getLeftRight
     :: Int
-    -- ^ gap size
+    -- ^ gap size.
     -> Int
-    -- ^ center index
+    -- ^ center index if searching for odd and even palindromes.
     -> Int
-    -- ^ the size of the whole input
+    -- ^ the size of the whole input.
     -> (Int, Int)
-getLeftRightReflexive gapSize center lengthInput
+getLeftRight gapSize center lengthInput
     | even center = getLeftRightCenterBetweenElems gapSize elementIndex lengthInput
     | otherwise = getLeftRightCenterOnElem gapSize elementIndex lengthInput
   where
@@ -174,40 +174,41 @@ getLeftRightReflexive gapSize center lengthInput
 
 {-
 ---------------------------------------------------------------------
-      End reflexive quadratic functions
+      End quadratic functions
 ---------------------------------------------------------------------
 -}
 
 {-
 ---------------------------------------------------------------------
-      Begin anti-reflexive quadratic functions
+      Begin 'only even pals' quadratic functions
 ---------------------------------------------------------------------
 -}
 
-{- | The length of the maximal palindrome around the specified center for anti-reflexive
-datatypes. This is a separate function because the center indices for anti-reflexive
-datatypes are different than those for reflexive datatypes, because there are fewer
-centers for anti-reflexive datatypes.
+{- | The length of the maximal palindrome around the specified center for when we only
+have to check for even palindromes. This is a separate function because the center indices
+then are different than when we also have to check for odd palindromes, because there are
+fewer centers to check now.
 -}
-lengthPalAtCenterAntiReflexive
+lengthPalAtCenterOnlyEvenPals
     :: (PalEq a, G.Vector v a)
     => v a
-    -- ^ The total vector to find palindromes in
+    -- ^ The total vector to find palindromes in.
     -> Int
-    -- ^ The size of the gap
+    -- ^ The size of the gap.
     -> Int
-    -- ^ The (maximum) number of allowed errors
+    -- ^ The (maximum) number of allowed substitution errors.
     -> Int
-    -- ^ The index of the center
+    -- ^ The index of the center.
     -> Int
-lengthPalAtCenterAntiReflexive input gapSize maxErrors center =
-    -- We can just use getLeftRightCenterBetweenElems, because with anti reflexive data
-    -- types, the center is aways between two elements
+    -- ^ The found length of the maximal palindrome.
+lengthPalAtCenterOnlyEvenPals input gapSize maxErrors center =
+    {- We can just use getLeftRightCenterBetweenElems, because we know the center is always
+    between two elements. -}
     let (left, right) = getLeftRightCenterBetweenElems gapSize center (G.length input)
     in  lengthApproximatePalindrome input maxErrors left right
 
 {-
 ---------------------------------------------------------------------
-      End anti-reflexive quadratic functions
+      End 'only even pals' quadratic functions
 ---------------------------------------------------------------------
 -}

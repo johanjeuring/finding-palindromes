@@ -28,7 +28,7 @@ module Data.Algorithms.Palindromes.Algorithms
 import Data.Algorithms.Palindromes.Internal.ApproximateAlgorithm (approximateAlgorithm)
 import Data.Algorithms.Palindromes.Internal.LinearAlgorithm (extendPalindromeS)
 import Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm
-    ( gappedApproximatePalindromesAroundCentres
+    ( maxPalindromePerCenter
     )
 import Data.Algorithms.Palindromes.PalEq (PalEq)
 
@@ -73,4 +73,4 @@ quadraticAlgorithm
     -- ^ The input vector to find palindromes in.
     -> [Int]
     -- ^ A list of integers representing the palindrome lengths at every center position.
-quadraticAlgorithm = gappedApproximatePalindromesAroundCentres
+quadraticAlgorithm = maxPalindromePerCenter

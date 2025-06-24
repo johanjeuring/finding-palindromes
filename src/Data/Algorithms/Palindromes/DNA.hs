@@ -29,8 +29,9 @@ import qualified Data.Vector.Generic as G (Vector (..))
 import qualified Data.Vector.Generic.Mutable as GM (MVector (..))
 import qualified Data.Vector.Unboxed as U (MVector, Unbox, Vector, any, map)
 
-{- | Datatype for the different DNA, note that (=)/Eq is not suitable for checking if DNA
-  has palindromes, instead PalEq should be used.
+{- | Datatype for the different DNA bases, note that (=)/Eq is not suitable for checking
+if DNA has palindromes. Instead PalEq should be used. This is because in DNA, A only
+matches with T and vice versa and C only matches with G and vice versa.
 -}
 data DNA = A | T | C | G | N deriving (Show, Eq, Enum)
 
@@ -67,7 +68,7 @@ instance G.Vector U.Vector DNA where
 
 instance U.Unbox DNA
 
--- | Declare instance PalEq for DNA. A and T form a couple, C and G form a couple.
+-- | Defined as the base pairs for DNA. Meaning A matches T and G matches with C.
 instance {-# OVERLAPPING #-} PalEq DNA where
     A =:= T = True
     T =:= A = True
@@ -75,8 +76,8 @@ instance {-# OVERLAPPING #-} PalEq DNA where
     C =:= G = True
     _ =:= _ = False
 
-{- | Parsed a foldable with chars to a foldable with the DNA datatype. Returns Nothing if
-  the input cannot be fully parsed to DNA.
+{- | Parses an unboxed vector with chars to an unboxed vector with the DNA datatype.
+Returns Nothing if the input cannot be fully parsed to DNA.
 -}
 toDNA :: U.Vector Char -> Maybe (U.Vector DNA)
 toDNA x

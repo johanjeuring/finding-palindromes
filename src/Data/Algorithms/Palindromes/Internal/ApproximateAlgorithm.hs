@@ -54,11 +54,11 @@ maximum number of errors.
 approximateAlgorithm
     :: (PalEq a, G.Vector v a)
     => Int
-    -- ^ The size of the gap
+    -- ^ The size of the gap.
     -> Int
-    -- ^ The maximum number of errors
+    -- ^ The maximum number of insertion, deletion and substition errors that a valid palindrome can have.
     -> v a
-    -- ^ The input vector
+    -- ^ The input vector to find palindromes in.
     -> [PalRange]
     -- ^ The list of found maximal gapped approximate palindromes
 approximateAlgorithm gapSize maxErrors input = concatMap (\(_, palRanges, _) -> palRanges) states

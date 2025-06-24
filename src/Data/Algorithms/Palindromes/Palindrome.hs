@@ -10,7 +10,7 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-Describes the palindrome datatype.
+Describes the palindrome datatype. This datatype represents a found palindrome in the original input string.
 -}
 module Data.Algorithms.Palindromes.Palindrome (Palindrome (..), getLength) where
 
@@ -24,7 +24,7 @@ data Palindrome
     , palText :: String
     {- ^ The text representing the found palindrome. Note that this must be a string,
     not some abstract datatype. This string must be a subarray of the original
-    (not pre-processed) input string, meaning that e.g. present punctuation is in this
+    (not pre-processed) input string, meaning that e.g. punctuation is present in this
     string.
     -}
     , palRangeInText :: Range
@@ -41,5 +41,6 @@ punctuation, the start character index is 1 (the first 'a') and the end characte
 is 6 (the 'c' after the second 'a'). The string representing this text palindrome is
 "ab..a". -}
 
+-- | Returns the length of the palindrome in the input vector.
 getLength :: Palindrome -> Int
 getLength = rangeToLength . palRange

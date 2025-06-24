@@ -12,7 +12,7 @@ This program has been developed by students from the bachelor Computer Science a
 University within the Software Project course.
 © Copyright Utrecht University (Department of Information and Computing Sciences) and Johan Jeuring
 
-This module contains an implementation of a linear algorithm to find palindromes.
+This module contains an implementation of a linear algorithm to find palindromes based on a paper by Johan Jeuring.
 -}
 module Data.Algorithms.Palindromes.Internal.LinearAlgorithm
     ( extendPalindromeS
@@ -28,17 +28,17 @@ import qualified Data.Vector.Generic as G
 extendPalindromeS
     :: (PalEq a, G.Vector v a)
     => Bool
-    -- ^ indicates whether the input datatype is anti-reflexive
+    -- ^ Indicates whether the input datatype is anti-reflexive.
     -> v a
-    -- ^ input, with only the elements we want to find palindromes in
+    -- ^ Input, with only the elements we want to find palindromes in.
     -> Int
-    -- ^ the rightmost index which is checked by the algorithm
+    -- ^ The rightmost index which is checked by the algorithm.
     -> [Int]
-    -- ^ length of palindromes that are already found
+    -- ^ Length of palindromes that are already found.
     -> Int
-    -- ^ the length of the palindrome currently being expanded
+    -- ^ The length of the palindrome currently being expanded.
     -> [Int]
-    -- ^ the final list of maximal palindrome lengths
+    -- ^ The final list of maximal palindrome lengths at every center position.
 extendPalindromeS onlyEvenPals input rightmost maximalPalindromesIn currentPalindrome
     | rightmost > lastPos =
         -- reached the end of the array

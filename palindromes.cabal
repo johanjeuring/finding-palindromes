@@ -1,6 +1,6 @@
 cabal-version:   3.4
 name:            palindromes
-version:         1.0.0.1
+version:         1.1.0.0
 synopsis:        Finding palindromes in strings
 description:
   palindromes is an executable and a library which takes a file name, and

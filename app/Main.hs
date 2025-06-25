@@ -123,7 +123,7 @@ main = do
     headerHelpMessage =
         "*********************\n"
             ++ "* Palindrome Finder *\n"
-            ++ "* version 1.0.0.1   *\n"
+            ++ "* version 1.1.0.0   *\n"
             ++ "*********************\n"
             ++ "Usage: \n"
             ++ "Either give the path to a file or directory or use the flag -i for manual input in the terminal. "

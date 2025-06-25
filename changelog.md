@@ -1,6 +1,14 @@
 Release history:
 
 --------
+25062025 Version 1.1.0.0
+--------
+- Define internal modules to signal which modules are and are not part of the public interface.
+- Add file with test strings instead of depending on text files.
+- Rename functions in quadratic algorithm.
+- Update documentation.
+
+--------
 19062025 Version 1.0.0.1
 --------
 Fix the cabal-version from 3.12 to 3.4, because 3.12 is not supported on Hackage.

@@ -7,7 +7,7 @@ To clone the repository either use an SSH key with the SHH link under the Code b
 Or to use HTTPS open a terminal in the location you want to clone to and use the command:
 
 ```
-git clone <https://github.com/johanjeuring/finding-palindromes>
+git clone <https://github.com/johanjeuring/finding-palindromes.git>
 ```
 
 After which the repository should be cloned in your current directory.

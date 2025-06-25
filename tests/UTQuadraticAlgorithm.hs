@@ -18,20 +18,20 @@ import qualified Data.Algorithms.Palindromes.Internal.QuadraticAlgorithm as Q
 testListQuadraticAlgorithm =
     [ testMaxPalindromePerCenterDNA
     , testMaxPalindromePerCenterText
-    , testLengthPalAtCenterReflexiveEven
-    , testLengthGappedPalAtCenterReflexiveEven
-    , testLengthPalWithErrorsAtCenterReflexiveEven
-    , testLengthGappedPalWithErrorsAtCenterReflexiveEven
-    , testLengthPalAtCenterReflexiveOdd
-    , testLengthGappedPalAtCenterReflexiveOdd
-    , testLengthPalWithErrorsAtCenterReflexiveOdd
-    , testLengthGappedPalWithErrorsAtCenterReflexiveOdd
-    , testGetLeftRightReflexiveEven
-    , testGetLeftRightReflexiveOdd
-    , testLengthPalAtCenterAntiReflexive
-    , testLengthGappedPalAtCenterAntiReflexive
-    , testLengthPalWithErrorsAtCenterAntiReflexive
-    , testLengthGappedPalWithErrorsAtCenterAntiReflexive
+    , testLengthPalAtCenterEven
+    , testLengthGappedPalAtCenterEven
+    , testLengthPalWithErrorsAtCenterEven
+    , testLengthGappedPalWithErrorsAtCenterEven
+    , testLengthPalAtCenterOdd
+    , testLengthGappedPalAtCenterOdd
+    , testLengthPalWithErrorsAtCenterOdd
+    , testLengthGappedPalWithErrorsAtCenterOdd
+    , testGetLeftRightEven
+    , testGetLeftRightOdd
+    , testLengthPalAtCenterOnlyEvenPals
+    , testLengthGappedPalAtCenterOnlyEvenPals
+    , testLengthPalWithErrorsAtCenterOnlyEvenPals
+    , testLengthGappedPalWithErrorsAtCenterOnlyEvenPals
     , testLeftOutOfBoundsLengthApproximatePalindrome
     , testRightOutOfBoundsLengthApproximatePalindrome
     , testNoErrorLengthApproximatePalindrome
@@ -78,142 +78,138 @@ testMaxPalindromePerCenterText =
 
 {-
 -------------------------------------------------
-    Begin tests for lengthPalAtCenterReflexive
+    Begin tests for lengthPalAtCenter
 -------------------------------------------------
 -}
 
--- | Test lengthPalAtCenterReflexive with even center index, no gap and no errors
-testLengthPalAtCenterReflexiveEven =
+-- | Test lengthPalAtCenter with even center index, no gap and no errors
+testLengthPalAtCenterEven =
     TestCase $
         assertEqual
-            "testLengthPalAtCenterReflexiveEven"
+            "testlengthPalAtCenterEven"
             2
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabadabadoo") 0 0 20)
+            (Q.lengthPalAtCenter (U.fromList "yabadabadoo") 0 0 20)
 
--- | Test lengthPalAtCenterReflexive with even center index, a gap and no errors
-testLengthGappedPalAtCenterReflexiveEven =
+-- | Test lengthPalAtCenter with even center index, a gap and no errors
+testLengthGappedPalAtCenterEven =
     TestCase $
         assertEqual
-            "testLengthGappedPalAtCenterReflexiveEven"
+            "testLengthGappedPalAtCenterEven"
             6
-            --                                       gap: |--|
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabaddabadoo") 4 0 14)
+            (Q.lengthPalAtCenter (U.fromList "yabaddabadoo") 4 0 14)
 
--- | Test lengthPalAtCenterReflexive with even center index, no gap and with errors
-testLengthPalWithErrorsAtCenterReflexiveEven =
+-- | Test lengthPalAtCenter with even center index, no gap and with errors
+testLengthPalWithErrorsAtCenterEven =
     TestCase $
         assertEqual
-            "testLengthGappedPalAtCenterReflexiveEven"
+            "testLengthPalWithErrorsAtCenterEven"
             6
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabaoabadoo") 0 2 14)
+            (Q.lengthPalAtCenter (U.fromList "yabaoabadoo") 0 2 14)
 
--- | Test lengthPalAtCenterReflexive with even center index, a gap and with errors
-testLengthGappedPalWithErrorsAtCenterReflexiveEven =
+-- | Test lengthPalAtCenter with even center index, a gap and with errors
+testLengthGappedPalWithErrorsAtCenterEven =
     TestCase $
         assertEqual
-            "testLengthGappedPalWithErrorsAtCenterReflexiveEven"
+            "testLengthGappedPalWithErrorsAtCenterEven"
             10
-            --                                       gap: |--|
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabaddabadoo") 4 3 14)
+            (Q.lengthPalAtCenter (U.fromList "yabaddabadoo") 4 3 14)
 
--- | Test lengthPalAtCenterReflexive with odd center index, no gap and no errors
-testLengthPalAtCenterReflexiveOdd =
+-- | Test lengthPalAtCenter with odd center index, no gap and no errors
+testLengthPalAtCenterOdd =
     TestCase $
         assertEqual
-            "testLengthPalAtCenterReflexiveEven"
+            "testlengthPalAtCenterEven"
             7
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabadabadoo") 0 0 9)
+            (Q.lengthPalAtCenter (U.fromList "yabadabadoo") 0 0 9)
 
--- | Test lengthPalAtCenterReflexive with odd center index, a gap and no errors
-testLengthGappedPalAtCenterReflexiveOdd =
+-- | Test lengthPalAtCenter with odd center index, a gap and no errors
+testLengthGappedPalAtCenterOdd =
     TestCase $
         assertEqual
-            "testLengthGappedPalAtCenterReflexiveOdd"
+            "testLengthGappedPalAtCenterOdd"
             7
-            --                                       gap: |-|
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabbagapabadoo") 3 0 13)
+            (Q.lengthPalAtCenter (U.fromList "yabbagapabadoo") 3 0 13)
 
--- | Test lengthPalAtCenterReflexive with odd center index, no gap and with errors
-testLengthPalWithErrorsAtCenterReflexiveOdd =
+-- | Test lengthPalAtCenter with odd center index, no gap and with errors
+testLengthPalWithErrorsAtCenterOdd =
     TestCase $
         assertEqual
-            "testLengthPalWithErrorsAtCenterReflexiveOdd"
+            "testLengthPalWithErrorsAtCenterOdd"
             9
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabadabadoo") 0 2 13)
+            (Q.lengthPalAtCenter (U.fromList "yabadabadoo") 0 2 13)
 
--- | Test lengthPalAtCenterReflexive with odd center index, a gap and with errors
-testLengthGappedPalWithErrorsAtCenterReflexiveOdd =
+-- | Test lengthPalAtCenter with odd center index, a gap and with errors
+testLengthGappedPalWithErrorsAtCenterOdd =
     TestCase $
         assertEqual
-            "testLengthGappedPalWithErrorsAtCenterReflexiveOdd"
+            "testLengthGappedPalWithErrorsAtCenterOdd"
             11
-            --                                       gap: |-|
-            (Q.lengthPalAtCenterReflexive (U.fromList "yabbagapabadoo") 3 2 13)
+            (Q.lengthPalAtCenter (U.fromList "yabbagapabadoo") 3 2 13)
 
 {-
 -------------------------------------------------
-    End tests for lengthPalAtCenterReflexive
+    End tests for lengthPalAtCenter
 -------------------------------------------------
 -}
 
 {-
 ---------------------------------------------
-    Begin tests for getLeftRightReflexive reflexive
+    Begin tests for getLeftRight
 ---------------------------------------------
 -}
 
--- | Test getLeftRightReflexive with an even center index
-testGetLeftRightReflexiveEven =
+-- | Test getLeftRight with an even center index
+testGetLeftRightEven =
     TestCase $
         assertEqual
-            "testGetLeftRightReflexiveEven"
+            "testgetLeftRightEven"
             (0, 3)
-            (Q.getLeftRightReflexive 2 4 7)
+            (Q.getLeftRight 2 4 7)
 
--- | Test getLeftRightReflexive with an odd center index
-testGetLeftRightReflexiveOdd =
+-- | Test getLeftRight with an odd center index
+testGetLeftRightOdd =
     TestCase $
         assertEqual
-            "testGetLeftRightReflexiveOdd"
+            "testgetLeftRightOdd"
             (1, 5)
-            (Q.getLeftRightReflexive 3 7 7)
+            (Q.getLeftRight 3 7 7)
 
 {-
 ---------------------------------------------
-    End tests for getLeftRightReflexive reflexive
+    End tests for getLeftRight
 ---------------------------------------------
 -}
 
 {-
 --------------------------------------------------------
-    Begin tests for anti-reflexive length pal at center
+    Begin tests for 'only even pals' length pal at center
 --------------------------------------------------------
 -}
 
-{- | Test whether the observed length of the palindrome with (anti reflexive) DNA
+{- | Test whether the observed length of the palindrome with (anti-reflexive) DNA
 is correct for palindrome without gaps and without errors.
 -}
-testLengthPalAtCenterAntiReflexive =
+testLengthPalAtCenterOnlyEvenPals =
     TestCase $
         assertEqual
-            "testLengthPalAtCenterAntiReflexive"
+            "testLengthPalAtCenterOnlyEvenPals"
             4
-            ( Q.lengthPalAtCenterAntiReflexive
+            ( Q.lengthPalAtCenterOnlyEvenPals
                 (U.fromList [A, A, T {-center-}, A, T, G] :: U.Vector DNA)
                 0
                 0
                 3
             )
 
-{- | Test whether the observed length of the palindrome with (anti reflexive) DNA
-is correct for palindrome with a gap and without errors.
+{- | Test whether the observed length of the palindrome with (anti-reflexive) DNA
+is correct for palindrome with an even gap and without errors.
 -}
-testLengthGappedPalAtCenterAntiReflexive =
+testLengthGappedPalAtCenterOnlyEvenPals =
     TestCase $
         assertEqual
-            "testLengthGappedPalAtCenterAntiReflexive"
+            "testLengthGappedPalAtCenterOnlyEvenPals"
             8
-            ( Q.lengthPalAtCenterAntiReflexive
+            ( Q.lengthPalAtCenterOnlyEvenPals
                 --                  gap: |-------------------|
                 (U.fromList [A, A, T, G, T, G {-center-}, A, A, C, A, A, T, C] :: U.Vector DNA)
                 4
@@ -221,15 +217,15 @@ testLengthGappedPalAtCenterAntiReflexive =
                 6
             )
 
-{- | Test whether the observed length of the palindrome with (anti reflexive) DNA
-is correct for palindrome without a gap and with errors.
+{- | Test whether the observed length of the palindrome with (anti-reflexive) DNA
+is correct for palindrome without no gap and with errors.
 -}
-testLengthPalWithErrorsAtCenterAntiReflexive =
+testLengthPalWithErrorsAtCenterOnlyEvenPals =
     TestCase $
         assertEqual
-            "testLengthPalWithErrorsAtCenterAntiReflexive"
+            "testLengthPalWithErrorsAtCenterOnlyEvenPals"
             10
-            ( Q.lengthPalAtCenterAntiReflexive
+            ( Q.lengthPalAtCenterOnlyEvenPals
                 (U.fromList [A, A, A, T, G, T, G {-center-}, A, A, C, A, A, G, C] :: U.Vector DNA)
                 0
                 2
@@ -237,14 +233,14 @@ testLengthPalWithErrorsAtCenterAntiReflexive =
             )
 
 {- | Test whether the observed length of the palindrome with (anti reflexive) DNA
-is correct for palindrome with gap and with errors.
+is correct for palindrome with even gap and with errors.
 -}
-testLengthGappedPalWithErrorsAtCenterAntiReflexive =
+testLengthGappedPalWithErrorsAtCenterOnlyEvenPals =
     TestCase $
         assertEqual
-            "testLengthGappedPalWithErrorsAtCenterAntiReflexive"
+            "testLengthGappedPalWithErrorsAtCenterOnlyEvenPals"
             8
-            ( Q.lengthPalAtCenterAntiReflexive
+            ( Q.lengthPalAtCenterOnlyEvenPals
                 (U.fromList [A, A, A, T {-center-}, G, T, G, A, A, C, A, A, G, C] :: U.Vector DNA)
                 2
                 2

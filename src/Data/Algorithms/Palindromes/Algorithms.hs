@@ -40,8 +40,8 @@ the maximal palindromes which were found at each center from the input.
 linearAlgorithm
     :: (PalEq a, G.Vector v a)
     => Bool
-    {- ^ Represents if the datatype 'a' is anti-reflexive, anti-reflexive types only need to check even indices, because the
-    linear algorithm does not support gaps.
+    {- ^ Represents if the datatype 'a' is anti-reflexive. For anti-reflexive datatypes we
+    only need to check even indices, because the linear algorithm does not support gaps.
     -}
     -> v a
     -- ^ The input vector to find palindromes in
@@ -59,9 +59,8 @@ errors in the palindrome.
 quadraticAlgorithm
     :: (PalEq a, G.Vector v a)
     => Bool
-    {- ^ Represents if the datatype 'a' is anti-reflexive, in the case where we search for
-    an even-gapped, anti-reflexive query we only need to look at even indices as odd
-    palindromes can not exist then.
+    {- ^ Represents whether we only need to search for even palindromes. This is the case
+    if we have an even-sized gap and an anti-reflexive datatype.
     -}
     -> Int
     {- ^ Represents the size of a gap in the center when looking for palindromes.

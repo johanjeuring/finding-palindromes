@@ -24,6 +24,10 @@ extra-doc-files:
 build-type:      Simple
 tested-with:     GHC ==9.8.2 || ==9.10.1
 
+source-repository head
+  type:     git
+  location: https://github.com/johanjeuring/finding-palindromes
+
 library
   hs-source-dirs:   src
   default-language: Haskell2010

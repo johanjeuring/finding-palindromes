@@ -45,7 +45,7 @@ The approximate palindrome algorithm further supports:
 The algorithms search for maximal palindromes but use different definitions of maximal. 
 For the linear and quadratic algorithm a maximal palindrome is the possible palindrome from a center (a position on a letter or inbetween two letters), from which the palindrome is extended on both sides. This means the algorithm will find a palindrome for each center. In approximate algorithm a maximal palindrome is any substring which cannot be extended on one or both sides without exceeding the allowed amount of insertions, deletions or substitions. 
 
-For more information on the different algorithms and the different kinds of palindromes, see the tutorial on [our website](https://palindromes.science.uu.nl/smallsites/tutorial.html).
+For more information on the different algorithms and the different kinds of palindromes, see the tutorial on [the website](https://finding-palindromes.net/smallsites/tutorial.html).
 
 ## Requirements
 

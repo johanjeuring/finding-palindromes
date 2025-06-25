@@ -7,10 +7,10 @@ To clone the repository either use an SSH key with the SHH link under the Code b
 Or to use HTTPS open a terminal in the location you want to clone to and use the command:
 
 ```
-git clone https://git.science.uu.nl/ics/sp/2025/v25b/finding-palindromes-package.git
+git clone <https://github.com/johanjeuring/finding-palindromes.git>
 ```
 
-This should then prompt for a login where you need to use your UU credentials (Solis ID). After which the repository should be cloned
+After which the repository should be cloned in your current directory.
 
 ### Set up
 
